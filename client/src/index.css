@@ -109,9 +109,11 @@ a { color:inherit; text-decoration:none; }
 .recommendation-window { max-width:1304px; overflow:hidden; margin:0 auto; }
 .recommendation-track { display:flex; gap:12px; transition:transform .35s var(--ease-out); cursor:grab; touch-action:pan-x; }
 .recommendation-track:active { cursor:grabbing; }
-.recommendation-card { flex:0 0 calc((100% - 36px) / 4); min-width:0; }
-.recommendation-image { overflow:hidden; aspect-ratio:1.15/1; background:#ebe8e0; border-radius:10px; }
-.recommendation-image img { width:100%; height:100%; object-fit:cover; transition:transform .35s var(--ease-out); }
+.recommendation-card { flex:0 0 calc((100% - 36px) / 4); min-width:0; display:block; }
+.recommendation-image { overflow:hidden; min-height:160px; background:#ebe8e0; border-radius:14px; }
+.recommendation-card:nth-child(3n) .recommendation-image { min-height:240px; }
+.recommendation-card:nth-child(5n) .recommendation-image { min-height:300px; }
+.recommendation-image img { display:block; width:100%; height:100%; min-height:inherit; object-fit:cover; transition:transform .35s var(--ease-out); }
 .recommendation-card:hover .recommendation-image img { transform:scale(1.035); }
 .recommendation-meta { display:flex; justify-content:space-between; gap:10px; padding-top:10px; font-size:11px; }
 .recommendation-meta strong { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -154,6 +156,9 @@ a { color:inherit; text-decoration:none; }
 .low-price-extension { max-width:1304px; margin:0 auto 72px; padding-top:10px; }
 .low-price-extension-label { margin:0 0 16px; color:var(--ink-soft); font-size:9px; font-weight:800; letter-spacing:.18em; }
 .low-price-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; }
-.low-price-grid .product-image-wrap { aspect-ratio:1.18/1; }
+.low-price-grid .product-image-wrap { aspect-ratio:auto; }
+.low-price-grid .product-image-wrap img { min-height:160px; }
+.low-price-grid .product-card:nth-child(3n) .product-image-wrap img { min-height:240px; }
+.low-price-grid .product-card:nth-child(5n) .product-image-wrap img { min-height:300px; }
 .low-price-grid .product-card:hover .product-image-wrap img { transform:scale(1.06); }
 @media (max-width:760px) { .low-price-extension { margin:0 17px 48px; }.low-price-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }.low-price-grid .product-meta { padding-top:8px; }.low-price-grid .product-sub { font-size:10px; } }
