@@ -148,3 +148,10 @@ a { color:inherit; text-decoration:none; }
 .curation-note strong { display:block; color:var(--ink); font:400 26px/1.1 'DM Serif Display',Georgia,serif; }
 .curation-note p { margin:9px 0 0; font-size:11px; letter-spacing:.04em; }
 @media (max-width:760px) { .curation-note { margin:38px 17px 48px; padding:22px 0; }.curation-note strong { font-size:23px; }.curation-note p { line-height:1.6; } }
+
+/* Low-ticket extension: a quieter second row beneath the curation note for sparse categories. */
+.low-price-extension { max-width:1304px; margin:0 auto 72px; padding-top:10px; }
+.low-price-extension-label { margin:0 0 16px; color:var(--ink-soft); font-size:9px; font-weight:800; letter-spacing:.18em; }
+.low-price-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; }
+.low-price-grid .product-image-wrap { aspect-ratio:1.18/1; }
+@media (max-width:760px) { .low-price-extension { margin:0 17px 48px; }.low-price-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }.low-price-grid .product-meta { padding-top:8px; }.low-price-grid .product-sub { font-size:10px; } }
