@@ -35,15 +35,16 @@ export default function Home() {
     });
     return [...filtered].sort((a, b) => sort === "price-low" ? a.price - b.price : sort === "price-high" ? b.price - a.price : a.id.localeCompare(b.id));
   }, [brand, category, query, sort]);
+  const needsCuration = visible.length <= 8;
   const lowPriceProducts = useMemo(() => {
-    if (visible.length > 4) return [];
+    if (!needsCuration) return [];
     const visibleIds = new Set(visible.map((item) => item.id));
     const scoped = products.filter((item) => !visibleIds.has(item.id) && (brand === "all" || item.brand === brand) && (category === "all" || item.category === category));
     const sameBrand = products.filter((item) => !visibleIds.has(item.id) && brand !== "all" && item.brand === brand);
     const sameCategory = products.filter((item) => !visibleIds.has(item.id) && category !== "all" && item.category === category);
     const pool = scoped.length >= 4 ? scoped : sameBrand.length >= 4 ? sameBrand : sameCategory.length >= 4 ? sameCategory : products.filter((item) => !visibleIds.has(item.id));
     return [...pool].sort((a, b) => a.price - b.price).slice(0, 8);
-  }, [brand, category, visible]);
+  }, [brand, category, visible, needsCuration]);
   const toggleFavorite = (id: string) => setFavorites((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
   const resetFilters = () => { setCategory("all"); setBrand("all"); setQuery(""); };
 
@@ -67,7 +68,7 @@ export default function Home() {
         <section className="masonry-grid" aria-label="商品列表">
           {visible.map((product, index) => { const image = product.images[0]; const isFav = favorites.includes(product.id); return <article className={`product-card card-${index % 7}`} key={product.id} onClick={() => navigate(`/product/${product.id}`)}><div className="product-image-wrap"><img src={image} alt={product.catalogName || product.name} loading={index < 8 ? "eager" : "lazy"} /><div className="image-wash" /><button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "取消收藏" : "收藏商品"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={14} /></span></div><div className="product-meta"><div className="product-name">{cleanTitle(product.catalogName || product.name)}</div><div className="product-sub"><span>{product.brand || product.subCategory || "CATALOG ITEM"}</span><strong>{money(product.price, product.currency)}</strong></div></div></article>; })}
         </section>
-        {visible.length <= 4 && <div className="curation-note"><span className="curation-note-mark">✦</span><div><strong>正在高标准选择高质量的产品</strong><p>我们会持续筛选更值得加入目录的商品，敬请期待。</p></div></div>}
+        {needsCuration && <div className="curation-note"><span className="curation-note-mark">✦</span><div><strong>正在高标准选择高质量的产品</strong><p>我们会持续筛选更值得加入目录的商品，敬请期待。</p></div></div>}
         {lowPriceProducts.length > 0 && <section className="low-price-extension"><div className="low-price-extension-label">MORE TO EXPLORE</div><div className="low-price-grid">{lowPriceProducts.map((product, index) => <article className={`product-card card-${(index + 3) % 7}`} key={`low-${product.id}`} onClick={() => navigate(`/product/${product.id}`)}><div className="product-image-wrap"><img src={product.images[0]} alt={product.catalogName || product.name} loading="lazy" /><div className="image-wash" /></div><div className="product-meta"><div className="product-name">{cleanTitle(product.catalogName || product.name)}</div><div className="product-sub"><span>{product.brand || product.subCategory || "CATALOG ITEM"}</span><strong>{money(product.price, product.currency)}</strong></div></div></article>)}</div></section>}
       </> : <div className="empty-state"><span>NO MATCHES / 00</span><h2>换一个关键词试试。</h2><button onClick={resetFilters}>清除筛选</button></div>}
     </main>
