@@ -141,3 +141,10 @@ a { color:inherit; text-decoration:none; }
 .recommendation-only-controls button { display:grid; place-items:center; width:35px; height:35px; border:1px solid var(--line); color:var(--ink); font-size:18px; transition:background .18s,color .18s,transform .18s; }
 .recommendation-only-controls button:hover { background:var(--ink); color:white; transform:translateY(-2px); }
 @media (max-width:760px) { .recommendation-only-controls { margin-bottom:13px; } }
+
+/* Low-inventory curation note: turns a sparse result into an intentional editorial pause. */
+.curation-note { display:flex; align-items:flex-start; gap:16px; max-width:680px; margin:58px auto 72px; padding:26px 30px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); color:var(--ink-soft); }
+.curation-note-mark { color:var(--coral); font-size:17px; line-height:1; }
+.curation-note strong { display:block; color:var(--ink); font:400 26px/1.1 'DM Serif Display',Georgia,serif; }
+.curation-note p { margin:9px 0 0; font-size:11px; letter-spacing:.04em; }
+@media (max-width:760px) { .curation-note { margin:38px 17px 48px; padding:22px 0; }.curation-note strong { font-size:23px; }.curation-note p { line-height:1.6; } }
