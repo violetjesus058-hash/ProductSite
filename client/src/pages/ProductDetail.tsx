@@ -16,7 +16,16 @@ export default function ProductDetail() {
   const [recIndex, setRecIndex] = useState(0);
   const gallery = product?.images?.length ? product.images : ["/manus-storage/catalog-detail-stilllife_f1f3f213.jpg"];
   const currentImage = gallery[selectedImage] || gallery[0];
-  const recommended = useMemo(() => products.filter((item) => item.id !== product?.id && item.price > (product?.price || 0)).sort((a, b) => b.price - a.price).slice(0, 12), [product]);
+  const recommended = useMemo(() => {
+    if (!product) return [];
+    const low = product.price * 1.05;
+    const high = product.price * 1.8;
+    const pool = products.filter((item) => item.id !== product.id && item.price >= low && item.price <= high);
+    const fallback = products.filter((item) => item.id !== product.id && item.price > product.price).sort((a, b) => a.price - b.price);
+    return [...(pool.length ? pool : fallback)].sort(() => Math.random() - 0.5).slice(0, 8);
+  }, [product]);
+  const activeRecommendation = recommended[recIndex];
+  const recommendationSpecs = activeRecommendation?.sizes.filter((value) => value.includes(":")).map((value) => value.split(":").slice(-1)[0].trim()).filter(Boolean).slice(0, 8) || [];
   useEffect(() => setRecIndex(0), [product?.id]);
 
   const specGroups = useMemo(() => {
@@ -41,7 +50,7 @@ export default function ProductDetail() {
         <div className="details-block"><div className="block-label">ITEM NOTES</div><p>{product.description || "该商品暂无文字描述，图片与规格信息以页面采集结果为准。"}</p></div><div className="detail-facts"><div><span>分类</span><strong>{categoryLabels[product.category] || product.category} / {product.subCategory}</strong></div><div><span>品牌</span><strong>{product.brand || "未提供"}</strong></div><div><span>采集时间</span><strong>{product.collectedAt ? product.collectedAt.slice(0, 10) : "—"}</strong></div></div>
       </section>
     </main>
-    {recommended.length > 0 && <section className="recommendations"><div className="recommendation-head"><div><div className="block-label">PRICE LADDER</div><h2>还可以看看</h2><p>从当前商品向上探索更高价位的单品。</p></div><div className="recommendation-controls"><button onClick={() => setRecIndex((index) => Math.max(0, index - 1))} disabled={recIndex === 0} aria-label="上一组推荐">←</button><button onClick={() => setRecIndex((index) => Math.min(Math.max(0, recommended.length - 4), index + 1))} disabled={recIndex >= Math.max(0, recommended.length - 4)} aria-label="下一组推荐">→</button></div></div><div className="recommendation-window"><div className="recommendation-track" style={{ transform: `translateX(calc(-${recIndex} * (25% + 12px)))` }}>{recommended.map((item) => <Link key={item.id} href={`/product/${item.id}`} className="recommendation-card"><div className="recommendation-image"><img src={item.images[0]} alt={cleanTitle(item.catalogName || item.name)} /></div><div className="recommendation-meta"><strong>{cleanTitle(item.catalogName || item.name)}</strong><span>{money(item.price, item.currency)}</span></div></Link>)}</div></div></section>}
+    {activeRecommendation && <section className="recommendations"><div className="recommendation-head"><div><div className="block-label">PRICE LADDER / CURATED PICK</div><h2>还可以看看</h2><p>从当前价位向上探索一件更接近的单品。</p></div><div className="recommendation-controls"><button onClick={() => setRecIndex((index) => Math.max(0, index - 1))} disabled={recIndex === 0} aria-label="上一个推荐商品">←</button><span>{String(recIndex + 1).padStart(2, "0")} / {String(recommended.length).padStart(2, "0")}</span><button onClick={() => setRecIndex((index) => Math.min(recommended.length - 1, index + 1))} disabled={recIndex >= recommended.length - 1} aria-label="下一个推荐商品">→</button></div></div><div className="recommendation-feature"><div className="recommendation-feature-image"><img src={activeRecommendation.images[0]} alt={cleanTitle(activeRecommendation.catalogName || activeRecommendation.name)} /></div><div className="recommendation-feature-info"><div className="dossier-eyebrow">RECOMMENDED ITEM <span>/{categoryLabels[activeRecommendation.category] || activeRecommendation.category}</span></div><h3>{cleanTitle(activeRecommendation.catalogName || activeRecommendation.name)}</h3><div className="recommendation-feature-price">{money(activeRecommendation.price, activeRecommendation.currency)}</div><div className="recommendation-feature-facts"><span>{activeRecommendation.brand || "品牌未提供"}</span><span>{activeRecommendation.stock || "库存状态待确认"}</span></div>{activeRecommendation.colors.length > 0 && <div className="recommendation-options"><b>颜色</b><div>{activeRecommendation.colors.slice(0, 6).map((color) => <span key={color}>{color}</span>)}</div></div>}{recommendationSpecs.length > 0 && <div className="recommendation-options"><b>规格</b><div>{recommendationSpecs.map((spec) => <span key={spec}>{spec}</span>)}</div></div>}<div className="recommendation-feature-actions"><button className="primary-action" onClick={() => window.open(activeRecommendation.url, "_blank", "noopener,noreferrer")}><ShoppingBag size={16} /> 查看原始商品链接 <ArrowUpRight size={14} /></button><button className="secondary-action" onClick={() => setLiked(!liked)}><Heart size={16} fill={liked ? "currentColor" : "none"} /> {liked ? "已收藏" : "收藏"}</button></div></div></div></section>}
     <footer className="detail-footer"><span>MATERIAL CATALOG / 01</span><span>ITEM FILE CLOSED</span></footer>
   </div>;
 }
