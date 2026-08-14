@@ -1,5 +1,5 @@
 // Editorial Pinboard reminder: product detail is an item dossier—image gallery left, evidence and actions right, coral signal only for key actions.
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "wouter";
 import { ArrowLeft, ArrowUpRight, Check, ChevronLeft, ChevronRight, Heart, Info, Share2, ShoppingBag } from "lucide-react";
 import { products, categoryLabels } from "@/data/products";
@@ -13,8 +13,12 @@ export default function ProductDetail() {
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSpec, setSelectedSpec] = useState("");
   const [liked, setLiked] = useState(false);
+  const [recIndex, setRecIndex] = useState(0);
   const gallery = product?.images?.length ? product.images : ["/manus-storage/catalog-detail-stilllife_f1f3f213.jpg"];
   const currentImage = gallery[selectedImage] || gallery[0];
+  const recommended = useMemo(() => products.filter((item) => item.id !== product?.id && item.price > (product?.price || 0)).sort((a, b) => b.price - a.price).slice(0, 12), [product]);
+  useEffect(() => setRecIndex(0), [product?.id]);
+
   const specGroups = useMemo(() => {
     if (!product) return [];
     const labels = product.sizes.filter((value) => value.includes(":")).map((value) => value.split(":").slice(-1)[0].trim());
@@ -37,6 +41,7 @@ export default function ProductDetail() {
         <div className="details-block"><div className="block-label">ITEM NOTES</div><p>{product.description || "该商品暂无文字描述，图片与规格信息以页面采集结果为准。"}</p></div><div className="detail-facts"><div><span>分类</span><strong>{categoryLabels[product.category] || product.category} / {product.subCategory}</strong></div><div><span>品牌</span><strong>{product.brand || "未提供"}</strong></div><div><span>采集时间</span><strong>{product.collectedAt ? product.collectedAt.slice(0, 10) : "—"}</strong></div></div>
       </section>
     </main>
+    {recommended.length > 0 && <section className="recommendations"><div className="recommendation-head"><div><div className="block-label">PRICE LADDER</div><h2>还可以看看</h2><p>从当前商品向上探索更高价位的单品。</p></div><div className="recommendation-controls"><button onClick={() => setRecIndex((index) => Math.max(0, index - 1))} disabled={recIndex === 0} aria-label="上一组推荐">←</button><button onClick={() => setRecIndex((index) => Math.min(Math.max(0, recommended.length - 4), index + 1))} disabled={recIndex >= Math.max(0, recommended.length - 4)} aria-label="下一组推荐">→</button></div></div><div className="recommendation-window"><div className="recommendation-track" style={{ transform: `translateX(calc(-${recIndex} * (25% + 12px)))` }}>{recommended.map((item) => <Link key={item.id} href={`/product/${item.id}`} className="recommendation-card"><div className="recommendation-image"><img src={item.images[0]} alt={cleanTitle(item.catalogName || item.name)} /></div><div className="recommendation-meta"><strong>{cleanTitle(item.catalogName || item.name)}</strong><span>{money(item.price, item.currency)}</span></div></Link>)}</div></div></section>}
     <footer className="detail-footer"><span>MATERIAL CATALOG / 01</span><span>ITEM FILE CLOSED</span></footer>
   </div>;
 }

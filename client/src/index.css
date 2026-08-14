@@ -96,3 +96,23 @@ a { color:inherit; text-decoration:none; }
 @media (max-width:1100px) { .catalog-rail { width:185px; padding-left:20px; padding-right:20px; }.catalog-main { margin-left:185px; padding-left:25px; padding-right:25px; }.masonry-grid { columns:4 180px; }.detail-content { gap:38px; padding-left:35px; padding-right:35px; } }
 @media (max-width:760px) { .catalog-rail { position:static; width:auto; height:auto; padding:16px 17px 0; border-right:0; background:transparent; }.brand-lockup,.rail-rule,.rail-kicker,.rail-footer { display:none; }.catalog-shell { background-color:var(--paper); }.catalog-main { margin-left:0; padding:0 17px 45px; }.catalog-header { height:62px; gap:12px; background:rgba(247,245,240,.92); }.mobile-brand { display:flex; align-items:center; gap:7px; white-space:nowrap; font-size:12px; font-weight:800; }.mobile-brand img { width:25px; height:25px; }.search-wrap { width:auto; flex:1; padding:9px 11px; }.header-actions { gap:9px; }.header-icon:first-child { display:none; }.category-nav { flex-direction:row; overflow-x:auto; margin:0 -17px; padding:12px 17px 8px; gap:17px; border-bottom:1px solid var(--line); }.category-link { flex:0 0 auto; padding:3px 0 8px; font-size:12px; }.category-link::before { left:0; bottom:0; width:100%; height:2px; }.category-link.is-active::before { height:2px; }.category-link.is-active small { display:none; }.brand-rule { margin:12px -17px 12px; }.brand-kicker { padding:0 17px; }.brand-nav { flex-direction:row; overflow-x:auto; max-height:none; margin:0 -17px; padding:0 17px 8px; gap:16px; }.brand-link { flex:0 0 auto; padding:3px 0 7px; font-size:11px; }.brand-link small { display:none; }.catalog-intro { padding:35px 0 27px; }.catalog-intro h1 { font-size:48px; }.intro-note { font-size:10px; }.masonry-grid { columns:2 130px; column-gap:10px; }.product-card { margin-bottom:19px; }.product-meta { padding-top:7px; }.product-name { font-size:11px; }.product-sub { font-size:9px; }.product-sub strong { font-size:10px; }.detail-header { height:62px; padding:0 17px; }.detail-wordmark { font-size:9px; }.detail-content { display:block; padding:20px 17px 45px; }.detail-gallery { margin-bottom:33px; }.gallery-main > img { max-height:none; }.detail-dossier { padding:0; }.dossier-heading h1 { font-size:40px; }.dossier-price { margin-top:16px; }.detail-facts { grid-template-columns:1fr 1fr; }.detail-footer { padding:14px 17px; font-size:8px; } }
 @media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto !important; transition-duration:.01ms !important; animation-duration:.01ms !important; } }
+
+/* Price ladder carousel: higher-priced catalog items, arrow-controlled and touch-scroll friendly. */
+.recommendations { padding:42px 58px 70px; border-top:1px solid var(--line); }
+.recommendation-head { display:flex; align-items:flex-end; justify-content:space-between; max-width:1304px; margin:0 auto 22px; }
+.recommendation-head h2 { margin:8px 0 5px; font:400 34px/1 'DM Serif Display',Georgia,serif; }
+.recommendation-head p { margin:0; color:var(--ink-soft); font-size:11px; }
+.recommendation-controls { display:flex; gap:7px; }
+.recommendation-controls button { display:grid; place-items:center; width:35px; height:35px; border:1px solid var(--line); color:var(--ink); font-size:18px; transition:background .18s,color .18s,transform .18s; }
+.recommendation-controls button:hover:not(:disabled) { background:var(--ink); color:white; transform:translateY(-2px); }
+.recommendation-controls button:disabled { color:#bbb7af; cursor:not-allowed; }
+.recommendation-window { max-width:1304px; overflow:hidden; margin:0 auto; }
+.recommendation-track { display:flex; gap:12px; transition:transform .35s var(--ease-out); }
+.recommendation-card { flex:0 0 calc((100% - 36px) / 4); min-width:0; }
+.recommendation-image { overflow:hidden; aspect-ratio:1.15/1; background:#ebe8e0; border-radius:10px; }
+.recommendation-image img { width:100%; height:100%; object-fit:cover; transition:transform .35s var(--ease-out); }
+.recommendation-card:hover .recommendation-image img { transform:scale(1.035); }
+.recommendation-meta { display:flex; justify-content:space-between; gap:10px; padding-top:10px; font-size:11px; }
+.recommendation-meta strong { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.recommendation-meta span { flex:0 0 auto; color:var(--coral); font-weight:800; }
+@media (max-width:760px) { .recommendations { padding:32px 17px 48px; }.recommendation-head h2 { font-size:30px; }.recommendation-head p { max-width:190px; line-height:1.5; }.recommendation-card { flex-basis:calc((100% - 12px) / 2); }.recommendation-meta { font-size:10px; } }
