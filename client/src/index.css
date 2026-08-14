@@ -51,6 +51,7 @@ a { color:inherit; text-decoration:none; }
 .profile-dot { display:grid; place-items:center; width:28px; height:28px; border-radius:50%; background:var(--coral); color:white; font-size:11px; font-weight:800; }
 .live-status { display:flex; align-items:center; gap:7px; color:var(--ink-soft); font-size:9px; font-weight:800; letter-spacing:.14em; white-space:nowrap; }
 .live-status i { display:block; width:6px; height:6px; border-radius:50%; background:var(--coral); box-shadow:0 0 0 3px rgba(233,93,79,.12); }
+.demo-label { color:transparent; width:0; overflow:hidden; display:inline-block; }
 .mobile-brand { display:none; }
 .catalog-intro { display:none; }
 .eyebrow { display:flex; align-items:center; gap:8px; color:var(--coral); }
