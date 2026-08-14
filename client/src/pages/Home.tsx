@@ -18,6 +18,7 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("curated");
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [lowPriceIndex, setLowPriceIndex] = useState(0);
   const [demoViewers] = useState(() => Math.floor(Math.random() * 151) + 150);
   const brandItems = useMemo(() => {
     const scoped = category === "all" ? products : products.filter((product) => product.category === category);
@@ -43,7 +44,7 @@ export default function Home() {
     const sameBrand = products.filter((item) => !visibleIds.has(item.id) && brand !== "all" && item.brand === brand);
     const sameCategory = products.filter((item) => !visibleIds.has(item.id) && category !== "all" && item.category === category);
     const pool = scoped.length >= 4 ? scoped : sameBrand.length >= 4 ? sameBrand : sameCategory.length >= 4 ? sameCategory : products.filter((item) => !visibleIds.has(item.id));
-    return [...pool].sort((a, b) => a.price - b.price).slice(0, 8);
+    return [...pool].sort((a, b) => a.price - b.price);
   }, [brand, category, visible, needsCuration]);
   const toggleFavorite = (id: string) => setFavorites((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
   const resetFilters = () => { setCategory("all"); setBrand("all"); setQuery(""); };
@@ -69,7 +70,7 @@ export default function Home() {
           {visible.map((product, index) => { const image = product.images[0]; const isFav = favorites.includes(product.id); return <article className={`product-card card-${index % 7}`} key={product.id} onClick={() => navigate(`/product/${product.id}`)}><div className="product-image-wrap"><img src={image} alt={product.catalogName || product.name} loading={index < 8 ? "eager" : "lazy"} /><div className="image-wash" /><button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "取消收藏" : "收藏商品"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={14} /></span></div><div className="product-meta"><div className="product-name">{cleanTitle(product.catalogName || product.name)}</div><div className="product-sub"><span>{product.brand || product.subCategory || "CATALOG ITEM"}</span><strong>{money(product.price, product.currency)}</strong></div></div></article>; })}
         </section>
         {needsCuration && <div className="curation-note"><span className="curation-note-mark">✦</span><div><strong>正在高标准选择高质量的产品</strong><p>我们会持续筛选更值得加入目录的商品，敬请期待。</p></div></div>}
-        {lowPriceProducts.length > 0 && <section className="low-price-extension"><div className="low-price-extension-label">MORE TO EXPLORE</div><div className="low-price-grid">{lowPriceProducts.map((product, index) => <article className={`product-card card-${(index + 3) % 7}`} key={`low-${product.id}`} onClick={() => navigate(`/product/${product.id}`)}><div className="product-image-wrap"><img src={product.images[0]} alt={product.catalogName || product.name} loading="lazy" /><div className="image-wash" /></div><div className="product-meta"><div className="product-name">{cleanTitle(product.catalogName || product.name)}</div><div className="product-sub"><span>{product.brand || product.subCategory || "CATALOG ITEM"}</span><strong>{money(product.price, product.currency)}</strong></div></div></article>)}</div></section>}
+        {lowPriceProducts.length > 0 && <section className="low-price-extension"><div className="low-price-extension-top"><div className="low-price-extension-label">MORE TO EXPLORE</div><div className="low-price-controls"><button onClick={() => setLowPriceIndex((index) => (index - 1 + lowPriceProducts.length) % lowPriceProducts.length)} aria-label="上一个更多商品">←</button><button onClick={() => setLowPriceIndex((index) => (index + 1) % lowPriceProducts.length)} aria-label="下一个更多商品">→</button></div></div><div className="low-price-grid">{Array.from({ length: Math.min(4, lowPriceProducts.length) }, (_, offset) => { const product = lowPriceProducts[(lowPriceIndex + offset) % lowPriceProducts.length]; return <article className={`product-card card-${(offset + 3) % 7}`} key={`low-${product.id}-${lowPriceIndex}-${offset}`} onClick={() => navigate(`/product/${product.id}`)}><div className="product-image-wrap"><img src={product.images[0]} alt={product.catalogName || product.name} loading="lazy" /><div className="image-wash" /></div><div className="product-meta"><div className="product-name">{cleanTitle(product.catalogName || product.name)}</div><div className="product-sub"><span>{product.brand || product.subCategory || "CATALOG ITEM"}</span><strong>{money(product.price, product.currency)}</strong></div></div></article>; })}</div></section>}
       </> : <div className="empty-state"><span>NO MATCHES / 00</span><h2>换一个关键词试试。</h2><button onClick={resetFilters}>清除筛选</button></div>}
     </main>
   </div>;
