@@ -135,3 +135,9 @@ a { color:inherit; text-decoration:none; }
 .recommendation-feature-actions { display:flex; gap:9px; margin-top:27px; }
 .recommendation-feature-actions .primary-action { flex:1; }
 @media (max-width:760px) { .recommendation-feature { display:block; padding-top:10px; }.recommendation-feature-image,.recommendation-feature-image img { min-height:270px; }.recommendation-feature-info { padding-top:25px; }.recommendation-feature-info h3 { font-size:38px; }.recommendation-feature-actions { margin-top:22px; }.recommendation-head p { max-width:180px; } }
+
+/* Infinite recommendation rail: controls stay visible while the product cards wrap around. */
+.recommendation-only-controls { display:flex; justify-content:flex-end; gap:7px; max-width:1304px; margin:0 auto 18px; }
+.recommendation-only-controls button { display:grid; place-items:center; width:35px; height:35px; border:1px solid var(--line); color:var(--ink); font-size:18px; transition:background .18s,color .18s,transform .18s; }
+.recommendation-only-controls button:hover { background:var(--ink); color:white; transform:translateY(-2px); }
+@media (max-width:760px) { .recommendation-only-controls { margin-bottom:13px; } }
