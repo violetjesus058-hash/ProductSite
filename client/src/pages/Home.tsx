@@ -38,8 +38,10 @@ export default function Home() {
   const lowPriceProducts = useMemo(() => {
     if (visible.length > 4) return [];
     const visibleIds = new Set(visible.map((item) => item.id));
-    const scoped = products.filter((item) => !visibleIds.has(item.id) && (brand !== "all" ? item.brand === brand : category !== "all" ? item.category === category : true));
-    const pool = scoped.length >= 4 ? scoped : products.filter((item) => !visibleIds.has(item.id));
+    const scoped = products.filter((item) => !visibleIds.has(item.id) && (brand === "all" || item.brand === brand) && (category === "all" || item.category === category));
+    const sameBrand = products.filter((item) => !visibleIds.has(item.id) && brand !== "all" && item.brand === brand);
+    const sameCategory = products.filter((item) => !visibleIds.has(item.id) && category !== "all" && item.category === category);
+    const pool = scoped.length >= 4 ? scoped : sameBrand.length >= 4 ? sameBrand : sameCategory.length >= 4 ? sameCategory : products.filter((item) => !visibleIds.has(item.id));
     return [...pool].sort((a, b) => a.price - b.price).slice(0, 8);
   }, [brand, category, visible]);
   const toggleFavorite = (id: string) => setFavorites((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
