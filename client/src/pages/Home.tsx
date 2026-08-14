@@ -68,8 +68,8 @@ export default function Home() {
           const image = product.images[0];
           const isFav = favorites.includes(product.id);
           return <article className={`product-card card-${index % 7}`} key={product.id} onClick={() => navigate(`/product/${product.id}`)}>
-            <div className="product-image-wrap"><img src={image} alt={product.name} loading={index < 8 ? "eager" : "lazy"} /><div className="image-wash" /><button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "取消收藏" : "收藏商品"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={14} /></span></div>
-            <div className="product-meta"><div className="product-name">{cleanTitle(product.name || product.catalogName)}</div><div className="product-sub"><span>{product.brand || product.subCategory || "CATALOG ITEM"}</span><strong>{money(product.price, product.currency)}</strong></div></div>
+            <div className="product-image-wrap"><img src={image} alt={product.catalogName || product.name} loading={index < 8 ? "eager" : "lazy"} /><div className="image-wash" /><button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "取消收藏" : "收藏商品"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={14} /></span></div>
+            <div className="product-meta"><div className="product-name">{cleanTitle(product.catalogName || product.name)}</div><div className="product-sub"><span>{product.brand || product.subCategory || "CATALOG ITEM"}</span><strong>{money(product.price, product.currency)}</strong></div></div>
           </article>;
         })}</section> : <div className="empty-state"><span>NO MATCHES / 00</span><h2>换一个关键词试试。</h2><button onClick={() => { setQuery(""); setCategory("all"); }}>清除筛选</button></div>}
       </main>
