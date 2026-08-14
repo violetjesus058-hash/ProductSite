@@ -18,10 +18,10 @@ export default function ProductDetail() {
   const currentImage = gallery[selectedImage] || gallery[0];
   const recommended = useMemo(() => {
     if (!product) return [];
-    const low = product.price * 1.05;
-    const high = product.price * 1.8;
-    const pool = products.filter((item) => item.id !== product.id && item.price >= low && item.price <= high);
-    const fallback = products.filter((item) => item.id !== product.id && item.price > product.price).sort((a, b) => a.price - b.price);
+    const low = product.price * 0.8;
+    const high = product.price * 1.35;
+    const pool = products.filter((item) => item.id !== product.id && item.price >= low && item.price <= high).sort((a, b) => Math.abs(a.price - product.price) - Math.abs(b.price - product.price));
+    const fallback = products.filter((item) => item.id !== product.id).sort((a, b) => Math.abs(a.price - product.price) - Math.abs(b.price - product.price));
     return [...(pool.length ? pool : fallback)].sort(() => Math.random() - 0.5).slice(0, 8);
   }, [product]);
   const activeRecommendation = recommended[recIndex];
@@ -50,7 +50,7 @@ export default function ProductDetail() {
         <div className="details-block"><div className="block-label">ITEM NOTES</div><p>{product.description || "该商品暂无文字描述，图片与规格信息以页面采集结果为准。"}</p></div><div className="detail-facts"><div><span>分类</span><strong>{categoryLabels[product.category] || product.category} / {product.subCategory}</strong></div><div><span>品牌</span><strong>{product.brand || "未提供"}</strong></div><div><span>采集时间</span><strong>{product.collectedAt ? product.collectedAt.slice(0, 10) : "—"}</strong></div></div>
       </section>
     </main>
-    {recommended.length > 0 && <section className="recommendations"><div className="recommendation-head"><div><div className="block-label">PRICE LADDER / CURATED PICKS</div><h2>还可以看看</h2><p>从当前价位向上探索更接近的高价单品。</p></div><div className="recommendation-controls"><button onClick={() => setRecIndex((index) => Math.max(0, index - 1))} disabled={recIndex === 0} aria-label="上一组推荐">←</button><span>{String(recIndex + 1).padStart(2, "0")} / {String(Math.max(1, recommended.length - 3)).padStart(2, "0")}</span><button onClick={() => setRecIndex((index) => Math.min(Math.max(0, recommended.length - 4), index + 1))} disabled={recIndex >= Math.max(0, recommended.length - 4)} aria-label="下一组推荐">→</button></div></div><div className="recommendation-window"><div className="recommendation-track" style={{ transform: `translateX(calc(-${recIndex} * (25% + 12px)))` }}>{recommended.map((item) => <Link key={item.id} href={`/product/${item.id}`} className="recommendation-card"><div className="recommendation-image"><img src={item.images[0]} alt={cleanTitle(item.catalogName || item.name)} /></div><div className="recommendation-meta"><strong>{cleanTitle(item.catalogName || item.name)}</strong><span>{money(item.price, item.currency)}</span></div></Link>)}</div></div></section>}
+    {recommended.length > 0 && <section className="recommendations"><div className="recommendation-head"><div><div className="block-label">PRICE RANGE / MID-TICKET PICKS</div><h2>还可以看看</h2><p>从当前价位探索更接近的中等客单价单品。</p></div><div className="recommendation-controls"><button onClick={() => setRecIndex((index) => Math.max(0, index - 1))} disabled={recIndex === 0} aria-label="上一组推荐">←</button><span>{String(recIndex + 1).padStart(2, "0")} / {String(Math.max(1, recommended.length - 3)).padStart(2, "0")}</span><button onClick={() => setRecIndex((index) => Math.min(Math.max(0, recommended.length - 4), index + 1))} disabled={recIndex >= Math.max(0, recommended.length - 4)} aria-label="下一组推荐">→</button></div></div><div className="recommendation-window"><div className="recommendation-track" style={{ transform: `translateX(calc(-${recIndex} * (25% + 12px)))` }}>{recommended.map((item) => <Link key={item.id} href={`/product/${item.id}`} className="recommendation-card"><div className="recommendation-image"><img src={item.images[0]} alt={cleanTitle(item.catalogName || item.name)} /></div><div className="recommendation-meta"><strong>{cleanTitle(item.catalogName || item.name)}</strong><span>{money(item.price, item.currency)}</span></div></Link>)}</div></div></section>}
     <footer className="detail-footer"><span>MATERIAL CATALOG / 01</span><span>ITEM FILE CLOSED</span></footer>
   </div>;
 }
