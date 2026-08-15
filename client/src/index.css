@@ -200,3 +200,43 @@ a { color:inherit; text-decoration:none; }
 @keyframes record-popover-in { from { opacity:0; transform:translateY(-5px) scale(.97); } to { opacity:1; transform:translateY(0) scale(1); } }
 @media (max-width:760px) { .header-actions { gap:7px; } .header-record-button span { display:none; } .record-popover { position:fixed; top:68px; right:12px; width:min(292px, calc(100vw - 24px)); } .live-status { max-width:118px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; } }
 @media (prefers-reduced-motion: reduce) { .record-popover, .record-row { animation:none; transition:none; } }
+
+/* Editorial Pinboard reminder: mobile keeps the catalog tactile and editorial—content stays visible first, controls unfold only when requested. */
+.mobile-discovery,.mobile-settings-trigger,.mobile-settings-backdrop { display:none; }
+.catalog-style-white { --paper:#fff; --paper-deep:#f7f7f5; --ink:#171717; --ink-soft:#6a6965; --line:#e5e4e0; }
+.catalog-style-gray { --paper:#e9e9e7; --paper-deep:#dededb; --ink:#242424; --ink-soft:#6c6c68; --line:#d1d1cd; }
+.catalog-style-black { --paper:#171717; --paper-deep:#222; --ink:#f5f4ef; --ink-soft:#b8b7b0; --line:#3b3b37; }
+.catalog-style-green { --paper:#edf3ea; --paper-deep:#dce8d8; --ink:#1d2a20; --ink-soft:#687568; --line:#cbd9c8; }
+.type-size-1 { font-size:1.04em; }
+.type-size-2 { font-size:1.1em; }
+.tracking-level-1 { letter-spacing:.015em; }
+.tracking-level-2 { letter-spacing:.035em; }
+@media (max-width:760px) {
+  .catalog-shell { min-height:100dvh; }
+  .mobile-discovery { display:flex; align-items:flex-end; justify-content:space-between; gap:18px; margin:0 -17px; padding:18px 17px 16px; background:#d9d9d7; color:#fff; }
+  .mobile-discovery.is-open { align-items:flex-start; background:#cfcfcd; }
+  .mobile-discovery > div { min-width:0; }
+  .mobile-discovery-kicker { display:block; margin-bottom:6px; color:var(--coral); font-size:9px; font-weight:800; letter-spacing:.14em; }
+  .mobile-discovery strong { display:block; max-width:220px; font-family:Georgia,serif; font-size:21px; line-height:1.05; }
+  .mobile-discovery p { max-width:245px; margin:9px 0 0; color:rgba(255,255,255,.82); font-size:11px; line-height:1.45; }
+  .mobile-discovery > button { display:inline-flex; flex:none; align-items:center; gap:4px; padding:8px 10px; border-radius:10px; background:#fff; color:#292927; font-size:10px; font-weight:700; }
+  .mobile-discovery > button svg { transition:transform .2s; }
+  .mobile-discovery.is-open > button svg { transform:rotate(180deg); }
+  .mobile-settings-trigger { position:fixed; left:12px; bottom:14px; z-index:35; display:grid; place-items:center; width:38px; height:38px; border:1px solid rgba(27,27,25,.16); border-radius:50%; background:rgba(250,249,245,.92); color:var(--ink); box-shadow:0 6px 18px rgba(27,25,18,.14); }
+  .mobile-settings-backdrop { position:fixed; inset:0; z-index:60; display:flex; align-items:flex-end; background:rgba(16,16,14,.32); }
+  .mobile-settings-sheet { width:100%; padding:20px 18px 28px; border-radius:20px 20px 0 0; background:var(--paper); color:var(--ink); box-shadow:0 -14px 40px rgba(20,18,13,.2); animation:settings-sheet-in .22s var(--ease-out, cubic-bezier(.23,1,.32,1)); }
+  .mobile-settings-head { display:flex; align-items:flex-start; justify-content:space-between; padding-bottom:16px; border-bottom:1px solid var(--line); }
+  .mobile-settings-head h2 { margin:0; font-family:Georgia,serif; font-size:27px; font-weight:500; }
+  .mobile-settings-head > button { display:grid; place-items:center; color:var(--ink-soft); }
+  .settings-group { padding:17px 0 8px; }
+  .settings-label { display:block; margin-bottom:10px; color:var(--ink-soft); font-size:9px; font-weight:800; letter-spacing:.14em; }
+  .style-options { display:flex; flex-wrap:wrap; gap:7px; }
+  .style-options button { padding:8px 10px; border:1px solid var(--line); border-radius:999px; color:var(--ink-soft); font-size:10px; }
+  .style-options button.is-selected { border-color:var(--coral); background:var(--coral); color:#fff; }
+  .settings-range { display:block; padding:13px 0 5px; }
+  .settings-range > span { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; font-size:11px; }
+  .settings-range small { color:var(--ink-soft); font-size:10px; }
+  .settings-range input { width:100%; accent-color:var(--coral); }
+  @keyframes settings-sheet-in { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+}
+@media (prefers-reduced-motion: reduce) { .mobile-settings-sheet { animation:none; } .mobile-discovery > button svg { transition:none; } }
