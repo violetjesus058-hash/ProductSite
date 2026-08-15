@@ -114,3 +114,7 @@
 - [ ] 修复外部部署平台将输出目录误判为 .vitepress/dist 的配置冲突。
 - [ ] 保持现有 build 产物 dist/public 与项目部署配置一致。
 - [ ] 重新运行生产构建并验证部署输出目录存在。
+
+
+- [ ] 提交并推送部署输出目录修复到 ProductSite GitHub 仓库。
+- [ ] 验证远程分支包含 package.json 和 scripts/sync-deploy-output.mjs 更新。
