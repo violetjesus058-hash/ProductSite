@@ -332,3 +332,29 @@ a { color:inherit; text-decoration:none; }
 .platform-source.is-primary { border-color:var(--coral); background:#fff7f4; color:var(--coral); }
 .platform-source.is-primary small { color:var(--coral); }
 @media (max-width:760px) { .platform-source-list { grid-template-columns:repeat(3, minmax(0, 1fr)); gap:5px; } .platform-source { min-height:40px; padding:8px 7px; } .platform-source strong { font-size:10px; } }
+
+/* Each detail image gets its own selection-and-purchase dossier before recommendations. */
+.detail-purchase-modules { display:grid; gap:26px; padding:42px; border-top:1px solid var(--line); }
+.detail-purchase-module { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr); min-height:390px; border:1px solid var(--line); background:rgba(255,254,250,.45); }
+.detail-purchase-image { position:relative; min-height:390px; background:var(--paper-deep); overflow:hidden; }
+.detail-purchase-image img { display:block; width:100%; height:100%; min-height:390px; object-fit:contain; mix-blend-mode:multiply; }
+.detail-purchase-image > span { position:absolute; left:15px; bottom:14px; padding:5px 8px; background:rgba(255,254,250,.86); color:var(--ink-soft); font-size:10px; letter-spacing:.12em; }
+.detail-purchase-info { display:flex; flex-direction:column; justify-content:center; padding:34px; }
+.module-kicker { color:var(--coral); font-size:10px; font-weight:800; letter-spacing:.14em; }
+.detail-purchase-info h2 { margin:16px 0 12px; font:400 clamp(27px,3vw,44px)/1.05 'DM Serif Display',Georgia,serif; }
+.module-price { color:var(--coral); font-size:20px; }
+.module-status { display:flex; align-items:center; gap:7px; margin-top:9px; color:var(--ink-soft); font-size:10px; }
+.module-option-group { margin-top:20px; }
+.module-option-group > span { display:block; margin-bottom:8px; color:var(--ink-soft); font-size:10px; font-weight:800; letter-spacing:.08em; }
+.module-option-group > div { display:flex; flex-wrap:wrap; gap:6px; }
+.module-option-group button { padding:8px 10px; border:1px solid var(--line); background:rgba(255,254,250,.72); color:var(--ink-soft); font-size:10px; }
+.module-option-group button:hover, .module-option-group button.is-selected { border-color:var(--coral); background:#fff7f4; color:var(--coral); }
+.module-buy-button { display:flex; align-items:center; justify-content:center; gap:8px; min-height:45px; margin-top:25px; background:var(--ink); color:#fff; font-size:11px; font-weight:800; }
+.module-buy-button:hover { transform:translateY(-2px); }
+@media (max-width:760px) {
+  .detail-purchase-modules { gap:18px; padding:24px 16px; }
+  .detail-purchase-module { grid-template-columns:1fr; min-height:0; }
+  .detail-purchase-image, .detail-purchase-image img { min-height:260px; height:260px; }
+  .detail-purchase-info { padding:24px 20px; }
+  .detail-purchase-info h2 { font-size:32px; }
+}
