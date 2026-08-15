@@ -221,3 +221,8 @@
 - [ ] 显示 Kakobuy、Oopbuy、Litbuy、Superbuy、GTbuy、Fansbuy 全部平台入口。
 - [ ] Kakobuy 作为首位主入口并增加快速物流提示。
 - [ ] 其他平台保持独立卡片展示，不使用隐藏式下拉。
+
+
+- [ ] 修正平台入口显示条件，确保 Ralph Lauren 商品页可见。
+- [ ] 将 Oopbuy、Litbuy、Superbuy、GTbuy、Fansbuy 按每行三个按钮排列。
+- [ ] 验证平台按钮跳转链接和窄屏布局。
