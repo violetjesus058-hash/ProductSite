@@ -105,3 +105,7 @@
 - [ ] 为明显低价或高价商品增加 NEW 演示徽章。
 - [ ] 验证徽章在主商品墙、MORE TO EXPLORE 和移动端卡片中的位置与可读性。
 - [ ] 保存演示徽章更新版本。
+
+- [ ] 为 shoes、fragrance、watches、wallets 类商品增加 CURATED 精选徽章和图标。
+- [ ] 处理 CURATED 与 NEW、200+ SOLD 同时出现时的徽章排布。
+- [ ] 验证桌面端与移动端商品卡片显示并保存版本。

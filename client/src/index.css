@@ -174,3 +174,9 @@ a { color:inherit; text-decoration:none; }
 .demo-product-badge.is-popular { color:#b94d3d; border-color:rgba(185,77,61,.35); }
 .demo-product-badge.is-new { color:#24221f; background:#f6c7ba; border-color:#d98977; }
 @media (max-width:760px) { .demo-product-badge { top:7px; right:7px; min-height:21px; padding:0 6px; font-size:8px; letter-spacing:.08em; } }
+
+/* Editorial Pinboard reminder: CURATED is a restrained selection signal for shoes, watches, wallets, and fragrance-related catalog items. */
+.curated-product-badge { position:absolute; top:10px; right:10px; z-index:4; display:inline-flex; align-items:center; min-height:24px; padding:0 8px; border:1px solid rgba(24,23,21,.2); border-radius:999px; background:rgba(250,248,242,.94); color:#24221f; font-size:9px; font-weight:800; letter-spacing:.1em; line-height:1; box-shadow:0 3px 10px rgba(30,25,18,.08); backdrop-filter:blur(8px); }
+.demo-product-badge + .curated-product-badge { top:40px; }
+.curated-product-badge::first-letter { color:#c95846; }
+@media (max-width:760px) { .curated-product-badge { top:7px; right:7px; min-height:21px; padding:0 6px; font-size:8px; letter-spacing:.06em; } .demo-product-badge + .curated-product-badge { top:34px; } }
