@@ -109,3 +109,8 @@
 - [ ] 为 shoes、fragrance、watches、wallets 类商品增加 CURATED 精选徽章和图标。
 - [ ] 处理 CURATED 与 NEW、200+ SOLD 同时出现时的徽章排布。
 - [ ] 验证桌面端与移动端商品卡片显示并保存版本。
+
+
+- [ ] 修复外部部署平台将输出目录误判为 .vitepress/dist 的配置冲突。
+- [ ] 保持现有 build 产物 dist/public 与项目部署配置一致。
+- [ ] 重新运行生产构建并验证部署输出目录存在。
