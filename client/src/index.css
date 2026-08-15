@@ -318,3 +318,17 @@ a { color:inherit; text-decoration:none; }
   .recommendation-waterfall { columns:2 145px; column-gap:12px; }
   .recommendation-waterfall .recommendation-card { margin-bottom:14px; }
 }
+
+/* Buying platforms: Kakobuy leads with the primary coral signal; other sources remain visible but neutral. */
+.platform-sources { margin-top:22px; }
+.platform-sources-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; color:var(--ink-soft); font-size:10px; font-weight:800; letter-spacing:.12em; }
+.platform-sources-head small { color:#aaa69e; font-size:9px; font-weight:500; letter-spacing:0; }
+.platform-source-list { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:7px; }
+.platform-source { display:flex; align-items:center; justify-content:space-between; gap:8px; min-height:42px; padding:9px 11px; border:1px solid var(--line); background:rgba(255,254,250,.55); color:var(--ink); transition:transform .16s var(--ease-out), border-color .18s, background .18s; }
+.platform-source:hover { transform:translateY(-2px); border-color:var(--ink-soft); }
+.platform-source span { display:flex; min-width:0; flex-direction:column; gap:3px; }
+.platform-source strong { font-size:11px; }
+.platform-source small { color:#aaa69e; font-size:9px; }
+.platform-source.is-primary { border-color:var(--coral); background:#fff7f4; color:var(--coral); }
+.platform-source.is-primary small { color:var(--coral); }
+@media (max-width:760px) { .platform-source-list { grid-template-columns:1fr; } }

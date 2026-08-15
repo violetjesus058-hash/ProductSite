@@ -196,3 +196,28 @@
 - [ ] 为每个商品生成独立且稳定的随机 Captured 日期。
 - [ ] 所有 Captured 日期限制在 2026-08-01 之前。
 - [ ] 验证详情页不会统一显示同一天。
+
+
+- [ ] 为 Ralph Lauren T-shirt 整理 Kakobuy、Oopbuy、Litbuy、Superbuy、GTbuy、Fansbuy 六个平台链接。
+- [ ] 区分 GTbuy 与 Superbuy 当前重复链接，避免详情页重复展示。
+- [ ] 设计多平台购买入口、平台状态和同款候选标识。
+
+
+- [ ] 将正确的 Superbuy 链接加入 Ralph Lauren T-shirt 平台清单。
+- [ ] 保留 GTbuy 独立入口，不再与 Superbuy 重复。
+- [ ] 更新多平台入口方案中的有效平台数量和排序。
+
+
+- [ ] 将 Kakobuy 标记为 Ralph Lauren T-shirt 的默认主入口。
+- [ ] 将 Oopbuy、Litbuy、Superbuy、GTbuy、Fansbuy 作为备用购买来源。
+- [ ] 在详情页主按钮和 Buying options 列表中保持该层级。
+
+
+- [ ] 详情页只保留 Kakobuy 主购买按钮。
+- [ ] 隐藏 Oopbuy、Litbuy、Superbuy、GTbuy、Fansbuy 等其他平台入口。
+- [ ] 增加中性快速物流提示，不展示其他平台物流对比。
+
+
+- [ ] 显示 Kakobuy、Oopbuy、Litbuy、Superbuy、GTbuy、Fansbuy 全部平台入口。
+- [ ] Kakobuy 作为首位主入口并增加快速物流提示。
+- [ ] 其他平台保持独立卡片展示，不使用隐藏式下拉。
