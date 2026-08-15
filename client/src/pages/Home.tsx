@@ -1,8 +1,9 @@
 // Editorial Pinboard reminder: the homepage is a browsable catalog wall, not a centered storefront; images lead, copy follows.
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "wouter";
-import { ArrowUpRight, ChevronDown, Grid2X2, Heart, Search, SlidersHorizontal } from "lucide-react";
+import { ArrowUpRight, ChevronDown, Grid2X2, Heart, History as HistoryIcon, Search, SlidersHorizontal, X } from "lucide-react";
 import { products, categoryLabels, categoryOrder } from "@/data/products";
+import { formatVisitTime, readFavorites, readHistory, saveFavorites, type HistoryEntry } from "@/lib/catalogMemory";
 
 function englishValue(value: string, fallback: string) { return /[\u4e00-\u9fff]/.test(value) ? fallback : value; }
 function cleanTitle(value: string) { return value.replace(/📏.*$/, "").replace(/pls add whatsapp.*$/i, "").replace(/whatsapp[:：]?\s*\d+/gi, "").replace(/\s+/g, " ").trim(); }
@@ -29,8 +30,11 @@ export default function Home() {
   const [brand, setBrand] = useState("all");
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("curated");
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const [favorites, setFavorites] = useState<string[]>(() => readFavorites());
+  const [history, setHistory] = useState<HistoryEntry[]>(() => readHistory());
+  const [openPanel, setOpenPanel] = useState<"favorites" | "history" | null>(null);
   const [lowPriceIndex, setLowPriceIndex] = useState(0);
+  useEffect(() => saveFavorites(favorites), [favorites]);
   const [demoViewers] = useState(() => Math.floor(Math.random() * 151) + 150);
   const brandItems = useMemo(() => {
     const scoped = category === "all" ? products : products.filter((product) => product.category === category);
@@ -59,6 +63,8 @@ export default function Home() {
     return [...pool].sort((a, b) => a.price - b.price);
   }, [brand, category, visible, needsCuration]);
   const toggleFavorite = (id: string) => setFavorites((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
+  const favoriteProducts = favorites.map((id) => products.find((item) => item.id === id)).filter(Boolean) as typeof products;
+  const historyProducts = history.map((entry) => ({ entry, product: products.find((item) => item.id === entry.id) })).filter((item) => item.product) as { entry: HistoryEntry; product: (typeof products)[number] }[];
   const resetFilters = () => { setCategory("all"); setBrand("all"); setQuery(""); };
 
   return <div className="catalog-shell">
@@ -75,7 +81,7 @@ export default function Home() {
       <div className="rail-footer"><span>CATALOG / 01</span><span>2026</span></div>
     </aside>
     <main className="catalog-main">
-      <header className="catalog-header"><div className="mobile-brand"><img src="/manus-storage/catalog-mark_f15a35f4.png" alt="" /> <span>Material Catalog</span></div><div className="search-wrap"><Search size={17} strokeWidth={1.8} /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search brands, products, or categories" aria-label="Search products" />{query && <button onClick={() => setQuery("")}>Clear</button>}</div><div className="header-actions"><button className="header-icon" aria-label="Filters"><SlidersHorizontal size={18} /></button><button className="header-icon" aria-label="Grid view"><Grid2X2 size={18} /></button><span className="live-status"><i /> <span className="demo-label">Demo</span> · Browsing {demoViewers} · Historical visits 20K+</span></div></header>
+      <header className="catalog-header"><div className="mobile-brand"><img src="/manus-storage/catalog-mark_f15a35f4.png" alt="" /> <span>Material Catalog</span></div><div className="search-wrap"><Search size={17} strokeWidth={1.8} /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search brands, products, or categories" aria-label="Search products" />{query && <button onClick={() => setQuery("")}>Clear</button>}</div><div className="header-actions"><button className="header-icon" aria-label="Filters"><SlidersHorizontal size={18} /></button><button className="header-icon" aria-label="Grid view"><Grid2X2 size={18} /></button><div className="header-menu"><button className={`header-icon header-record-button ${openPanel === "favorites" ? "is-active" : ""}`} aria-label={`Saved items, ${favoriteProducts.length}`} aria-expanded={openPanel === "favorites"} onClick={() => setOpenPanel(openPanel === "favorites" ? null : "favorites")}><Heart size={18} fill={favoriteProducts.length ? "currentColor" : "none"} /><span>{favoriteProducts.length}</span></button>{openPanel === "favorites" && <div className="record-popover"><div className="record-popover-head"><strong>SAVED ITEMS</strong><button onClick={() => setOpenPanel(null)} aria-label="Close saved items"><X size={15} /></button></div>{favoriteProducts.length ? favoriteProducts.map((product) => <button className="record-row" key={product.id} onClick={() => navigate(`/product/${product.id}`)}><img src={product.images[0]} alt="" /><span><strong>{cleanTitle(product.catalogName || product.name)}</strong><small>{money(product.price, product.currency)}</small></span><ArrowUpRight size={14} /></button>) : <p className="record-empty">Your saved products will appear here.</p>}</div>}</div><div className="header-menu"><button className={`header-icon header-record-button ${openPanel === "history" ? "is-active" : ""}`} aria-label={`Browsing history, ${historyProducts.length}`} aria-expanded={openPanel === "history"} onClick={() => { setHistory(readHistory()); setOpenPanel(openPanel === "history" ? null : "history"); }}><HistoryIcon size={18} /><span>{historyProducts.length}</span></button>{openPanel === "history" && <div className="record-popover"><div className="record-popover-head"><strong>BROWSING HISTORY</strong><button onClick={() => setOpenPanel(null)} aria-label="Close browsing history"><X size={15} /></button></div>{historyProducts.length ? historyProducts.map(({ entry, product }) => <button className="record-row" key={product.id} onClick={() => navigate(`/product/${product.id}`)}><img src={product.images[0]} alt="" /><span><strong>{cleanTitle(product.catalogName || product.name)}</strong><small>Viewed {formatVisitTime(entry.visitedAt)}</small></span><ArrowUpRight size={14} /></button>) : <p className="record-empty">Products you open will appear here.</p>}</div>}</div><span className="live-status"><i /> <span className="demo-label">Demo</span> · Browsing {demoViewers} · Historical visits 20K+</span></div></header>
       <div className="catalog-toolbar"><div className="result-label"><span className="coral-dot" /> {brand !== "all" ? englishValue(brand, "SELECTED BRAND") : category === "all" ? "ALL PRODUCTS" : englishCategoryLabels[category] || category.toUpperCase()}</div><label className="sort-select">Sort <select value={sort} onChange={(e) => setSort(e.target.value)}><option value="curated">Curated</option><option value="price-low">Price: Low to High</option><option value="price-high">Price: High to Low</option></select><ChevronDown size={14} /></label></div>
       {visible.length > 0 ? <>
         <section className="masonry-grid" aria-label="Product list">
