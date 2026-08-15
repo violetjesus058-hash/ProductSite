@@ -1,7 +1,7 @@
 // Editorial Pinboard reminder: the homepage is a browsable catalog wall, not a centered storefront; images lead, copy follows.
 import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "wouter";
-import { ArrowUpRight, ChevronDown, Grid2X2, Heart, History as HistoryIcon, Search, Settings2, SlidersHorizontal, X } from "lucide-react";
+import { ArrowUpRight, Bell, ChevronDown, Grid2X2, Heart, History as HistoryIcon, Home as HomeIcon, MessageCircle, Search, Settings2, SlidersHorizontal, X } from "lucide-react";
 import { products, categoryLabels, categoryOrder } from "@/data/products";
 import { formatVisitTime, readFavorites, readHistory, saveFavorites, type HistoryEntry } from "@/lib/catalogMemory";
 
@@ -77,6 +77,7 @@ export default function Home() {
   const resetFilters = () => { setCategory("all"); setBrand("all"); setQuery(""); };
 
   return <div className={`catalog-shell catalog-style-${pageStyle} type-size-${fontSizeLevel} tracking-level-${letterSpacingLevel}`}>
+    <nav className="mobile-icon-rail" aria-label="Mobile navigation"><button className="is-active" aria-label="Catalog home"><HomeIcon size={19} /></button><button aria-label="Browse categories"><Grid2X2 size={19} /></button><button aria-label="Saved items" onClick={() => setOpenPanel("favorites")}><Heart size={19} /></button><button aria-label="Notifications"><Bell size={19} /></button><button aria-label="Messages"><MessageCircle size={19} /></button><button aria-label="Display settings" onClick={() => setSettingsOpen(true)}><Settings2 size={19} /></button></nav>
     <aside className="catalog-rail">
       <button className="brand-lockup" onClick={resetFilters} aria-label="Back to ALL PRODUCTS"><img src="/manus-storage/catalog-mark_f15a35f4.png" alt="" className="brand-mark" /><span className="brand-type">MATERIAL<br /><em>CATALOG</em></span></button>
       <div className="rail-rule" /><div className="rail-kicker">BROWSE BY</div>
