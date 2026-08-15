@@ -27,11 +27,34 @@ export default function ProductDetail() {
   const currentImage = gallery[selectedImage] || gallery[0];
   const recommended = useMemo(() => {
     if (!product) return [];
-    const low = product.price * 0.8;
-    const high = product.price * 1.35;
-    const pool = products.filter((item) => item.id !== product.id && item.price >= low && item.price <= high);
-    const fallback = products.filter((item) => item.id !== product.id);
-    return [...(pool.length ? pool : fallback)].sort(() => Math.random() - 0.5);
+    const shuffle = <T,>(items: T[]) => [...items].sort(() => Math.random() - 0.5);
+    const allCandidates = products.filter((item) => item.id !== product.id);
+    const low = product.price * 0.65;
+    const high = product.price * 1.6;
+    const priceCandidates = allCandidates.filter((item) => item.price >= low && item.price <= high);
+    const isPhoneCase = /phone\s*case|case|手机壳/i.test(`${product.name} ${product.catalogName} ${product.subCategory}`);
+    if (!isPhoneCase) return shuffle(priceCandidates.length ? priceCandidates : allCandidates);
+
+    const matches = (item: typeof product, pattern: RegExp) => pattern.test(`${item.name} ${item.catalogName} ${item.subCategory} ${item.category}`);
+    const buckets = [
+      priceCandidates.filter((item) => matches(item, /phone\s*case|case|手机壳/i)),
+      priceCandidates.filter((item) => matches(item, /bag|wallet|belt|cap|hat|glasses|bracelet|watch|accessor/i)),
+      priceCandidates.filter((item) => matches(item, /shoe|boot|sneaker|clothing|shirt|hoodie|jacket|pants/i)),
+      allCandidates,
+    ].map(shuffle);
+    const result: typeof allCandidates = [];
+    const seenIds = new Set<string>();
+    const seenImages = new Set<string>();
+    const add = (item: (typeof allCandidates)[number]) => {
+      const image = item.images[0] || item.id;
+      if (seenIds.has(item.id) || seenImages.has(image)) return;
+      seenIds.add(item.id);
+      seenImages.add(image);
+      result.push(item);
+    };
+    for (let index = 0; index < 60; index += 1) buckets.forEach((bucket) => add(bucket[index % Math.max(bucket.length, 1)]));
+    allCandidates.forEach(add);
+    return result;
   }, [product]);
   useEffect(() => { setRecommendationCount(24); window.scrollTo({ top: 0, left: 0, behavior: "auto" }); }, [product?.id]);
   useEffect(() => { const node = recommendationSentinel.current; if (!node || recommended.length === 0) return; const observer = new IntersectionObserver((entries) => { if (entries[0]?.isIntersecting) setRecommendationCount((count) => count + 24); }, { rootMargin: "700px" }); observer.observe(node); return () => observer.disconnect(); }, [recommended.length, recommendationCount]);
