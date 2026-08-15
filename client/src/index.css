@@ -304,3 +304,6 @@ a { color:inherit; text-decoration:none; }
   .low-price-grid { columns:2 145px; column-gap:12px; }
   .low-price-grid .product-card { margin-bottom:14px; }
 }
+
+/* Infinite recommendation sentinel: invisible spacing keeps the observer reachable without creating a visible footer. */
+.recommendation-sentinel { width:100%; height:2px; clear:both; }

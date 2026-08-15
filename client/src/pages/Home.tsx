@@ -1,5 +1,5 @@
 // Editorial Pinboard reminder: the homepage is a browsable catalog wall, not a centered storefront; images lead, copy follows.
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { ArrowUpRight, Bell, ChevronDown, Grid2X2, Heart, History as HistoryIcon, Home as HomeIcon, MessageCircle, Search, Settings2, SlidersHorizontal, X } from "lucide-react";
 import { products, categoryLabels, categoryOrder } from "@/data/products";
@@ -38,6 +38,8 @@ export default function Home() {
   const [imageViewer, setImageViewer] = useState<string | null>(null);
   const [subCategory, setSubCategory] = useState("all");
   const [subCategoryOpen, setSubCategoryOpen] = useState(false);
+  const [recommendationCount, setRecommendationCount] = useState(24);
+  const recommendationSentinel = useRef<HTMLDivElement | null>(null);
   const [pageStyle, setPageStyle] = useState(() => localSetting("material-catalog:style", "default"));
   const [fontSizeLevel, setFontSizeLevel] = useState(() => Number(localSetting("material-catalog:font-size", "0")));
   const [letterSpacingLevel, setLetterSpacingLevel] = useState(() => Number(localSetting("material-catalog:letter-spacing", "0")));
@@ -65,14 +67,16 @@ export default function Home() {
   }, [brand, category, query, sort, subCategory]);
   const needsCuration = visible.length <= 8;
   const lowPriceProducts = useMemo(() => {
-    if (!needsCuration) return [];
     const visibleIds = new Set(visible.map((item) => item.id));
-    const scoped = products.filter((item) => !visibleIds.has(item.id) && (brand === "all" || item.brand === brand) && (category === "all" || item.category === category));
+    const matchesScope = (item: (typeof products)[number]) => !visibleIds.has(item.id) && (brand === "all" || item.brand === brand) && (category === "all" || item.category === category) && (subCategory === "all" || item.subCategory === subCategory);
+    const scoped = products.filter(matchesScope);
     const sameBrand = products.filter((item) => !visibleIds.has(item.id) && brand !== "all" && item.brand === brand);
     const sameCategory = products.filter((item) => !visibleIds.has(item.id) && category !== "all" && item.category === category);
     const pool = scoped.length >= 4 ? scoped : sameBrand.length >= 4 ? sameBrand : sameCategory.length >= 4 ? sameCategory : products.filter((item) => !visibleIds.has(item.id));
-    return [...pool].sort((a, b) => a.price - b.price);
-  }, [brand, category, visible, needsCuration]);
+    return [...pool].sort(() => Math.random() - 0.5);
+  }, [brand, category, subCategory, visible]);
+  useEffect(() => { setRecommendationCount(24); }, [brand, category, subCategory, query, sort]);
+  useEffect(() => { const node = recommendationSentinel.current; if (!node || lowPriceProducts.length === 0) return; const observer = new IntersectionObserver((entries) => { if (entries[0]?.isIntersecting) setRecommendationCount((count) => count + 24); }, { rootMargin: "700px" }); observer.observe(node); return () => observer.disconnect(); }, [lowPriceProducts.length, recommendationCount]);
   const toggleFavorite = (id: string) => setFavorites((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
   const favoriteProducts = favorites.map((id) => products.find((item) => item.id === id)).filter(Boolean) as typeof products;
   const historyProducts = history.map((entry) => ({ entry, product: products.find((item) => item.id === entry.id) })).filter((item) => item.product) as { entry: HistoryEntry; product: (typeof products)[number] }[];
@@ -100,7 +104,7 @@ export default function Home() {
         <section className="masonry-grid" aria-label="Product list">
           {visible.map((product, index) => { const image = product.images[0]; const isFav = favorites.includes(product.id); return <article className={`product-card card-${index % 7}`} key={product.id} onClick={() => navigate(`/product/${product.id}`)}><div className="product-image-wrap"><img src={image} alt={englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`)} loading={index < 8 ? "eager" : "lazy"} onClick={(event) => { event.stopPropagation(); setImageViewer(image); }} role="button" tabIndex={0} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); event.stopPropagation(); setImageViewer(image); } }} /><div className="image-wash" />{demoBadge(product.price) && <span className={`demo-product-badge ${demoBadge(product.price) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price)}</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}<button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "Remove from saved items" : "Save product"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={14} /></span></div><div className="product-meta"><div className="product-name">{englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`)}</div><div className="product-sub"><span>{englishValue(product.brand || product.subCategory || "CATALOG ITEM", "CATALOG ITEM")}</span><strong>{money(product.price, product.currency)}</strong></div></div></article>; })}
         </section>
-        {lowPriceProducts.length > 0 && <section className="low-price-extension"><div className="low-price-extension-top"><div className="low-price-extension-label">MORE TO EXPLORE</div></div><div className="low-price-grid">{lowPriceProducts.map((product, index) => <article className={`product-card card-${(index + 3) % 7}`} key={`low-${product.id}`} onClick={() => navigate(`/product/${product.id}`)}><div className="product-image-wrap"><img src={product.images[0]} alt={englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`)} loading="lazy" /><div className="image-wash" />{demoBadge(product.price) && <span className={`demo-product-badge ${demoBadge(product.price) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price)}</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}</div><div className="product-meta"><div className="product-name">{englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`)}</div><div className="product-sub"><span>{englishValue(product.brand || product.subCategory || "CATALOG ITEM", "CATALOG ITEM")}</span><strong>{money(product.price, product.currency)}</strong></div></div></article>)}</div></section>}
+        {lowPriceProducts.length > 0 && <section className="low-price-extension"><div className="low-price-extension-top"><div className="low-price-extension-label">MORE TO EXPLORE</div></div><div className="low-price-grid">{Array.from({ length: recommendationCount }, (_, index) => { const product = lowPriceProducts[index % lowPriceProducts.length]; return <article className={`product-card card-${(index + 3) % 7}`} key={`low-${product.id}-${index}`} onClick={() => navigate(`/product/${product.id}`)}><div className="product-image-wrap"><img src={product.images[0]} alt={englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`)} loading="lazy" /><div className="image-wash" />{demoBadge(product.price) && <span className={`demo-product-badge ${demoBadge(product.price) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price)}</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}</div><div className="product-meta"><div className="product-name">{englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`)}</div><div className="product-sub"><span>{englishValue(product.brand || product.subCategory || "CATALOG ITEM", "CATALOG ITEM")}</span><strong>{money(product.price, product.currency)}</strong></div></div></article>; })}</div><div ref={recommendationSentinel} className="recommendation-sentinel" aria-hidden="true" /></section>}
       </> : <div className="empty-state"><span>NO MATCHES / 00</span><h2>Try another search.</h2><button onClick={resetFilters}>Clear filters</button></div>}
       {imageViewer && <div className="image-viewer-backdrop" onClick={() => setImageViewer(null)}><div className="image-viewer-dialog" role="dialog" aria-modal="true" aria-label="Expanded product image" onClick={(event) => event.stopPropagation()}><button className="image-viewer-close" onClick={() => setImageViewer(null)} aria-label="Close expanded image"><X size={19} /></button><img src={imageViewer} alt="Expanded catalog product" /></div></div>}
       <button className="mobile-settings-trigger" onClick={() => setSettingsOpen(true)} aria-label="Open display settings"><Settings2 size={19} /></button>
