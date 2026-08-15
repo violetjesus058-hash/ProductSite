@@ -1,5 +1,5 @@
 // Editorial Pinboard reminder: product detail is an item dossier—image gallery left, evidence and actions right, coral signal only for key actions.
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "wouter";
 import { ArrowLeft, ArrowUpRight, Check, ChevronLeft, ChevronRight, Heart, Info, Share2, ShoppingBag } from "lucide-react";
 import { products } from "@/data/products";
@@ -18,20 +18,20 @@ export default function ProductDetail() {
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
   const [liked, setLiked] = useState(() => product ? readFavorites().includes(product.id) : false);
-  const [recIndex, setRecIndex] = useState(0);
+  const [recommendationCount, setRecommendationCount] = useState(24);
+  const recommendationSentinel = useRef<HTMLDivElement | null>(null);
   const gallery = product?.images?.length ? product.images : ["/manus-storage/catalog-detail-stilllife_f1f3f213.jpg"];
   const currentImage = gallery[selectedImage] || gallery[0];
   const recommended = useMemo(() => {
     if (!product) return [];
     const low = product.price * 0.8;
     const high = product.price * 1.35;
-    const pool = products.filter((item) => item.id !== product.id && item.price >= low && item.price <= high).sort((a, b) => Math.abs(a.price - product.price) - Math.abs(b.price - product.price));
-    const fallback = products.filter((item) => item.id !== product.id).sort((a, b) => Math.abs(a.price - product.price) - Math.abs(b.price - product.price));
+    const pool = products.filter((item) => item.id !== product.id && item.price >= low && item.price <= high);
+    const fallback = products.filter((item) => item.id !== product.id);
     return [...(pool.length ? pool : fallback)].sort(() => Math.random() - 0.5);
   }, [product]);
-  const activeRecommendation = recommended[recIndex];
-  const recommendationSpecs = activeRecommendation?.sizes.filter((value) => value.includes(":")).map((value) => value.split(":").slice(-1)[0].trim()).filter(Boolean).slice(0, 8) || [];
-  useEffect(() => setRecIndex(0), [product?.id]);
+  useEffect(() => { setRecommendationCount(24); window.scrollTo({ top: 0, left: 0, behavior: "auto" }); }, [product?.id]);
+  useEffect(() => { const node = recommendationSentinel.current; if (!node || recommended.length === 0) return; const observer = new IntersectionObserver((entries) => { if (entries[0]?.isIntersecting) setRecommendationCount((count) => count + 24); }, { rootMargin: "700px" }); observer.observe(node); return () => observer.disconnect(); }, [recommended.length, recommendationCount]);
   useEffect(() => { if (product) rememberVisit(product.id); }, [product?.id]);
   const toggleLiked = () => { if (!product) return; const nextLiked = !liked; setLiked(nextLiked); const current = readFavorites(); saveFavorites(nextLiked ? Array.from(new Set([...current, product.id])) : current.filter((item) => item !== product.id)); };
 
@@ -57,7 +57,7 @@ export default function ProductDetail() {
         <div className="details-block"><div className="block-label">ITEM NOTES</div><p>{englishValue(product.description || "Product details are based on the latest catalog capture.", "Product details are based on the latest catalog capture.")}</p></div><div className="detail-facts"><div><span>Category</span><strong>{englishCategoryLabels[product.category] || product.category.toUpperCase()} / {englishValue(product.subCategory || "GENERAL", "GENERAL")}</strong></div><div><span>Brand</span><strong>{englishValue(product.brand || "Not provided", "Not provided")}</strong></div><div><span>Captured</span><strong>{product.collectedAt ? product.collectedAt.slice(0, 10) : "—"}</strong></div></div>
       </section>
     </main>
-    {recommended.length > 0 && <section className="recommendations"><div className="recommendation-only-controls"><button onClick={() => setRecIndex((index) => (index - 1 + recommended.length) % recommended.length)} aria-label="Previous recommendation">←</button><button onClick={() => setRecIndex((index) => (index + 1) % recommended.length)} aria-label="Next recommendation">→</button></div><div className="recommendation-window"><div className="recommendation-track">{Array.from({ length: Math.min(4, recommended.length) }, (_, offset) => { const item = recommended[(recIndex + offset) % recommended.length]; return <Link key={`${item.id}-${recIndex}-${offset}`} href={`/product/${item.id}`} className="recommendation-card"><div className="recommendation-image"><img src={item.images[0]} alt={englishValue(cleanTitle(item.catalogName || item.name), `Catalog Item ${item.id}`)} /></div><div className="recommendation-meta"><strong>{englishValue(cleanTitle(item.catalogName || item.name), `Catalog Item ${item.id}`)}</strong><span>{money(item.price, item.currency)}</span></div></Link>; })}</div></div></section>}
+    {recommended.length > 0 && <section className="recommendations"><div className="recommendation-waterfall">{Array.from({ length: recommendationCount }, (_, index) => { const item = recommended[index % recommended.length]; return <Link key={`${item.id}-${index}`} href={`/product/${item.id}`} className="recommendation-card"><div className="recommendation-image"><img src={item.images[0]} alt={englishValue(cleanTitle(item.catalogName || item.name), `Catalog Item ${item.id}`)} loading="lazy" /></div><div className="recommendation-meta"><strong>{englishValue(cleanTitle(item.catalogName || item.name), `Catalog Item ${item.id}`)}</strong><span>{money(item.price, item.currency)}</span></div></Link>; })}</div><div ref={recommendationSentinel} className="recommendation-sentinel" aria-hidden="true" /></section>}
     <footer className="detail-footer"><span>MATERIAL CATALOG / 01</span><span>ITEM FILE CLOSED</span></footer>
   </div>;
 }

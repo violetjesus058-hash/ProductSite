@@ -307,3 +307,14 @@ a { color:inherit; text-decoration:none; }
 
 /* Infinite recommendation sentinel: invisible spacing keeps the observer reachable without creating a visible footer. */
 .recommendation-sentinel { width:100%; height:2px; clear:both; }
+
+/* Detail recommendations: the dossier closes into an endless editorial waterfall instead of a horizontal carousel. */
+.recommendation-waterfall { columns:4 220px; column-gap:16px; }
+.recommendation-waterfall .recommendation-card { display:inline-block; width:100%; margin:0 0 18px; break-inside:avoid; vertical-align:top; }
+.recommendation-waterfall .recommendation-image { height:auto; aspect-ratio:auto; }
+.recommendation-waterfall .recommendation-image img { width:100%; height:auto; min-height:0; object-fit:cover; }
+.recommendation-only-controls, .recommendation-window { display:none; }
+@media (max-width:760px) {
+  .recommendation-waterfall { columns:2 145px; column-gap:12px; }
+  .recommendation-waterfall .recommendation-card { margin-bottom:14px; }
+}
