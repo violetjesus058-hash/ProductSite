@@ -77,7 +77,7 @@ export default function Home() {
   const toggleFavorite = (id: string) => setFavorites((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
   const favoriteProducts = favorites.map((id) => products.find((item) => item.id === id)).filter(Boolean) as typeof products;
   const historyProducts = history.map((entry) => ({ entry, product: products.find((item) => item.id === entry.id) })).filter((item) => item.product) as { entry: HistoryEntry; product: (typeof products)[number] }[];
-  const subCategoryItems = useMemo(() => { const scoped = category === "all" ? products : products.filter((product) => product.category === category); const values = Array.from(new Set(scoped.map((product) => product.subCategory).filter(Boolean))).sort((a, b) => a.localeCompare(b)); return ["all", ...values]; }, [category]);
+  const subCategoryItems = useMemo(() => { const scoped = category === "all" ? products : products.filter((product) => product.category === category); const counts = new Map<string, number>(); scoped.forEach((product) => { if (product.subCategory) counts.set(product.subCategory, (counts.get(product.subCategory) || 0) + 1); }); const values = Array.from(counts.keys()).sort((a, b) => (counts.get(b) || 0) - (counts.get(a) || 0) || a.localeCompare(b)); return ["all", ...values]; }, [category]);
   const resetFilters = () => { setCategory("all"); setBrand("all"); setSubCategory("all"); setQuery(""); };
 
   return <div className={`catalog-shell catalog-style-${pageStyle} type-size-${fontSizeLevel} tracking-level-${letterSpacingLevel}`}>
