@@ -6,7 +6,18 @@ import { products } from "@/data/products";
 import { readFavorites, rememberVisit, saveFavorites } from "@/lib/catalogMemory";
 
 const englishCategoryLabels: Record<string, string> = { clothing: "CLOTHING", shoe: "SHOES", pants: "PANTS", ACC: "ACCESSORIES", watches: "WATCHES" };
-const platformSources = [{ name: "Fansbuy", url: "https://fansbuy.com/item-micro-7572864219.html?promotionCode=R0dfTU9DRzA2VTk", primary: true }, { name: "Kakobuy", url: "https://www.kakobuy.com/item/details?url=https%3A%2F%2Fweidian.com%2Fitem.html%3FitemID%3D7572864219&affcode=vxxss" }, { name: "Oopbuy", url: "https://oopbuy.com/product/weidian/7572864219?inviteCode=Y5DH4UF2W" }, { name: "Litbuy", url: "https://litbuy.com/product/weidian/7572864219?inviteCode=XXGYH4Z80" }, { name: "Superbuy", url: "https://www.superbuy.com/en/page/buy/?nTag=Home-search&from=search-input&url=https%3A%2F%2Fweidian.com%2Fitem.html%3FitemID%3D7572864219&partnercode=E6miyW" }, { name: "GTbuy", url: "https://gtbuy.com/product/weidian/7572864219?inviteCode=XO78PVRZW" }];
+type PlatformSource = { name: string; url: string; primary?: boolean };
+function platformSourcesFor(productId: string): PlatformSource[] {
+  const encodedWeidianUrl = encodeURIComponent(`https://weidian.com/item.html?itemID=${productId}`);
+  return [
+    { name: "Fansbuy", url: `https://fansbuy.com/item-micro-${productId}.html?promotionCode=R0dfTU9DRzA2VTk`, primary: true },
+    { name: "Kakobuy", url: `https://www.kakobuy.com/item/details?url=${encodedWeidianUrl}&affcode=vxxss` },
+    { name: "Oopbuy", url: `https://oopbuy.com/product/weidian/${productId}?inviteCode=Y5DH4UF2W` },
+    { name: "Litbuy", url: `https://litbuy.com/product/weidian/${productId}?inviteCode=XXGYH4Z80` },
+    { name: "Superbuy", url: `https://www.superbuy.com/en/page/buy/?nTag=Home-search&from=search-input&url=${encodedWeidianUrl}&partnercode=E6miyW` },
+    { name: "GTbuy", url: `https://gtbuy.com/product/weidian/${productId}?inviteCode=XO78PVRZW` },
+  ];
+}
 function fansbuyUrlFor(productId: string) { return `https://fansbuy.com/item-micro-${productId}.html?promotionCode=R0dfTU9DRzA2VTk`; }
 
 function money(value: number, currency = "USD") { return new Intl.NumberFormat("en-US", { style: "currency", currency, maximumFractionDigits: 2 }).format(value); }
@@ -17,7 +28,8 @@ function capturedDateFor(productId: string) { let hash = 2166136261; for (let in
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const product = products.find((item) => item.id === id);
-  const hasPlatformSources = Boolean(product && /ralph lauren/i.test(`${product.catalogName || ""} ${product.name || ""}`));
+  const platformSources = product ? platformSourcesFor(product.id) : [];
+  const hasPlatformSources = platformSources.length > 1;
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
