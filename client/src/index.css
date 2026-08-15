@@ -337,9 +337,13 @@ a { color:inherit; text-decoration:none; }
 .detail-purchase-modules { display:grid; gap:26px; padding:42px; border-top:1px solid var(--line); }
 /* Editorial Pinboard desktop rule: keep each evidence-and-buying dossier compact so several image modules remain scannable in one visit. */
 .detail-purchase-module { display:grid; grid-template-columns:minmax(0,1.08fr) minmax(360px,.92fr); width:100%; max-width:1240px; height:440px; min-height:0; margin-inline:auto; border:1px solid var(--line); background:rgba(255,254,250,.45); }
-.detail-purchase-image { position:relative; height:440px; min-height:0; background:var(--paper-deep); overflow:hidden; }
+.detail-purchase-image { position:relative; height:440px; min-height:0; background:var(--paper-deep); overflow:hidden; cursor:crosshair; }
 .detail-purchase-image img { display:block; width:100%; height:440px; min-height:0; object-fit:contain; mix-blend-mode:multiply; }
-.detail-purchase-image > span { position:absolute; left:15px; bottom:14px; padding:5px 8px; background:rgba(255,254,250,.86); color:var(--ink-soft); font-size:10px; letter-spacing:.12em; }
+/* Desktop magnifier: the overlay follows the pointer and enlarges the exact local image area without changing layout. */
+.detail-image-zoom { position:absolute; inset:0; z-index:2; pointer-events:none; opacity:0; background-repeat:no-repeat; background-size:220% auto; background-color:var(--paper-deep); mix-blend-mode:normal; transition:opacity .16s var(--ease-out); }
+.detail-purchase-image:hover .detail-image-zoom { opacity:1; }
+.detail-image-index { position:absolute; left:15px; bottom:14px; z-index:3; padding:5px 8px; background:rgba(255,254,250,.86); color:var(--ink-soft); font-size:10px; letter-spacing:.12em; pointer-events:none; }
+@media (max-width:760px) { .detail-purchase-image { cursor:default; } .detail-image-zoom { display:none; } }
 .detail-purchase-info { display:flex; flex-direction:column; justify-content:center; padding:34px; }
 .module-kicker { color:var(--coral); font-size:10px; font-weight:800; letter-spacing:.14em; }
 .detail-purchase-info h2 { margin:16px 0 12px; font:400 clamp(27px,3vw,44px)/1.05 'DM Serif Display',Georgia,serif; }
