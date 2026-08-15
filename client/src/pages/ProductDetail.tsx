@@ -28,7 +28,7 @@ export default function ProductDetail() {
   const recommended = useMemo(() => {
     if (!product) return [];
     const shuffle = <T,>(items: T[]) => [...items].sort(() => Math.random() - 0.5);
-    const allCandidates = products.filter((item) => item.id !== product.id);
+    const allCandidates = products.filter((item) => item && item.id !== product.id && Array.isArray(item.images) && item.images.length > 0);
     const low = product.price * 0.65;
     const high = product.price * 1.6;
     const priceCandidates = allCandidates.filter((item) => item.price >= low && item.price <= high);
@@ -45,14 +45,15 @@ export default function ProductDetail() {
     const result: typeof allCandidates = [];
     const seenIds = new Set<string>();
     const seenImages = new Set<string>();
-    const add = (item: (typeof allCandidates)[number]) => {
+    const add = (item?: (typeof allCandidates)[number]) => {
+      if (!item || !Array.isArray(item.images) || item.images.length === 0) return;
       const image = item.images[0] || item.id;
       if (seenIds.has(item.id) || seenImages.has(image)) return;
       seenIds.add(item.id);
       seenImages.add(image);
       result.push(item);
     };
-    for (let index = 0; index < 60; index += 1) buckets.forEach((bucket) => add(bucket[index % Math.max(bucket.length, 1)]));
+    for (let index = 0; index < 60; index += 1) buckets.forEach((bucket) => { if (bucket.length > 0) add(bucket[index % bucket.length]); });
     allCandidates.forEach(add);
     return result;
   }, [product]);
@@ -84,7 +85,7 @@ export default function ProductDetail() {
         <div className="details-block"><div className="block-label">ITEM NOTES</div><p>{englishValue(product.description || "Product details are based on the latest catalog capture.", "Product details are based on the latest catalog capture.")}</p></div><div className="detail-facts"><div><span>Category</span><strong>{englishCategoryLabels[product.category] || product.category.toUpperCase()} / {englishValue(product.subCategory || "GENERAL", "GENERAL")}</strong></div><div><span>Brand</span><strong>{englishValue(product.brand || "Not provided", "Not provided")}</strong></div><div><span>Captured</span><strong>{capturedDateFor(product.id)}</strong></div></div>
       </section>
     </main>
-    {recommended.length > 0 && <section className="recommendations"><div className="recommendation-waterfall">{Array.from({ length: recommendationCount }, (_, index) => { const item = recommended[index % recommended.length]; return <Link key={`${item.id}-${index}`} href={`/product/${item.id}`} className="recommendation-card"><div className="recommendation-image"><img src={item.images[0]} alt={englishValue(cleanTitle(item.catalogName || item.name), `Catalog Item ${item.id}`)} loading="lazy" /></div><div className="recommendation-meta"><strong>{englishValue(cleanTitle(item.catalogName || item.name), `Catalog Item ${item.id}`)}</strong><span>{money(item.price, item.currency)}</span></div></Link>; })}</div><div ref={recommendationSentinel} className="recommendation-sentinel" aria-hidden="true" /></section>}
+    {recommended.length > 0 && <section className="recommendations"><div className="recommendation-waterfall">{Array.from({ length: recommendationCount }, (_, index) => { const item = recommended.length > 0 ? recommended[index % recommended.length] : null; if (!item) return null; return <Link key={`${item.id}-${index}`} href={`/product/${item.id}`} className="recommendation-card"><div className="recommendation-image"><img src={item.images[0] || "/manus-storage/catalog-detail-stilllife_f1f3f213.jpg"} alt={englishValue(cleanTitle(item.catalogName || item.name), `Catalog Item ${item.id}`)} loading="lazy" /></div><div className="recommendation-meta"><strong>{englishValue(cleanTitle(item.catalogName || item.name), `Catalog Item ${item.id}`)}</strong><span>{money(item.price, item.currency)}</span></div></Link>; })}</div><div ref={recommendationSentinel} className="recommendation-sentinel" aria-hidden="true" /></section>}
     <footer className="detail-footer"><span>MATERIAL CATALOG / 01</span><span>ITEM FILE CLOSED</span></footer>
   </div>;
 }
