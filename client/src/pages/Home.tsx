@@ -37,6 +37,8 @@ export default function Home() {
   const [lowPriceIndex, setLowPriceIndex] = useState(0);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [imageViewer, setImageViewer] = useState<string | null>(null);
+  const [subCategory, setSubCategory] = useState("all");
+  const [subCategoryOpen, setSubCategoryOpen] = useState(false);
   const [pageStyle, setPageStyle] = useState(() => localSetting("material-catalog:style", "default"));
   const [fontSizeLevel, setFontSizeLevel] = useState(() => Number(localSetting("material-catalog:font-size", "0")));
   const [letterSpacingLevel, setLetterSpacingLevel] = useState(() => Number(localSetting("material-catalog:letter-spacing", "0")));
@@ -56,11 +58,12 @@ export default function Home() {
     const filtered = products.filter((product) => {
       const matchesCategory = category === "all" || product.category === category;
       const matchesBrand = brand === "all" || product.brand === brand;
+      const matchesSubCategory = subCategory === "all" || product.subCategory === subCategory;
       const haystack = [product.name, product.catalogName, product.brand, product.subCategory].join(" ").toLowerCase();
-      return matchesCategory && matchesBrand && (!term || haystack.includes(term));
+      return matchesCategory && matchesBrand && matchesSubCategory && (!term || haystack.includes(term));
     });
     return [...filtered].sort((a, b) => sort === "price-low" ? a.price - b.price : sort === "price-high" ? b.price - a.price : a.id.localeCompare(b.id));
-  }, [brand, category, query, sort]);
+  }, [brand, category, query, sort, subCategory]);
   const needsCuration = visible.length <= 8;
   const lowPriceProducts = useMemo(() => {
     if (!needsCuration) return [];
@@ -74,15 +77,16 @@ export default function Home() {
   const toggleFavorite = (id: string) => setFavorites((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
   const favoriteProducts = favorites.map((id) => products.find((item) => item.id === id)).filter(Boolean) as typeof products;
   const historyProducts = history.map((entry) => ({ entry, product: products.find((item) => item.id === entry.id) })).filter((item) => item.product) as { entry: HistoryEntry; product: (typeof products)[number] }[];
-  const resetFilters = () => { setCategory("all"); setBrand("all"); setQuery(""); };
+  const subCategoryItems = useMemo(() => { const scoped = category === "all" ? products : products.filter((product) => product.category === category); const values = Array.from(new Set(scoped.map((product) => product.subCategory).filter(Boolean))).sort((a, b) => a.localeCompare(b)); return ["all", ...values]; }, [category]);
+  const resetFilters = () => { setCategory("all"); setBrand("all"); setSubCategory("all"); setQuery(""); };
 
   return <div className={`catalog-shell catalog-style-${pageStyle} type-size-${fontSizeLevel} tracking-level-${letterSpacingLevel}`}>
-    <nav className="mobile-icon-rail" aria-label="Mobile categories"><button className={category === "all" ? "is-active" : ""} onClick={() => { setCategory("all"); setBrand("all"); }} aria-label="All products"><HomeIcon size={17} /><span>ALL</span></button>{navItems.slice(1).map((item) => <button key={item.id} className={category === item.id ? "is-active" : ""} onClick={() => { setCategory(item.id); setBrand("all"); }} aria-label={item.label}><span>{item.id === "ACC" ? "ACC" : item.label.slice(0, 5)}</span></button>)}<button aria-label="Saved items" onClick={() => setOpenPanel("favorites")}><Heart size={17} /></button><button aria-label="Display settings" onClick={() => setSettingsOpen(true)}><Settings2 size={17} /></button></nav>
+    <nav className="mobile-icon-rail" aria-label="Mobile categories"><button className={category === "all" ? "is-active" : ""} onClick={() => { setCategory("all"); setBrand("all"); setSubCategory("all"); }} aria-label="All products"><HomeIcon size={17} /><span>ALL</span></button>{navItems.slice(1).map((item) => <button key={item.id} className={category === item.id ? "is-active" : ""} onClick={() => { setCategory(item.id); setBrand("all"); setSubCategory("all"); }} aria-label={item.label}><span>{item.id === "ACC" ? "ACC" : item.label.slice(0, 5)}</span></button>)}<button aria-label="Saved items" onClick={() => setOpenPanel("favorites")}><Heart size={17} /></button><button aria-label="Display settings" onClick={() => setSettingsOpen(true)}><Settings2 size={17} /></button><button className={`mobile-expand-button ${subCategoryOpen ? "is-active" : ""}`} aria-label="Expand subcategories" aria-expanded={subCategoryOpen} onClick={() => setSubCategoryOpen((open) => !open)}><ChevronDown size={16} /><span>MORE</span></button>{subCategoryOpen && <div className="mobile-subcategory-panel"><div className="mobile-subcategory-head"><strong>{category === "all" ? "ALL CATEGORIES" : englishCategoryLabels[category]}</strong><button onClick={() => setSubCategoryOpen(false)} aria-label="Close subcategories"><X size={14} /></button></div>{subCategoryItems.map((item) => <button key={item} className={subCategory === item ? "is-selected" : ""} onClick={() => { setSubCategory(item); setSubCategoryOpen(false); }}>{item === "all" ? "ALL SUBCATEGORIES" : englishValue(item, "SUBCATEGORY")}</button>)}</div>}</nav>
     <aside className="catalog-rail">
       <button className="brand-lockup" onClick={resetFilters} aria-label="Back to ALL PRODUCTS"><img src="/manus-storage/catalog-mark_f15a35f4.png" alt="" className="brand-mark" /><span className="brand-type">MATERIAL<br /><em>CATALOG</em></span></button>
       <div className="rail-rule" /><div className="rail-kicker">BROWSE BY</div>
       <nav className="category-nav" aria-label="Product categories">
-        {navItems.map((item) => <button key={item.id} className={`category-link ${category === item.id ? "is-active" : ""}`} onClick={() => { setCategory(item.id); setBrand("all"); }}><span>{item.label}</span></button>)}
+        {navItems.map((item) => <button key={item.id} className={`category-link ${category === item.id ? "is-active" : ""}`} onClick={() => { setCategory(item.id); setBrand("all"); setSubCategory("all"); }}><span>{item.label}</span></button>)}
       </nav>
       <div className="rail-rule brand-rule" /><div className="rail-kicker brand-kicker">BRANDS</div>
       <nav className="brand-nav" aria-label="Brand selection">
