@@ -236,3 +236,8 @@
 - [ ] 修复推荐循环中索引越界导致的 undefined.images 错误。
 - [ ] 为推荐卡片增加无效商品项保护和有效图片回退。
 - [ ] 验证 /product/7545217096 及少量推荐池详情页。
+
+
+- [ ] 所有详情页主按钮统一跳转 Fansbuy。
+- [ ] 主按钮文案从 Buy on Kakobuy 改为 Buy on Fansbuy。
+- [ ] 平台列表中 Fansbuy 设为主入口并移除 Kakobuy 的主入口高亮。
