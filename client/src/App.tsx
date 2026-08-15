@@ -1,4 +1,5 @@
 // Editorial Pinboard reminder: fixed catalog rail, editorial typography, ink-on-paper palette, coral interaction signal.
+import { useEffect } from "react";
 import { Route, Switch } from "wouter";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -9,6 +10,23 @@ import ProductDetail from "./pages/ProductDetail";
 import NotFound from "./pages/NotFound";
 
 export default function App() {
+  useEffect(() => {
+    const preventImageDrag = (event: DragEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (target?.tagName === "IMG") event.preventDefault();
+    };
+    const preventImageContextMenu = (event: MouseEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (target?.tagName === "IMG") event.preventDefault();
+    };
+    document.addEventListener("dragstart", preventImageDrag);
+    document.addEventListener("contextmenu", preventImageContextMenu);
+    return () => {
+      document.removeEventListener("dragstart", preventImageDrag);
+      document.removeEventListener("contextmenu", preventImageContextMenu);
+    };
+  }, []);
+
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light">
