@@ -3,7 +3,7 @@ export type Product = { id: string; name: string; catalogName: string; category:
 export const products: Product[] = [
   {
     "id": "7572836729",
-    "name": "工厂秋冬时尚百搭毛衣针织衫📏pls add whatsapp:12812360789 if u need size g",
+    "name": "工厂秋冬时尚百搭毛衣针织衫need size g",
     "catalogName": "Stone Island Sweater",
     "category": "clothing",
     "subCategory": "Sweater",
@@ -11,7 +11,7 @@ export const products: Product[] = [
     "price": 118.8,
     "referencePrice": 118.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:6:款式:DDSTD-MY-0029;1:16:尺码:M;2:22:袖标:绿色",
       "0:6:款式:DDSTD-MY-0029;1:16:尺码:M;2:23:袖标:白色",
@@ -68,7 +68,7 @@ export const products: Product[] = [
     "price": 150,
     "referencePrice": 150,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:2:款式:2;1:8:尺寸:S 45-60kg",
       "0:2:款式:2;1:9:尺寸:M 55-70kg",
@@ -124,7 +124,7 @@ export const products: Product[] = [
     "price": 118.8,
     "referencePrice": 118.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:9587299104:款式ALBB:ALBB-01 男款;1:9587179468:尺码:S",
       "0:9587299104:款式ALBB:ALBB-01 男款;1:9585347467:尺码:M",
@@ -181,7 +181,7 @@ export const products: Product[] = [
     "price": 216,
     "referencePrice": 216,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:7:尺码:S",
       "0:1:款式:1;1:8:尺码:M",
@@ -237,7 +237,7 @@ export const products: Product[] = [
     "price": 139,
     "referencePrice": 139,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:3:尺寸:S",
       "0:1:款式:1;1:4:尺寸:M",
@@ -292,7 +292,7 @@ export const products: Product[] = [
     "price": 202.8,
     "referencePrice": 202.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1-Laa;1:3:尺码:S",
       "0:1:款式:1-Laa;1:4:尺码:M",
@@ -389,7 +389,7 @@ export const products: Product[] = [
     "price": 216,
     "referencePrice": 216,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:11:尺寸:M",
       "0:1:款式:1;1:12:尺寸:L",
@@ -441,7 +441,7 @@ export const products: Product[] = [
     "price": 118.8,
     "referencePrice": 118.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:EY001;1:21:尺码:S",
       "0:1:款式:EY001;1:22:尺码:M",
@@ -550,7 +550,7 @@ export const products: Product[] = [
     "price": 154.8,
     "referencePrice": 154.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:ALBB-LMWY-0032;1:7:尺码:M",
       "0:1:款式:ALBB-LMWY-0032;1:8:尺码:L",
@@ -606,7 +606,7 @@ export const products: Product[] = [
     "price": 226.8,
     "referencePrice": 226.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:40:尺寸:S 60-68kg",
       "0:1:款式:1;1:41:尺寸:M 68-78kg",
@@ -662,7 +662,7 @@ export const products: Product[] = [
     "price": 210,
     "referencePrice": 210,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:2:款式:2;1:40:尺寸:S 60-68kg",
       "0:2:款式:2;1:41:尺寸:M 68-78kg",
@@ -719,7 +719,7 @@ export const products: Product[] = [
     "price": 118.8,
     "referencePrice": 118.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:9587397932:款式:QS01;1:9587179468:尺码:S40-47.5kg",
       "0:9587397932:款式:QS01;1:9585347467:尺码:M47.5-52.5kg",
@@ -776,7 +776,7 @@ export const products: Product[] = [
     "price": 189.6,
     "referencePrice": 189.6,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:2:款式:2;1:17:尺寸:S",
       "0:2:款式:2;1:18:尺寸:M",
@@ -887,7 +887,7 @@ export const products: Product[] = [
     "price": 210,
     "referencePrice": 210,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:40:尺寸:S 55-60kg",
       "0:1:款式:1;1:41:尺寸:M 60-68kg",
@@ -944,7 +944,7 @@ export const products: Product[] = [
     "price": 82.8,
     "referencePrice": 82.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:33:尺寸:S",
       "0:1:款式:1;1:34:尺寸:M",
@@ -1112,7 +1112,7 @@ export const products: Product[] = [
     "price": 226.8,
     "referencePrice": 226.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:40:尺寸:S",
       "0:1:款式:1;1:41:尺寸:M",
@@ -1167,7 +1167,7 @@ export const products: Product[] = [
     "price": 198,
     "referencePrice": 198,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:34:OWsize:M 45-55KG",
       "0:1:款式:1;1:35:OWsize:L 55-65KG",
@@ -1223,7 +1223,7 @@ export const products: Product[] = [
     "price": 186,
     "referencePrice": 186,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:19:尺寸:M",
       "0:1:款式:1;1:20:尺寸:L",
@@ -1341,7 +1341,7 @@ export const products: Product[] = [
     "price": 106.8,
     "referencePrice": 106.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:9:Size:S 50-60kg",
       "0:1:款式:1;1:10:Size:M 55-65kg",
@@ -1450,7 +1450,7 @@ export const products: Product[] = [
     "price": 118.8,
     "referencePrice": 118.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:28:尺寸:M-45-55KG",
       "0:1:款式:1;1:29:尺寸:L-55-60KG",
@@ -1500,7 +1500,7 @@ export const products: Product[] = [
     "price": 109.2,
     "referencePrice": 109.2,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:11:尺码:S 40-52.5kg",
       "0:1:款式:1;1:12:尺码:M 52.5-60kg",
@@ -1557,7 +1557,7 @@ export const products: Product[] = [
     "price": 114,
     "referencePrice": 114,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:32:尺寸:M",
       "0:1:款式:1;1:33:尺寸:L",
@@ -1613,7 +1613,7 @@ export const products: Product[] = [
     "price": 93.6,
     "referencePrice": 93.6,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:2:款式:2;1:10:尺寸:M 45-55kg",
       "0:2:款式:2;1:11:尺寸:L 55-60kg",
@@ -1725,7 +1725,7 @@ export const products: Product[] = [
     "price": 129.6,
     "referencePrice": 129.6,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:20:尺寸:M 170cm",
       "0:1:款式:1;1:21:尺寸:L 175cm",
@@ -1839,7 +1839,7 @@ export const products: Product[] = [
     "price": 210,
     "referencePrice": 210,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:2:款式:2;1:12:尺寸:S 55-60kg",
       "0:2:款式:2;1:13:尺寸:M 60-68kg",
@@ -1895,7 +1895,7 @@ export const products: Product[] = [
     "price": 78,
     "referencePrice": 78,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:2:款式:2;1:31:尺寸:M 47.5-52.5kg",
       "0:2:款式:2;1:32:尺寸:L 52.5-65kg",
@@ -2068,7 +2068,7 @@ export const products: Product[] = [
     "price": 118.8,
     "referencePrice": 118.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:35:尺码:S",
       "0:1:款式:1;1:36:尺码:M",
@@ -2125,7 +2125,7 @@ export const products: Product[] = [
     "price": 180,
     "referencePrice": 180,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:2:款式:2(NOCTA);1:38:nike科技size:M 45-60kg",
       "0:2:款式:2(NOCTA);1:39:nike科技size:L 65-70kg",
@@ -2181,7 +2181,7 @@ export const products: Product[] = [
     "price": 118.8,
     "referencePrice": 118.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:31:尺寸:S50-60kg",
       "0:1:款式:1;1:32:尺寸:M55-65kg",
@@ -2236,7 +2236,7 @@ export const products: Product[] = [
     "price": 150,
     "referencePrice": 150,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:32:尺码:S",
       "0:1:款式:1;1:33:尺码:M",
@@ -2293,7 +2293,7 @@ export const products: Product[] = [
     "price": 126,
     "referencePrice": 126,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:2:款式:2;1:18:ad套装size:M 40-50kg",
       "0:2:款式:2;1:19:ad套装size:L 50-60kg",
@@ -2350,7 +2350,7 @@ export const products: Product[] = [
     "price": 462,
     "referencePrice": 462,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:41:尺码:S",
       "0:1:款式:1;1:42:尺码:M",
@@ -2406,7 +2406,7 @@ export const products: Product[] = [
     "price": 216,
     "referencePrice": 216,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:2:款式:2;1:16:尺寸:S55-60kg",
       "0:2:款式:2;1:17:尺寸:M60-68kg",
@@ -2462,7 +2462,7 @@ export const products: Product[] = [
     "price": 132,
     "referencePrice": 132,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:2:款式:2;1:16:尺寸:S 45-60kg",
       "0:2:款式:2;1:17:尺寸:M 60-70kg",
@@ -2516,7 +2516,7 @@ export const products: Product[] = [
     "price": 114,
     "referencePrice": 114,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:2:款式:2;1:10:尺寸:S 50-6kg",
       "0:2:款式:2;1:11:尺寸:M 60-70kg",
@@ -2569,7 +2569,7 @@ export const products: Product[] = [
     "price": 177.6,
     "referencePrice": 177.6,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:17;1:44:尺码:S50-60kg",
       "0:1:款式:17;1:45:尺码:M55-65kg",
@@ -2625,7 +2625,7 @@ export const products: Product[] = [
     "price": 70.8,
     "referencePrice": 70.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:2:款式:2;1:40:尺寸:S 45-60kg",
       "0:2:款式:2;1:41:尺寸:M 60-70kg",
@@ -2681,7 +2681,7 @@ export const products: Product[] = [
     "price": 300,
     "referencePrice": 300,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:2:款式:2;1:32:尺寸:S",
       "0:2:款式:2;1:33:尺寸:M",
@@ -2737,7 +2737,7 @@ export const products: Product[] = [
     "price": 129.6,
     "referencePrice": 129.6,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:40:套装尺码:S 160cm-168cm",
       "0:1:款式:1;1:41:套装尺码:M 165cm-174cm",
@@ -2793,7 +2793,7 @@ export const products: Product[] = [
     "price": 96,
     "referencePrice": 96,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:7:尺码:S",
       "0:1:款式:1;1:8:尺码:M",
@@ -2850,7 +2850,7 @@ export const products: Product[] = [
     "price": 117.6,
     "referencePrice": 117.6,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:30:款式:30;1:41:Size:M 50-70kg",
       "0:30:款式:30;1:42:Size:L 55-75kg",
@@ -2905,7 +2905,7 @@ export const products: Product[] = [
     "price": 84,
     "referencePrice": 84,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:9587397730:款式:DD-001;1:9587342632:YF尺码:S",
       "0:9587397730:款式:DD-001;1:9585510631:YF尺码:M",
@@ -2962,7 +2962,7 @@ export const products: Product[] = [
     "price": 178.8,
     "referencePrice": 178.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:26:尺寸:M100-125",
       "0:1:款式:1;1:27:尺寸:L125-145",
@@ -3077,7 +3077,7 @@ export const products: Product[] = [
     "price": 153.6,
     "referencePrice": 153.6,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:47:足球训练服尺寸:S 55-65kg",
       "0:1:款式:1;1:48:足球训练服尺寸:M 60-75kg",
@@ -3133,7 +3133,7 @@ export const products: Product[] = [
     "price": 130.8,
     "referencePrice": 130.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:37:尺寸:S",
       "0:1:款式:1;1:38:尺寸:M",
@@ -3188,7 +3188,7 @@ export const products: Product[] = [
     "price": 60,
     "referencePrice": 60,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:39:足球训练服尺寸:S 55-65kg",
       "0:1:款式:1;1:40:足球训练服尺寸:M 60-75kg",
@@ -3244,7 +3244,7 @@ export const products: Product[] = [
     "price": 70.8,
     "referencePrice": 70.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:6:尺寸:S",
       "0:1:款式:1;1:7:尺寸:M",
@@ -3871,7 +3871,7 @@ export const products: Product[] = [
     "price": 294,
     "referencePrice": 294,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:颜色:1;1:5:Size:S 45-60kg",
       "0:1:颜色:1;1:6:Size:M 60-70kg",
@@ -3940,7 +3940,7 @@ export const products: Product[] = [
     "price": 348,
     "referencePrice": 348,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:2:款式:2;1:6:尺寸:M 50-57.5kg",
       "0:2:款式:2;1:7:尺寸:L 60-67.5kg",
@@ -3991,7 +3991,7 @@ export const products: Product[] = [
     "price": 141.6,
     "referencePrice": 141.6,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:19:尺寸:M(160-170cm 40-50kg)",
       "0:1:款式:1;1:20:尺寸:L(160-175cm 50-60kg)",
@@ -4096,7 +4096,7 @@ export const products: Product[] = [
     "price": 109.2,
     "referencePrice": 109.2,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:22:尺寸:S",
       "0:1:款式:1;1:23:尺寸:M",
@@ -4150,7 +4150,7 @@ export const products: Product[] = [
   },
   {
     "id": "7572868067",
-    "name": "工厂高质量棉服超低价 1:1📏pls add whatsapp:12818407291 if u need size",
+    "name": "工厂高质量棉服超低价 1:1need size",
     "catalogName": "Stussy Down Jacket",
     "category": "clothing",
     "subCategory": "Down Jacket",
@@ -4158,7 +4158,7 @@ export const products: Product[] = [
     "price": 154.8,
     "referencePrice": 154.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:5;1:26:尺寸:M",
       "0:1:款式:5;1:27:尺寸:L",
@@ -4214,7 +4214,7 @@ export const products: Product[] = [
     "price": 156,
     "referencePrice": 156,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:STD023;1:4:尺码:S",
       "0:1:款式:STD023;1:5:尺码:M",
@@ -4469,7 +4469,7 @@ export const products: Product[] = [
     "price": 118.8,
     "referencePrice": 118.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:41:尺寸:M 45-57.5kg",
       "0:1:款式:1;1:42:尺寸:L 57.5-70kg",
@@ -4524,7 +4524,7 @@ export const products: Product[] = [
     "price": 204,
     "referencePrice": 204,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:16:尺寸:S 160-165cm",
       "0:1:款式:1;1:17:尺寸:M 165-170cm",
@@ -5546,7 +5546,7 @@ export const products: Product[] = [
     "price": 116,
     "referencePrice": 116,
     "currency": "USD",
-    "description": "更换新店各位老板们放心下单 📏Sizing Issues 🛒Product Issues ☎️Whatsapp: +1 (518) 858-0278 👆Please add the customer service number above to find more",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:34:尺寸:S",
       "0:1:款式:1;1:35:尺寸:M",
@@ -6117,7 +6117,7 @@ export const products: Product[] = [
     "price": 116,
     "referencePrice": 116,
     "currency": "USD",
-    "description": "更换新店各位老板们放心下单 📏Sizing Issues 🛒Product Issues ☎️Whatsapp: +1 (518) 858-0278 👆Please add the customer service number above to find more",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:40:尺寸:S",
       "0:1:款式:1;1:41:尺寸:M",
@@ -6955,7 +6955,7 @@ export const products: Product[] = [
     "price": 84,
     "referencePrice": 84,
     "currency": "USD",
-    "description": "更换新店各位老板们放心下单 📏Sizing Issues 🛒Product Issues ☎️Whatsapp: +1 (518) 858-0278 👆Please add the customer service number above to find more",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:23:Size:S 50-62.5kg",
       "0:1:款式:1;1:24:Size:M 62.5-70kg",
@@ -7012,7 +7012,7 @@ export const products: Product[] = [
     "price": 99,
     "referencePrice": 99,
     "currency": "USD",
-    "description": "高品质短袖PL-7004 WhatsApp:+1 (346) 256-7125 Hoobuy： https://hoobuy.com/ All China Buy： https://www.allchinabuy.com/cn/ CSSBuy： https://cssbuy.com/ CnFans: https://cnfans.com/ OopBuy :https://oopbuy.com/",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:2:款式:2;1:21:尺码:S",
       "0:2:款式:2;1:22:尺码:M",
@@ -7956,7 +7956,7 @@ export const products: Product[] = [
     "price": 59.9,
     "referencePrice": 59.9,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:7262:颜色:1",
       "0:6954:颜色:2",
@@ -8053,7 +8053,7 @@ export const products: Product[] = [
     "price": 72,
     "referencePrice": 72,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1",
       "0:2:款式:2",
@@ -8109,7 +8109,7 @@ export const products: Product[] = [
     "price": 47.04,
     "referencePrice": 47.04,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:2:款式:1;1:49:棒球帽size:7（55.8cm）",
       "0:2:款式:1;1:50:棒球帽size:7 1/8（56.8cm）",
@@ -8164,7 +8164,7 @@ export const products: Product[] = [
     "price": 45,
     "referencePrice": 45,
     "currency": "USD",
-    "description": "￥45 高质量帽子合集 Discord : xaayitqmyk@rambler.ru (official Account) WhatsApp:+8616715913616 All China Buy： https://www.allchinabuy.com/cn/ CSSBuy： https://m.cssbuy.com/ CnFans: https://cnfans.com/",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1",
       "0:2:款式:2",
@@ -8190,7 +8190,6 @@ export const products: Product[] = [
     "url": "https://fansbuy.com/item-micro-7572822957.html?promotionCode=R0dfTU9DRzA2VTk",
     "images": [
       "/manus-storage/a4258af07d281a84b3dc_3a0c9d7a.png",
-      "/manus-storage/05c3a94639c69e6fe335_839ab3e4.jpg",
       "/manus-storage/bb78db001b3669357497_8475e9ab.png",
       "/manus-storage/181025b51de85a8ad58d_8d088638.jpg",
       "/manus-storage/a6c9853ac095d7f08375_cc858c1e.png",
@@ -8222,7 +8221,7 @@ export const products: Product[] = [
     "price": 78,
     "referencePrice": 78,
     "currency": "USD",
-    "description": "If you have any questions, please contact the seller on WhatsApp: +44 7465 944254",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:9552843255:color:01",
       "0:9554537258:color:02",
@@ -8319,7 +8318,7 @@ export const products: Product[] = [
     "price": 48,
     "referencePrice": 48,
     "currency": "USD",
-    "description": "If you have any questions, please contact the seller on WhatsApp: +86 187 6057 1647",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:01",
       "0:2:款式:02",
@@ -8375,7 +8374,7 @@ export const products: Product[] = [
     "price": 84,
     "referencePrice": 84,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1",
       "0:2:款式:2",
@@ -8413,7 +8412,7 @@ export const products: Product[] = [
     "price": 94.8,
     "referencePrice": 94.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:2:款式:2",
       "0:3:款式:3",
@@ -8469,7 +8468,7 @@ export const products: Product[] = [
     "price": 58.8,
     "referencePrice": 58.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1",
       "0:2:款式:2",
@@ -8525,7 +8524,7 @@ export const products: Product[] = [
     "price": 58.8,
     "referencePrice": 58.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1",
       "0:2:款式:2",
@@ -8580,7 +8579,7 @@ export const products: Product[] = [
     "price": 70.8,
     "referencePrice": 70.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:40:尺寸:均码",
       "0:2:款式:2;1:40:尺寸:均码",
@@ -8636,7 +8635,7 @@ export const products: Product[] = [
     "price": 54,
     "referencePrice": 54,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1",
       "0:2:款式:2",
@@ -8692,7 +8691,7 @@ export const products: Product[] = [
     "price": 58.8,
     "referencePrice": 58.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1",
       "0:2:款式:2",
@@ -8744,7 +8743,7 @@ export const products: Product[] = [
     "price": 84,
     "referencePrice": 84,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1",
       "0:2:款式:2",
@@ -8797,7 +8796,7 @@ export const products: Product[] = [
     "price": 228,
     "referencePrice": 228,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1",
       "0:2:款式:2",
@@ -8964,7 +8963,7 @@ export const products: Product[] = [
     "price": 336,
     "referencePrice": 336,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1",
       "0:2:款式:2",
@@ -9765,7 +9764,7 @@ export const products: Product[] = [
     "price": 75,
     "referencePrice": 75,
     "currency": "USD",
-    "description": "H 皮带 Discord : xaayitqmyk@rambler.ru (official Account) WhatsApp:+8616715913616 All China Buy： https://www.allchinabuy.com/cn/ CSSBuy： https://m.cssbuy.com/ CnFans: https://cnfans.com/",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:color:01;1:22:length:105CM(Length)注意：皮带上如印有数字，可能是欧码或者长度",
       "0:1:color:01;1:23:length:110CM(Length)注意：皮带上如印有数字，可能是欧码或者长度",
@@ -9860,7 +9859,7 @@ export const products: Product[] = [
     "price": 69,
     "referencePrice": 69,
     "currency": "USD",
-    "description": "高品质皮带 WhatsApp:+1 (346) 256-7125 Hoobuy： https://hoobuy.com/ All China Buy： https://www.allchinabuy.com/cn/ CSSBuy： https://cssbuy.com/ CnFans: https://cnfans.com/ OopBuy :https://oopbuy.com/",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:19:尺寸:100cm(Length)注意:皮带上如印有数字，可能是欧码或者长度",
       "0:1:款式:1;1:20:尺寸:105cm(Length)注意:皮带上如印有数字，可能是欧码或者长度",
@@ -9917,7 +9916,7 @@ export const products: Product[] = [
     "price": 90,
     "referencePrice": 90,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:2:款式:2;1:40:长度:95CM",
       "0:2:款式:2;1:41:长度:90CM",
@@ -10030,7 +10029,7 @@ export const products: Product[] = [
     "price": 94.8,
     "referencePrice": 94.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:3:款式:3;1:5:长度:95CM",
       "0:3:款式:3;1:7:长度:110CM",
@@ -10075,7 +10074,7 @@ export const products: Product[] = [
     "price": 90,
     "referencePrice": 90,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:16:皮带size:95cm(Length)",
       "0:1:款式:1;1:17:皮带size:100cm(Length)",
@@ -10191,7 +10190,7 @@ export const products: Product[] = [
     "price": 79,
     "referencePrice": 79,
     "currency": "USD",
-    "description": "If you have any questions, please contact the seller on WhatsApp: +44 7465 944254",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:9554567990:Color-1:01;1:9552875889:SZIE:国码 105 CM",
       "0:9554567990:Color-1:01;1:9554571892:SZIE:国码 110 CM",
@@ -10254,7 +10253,7 @@ export const products: Product[] = [
   },
   {
     "id": "7574805744",
-    "name": "时尚皮带BUR（pls contact WhatsApp：+1（346）256-7125，if u need size recommendation）",
+    "name": "时尚皮带BUR（need size recommendation）",
     "catalogName": "Burberry Belt",
     "category": "ACC",
     "subCategory": "Belt",
@@ -10262,7 +10261,7 @@ export const products: Product[] = [
     "price": 75,
     "referencePrice": 75,
     "currency": "USD",
-    "description": "WhatsApp:+1 (346) 256-7125 Hoobuy： https://hoobuy.com/ All China Buy： https://www.allchinabuy.com/cn/ CSSBuy： https://cssbuy.com/ CnFans: https://cnfans.com/ OopBuy :https://oopbuy.com/",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:9:皮带:105cm(Length)注意：皮带上如印有数字，可能是欧码或者长度",
       "0:1:款式:1;1:10:皮带:110cm(Length)注意：皮带上如印有数字，可能是欧码或者长度",
@@ -10625,7 +10624,7 @@ export const products: Product[] = [
     "price": 92.4,
     "referencePrice": 92.4,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1",
       "0:2:款式:2",
@@ -10737,7 +10736,7 @@ export const products: Product[] = [
     "price": 92.4,
     "referencePrice": 92.4,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1",
       "0:2:款式:2",
@@ -10791,7 +10790,7 @@ export const products: Product[] = [
     "price": 92.4,
     "referencePrice": 92.4,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1",
       "0:2:款式:2"
@@ -10818,7 +10817,7 @@ export const products: Product[] = [
   },
   {
     "id": "7574695008",
-    "name": "高质量工作证卡包 pls add whatsapp: 12812360789 if u need size guid",
+    "name": "高质量工作证卡包 need size guid",
     "catalogName": "Goyard Cardholder",
     "category": "ACC",
     "subCategory": "wallet",
@@ -10826,7 +10825,7 @@ export const products: Product[] = [
     "price": 65,
     "referencePrice": 65,
     "currency": "USD",
-    "description": "高质量工作证卡包 pls add whatsapp: 12812360789 if u need size guid",
+    "description": "高质量工作证卡包 need size guid",
     "sizes": [
       "0:1:款式:1",
       "0:2:款式:2",
@@ -11064,7 +11063,7 @@ export const products: Product[] = [
     "price": 180,
     "referencePrice": 180,
     "currency": "USD",
-    "description": "更换新店各位老板们放心下单 📏Sizing Issues 🛒Product Issues ☎️Whatsapp: +1 (518) 858-0278 👆Please add the customer service number above to find more",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1",
       "0:2:款式:2",
@@ -11121,7 +11120,7 @@ export const products: Product[] = [
     "price": 118.8,
     "referencePrice": 118.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1",
       "0:2:款式:2",
@@ -11176,7 +11175,7 @@ export const products: Product[] = [
     "price": 444,
     "referencePrice": 444,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1",
       "0:2:款式:2",
@@ -11231,7 +11230,7 @@ export const products: Product[] = [
     "price": 54,
     "referencePrice": 54,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1",
       "0:2:款式:2",
@@ -11276,7 +11275,7 @@ export const products: Product[] = [
     "price": 332.4,
     "referencePrice": 332.4,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1",
       "0:2:款式:2",
@@ -11331,7 +11330,7 @@ export const products: Product[] = [
     "price": 240,
     "referencePrice": 240,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1",
       "0:3:款式:3",
@@ -11367,7 +11366,7 @@ export const products: Product[] = [
   },
   {
     "id": "7572856467",
-    "name": "-高品质1-HB-001📏pls add whatsapp:15188580278 if u need size gu",
+    "name": "-高品质1-HB-001need size gu",
     "catalogName": "LV Bag",
     "category": "ACC",
     "subCategory": "Bag",
@@ -11375,7 +11374,7 @@ export const products: Product[] = [
     "price": 96,
     "referencePrice": 96,
     "currency": "USD",
-    "description": "-高品质1-HB-001📏pls add whatsapp:12812360789 if u need size gu",
+    "description": "-高品质1-HB-001need size gu",
     "sizes": [
       "0:16:款式:16",
       "0:17:款式:17",
@@ -11431,7 +11430,7 @@ export const products: Product[] = [
     "price": 110,
     "referencePrice": 110,
     "currency": "USD",
-    "description": "📏pls add whatsapp:+1（448）201-2280 if u need size guide Guys who add our customer service contact information can find customer service to receive a small gift!",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1",
       "0:2:款式:2",
@@ -11488,7 +11487,7 @@ export const products: Product[] = [
     "price": 120,
     "referencePrice": 120,
     "currency": "USD",
-    "description": "High quality perfume 2 (pls contact WhatsApp: 14482012280,if u need size recommendation",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:2:style:1",
       "0:3:style:2",
@@ -11588,7 +11587,7 @@ export const products: Product[] = [
     "price": 120,
     "referencePrice": 120,
     "currency": "USD",
-    "description": "更换新店各位老板们放心下单 📏Sizing Issues 🛒Product Issues ☎️Whatsapp: +1 (518) 858-0278 👆Please add the customer service number above to find more",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:百家乐:1",
       "0:2:百家乐:2",
@@ -11684,7 +11683,7 @@ export const products: Product[] = [
     "price": 132,
     "referencePrice": 132,
     "currency": "USD",
-    "description": "📏pls add whatsapp:12812360789 if u need size guide 📦For those who have already purchased, you can use the screenshot of your order to enter our 🏅VIP group and enjoy 5% OFF your order❤️‍🔥",
+    "description": "need size guide 📦For those who have already purchased, you can use the screenshot of your order to enter our 🏅VIP group and enjoy 5% OFF your order❤️‍🔥",
     "sizes": [
       "0:1:款式:1",
       "0:2:款式:2",
@@ -11781,7 +11780,7 @@ export const products: Product[] = [
     "price": 12,
     "referencePrice": 12,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1(3pairs)",
       "0:11:款式:2(3pairs)",
@@ -11856,7 +11855,7 @@ export const products: Product[] = [
     "price": 6.62,
     "referencePrice": 6.62,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:4:款式:a pair of black short;1:21:尺寸:M 38-42",
       "0:4:款式:a pair of black short;1:22:尺寸:L 42-46",
@@ -11927,7 +11926,7 @@ export const products: Product[] = [
     "price": 11.88,
     "referencePrice": 11.88,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:颜色:White 5 pairs",
       "0:2:颜色:Black 5 pairs",
@@ -11970,7 +11969,7 @@ export const products: Product[] = [
     "price": 60,
     "referencePrice": 60,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:2:款式:2;1:31:尺寸:S",
       "0:2:款式:2;1:32:尺寸:M",
@@ -12026,7 +12025,7 @@ export const products: Product[] = [
     "price": 154.8,
     "referencePrice": 154.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:20:尺寸:S",
       "0:1:款式:1;1:21:尺寸:M",
@@ -12081,7 +12080,7 @@ export const products: Product[] = [
     "price": 138,
     "referencePrice": 138,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:26:尺寸:M",
       "0:1:款式:1;1:27:尺寸:L",
@@ -12135,7 +12134,7 @@ export const products: Product[] = [
     "price": 258,
     "referencePrice": 258,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:18:牛仔裤size:S/28 45-47.5kg",
       "0:1:款式:1;1:19:牛仔裤size:M/30 47.5-57.5kg",
@@ -12192,7 +12191,7 @@ export const products: Product[] = [
     "price": 106.8,
     "referencePrice": 106.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:14:尺寸:S 28",
       "0:1:款式:1;1:15:尺寸:M 30",
@@ -12362,7 +12361,7 @@ export const products: Product[] = [
     "price": 189.6,
     "referencePrice": 189.6,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:31:裤子尺码:S(40-45kg)",
       "0:1:款式:1;1:32:裤子尺码:M(45-55kg)",
@@ -12465,7 +12464,7 @@ export const products: Product[] = [
   },
   {
     "id": "7574783920",
-    "name": "高品质棉内裤（pls contact WhatsApp：+1（346）256-7125，if u need size recommendation）",
+    "name": "高品质棉内裤（need size recommendation）",
     "catalogName": "Nike Underwear",
     "category": "pants",
     "subCategory": "Underwear",
@@ -12473,7 +12472,7 @@ export const products: Product[] = [
     "price": 20,
     "referencePrice": 20,
     "currency": "USD",
-    "description": "WhatsApp:+1 (346) 256-7125 Hoobuy： https://hoobuy.com/ All China Buy： https://www.allchinabuy.com/cn/ CSSBuy： https://cssbuy.com/ CnFans: https://cnfans.com/ OopBuy :https://oopbuy.com/",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1 Pair-1;1:25:尺码:L（42.5-52.5kg）",
       "0:2:款式:1 Pair-2;1:25:尺码:L（42.5-52.5kg）",
@@ -12586,7 +12585,7 @@ export const products: Product[] = [
     "price": 29,
     "referencePrice": 29,
     "currency": "USD",
-    "description": "高品质内裤H WhatsApp:+1 (346) 256-7125 Hoobuy： https://hoobuy.com/ All China Buy： https://www.allchinabuy.com/cn/ CSSBuy： https://cssbuy.com/ CnFans: https://cnfans.com/ OopBuy :https://oopbuy.com/",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:12:尺码:M;2:18:包装:普通包装",
       "0:1:款式:1;1:12:尺码:M;2:19:包装:礼盒包装",
@@ -12696,7 +12695,7 @@ export const products: Product[] = [
     "price": 108,
     "referencePrice": 108,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:30:内裤size:L 76cm-78cm",
       "0:1:款式:1;1:31:内裤size:XL 80cm-82cm",
@@ -12753,7 +12752,7 @@ export const products: Product[] = [
     "price": 102,
     "referencePrice": 102,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:6:款式:X3;1:12:CK size:L 50-60kg",
       "0:6:款式:X3;1:13:CK size:XL 60-75kg",
@@ -12802,7 +12801,7 @@ export const products: Product[] = [
     "price": 36,
     "referencePrice": 36,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:2:款式:2;1:22:美码内裤:S 50-60kg",
       "0:2:款式:2;1:23:美码内裤:M 60-70kg",
@@ -12859,7 +12858,7 @@ export const products: Product[] = [
     "price": 49,
     "referencePrice": 49,
     "currency": "USD",
-    "description": "高品质内裤sup WhatsApp:+1 (346) 256-7125 Hoobuy： https://hoobuy.com/ All China Buy： https://www.allchinabuy.com/cn/ CSSBuy： https://cssbuy.com/ CnFans: https://cnfans.com/ OopBuy :https://oopbuy.com/",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:8:尺码:M",
       "0:1:款式:1;1:9:尺码:L",
@@ -13519,7 +13518,7 @@ export const products: Product[] = [
     "price": 103.2,
     "referencePrice": 103.2,
     "currency": "USD",
-    "description": "更换新店各位老板们放心下单 📏Sizing Issues 🛒Product Issues ☎️Whatsapp: +1 (518) 858-0278 👆Please add the customer service number above to find more",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:黑色;1:9:SIZE：:M 90-110斤",
       "0:1:款式:黑色;1:10:SIZE：:L 110-130斤",
@@ -14086,7 +14085,7 @@ export const products: Product[] = [
     "price": 56.64,
     "referencePrice": 56.64,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:颜色:1;1:9:鞋码:36",
       "0:1:颜色:1;1:10:鞋码:37",
@@ -14147,7 +14146,7 @@ export const products: Product[] = [
     "price": 336,
     "referencePrice": 336,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:20:尺寸:35",
       "0:1:款式:1;1:21:尺寸:36",
@@ -14261,7 +14260,7 @@ export const products: Product[] = [
     "price": 600,
     "referencePrice": 600,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:31:鞋码:35",
       "0:1:款式:1;1:32:鞋码:35.5(US3.5)",
@@ -14358,7 +14357,7 @@ export const products: Product[] = [
     "price": 838.8,
     "referencePrice": 838.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1（LED）;1:10:鞋码:35",
       "0:1:款式:1（LED）;1:11:鞋码:36(US4)",
@@ -14411,7 +14410,7 @@ export const products: Product[] = [
     "price": 420,
     "referencePrice": 420,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:2:款式:2;1:16:鞋码:36(US4)",
       "0:2:款式:2;1:17:鞋码:36.5(US4.5)",
@@ -14463,7 +14462,7 @@ export const products: Product[] = [
     "price": 288,
     "referencePrice": 288,
     "currency": "USD",
-    "description": "If you have any questions, please contact the seller on WhatsApp: +44 7465 944254",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:22:color:01;1:23:EUR SIZE:EUR 36",
       "0:22:color:01;1:24:EUR SIZE:EUR 37.5",
@@ -14545,7 +14544,7 @@ export const products: Product[] = [
     "price": 441.6,
     "referencePrice": 441.6,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:22:鞋码:36(US4)",
       "0:1:款式:1;1:24:鞋码:38(US5.5)",
@@ -14602,7 +14601,7 @@ export const products: Product[] = [
     "price": 180,
     "referencePrice": 180,
     "currency": "USD",
-    "description": "If you have any questions, please contact the seller on WhatsApp: +44 7465 944254",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:9549061269:Color:01;1:9554545170:Adidas SIZE:45",
       "0:9549061269:Color:01;1:9554545168:Adidas SIZE:44",
@@ -14745,7 +14744,7 @@ export const products: Product[] = [
     "price": 499,
     "referencePrice": 499,
     "currency": "USD",
-    "description": "If you have any questions, please contact the seller on WhatsApp: +44 7465 944254",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:color:01;1:27:SIZE:36",
       "0:1:color:01;1:28:SIZE:37",
@@ -14929,7 +14928,7 @@ export const products: Product[] = [
     "price": 403.2,
     "referencePrice": 403.2,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:DQ4909-100;1:38:鞋码:36",
       "0:1:款式:DQ4909-100;1:39:鞋码:37",
@@ -14986,7 +14985,7 @@ export const products: Product[] = [
     "price": 264,
     "referencePrice": 264,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:2:款式:2;1:35:鞋码:38(US5.5)",
       "0:2:款式:2;1:37:鞋码:39(US6.5)",
@@ -15040,7 +15039,7 @@ export const products: Product[] = [
     "price": 336,
     "referencePrice": 336,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:13:鞋码:36",
       "0:1:款式:1;1:14:鞋码:37",
@@ -15097,7 +15096,7 @@ export const products: Product[] = [
     "price": 336,
     "referencePrice": 336,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:36:鞋码:35",
       "0:1:款式:1;1:37:鞋码:36",
@@ -15154,7 +15153,7 @@ export const products: Product[] = [
     "price": 300,
     "referencePrice": 300,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:13:鞋码:40",
       "0:1:款式:1;1:14:鞋码:41",
@@ -15203,7 +15202,7 @@ export const products: Product[] = [
     "price": 698.4,
     "referencePrice": 698.4,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:23:鞋码:36(US4)",
       "0:1:款式:1;1:26:鞋码:38(US5.5)",
@@ -15260,7 +15259,7 @@ export const products: Product[] = [
     "price": 93.6,
     "referencePrice": 93.6,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:16:型号:1;1:1:鞋码:36",
       "0:16:型号:1;1:2:鞋码:36.5",
@@ -15369,7 +15368,7 @@ export const products: Product[] = [
     "price": 660,
     "referencePrice": 660,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:21:鞋码:36(US4)",
       "0:1:款式:1;1:22:鞋码:37",
@@ -15425,7 +15424,7 @@ export const products: Product[] = [
     "price": 420,
     "referencePrice": 420,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:2:款式:2;1:26:鞋码:36(US4)",
       "0:2:款式:2;1:27:鞋码:36.5(US4.5)",
@@ -15531,7 +15530,7 @@ export const products: Product[] = [
     "price": 302.4,
     "referencePrice": 302.4,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:16:鞋码:45(US11)（非质量问题不退换）",
       "0:1:款式:1;1:27:鞋码:37.5(US5)",
@@ -15588,7 +15587,7 @@ export const products: Product[] = [
     "price": 352.8,
     "referencePrice": 352.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:37:鞋码:36",
       "0:1:款式:1;1:38:鞋码:37",
@@ -15701,7 +15700,7 @@ export const products: Product[] = [
     "price": 330,
     "referencePrice": 330,
     "currency": "USD",
-    "description": "爆款原版DR鞋子NS064 Discord : xaayitqmyk@rambler.ru (official Account) WhatsApp:+8616715913616 All China Buy： https://www.allchinabuy.com/cn/ CSSBuy： https://m.cssbuy.com/ CnFans: https://cnfans.com/",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:21:鞋码:EUR 36",
       "0:1:款式:1;1:22:鞋码:EUR 37",
@@ -15817,7 +15816,7 @@ export const products: Product[] = [
     "price": 240,
     "referencePrice": 240,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:20:鞋码:36(US4)",
       "0:1:款式:1;1:21:鞋码:36.5(US4.5)",
@@ -15874,7 +15873,7 @@ export const products: Product[] = [
     "price": 408,
     "referencePrice": 408,
     "currency": "USD",
-    "description": "爆款原版DR鞋子NS034 Discord : xaayitqmyk@rambler.ru (official Account) WhatsApp:+8616715913616 All China Buy： https://www.allchinabuy.com/cn/ CSSBuy： https://m.cssbuy.com/ CnFans: https://cnfans.com/",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:21:码数:35",
       "0:1:款式:1;1:22:码数:36",
@@ -15933,7 +15932,7 @@ export const products: Product[] = [
     "price": 480,
     "referencePrice": 480,
     "currency": "USD",
-    "description": "￥480 休闲舒适百搭鞋子 Discord : xaayitqmyk@rambler.ru (official Account) WhatsApp:+8616715913616 All China Buy： https://www.allchinabuy.com/cn/ CSSBuy： https://m.cssbuy.com/ CnFans: https://cnfans.com/",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:1:款式:1;1:16:麦昆鞋子:EU36",
       "0:1:款式:1;1:17:麦昆鞋子:EU37",
@@ -15993,7 +15992,7 @@ export const products: Product[] = [
     "price": 334.8,
     "referencePrice": 334.8,
     "currency": "USD",
-    "description": "when you need more help, please add our WhatsApp:https://wa.me/12812360789?text=Hi",
+    "description": "Product details are based on the latest catalog capture.",
     "sizes": [
       "0:9590041913:鞋款式:081202081;1:9589129929:EU 尺码:EU36",
       "0:9590041913:鞋款式:081202081;1:9590961932:EU 尺码:EU37",
