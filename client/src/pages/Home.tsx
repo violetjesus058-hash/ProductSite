@@ -74,7 +74,7 @@ export default function Home() {
     const pool = scoped.length >= 4 ? scoped : sameBrand.length >= 4 ? sameBrand : sameCategory.length >= 4 ? sameCategory : products.filter((item) => !visibleIds.has(item.id));
     return [...pool].sort(() => Math.random() - 0.5);
   }, [brand, category, subCategory, visible]);
-  useEffect(() => { setRecommendationCount(24); }, [brand, category, subCategory, query, sort]);
+  useEffect(() => { setRecommendationCount(24); window.scrollTo({ top: 0, left: 0, behavior: "auto" }); }, [brand, category, subCategory, query, sort]);
   useEffect(() => { const node = recommendationSentinel.current; if (!node || lowPriceProducts.length === 0) return; const observer = new IntersectionObserver((entries) => { if (entries[0]?.isIntersecting) setRecommendationCount((count) => count + 24); }, { rootMargin: "700px" }); observer.observe(node); return () => observer.disconnect(); }, [lowPriceProducts.length, recommendationCount]);
   const toggleFavorite = (id: string) => setFavorites((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
   const favoriteProducts = favorites.map((id) => products.find((item) => item.id === id)).filter(Boolean) as typeof products;
