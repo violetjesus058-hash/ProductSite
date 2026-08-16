@@ -89,3 +89,8 @@
 ## Style Decisions
 
 根据首轮视觉复核，首页必须让左侧中文大类导航成为明显的编辑目录脊柱；商品卡片以图片为第一信息层，标题与价格降为辅助层；商品详情页的主标题只显示清洗后的编辑化商品名，供应商联系方式和原始残留只放在次级说明；Catalog Coral #E95D4F 仅用于激活态、价格/状态、收藏和主要操作，不作为普遍装饰色。
+
+
+### Accepted review amendments
+
+The post-migration catalog keeps one archival dossier structure for product detail pages, uses Catalog Coral #E95D4F for active navigation, price/status signals, favorites/share, and primary commerce actions, and gives the masonry wall more breathing room through larger feature pins and stronger spacing rhythm. Platform links remain available but are visually subordinate to the catalog record.
