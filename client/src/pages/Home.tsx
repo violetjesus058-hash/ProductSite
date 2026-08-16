@@ -1,7 +1,7 @@
 // Editorial Pinboard reminder: the homepage is a browsable catalog wall, not a centered storefront; images lead, copy follows.
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "wouter";
-import { ArrowUpRight, Bell, ChevronDown, Heart, History as HistoryIcon, Home as HomeIcon, MessageCircle, Search, Settings2, X } from "lucide-react";
+import { ArrowUpRight, Bell, ChevronDown, Heart, History as HistoryIcon, Home as HomeIcon, MessageCircle, Search, Settings2, X, RefreshCw, CheckCircle2 } from "lucide-react";
 import { products, categoryLabels, categoryOrder } from "@/data/products";
 import { formatVisitTime, readFavorites, readHistory, saveFavorites, type HistoryEntry } from "@/lib/catalogMemory";
 
@@ -25,57 +25,107 @@ function isCuratedCategory(product: (typeof products)[number]) {
   return product.category === "shoe" || product.category === "watches" || (product.category === "ACC" && /(wallet|purse|bag|fragrance|perfume|cologne|香水|钱包)/i.test(text));
 }
 
+// Simple seeded random for stable shuffle within a batch
+function seededRandom(seed: number) {
+  const x = Math.sin(seed++) * 10000;
+  return x - Math.floor(x);
+}
+
 export default function Home() {
   const [, navigate] = useLocation();
-  const [category, setCategory] = useState("all");
+  const [category, setCategory] = useState("clothing"); // Default to clothing as requested
   const [brand, setBrand] = useState("all");
   const [query, setQuery] = useState("");
-  const [sort, setSort] = useState("curated");
+  const [sort, setSort] = useState("random"); // Default to random as requested
   const [favorites, setFavorites] = useState<string[]>(() => readFavorites());
   const [history, setHistory] = useState<HistoryEntry[]>(() => readHistory());
   const [openPanel, setOpenPanel] = useState<"favorites" | "history" | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [subCategory, setSubCategory] = useState("all");
   const [subCategoryOpen, setSubCategoryOpen] = useState(false);
-  const [recommendationCount, setRecommendationCount] = useState(24);
-  const recommendationSentinel = useRef<HTMLDivElement | null>(null);
+  
+  // Audit Mode State
+  const [seenIds, setSeenIds] = useState<string[]>(() => {
+    const saved = localStorage.getItem("audit:seen-ids");
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [shuffleSeed, setShuffleSeed] = useState(() => Date.now());
+  const [pageSize] = useState(40);
+
   const [pageStyle, setPageStyle] = useState(() => localSetting("material-catalog:style", "default"));
   const [fontSizeLevel, setFontSizeLevel] = useState(() => Number(localSetting("material-catalog:font-size", "0")));
   const [letterSpacingLevel, setLetterSpacingLevel] = useState(() => Number(localSetting("material-catalog:letter-spacing", "0")));
+  
   useEffect(() => saveFavorites(favorites), [favorites]);
   useEffect(() => { window.localStorage.setItem("material-catalog:style", pageStyle); }, [pageStyle]);
   useEffect(() => { window.localStorage.setItem("material-catalog:font-size", String(fontSizeLevel)); }, [fontSizeLevel]);
   useEffect(() => { window.localStorage.setItem("material-catalog:letter-spacing", String(letterSpacingLevel)); }, [letterSpacingLevel]);
+  
   const [demoViewers] = useState(() => Math.floor(Math.random() * 151) + 150);
+  
   const brandItems = useMemo(() => {
     const scoped = category === "all" ? products : products.filter((product) => product.category === category);
     const counts = new Map<string, number>();
     scoped.forEach((product) => { if (product.brand) counts.set(product.brand, (counts.get(product.brand) || 0) + 1); });
     return [{ id: "all", label: "ALL BRANDS", count: scoped.length }, ...Array.from(counts.entries()).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 14).map(([id, count]) => ({ id, label: id, count }))];
   }, [category]);
+
   const visible = useMemo(() => {
     const term = query.trim().toLowerCase();
     const filtered = products.filter((product) => {
       const matchesCategory = category === "all" || product.category === category;
       const matchesBrand = brand === "all" || product.brand === brand;
       const matchesSubCategory = subCategory === "all" || product.subCategory === subCategory;
+      const isNotSeen = !seenIds.includes(product.id);
       const haystack = [product.name, product.catalogName, product.brand, product.subCategory].join(" ").toLowerCase();
-      return matchesCategory && matchesBrand && matchesSubCategory && (!term || haystack.includes(term));
+      return matchesCategory && matchesBrand && matchesSubCategory && isNotSeen && (!term || haystack.includes(term));
     });
-    return [...filtered].sort((a, b) => sort === "price-low" ? a.price - b.price : sort === "price-high" ? b.price - a.price : a.id.localeCompare(b.id));
-  }, [brand, category, query, sort, subCategory]);
-  const needsCuration = visible.length <= 8;
-  const lowPriceProducts = useMemo(() => {
-    const visibleIds = new Set(visible.map((item) => item.id));
-    const matchesScope = (item: (typeof products)[number]) => !visibleIds.has(item.id) && (brand === "all" || item.brand === brand) && (category === "all" || item.category === category) && (subCategory === "all" || item.subCategory === subCategory);
-    const scoped = products.filter(matchesScope);
-    const sameBrand = products.filter((item) => !visibleIds.has(item.id) && brand !== "all" && item.brand === brand);
-    const sameCategory = products.filter((item) => !visibleIds.has(item.id) && category !== "all" && item.category === category);
-    const pool = scoped.length >= 4 ? scoped : sameBrand.length >= 4 ? sameBrand : sameCategory.length >= 4 ? sameCategory : products.filter((item) => !visibleIds.has(item.id));
-    return [...pool].sort(() => Math.random() - 0.5);
-  }, [brand, category, subCategory, visible]);
-  useEffect(() => { setRecommendationCount(24); window.scrollTo({ top: 0, left: 0, behavior: "auto" }); }, [brand, category, subCategory, query, sort]);
-  useEffect(() => { const node = recommendationSentinel.current; if (!node || lowPriceProducts.length === 0) return; const observer = new IntersectionObserver((entries) => { if (entries[0]?.isIntersecting) setRecommendationCount((count) => count + 24); }, { rootMargin: "700px" }); observer.observe(node); return () => observer.disconnect(); }, [lowPriceProducts.length, recommendationCount]);
+
+    let result = [...filtered];
+    if (sort === "random") {
+      // Seeded shuffle for stability within the same seed
+      let currentSeed = shuffleSeed;
+      for (let i = result.length - 1; i > 0; i--) {
+        const j = Math.floor(seededRandom(currentSeed++) * (i + 1));
+        [result[i], result[j]] = [result[j], result[i]];
+      }
+    } else if (sort === "price-low") {
+      result.sort((a, b) => a.price - b.price);
+    } else if (sort === "price-high") {
+      result.sort((a, b) => b.price - a.price);
+    } else {
+      result.sort((a, b) => a.id.localeCompare(b.id));
+    }
+    
+    return result.slice(0, pageSize);
+  }, [brand, category, query, sort, subCategory, seenIds, shuffleSeed, pageSize]);
+
+  const totalRemainingInCategory = useMemo(() => {
+    return products.filter(p => {
+      const matchesCategory = category === "all" || p.category === category;
+      const isNotSeen = !seenIds.includes(p.id);
+      return matchesCategory && isNotSeen;
+    }).length;
+  }, [category, seenIds]);
+
+  const markPageAsSeen = () => {
+    const newSeen = [...seenIds, ...visible.map(p => p.id)];
+    setSeenIds(newSeen);
+    localStorage.setItem("audit:seen-ids", JSON.stringify(newSeen));
+    setShuffleSeed(Date.now());
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const resetAuditProgress = () => {
+    if (confirm("Are you sure you want to reset audit progress? This will clear all 'seen' records.")) {
+      setSeenIds([]);
+      localStorage.removeItem("audit:seen-ids");
+      setShuffleSeed(Date.now());
+    }
+  };
+
+  useEffect(() => { window.scrollTo({ top: 0, left: 0, behavior: "auto" }); }, [brand, category, subCategory, query, sort]);
+
   const toggleFavorite = (id: string) => setFavorites((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
   const favoriteProducts = favorites.map((id) => products.find((item) => item.id === id)).filter(Boolean) as typeof products;
   const historyProducts = history.map((entry) => ({ entry, product: products.find((item) => item.id === entry.id) })).filter((item) => item.product) as { entry: HistoryEntry; product: (typeof products)[number] }[];
@@ -98,15 +148,47 @@ export default function Home() {
     </aside>
     <main className="catalog-main">
       <header className="catalog-header"><div className="mobile-brand"><img src="/manus-storage/catalog-mark_f15a35f4.png" alt="" /> <span>Material Catalog</span></div><div className="search-wrap"><Search size={17} strokeWidth={1.8} /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search brands, products, or categories" aria-label="Search products" />{query && <button onClick={() => setQuery("")}>Clear</button>}</div><div className="header-actions"><div className="header-menu"><button className={`header-icon header-record-button ${openPanel === "favorites" ? "is-active" : ""}`} aria-label={`Saved items, ${favoriteProducts.length}`} aria-expanded={openPanel === "favorites"} onClick={() => setOpenPanel(openPanel === "favorites" ? null : "favorites")}><Heart size={18} fill={favoriteProducts.length ? "currentColor" : "none"} /><span>{favoriteProducts.length}</span></button>{openPanel === "favorites" && <div className="record-popover"><div className="record-popover-head"><strong>SAVED ITEMS</strong><button onClick={() => setOpenPanel(null)} aria-label="Close saved items"><X size={15} /></button></div>{favoriteProducts.length ? favoriteProducts.map((product) => <button className="record-row" key={product.id} onClick={() => navigate(`/product/${product.id}`)}><img src={product.images[0]} alt="" /><span><strong>{cleanTitle(product.catalogName || product.name)}</strong><small>{money(product.price, product.currency)}</small></span><ArrowUpRight size={14} /></button>) : <p className="record-empty">Your saved products will appear here.</p>}</div>}</div><div className="header-menu"><button className={`header-icon header-record-button ${openPanel === "history" ? "is-active" : ""}`} aria-label={`Browsing history, ${historyProducts.length}`} aria-expanded={openPanel === "history"} onClick={() => { setHistory(readHistory()); setOpenPanel(openPanel === "history" ? null : "history"); }}><HistoryIcon size={18} /><span>{historyProducts.length}</span></button>{openPanel === "history" && <div className="record-popover"><div className="record-popover-head"><strong>BROWSING HISTORY</strong><button onClick={() => setOpenPanel(null)} aria-label="Close browsing history"><X size={15} /></button></div>{historyProducts.length ? historyProducts.map(({ entry, product }) => <button className="record-row" key={product.id} onClick={() => navigate(`/product/${product.id}`)}><img src={product.images[0]} alt="" /><span><strong>{cleanTitle(product.catalogName || product.name)}</strong><small>Viewed {formatVisitTime(entry.visitedAt)}</small></span><ArrowUpRight size={14} /></button>) : <p className="record-empty">Products you open will appear here.</p>}</div>}</div><span className="live-status"><i /> <span className="demo-label">Demo</span> · Browsing {demoViewers} · Historical visits 20K+</span></div></header>
-      <div className="catalog-toolbar"><div className="result-label"><span className="coral-dot" /> {brand !== "all" ? englishValue(brand, "SELECTED BRAND") : category === "all" ? "ALL PRODUCTS" : englishCategoryLabels[category] || category.toUpperCase()}</div><label className="sort-select">Sort <select value={sort} onChange={(e) => setSort(e.target.value)}><option value="curated">Curated</option><option value="price-low">Price: Low to High</option><option value="price-high">Price: High to Low</option></select><ChevronDown size={14} /></label></div>
+      
+      <div className="catalog-toolbar">
+        <div className="result-label">
+          <span className="coral-dot" /> 
+          {brand !== "all" ? englishValue(brand, "SELECTED BRAND") : category === "all" ? "ALL PRODUCTS" : englishCategoryLabels[category] || category.toUpperCase()}
+          <span className="audit-counter ml-3 text-xs opacity-50">({totalRemainingInCategory} remaining)</span>
+        </div>
+        <div className="flex items-center gap-4">
+          {seenIds.length > 0 && (
+            <button onClick={resetAuditProgress} className="text-[10px] uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">Reset Progress</button>
+          )}
+          <label className="sort-select">Sort <select value={sort} onChange={(e) => setSort(e.target.value)}><option value="random">Random Audit</option><option value="curated">Curated</option><option value="price-low">Price: Low to High</option><option value="price-high">Price: High to Low</option></select><ChevronDown size={14} /></label>
+        </div>
+      </div>
+
       {visible.length > 0 ? <>
         <section className="masonry-grid" aria-label="Product list">
-          {visible.map((product, index) => { const image = product.images[0]; const isFav = favorites.includes(product.id); const title = englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`); const note = product.subCategory ? `Catalog observation: ${englishValue(product.subCategory, "selected product format")} presentation with the listed options shown on the product page.` : "Catalog observation: product details and available options are shown on the product page."; return <Fragment key={product.id}><article className={`product-card card-${index % 7}`} onClick={() => navigate(`/product/${product.id}`)}><div className="product-image-wrap"><img src={image} alt={title} loading={index < 8 ? "eager" : "lazy"} /><div className="image-wash" />{demoBadge(product.price) && <span className={`demo-product-badge ${demoBadge(product.price) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price)}</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}<button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "Remove from saved items" : "Save product"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={14} /></span></div><div className="product-meta"><div className="product-name">{title}</div><div className="product-sub"><span>{englishValue(product.brand || product.subCategory || "CATALOG ITEM", "CATALOG ITEM")}</span><strong>{money(product.price, product.currency)}</strong></div></div></article>{(index + 1) % 16 === 0 && <article className="editorial-note-card" role="link" tabIndex={0} onClick={() => navigate(`/product/${product.id}`)} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") navigate(`/product/${product.id}`); }}><div className="editorial-note-mark">FIELD NOTE</div><div className="editorial-note-title">{title}</div><p>{note}</p><span>Open product <ArrowUpRight size={13} /></span></article>}</Fragment>; })}
+          {visible.map((product, index) => { const image = product.images[0]; const isFav = favorites.includes(product.id); const title = englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`); return <Fragment key={product.id}><article className={`product-card card-${index % 7}`} onClick={() => navigate(`/product/${product.id}`)}><div className="product-image-wrap"><img src={image} alt={title} loading={index < 8 ? "eager" : "lazy"} /><div className="image-wash" />{demoBadge(product.price) && <span className={`demo-product-badge ${demoBadge(product.price) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price)}</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}<button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "Remove from saved items" : "Save product"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={10} /></span></div><div className="product-info"><div className="product-meta"><span className="product-brand">{englishValue(product.brand, "UNBRANDED")}</span><span className="product-price">{money(product.price, product.currency)}</span></div><h3 className="product-name">{title}</h3></div></article></Fragment>; })}
         </section>
-        {lowPriceProducts.length > 0 && <section className="low-price-extension"><div className="low-price-extension-top"><div className="low-price-extension-label">MORE TO EXPLORE</div></div><div className="low-price-grid">{Array.from({ length: recommendationCount }, (_, index) => { const product = lowPriceProducts[index % lowPriceProducts.length]; return <article className={`product-card card-${(index + 3) % 7}`} key={`low-${product.id}-${index}`} onClick={() => navigate(`/product/${product.id}`)}><div className="product-image-wrap"><img src={product.images[0]} alt={englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`)} loading="lazy" /><div className="image-wash" />{demoBadge(product.price) && <span className={`demo-product-badge ${demoBadge(product.price) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price)}</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}</div><div className="product-meta"><div className="product-name">{englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`)}</div><div className="product-sub"><span>{englishValue(product.brand || product.subCategory || "CATALOG ITEM", "CATALOG ITEM")}</span><strong>{money(product.price, product.currency)}</strong></div></div></article>; })}</div><div ref={recommendationSentinel} className="recommendation-sentinel" aria-hidden="true" /></section>}
-      </> : <div className="empty-state"><span>NO MATCHES / 00</span><h2>Try another search.</h2><button onClick={resetFilters}>Clear filters</button></div>}
-      <button className="mobile-settings-trigger" onClick={() => setSettingsOpen(true)} aria-label="Open display settings"><Settings2 size={19} /></button>
-      {settingsOpen && <div className="mobile-settings-backdrop" onClick={() => setSettingsOpen(false)}><section className="mobile-settings-sheet" onClick={(event) => event.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="display-settings-title"><div className="mobile-settings-head"><div><span className="mobile-discovery-kicker">DISPLAY</span><h2 id="display-settings-title">Catalog settings</h2></div><button onClick={() => setSettingsOpen(false)} aria-label="Close display settings"><X size={18} /></button></div><div className="settings-group"><span className="settings-label">PAGE STYLE</span><div className="style-options">{[["default", "Default"], ["white", "White"], ["gray", "Gray"], ["black", "Black"], ["green", "Soft green"]].map(([value, label]) => <button key={value} className={pageStyle === value ? "is-selected" : ""} onClick={() => setPageStyle(value)}>{label}</button>)}</div></div><label className="settings-range"><span><strong>Font size</strong><small>{fontSizeLevel === 0 ? "Small" : fontSizeLevel === 1 ? "Medium" : "Large"}</small></span><input type="range" min="0" max="2" step="1" value={fontSizeLevel} onChange={(event) => setFontSizeLevel(Number(event.target.value))} /></label><label className="settings-range"><span><strong>Letter spacing</strong><small>{letterSpacingLevel === 0 ? "Tight" : letterSpacingLevel === 1 ? "Balanced" : "Open"}</small></span><input type="range" min="0" max="2" step="1" value={letterSpacingLevel} onChange={(event) => setLetterSpacingLevel(Number(event.target.value))} /></label></section></div>}
+        
+        <div className="audit-controls py-20 flex flex-col items-center justify-center border-t border-black/5 mt-20">
+          <div className="text-center mb-8">
+            <h4 className="text-2xl font-light tracking-tight mb-2">Batch Review Complete</h4>
+            <p className="text-sm opacity-50">You've reviewed {visible.length} items in this set. {totalRemainingInCategory - visible.length} items left in {englishCategoryLabels[category] || category}.</p>
+          </div>
+          <button 
+            onClick={markPageAsSeen}
+            className="group relative flex items-center gap-3 px-10 py-5 bg-black text-white rounded-full hover:scale-105 transition-transform active:scale-95"
+          >
+            <CheckCircle2 size={20} className="text-emerald-400" />
+            <span className="text-sm font-medium tracking-widest uppercase">Mark as Reviewed & Next Batch</span>
+            <RefreshCw size={16} className="opacity-50 group-hover:rotate-180 transition-transform duration-500" />
+          </button>
+        </div>
+      </> : <div className="empty-state">
+        <div className="empty-icon">✦</div>
+        <h3>No products found</h3>
+        <p>All products in this category have been reviewed or match no results.</p>
+        <button onClick={resetFilters}>Clear all filters</button>
+      </div>}
     </main>
+    {settingsOpen && <div className="settings-overlay" onClick={() => setSettingsOpen(false)}><div className="settings-modal" onClick={(e) => e.stopPropagation()}><div className="settings-head"><strong>DISPLAY SETTINGS</strong><button onClick={() => setSettingsOpen(false)} aria-label="Close settings"><X size={18} /></button></div><div className="settings-body"><div className="settings-section"><label>PAGE STYLE</label><div className="style-grid">{["default", "white", "gray", "black", "green"].map((s) => <button key={s} className={`style-opt is-${s} ${pageStyle === s ? "is-active" : ""}`} onClick={() => setPageStyle(s)} aria-label={`Switch to ${s} style`} />)}</div></div><div className="settings-section"><label>FONT SIZE</label><input type="range" min="0" max="2" step="1" value={fontSizeLevel} onChange={(e) => setFontSizeLevel(Number(e.target.value))} /></div><div className="settings-section"><label>LETTER SPACING</label><input type="range" min="0" max="2" step="1" value={letterSpacingLevel} onChange={(e) => setLetterSpacingLevel(Number(e.target.value))} /></div></div></div></div>}
   </div>;
 }

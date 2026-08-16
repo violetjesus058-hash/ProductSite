@@ -426,18 +426,14 @@
 - [ ] Validate the corrected card and detail page, then save a checkpoint.
 
 
-## 继续逐商品复核
+## 随机抽样审核模式 (Clothing 类目)
+- [x] 禁用无限滚动，改为固定批次展示。
+- [x] 实现随机排序并排除已看商品的逻辑。
+- [x] 在首页增加“标记本页已看并换一批”的功能。
+- [ ] 用户在首页 Clothing 类目下核对当前批次的 40 个商品。
+- [ ] 如果发现分类错误或图片问题，记录 SourcePID 并告知 Manus 进行修正。
+- [ ] Manus 添加 MANUAL_OVERRIDES 修正逻辑并重新构建。
+- [ ] 用户点击“Next Batch”进入下一批随机样本。
 
-- [ ] Select the next catalog records after the completed short-sleeve review.
-- [ ] Inspect each selected product's title, first five gallery images, category, subcategory, and size/variant labels.
-- [ ] Add only evidence-based manual overrides for incorrect cover images or categories.
-- [ ] Validate corrected records before creating the next checkpoint.
 
 
-## 持续审核监控
-
-- [x] Read the current connector and scheduled-task configuration before creating automation.
-- [x] Create a durable audit-progress state with last reviewed product, review count, pending queue, and heartbeat timestamp.
-- [x] Configure a three-minute status check using an always-running project-side mechanism rather than launching a full AI session every three minutes.
-- [x] Resume from the last saved review point when the audit process is interrupted.
-- [x] Stop checks automatically when all products are reviewed and record the completion time.
