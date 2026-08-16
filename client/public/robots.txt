@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /__manus__/
+Disallow: /src/
+Disallow: /node_modules/
+
+Sitemap: https://productsite-8wf.pages.dev/sitemap.xml

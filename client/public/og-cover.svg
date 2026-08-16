@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Material Catalog — Curated Product Discovery</title>
+  <desc id="desc">An editorial catalog for clothing, footwear, accessories, watches, and lifestyle products.</desc>
+  <rect width="1200" height="630" fill="#f7f5f0"/>
+  <path d="M0 470C220 420 350 510 560 456s355-28 640 12v162H0Z" fill="#ebe7dd"/>
+  <path d="M0 0h1200v10H0z" fill="#e46f5f"/>
+  <g fill="#22201d">
+    <text x="86" y="245" font-family="Georgia, serif" font-size="82" font-weight="700">Material</text>
+    <text x="90" y="330" font-family="Georgia, serif" font-size="82" font-weight="700">Catalog</text>
+  </g>
+  <text x="94" y="390" fill="#e46f5f" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="4">CURATED PRODUCT DISCOVERY</text>
+  <g transform="translate(922 178)">
+    <rect width="150" height="190" rx="75" fill="#e46f5f"/>
+    <path d="M75 32 111 69v88H39V69z" fill="#f7f5f0"/>
+    <path d="M75 32v125M39 69h72" stroke="#e46f5f" stroke-width="8"/>
+  </g>
+  <text x="94" y="555" fill="#6f6a62" font-family="Arial, sans-serif" font-size="17" letter-spacing="2">CLOTHING · FOOTWEAR · ACCESSORIES · WATCHES</text>
+</svg>

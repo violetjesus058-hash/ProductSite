@@ -24,6 +24,8 @@ function money(value: number, currency = "USD") { return new Intl.NumberFormat("
 function englishValue(value: string, fallback: string) { return /[\u4e00-\u9fff]/.test(value) ? fallback : value; }
 function cleanTitle(value: string) { return value.replace(/📏.*$/, "").replace(/pls add whatsapp.*$/i, "").replace(/whatsapp[:：]?\s*\d+/gi, "").replace(/\s+/g, " ").trim(); }
 function capturedDateFor(productId: string) { let hash = 2166136261; for (let index = 0; index < productId.length; index += 1) hash = Math.imul(hash ^ productId.charCodeAt(index), 16777619); const start = Date.UTC(2025, 0, 1); const end = Date.UTC(2026, 7, 1) - 1; const timestamp = start + (Math.abs(hash) % (end - start + 1)); return new Date(timestamp).toISOString().slice(0, 10); }
+function setMeta(attribute: "name" | "property", key: string, content: string) { let node = document.head.querySelector<HTMLMetaElement>(`meta[${attribute}="${key}"]`); if (!node) { node = document.createElement("meta"); node.setAttribute(attribute, key); document.head.appendChild(node); } node.content = content; }
+function setCanonical(url: string) { let node = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]'); if (!node) { node = document.createElement("link"); node.rel = "canonical"; document.head.appendChild(node); } node.href = url; }
 function ZoomableDetailImage({ image, alt, label }: { image: string; alt: string; label: string }) {
   const [position, setPosition] = useState({ x: 50, y: 50 });
   const handleMove = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -87,6 +89,34 @@ export default function ProductDetail() {
   useEffect(() => { setRecommendationCount(24); window.scrollTo({ top: 0, left: 0, behavior: "auto" }); }, [product?.id]);
   useEffect(() => { const node = recommendationSentinel.current; if (!node || recommended.length === 0) return; const observer = new IntersectionObserver((entries) => { if (entries[0]?.isIntersecting) setRecommendationCount((count) => count + 24); }, { rootMargin: "700px" }); observer.observe(node); return () => observer.disconnect(); }, [recommended.length, recommendationCount]);
   useEffect(() => { if (product) rememberVisit(product.id); }, [product?.id]);
+  useEffect(() => {
+    if (!product) return;
+    const title = englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`);
+    const category = englishCategoryLabels[product.category] || product.category.toUpperCase();
+    const description = `${title} — a ${category.toLowerCase()} catalog record on Material Catalog. Review options, price, and availability before ordering.`;
+    const canonicalUrl = `${window.location.origin}/product/${product.id}`;
+    const imageUrl = new URL(product.images?.[0] || "/og-cover.svg", window.location.origin).href;
+    document.documentElement.lang = "en";
+    document.title = `${title} — Material Catalog`;
+    setCanonical(canonicalUrl);
+    setMeta("name", "description", description);
+    setMeta("property", "og:locale", "en_US");
+    setMeta("property", "og:type", "website");
+    setMeta("property", "og:site_name", "Material Catalog");
+    setMeta("property", "og:title", title);
+    setMeta("property", "og:description", description);
+    setMeta("property", "og:url", canonicalUrl);
+    setMeta("property", "og:image", imageUrl);
+    setMeta("property", "og:image:alt", `${title} product image`);
+    setMeta("name", "twitter:card", "summary_large_image");
+    setMeta("name", "twitter:title", title);
+    setMeta("name", "twitter:description", description);
+    setMeta("name", "twitter:image", imageUrl);
+    setMeta("name", "twitter:image:alt", `${title} product image`);
+    setMeta("property", "product:price:amount", product.price.toFixed(2));
+    setMeta("property", "product:price:currency", product.currency);
+    if (product.collectedAt) setMeta("property", "article:modified_time", product.collectedAt);
+  }, [product]);
   const toggleLiked = () => { if (!product) return; const nextLiked = !liked; setLiked(nextLiked); const current = readFavorites(); saveFavorites(nextLiked ? Array.from(new Set([...current, product.id])) : current.filter((item) => item !== product.id)); };
   const shareUrl = typeof window !== "undefined" ? window.location.href : `/product/${product?.id || ""}`;
   const shareTitle = product ? englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`) : "Material Catalog product";

@@ -334,3 +334,9 @@
 - [ ] 制定 WAF、速率限制、Bot 防护、热链保护和缓存策略。
 - [ ] 加入合理的前端复制提示、图片拖拽限制和版权标识，不影响购买与分享。
 - [ ] 验证防护措施不阻断正常商品浏览、社媒分享和平台购买入口。
+
+
+- [ ] 将 HTML lang、title 和 description 统一为英文。
+- [ ] 补齐 Open Graph 和 X/Twitter Card 元标签及英文分享图片信息。
+- [ ] 增加 canonical、robots.txt、sitemap.xml 和基础发布日期字段。
+- [ ] 验证 Cloudflare Pages 构建输出中的 SEO 文件和英文元信息。
