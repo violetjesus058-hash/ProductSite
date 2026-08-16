@@ -437,3 +437,13 @@
 
 
 
+
+
+## 当前 AI 类目审计（2026-08-16）
+
+- [x] 使用 AI Audit View 以紧凑网格执行 Clothing 批量视觉扫描。
+- [x] 对已确认的 Clothing 混入裤装、帽子等商品添加 MANUAL_OVERRIDES 并重建目录。
+- [ ] 继续完成 Clothing 剩余批次，避免仅凭标题推断，优先依据主图确认。
+- [ ] Clothing 完成后自动切换到下一个尚未完成的类目。
+- [ ] 按 Pants、Shoes、Bags、Fragrance、Watches、Accessories 顺序完成全目录审核。
+- [ ] 每个类目完成后保存审核日志、统计和构建检查结果。

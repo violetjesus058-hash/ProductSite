@@ -5,6 +5,8 @@ import { ArrowUpRight, Bell, ChevronDown, Heart, History as HistoryIcon, Home as
 import { products, categoryLabels, categoryOrder } from "@/data/products";
 import { formatVisitTime, readFavorites, readHistory, saveFavorites, type HistoryEntry } from "@/lib/catalogMemory";
 
+// Editorial Pinboard audit view: compact evidence-first cards, restrained motion, and sequential category handoff after a category is fully reviewed.
+
 function englishValue(value: string, fallback: string) { return /[\u4e00-\u9fff]/.test(value) ? fallback : value; }
 function localSetting(key: string, fallback: string) { if (typeof window === "undefined") return fallback; return window.localStorage.getItem(key) || fallback; }
 function cleanTitle(value: string) { return value.replace(/📏.*$/, "").replace(/pls add whatsapp.*$/i, "").replace(/whatsapp[:：]?\s*\d+/gi, "").replace(/\s+/g, " ").trim(); }
@@ -50,7 +52,8 @@ export default function Home() {
     return saved ? JSON.parse(saved) : [];
   });
   const [shuffleSeed, setShuffleSeed] = useState(() => Date.now());
-  const [pageSize] = useState(40);
+  const [pageSize, setPageSize] = useState(40);
+  const [isAiAuditView, setIsAiAuditView] = useState(false);
 
   const [pageStyle, setPageStyle] = useState(() => localSetting("material-catalog:style", "default"));
   const [fontSizeLevel, setFontSizeLevel] = useState(() => Number(localSetting("material-catalog:font-size", "0")));
@@ -108,6 +111,20 @@ export default function Home() {
     }).length;
   }, [category, seenIds]);
 
+  // Once a category has no unseen records, move the audit view to the next category with remaining records.
+  useEffect(() => {
+    if (!isAiAuditView || category === "all" || totalRemainingInCategory > 0) return;
+    const nextCategory = categoryOrder
+      .filter((id) => id !== "all" && id !== category)
+      .find((id) => products.some((product) => product.category === id && !seenIds.includes(product.id)));
+    if (nextCategory) {
+      setCategory(nextCategory);
+      setBrand("all");
+      setSubCategory("all");
+      setShuffleSeed(Date.now());
+    }
+  }, [category, isAiAuditView, seenIds, totalRemainingInCategory]);
+
   const markPageAsSeen = () => {
     const newSeen = [...seenIds, ...visible.map(p => p.id)];
     setSeenIds(newSeen);
@@ -156,6 +173,15 @@ export default function Home() {
           <span className="audit-counter ml-3 text-xs opacity-50">({totalRemainingInCategory} remaining)</span>
         </div>
         <div className="flex items-center gap-4">
+          <button 
+            onClick={() => {
+              setIsAiAuditView(!isAiAuditView);
+              setPageSize(isAiAuditView ? 40 : 80);
+            }} 
+            className={`text-[10px] uppercase tracking-widest px-3 py-1 rounded border ${isAiAuditView ? "bg-black text-white border-black" : "border-black/20 opacity-60"}`}
+          >
+            AI Audit View
+          </button>
           {seenIds.length > 0 && (
             <button onClick={resetAuditProgress} className="text-[10px] uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">Reset Progress</button>
           )}
@@ -164,8 +190,28 @@ export default function Home() {
       </div>
 
       {visible.length > 0 ? <>
-        <section className="masonry-grid" aria-label="Product list">
-          {visible.map((product, index) => { const image = product.images[0]; const isFav = favorites.includes(product.id); const title = englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`); return <Fragment key={product.id}><article className={`product-card card-${index % 7}`} onClick={() => navigate(`/product/${product.id}`)}><div className="product-image-wrap"><img src={image} alt={title} loading={index < 8 ? "eager" : "lazy"} /><div className="image-wash" />{demoBadge(product.price) && <span className={`demo-product-badge ${demoBadge(product.price) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price)}</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}<button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "Remove from saved items" : "Save product"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={10} /></span></div><div className="product-info"><div className="product-meta"><span className="product-brand">{englishValue(product.brand, "UNBRANDED")}</span><span className="product-price">{money(product.price, product.currency)}</span></div><h3 className="product-name">{title}</h3></div></article></Fragment>; })}
+        <section className={isAiAuditView ? "grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2" : "masonry-grid"} aria-label="Product list">
+          {visible.map((product, index) => { 
+            const image = product.images[0]; 
+            const isFav = favorites.includes(product.id); 
+            const title = englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`); 
+            
+            if (isAiAuditView) {
+              return (
+                <article key={product.id} className="bg-white border border-black/5 p-1 flex flex-col gap-1 cursor-pointer hover:border-black/20" onClick={() => navigate(`/product/${product.id}`)}>
+                  <div className="aspect-square overflow-hidden bg-gray-50 relative">
+                    <img src={image} alt="" className="w-full h-full object-cover" />
+                    <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-[8px] text-white px-1 truncate">
+                      {product.sourceProductId}
+                    </div>
+                  </div>
+                  <div className="text-[9px] leading-tight truncate opacity-70">{title}</div>
+                </article>
+              );
+            }
+            
+            return <Fragment key={product.id}><article className={`product-card card-${index % 7}`} onClick={() => navigate(`/product/${product.id}`)}><div className="product-image-wrap"><img src={image} alt={title} loading={index < 8 ? "eager" : "lazy"} /><div className="image-wash" />{demoBadge(product.price) && <span className={`demo-product-badge ${demoBadge(product.price) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price)}</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}<button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "Remove from saved items" : "Save product"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={10} /></span></div><div className="product-info"><div className="product-meta"><span className="product-brand">{englishValue(product.brand, "UNBRANDED")}</span><span className="product-price">{money(product.price, product.currency)}</span></div><h3 className="product-name">{title}</h3></div></article></Fragment>; 
+          })}
         </section>
         
         <div className="audit-controls py-20 flex flex-col items-center justify-center border-t border-black/5 mt-20">
