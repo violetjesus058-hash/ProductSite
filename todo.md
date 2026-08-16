@@ -424,3 +424,11 @@
 - [ ] Record manual review fields for category, subcategory, brand, primary image index, and review status.
 - [ ] Establish a repeatable per-product review queue for future title/image/category corrections.
 - [ ] Validate the corrected card and detail page, then save a checkpoint.
+
+
+## 继续逐商品复核
+
+- [ ] Select the next catalog records after the completed short-sleeve review.
+- [ ] Inspect each selected product's title, first five gallery images, category, subcategory, and size/variant labels.
+- [ ] Add only evidence-based manual overrides for incorrect cover images or categories.
+- [ ] Validate corrected records before creating the next checkpoint.
