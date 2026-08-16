@@ -74,6 +74,9 @@ MANUAL_OVERRIDES = {
     '7543396675': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'AI Audit: REP High Quality 4-PT-001 thumbnail clearly shows a pants-only product; corrected to pants/trousers.'},
     '7603667852': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'AI Audit: KJ6300 work-trouser thumbnail clearly shows a pants-only product; corrected to pants/trousers.'},
     '7576505455': {'category': 'pants', 'subCategory': 'Jeans', 'review_note': 'AI Audit: REP High Quality 1-JE-001 thumbnail clearly shows a jeans-only assortment; corrected to pants/jeans.'},
+    '7576502955': {'category': 'pants', 'subCategory': 'Jeans', 'review_note': 'AI Audit: thumbnail clearly shows a jeans-only product; corrected to pants/jeans.'},
+    '7543371979': {'category': 'accessories', 'subCategory': 'Caps', 'review_note': 'AI Audit: High Quality Knitted Hat from Factory thumbnail clearly shows knit hats only; corrected to accessories/caps.'},
+    '7601613265': {'category': 'pants', 'subCategory': 'Jeans', 'review_note': 'AI Audit: WK339 jeans thumbnail clearly shows a pants-only denim product; corrected to pants/jeans.'},
 }
 
 def classify_product(info: dict) -> str:

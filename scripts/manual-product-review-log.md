@@ -182,3 +182,18 @@ The single local gallery image clearly shows a Burkina Faso football fan jersey.
 
 - Source product ID: `7603667852` (Corrected to Pants/Trousers; KJ6300 work-trouser thumbnail clearly shows pants-only product.)
 - Source product ID: `7576505455` (Corrected to Pants/Jeans; REP High Quality 1-JE-001 thumbnail shows jeans-only assortment.)
+
+## AI Audit: Clothing Next Batch - 2026-08-16
+
+- Source product ID: `7576502955` (Corrected to Pants/Jeans; visible product image clearly shows jeans-only item.)
+- Mixed apparel sets were retained in Clothing because they are not pants-only products.
+
+## AI Audit: Clothing Hat Batch - 2026-08-16
+
+- Source product ID: `7543371979` (Corrected to Accessories/Caps; visible product image shows knit hats only.)
+- Tracksuit and mixed apparel sets were retained in Clothing.
+
+## AI Audit: Clothing Pants Batch - 2026-08-16
+
+- Source product ID: `7601613265` (Corrected to Pants/Jeans; WK339 thumbnail clearly shows a jeans-only product.)
+- Source product ID `7578478202` was already classified as Pants/Shorts and required no new override.
