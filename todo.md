@@ -415,3 +415,12 @@
 - [ ] Define deterministic precedence rules for clothing, pants, shoes, watches, fragrance, bags, wallets, and other accessories.
 - [ ] Rebuild category, subcategory, and brand labels while keeping product IDs, prices, images, and Kakobuy links unchanged.
 - [ ] Validate the Pants category, category counts, brand filters, and representative detail pages.
+
+
+## 逐商品图片与分类复核
+
+- [ ] Locate `High Quality Short Sleeve from Factory` and identify its exact source product and price-group records.
+- [ ] Change that product group's primary image to the third gallery image without redownloading assets.
+- [ ] Record manual review fields for category, subcategory, brand, primary image index, and review status.
+- [ ] Establish a repeatable per-product review queue for future title/image/category corrections.
+- [ ] Validate the corrected card and detail page, then save a checkpoint.

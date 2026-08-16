@@ -42,10 +42,13 @@ CATEGORY_PATTERNS = {
     'bags': r'\b(bags?|backpacks?|totes?|shoulder bags?|crossbody|handbags?|pouches?)\b',
     'wallets': r'\b(wallets?|card holders?|cardholder|keychains?|零钱包|钱包)\b',
     'pants': r'\b(pants|trousers|jeans|shorts|joggers|sweatpants|leggings|denim|cargo|bottoms|长裤|短裤|牛仔裤|休闲裤|运动裤)\b',
-    'clothing': r'\b(shirts?|t-?shirts?|tees?|hoodies?|jackets?|coats?|sweaters?|sweatshirts?|jerseys?|tracksuits?|dresses?|skirts?|vests?|tops?|clothing|衬衫|卫衣|夹克|外套|毛衣|短袖|长袖|裙)\b',
+    'clothing': r'\b(shirts?|t-?shirts?|tees?|short sleeve|short-sleeve|hoodies?|jackets?|coats?|sweaters?|sweatshirts?|jerseys?|sportswear|tracksuits?|dresses?|skirts?|vests?|tops?|clothing|衬衫|卫衣|夹克|外套|毛衣|短袖|长袖|裙)\b',
     'accessories': r'\b(caps?|hats?|belts?|glasses|sunglasses|scarves?|ties?|bracelets?|rings?|necklaces?|earrings?|headphones?|phone cases?|accessor)\b',
 }
 BRAND_PATTERNS = [('Louis Vuitton', r'\b(louis\s*vuitton|lv)\b'), ('Stone Island', r'\bstone\s*island\b'), ('Ralph Lauren', r'\bralph\s*lauren\b'), ('Nike', r'\bnike\b'), ('Adidas', r'\badidas\b'), ('Puma', r'\bpuma\b'), ('Balenciaga', r'\bbalenciaga\b'), ('Dior', r'\bdior\b'), ('Moncler', r'\bmoncler\b'), ('The North Face', r'\bthe\s*north\s*face\b'), ('New Balance', r'\bnew\s*balance\b'), ('Gucci', r'\bgucci\b'), ('Prada', r'\bprada\b'), ('Supreme', r'\bsupreme\b')]
+MANUAL_OVERRIDES = {
+    '7543307459': {'category': 'clothing', 'subCategory': 'Shirts', 'primary_image_index': 2, 'review_note': 'Manual review: use third gallery image as catalog cover.'},
+}
 
 def classify_product(info: dict) -> str:
     title_text = f"{info.get('title', '')} {info.get('subcategory', '')}".lower()
@@ -157,13 +160,20 @@ def main() -> None:
             collected_at = next((row['checked_at'] for row in selected if row['checked_at']), info.get('collected_at', ''))
             if not images:
                 continue
+            override = MANUAL_OVERRIDES.get(pid, {})
+            display_images = images[:16]
+            primary_index = override.get('primary_image_index')
+            if isinstance(primary_index, int) and 0 <= primary_index < len(display_images):
+                display_images = [display_images[primary_index]] + [image for index, image in enumerate(display_images) if index != primary_index]
+            inferred_category = classify_product(info)
+            inferred_subcategory = subcategory_for(inferred_category, info)
             grouped.append({
                 'id': f'kb-{pid}-{price.replace(".", "-")}',
                 'sourceProductId': pid,
                 'name': info.get('title', f'Kakobuy Product {pid}'),
                 'catalogName': info.get('title', f'Kakobuy Product {pid}'),
-                'category': classify_product(info),
-                'subCategory': subcategory_for(classify_product(info), info),
+                'category': override.get('category') or inferred_category,
+                'subCategory': override.get('subCategory') or inferred_subcategory,
                 'brand': brand_for(info),
                 'price': float(price),
                 'referencePrice': float(price),
@@ -175,7 +185,7 @@ def main() -> None:
                 'shop': info.get('seller') or 'Kakobuy',
                 'shopUrl': info.get('source_url', ''),
                 'url': platform_url,
-                'images': images[:16],
+                'images': display_images,
                 'tags': [value for value in ['kakobuy', subcategory_for(classify_product(info), info), classify_product(info)] if value],
                 'collectedAt': collected_at,
                 'sourceSkuIds': [row['sku_id'] for row in selected if row['sku_id']],
