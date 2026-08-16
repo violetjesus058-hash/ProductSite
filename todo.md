@@ -455,3 +455,12 @@
 - [ ] Keep suspected cases out of MANUAL_OVERRIDES until evidence is conclusive.
 - [ ] Continue Clothing with priority on clearly visible pants, hats, and scarves.
 - [ ] Verify Clothing completion before switching to Pants.
+
+
+## 自动更换未审核商品
+
+- [ ] Make AI Audit View choose only unreviewed source products for each batch.
+- [ ] Automatically advance to the next unreviewed batch after the current batch is marked complete.
+- [ ] Automatically switch to the next category with unreviewed products when the current category is exhausted.
+- [ ] Stop advancing and show a completed state when every source product has been reviewed.
+- [ ] Preserve suspected cases as reviewable records without treating them as confirmed corrections.

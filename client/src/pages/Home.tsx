@@ -54,6 +54,8 @@ export default function Home() {
   const [shuffleSeed, setShuffleSeed] = useState(() => Date.now());
   const [pageSize, setPageSize] = useState(40);
   const [isAiAuditView, setIsAiAuditView] = useState(false);
+  const reviewKey = (product: (typeof products)[number]) => product.sourceProductId || product.id;
+  const isReviewed = (product: (typeof products)[number]) => seenIds.includes(reviewKey(product));
 
   const [pageStyle, setPageStyle] = useState(() => localSetting("material-catalog:style", "default"));
   const [fontSizeLevel, setFontSizeLevel] = useState(() => Number(localSetting("material-catalog:font-size", "0")));
@@ -79,7 +81,7 @@ export default function Home() {
       const matchesCategory = category === "all" || product.category === category;
       const matchesBrand = brand === "all" || product.brand === brand;
       const matchesSubCategory = subCategory === "all" || product.subCategory === subCategory;
-      const isNotSeen = !seenIds.includes(product.id);
+      const isNotSeen = !isReviewed(product);
       const haystack = [product.name, product.catalogName, product.brand, product.subCategory].join(" ").toLowerCase();
       return matchesCategory && matchesBrand && matchesSubCategory && isNotSeen && (!term || haystack.includes(term));
     });
@@ -106,9 +108,9 @@ export default function Home() {
   const totalRemainingInCategory = useMemo(() => {
     return products.filter(p => {
       const matchesCategory = category === "all" || p.category === category;
-      const isNotSeen = !seenIds.includes(p.id);
+      const isNotSeen = !isReviewed(p);
       return matchesCategory && isNotSeen;
-    }).length;
+    }).reduce((keys, product) => keys.add(reviewKey(product)), new Set<string>()).size;
   }, [category, seenIds]);
 
   // Once a category has no unseen records, move the audit view to the next category with remaining records.
@@ -116,7 +118,7 @@ export default function Home() {
     if (!isAiAuditView || category === "all" || totalRemainingInCategory > 0) return;
     const nextCategory = categoryOrder
       .filter((id) => id !== "all" && id !== category)
-      .find((id) => products.some((product) => product.category === id && !seenIds.includes(product.id)));
+      .find((id) => products.some((product) => product.category === id && !isReviewed(product)));
     if (nextCategory) {
       setCategory(nextCategory);
       setBrand("all");
@@ -126,7 +128,7 @@ export default function Home() {
   }, [category, isAiAuditView, seenIds, totalRemainingInCategory]);
 
   const markPageAsSeen = () => {
-    const newSeen = [...seenIds, ...visible.map(p => p.id)];
+    const newSeen = Array.from(new Set([...seenIds, ...visible.map(reviewKey)]));
     setSeenIds(newSeen);
     localStorage.setItem("audit:seen-ids", JSON.stringify(newSeen));
     setShuffleSeed(Date.now());
@@ -217,7 +219,7 @@ export default function Home() {
         <div className="audit-controls py-20 flex flex-col items-center justify-center border-t border-black/5 mt-20">
           <div className="text-center mb-8">
             <h4 className="text-2xl font-light tracking-tight mb-2">Batch Review Complete</h4>
-            <p className="text-sm opacity-50">You've reviewed {visible.length} items in this set. {totalRemainingInCategory - visible.length} items left in {englishCategoryLabels[category] || category}.</p>
+            <p className="text-sm opacity-50">This batch contains {visible.length} unique source products. Mark it complete to automatically load the next unreviewed batch; {Math.max(totalRemainingInCategory - new Set(visible.map(reviewKey)).size, 0)} remain in {englishCategoryLabels[category] || category}.</p>
           </div>
           <button 
             onClick={markPageAsSeen}
