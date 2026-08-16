@@ -340,3 +340,61 @@
 - [ ] 补齐 Open Graph 和 X/Twitter Card 元标签及英文分享图片信息。
 - [ ] 增加 canonical、robots.txt、sitemap.xml 和基础发布日期字段。
 - [ ] 验证 Cloudflare Pages 构建输出中的 SEO 文件和英文元信息。
+
+
+- [ ] 核对样例商品 Fansbuy 页面显示的 USD 与 RMB 价格字段。
+- [ ] 盘点 276 个商品的 Fansbuy 链接和当前价格币种。
+- [ ] 批量采集可访问平台价格，记录 USD、RMB、采集时间和失败原因。
+- [ ] 将确认后的目录展示价格统一为 USD，并保留原始 RMB 校验字段。
+- [ ] 验证价格显示、详情页和生产构建，输出异常商品报告。
+
+
+- [ ] 使用单浏览器会话串行访问商品页面，随机等待并限制访问频率。
+- [ ] 读取渲染后的 USD 与 RMB 价格，记录页面状态、时间和失败原因。
+- [ ] 只更新有明确页面证据的商品，不使用汇率换算填补缺失值。
+- [ ] 价格同步后重新验证目录价格、详情页和生产构建。
+
+
+- [ ] 用户已确认采用方案 A：分批可视化采集。
+- [ ] 当前批次按 10–20 个商品串行读取并保存结果后再继续。
+
+
+## 最新 Fansbuy SKU 数据表更新
+
+- [ ] Analyze the newly uploaded Fansbuy SKU workbook structure and fields.
+- [ ] Compare SKU/product IDs, titles, links, prices, and images against the current 276-product catalog.
+- [ ] Define a safe overlap, deduplication, and price-per-SKU update policy before overwriting data.
+- [ ] Preserve an import report and rollback copy before applying any catalog update.
+- [ ] Run TypeScript and production build validation after the update.
+
+
+
+## Kakobuy 商品迁移与图片增量复用
+
+- [ ] Map each existing Fansbuy product to the corresponding Kakobuy product using title, source URL, image evidence, and category.
+- [ ] Preserve the current internal product IDs and page routes while adding Kakobuy source IDs and URLs.
+- [ ] Build an image fingerprint inventory for existing hosted assets and the new workbook image URLs.
+- [ ] Reuse matching hosted images and download only missing or changed images.
+- [ ] Define SKU-level price, currency, stock, and variant aggregation rules before updating products.ts.
+- [ ] Run a small sample migration before applying the full 276-product update.
+- [ ] Validate product pages, image loading, Kakobuy links, TypeScript, and production build.
+
+
+## Kakobuy 按价格聚合商品目录
+
+- [ ] Count unique products after grouping SKU records by product and USD price.
+- [ ] Identify products whose all available variants share one price and can be merged into one record.
+- [ ] Identify products with multiple prices that must become separate display records.
+- [ ] Define stable IDs, titles, variant labels, stock, links, and image reuse for split records.
+- [ ] Prepare a Kakobuy-first catalog rebuild plan that replaces the old 276-product information safely.
+
+
+## 已确认执行：Kakobuy 价格聚合目录重建
+
+- [ ] Create a rollback snapshot before replacing the current product dataset.
+- [ ] Repair the existing products.ts syntax issue before migration.
+- [ ] Generate one display record per product and USD price group.
+- [ ] Reuse existing hosted images through the image URL manifest.
+- [ ] Validate a small sample of migrated Kakobuy product pages and purchase links.
+- [ ] Replace the old 276-product dataset with the validated Kakobuy catalog.
+- [ ] Run production build and save a checkpoint after successful validation.

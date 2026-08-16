@@ -1,0 +1,16 @@
+{
+  "source": "Chromium rendered DOM",
+  "total": 1,
+  "expected": 1,
+  "results": [
+    {
+      "id": "7545217096",
+      "url": "https://fansbuy.com/item-micro-7545217096.html?promotionCode=R0dfTU9DRzA2VTk",
+      "usd": null,
+      "rmb": null,
+      "ok": false,
+      "capturedAt": "2026-08-16T07:50:50.346Z",
+      "error": "Rendered USD price not found"
+    }
+  ]
+}
