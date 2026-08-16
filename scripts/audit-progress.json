@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "auditScope": "one review per unique sourceProductId; all price groups for that source are validated together",
+  "totalPriceGroupProducts": 2192,
+  "totalUniqueSourceProducts": 1153,
+  "reviewedUniqueSourceProducts": 11,
+  "remainingUniqueSourceProducts": 1142,
+  "reviewedSourceProductIds": [
+    "7543307459",
+    "7578517746",
+    "7601623089",
+    "7603560398",
+    "7782489369",
+    "7782537399",
+    "7782537483",
+    "7782594377",
+    "7785393202",
+    "7785549012",
+    "7785614022"
+  ],
+  "lastReviewedProductId": "7785614022",
+  "nextReview": {
+    "sourceProductId": "7576550615",
+    "name": "46_60 ￥310 1 high",
+    "category": "ACC",
+    "subCategory": "Selection",
+    "priceGroupCount": 1,
+    "productIds": [
+      "kb-7576550615-49-82"
+    ],
+    "images": [
+      "/product-images/6348f5cc94c4a005151c_kakobuy.webp",
+      "/product-images/ef70b8b515969700effd_0e0ce1c7.webp"
+    ]
+  },
+  "reviewCount": 11,
+  "status": "active",
+  "heartbeatAt": "2026-08-16T15:22:39Z",
+  "lastReviewAt": null,
+  "completedAt": null,
+  "lastMessage": "Progress refreshed from manual-product-review-log.md"
+}

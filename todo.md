@@ -432,3 +432,12 @@
 - [ ] Inspect each selected product's title, first five gallery images, category, subcategory, and size/variant labels.
 - [ ] Add only evidence-based manual overrides for incorrect cover images or categories.
 - [ ] Validate corrected records before creating the next checkpoint.
+
+
+## 持续审核监控
+
+- [x] Read the current connector and scheduled-task configuration before creating automation.
+- [x] Create a durable audit-progress state with last reviewed product, review count, pending queue, and heartbeat timestamp.
+- [x] Configure a three-minute status check using an always-running project-side mechanism rather than launching a full AI session every three minutes.
+- [x] Resume from the last saved review point when the audit process is interrupted.
+- [x] Stop checks automatically when all products are reviewed and record the completion time.
