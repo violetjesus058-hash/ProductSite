@@ -398,3 +398,11 @@
 - [ ] Validate a small sample of migrated Kakobuy product pages and purchase links.
 - [ ] Replace the old 276-product dataset with the validated Kakobuy catalog.
 - [ ] Run production build and save a checkpoint after successful validation.
+
+
+## 服饰 Size 选择
+
+- [ ] Inspect Kakobuy variant labels and current detail-page option grouping.
+- [ ] Classify apparel variant labels as Size and preserve shoe/accessory specifications as other options.
+- [ ] Update generated product records and detail-page labels for apparel size selection.
+- [ ] Validate apparel, footwear, and accessory detail pages and save a checkpoint.
