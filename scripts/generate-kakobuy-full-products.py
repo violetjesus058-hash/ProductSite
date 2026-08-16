@@ -35,6 +35,47 @@ def clean_title(value: str, fallback: str) -> str:
     return value or fallback
 
 
+CATEGORY_PATTERNS = {
+    'shoe': r'\b(shoes?|sneakers?|boots?|slides?|sandals?|loafers?|mules?|running shoes?)\b',
+    'watches': r'\b(watch(?:es)?|smart watch(?:es)?|mechanical watch(?:es)?|腕表|手表)\b',
+    'fragrance': r'\b(perfumes?|fragrances?|colognes?|parfum|香水)\b',
+    'bags': r'\b(bags?|backpacks?|totes?|shoulder bags?|crossbody|handbags?|pouches?)\b',
+    'wallets': r'\b(wallets?|card holders?|cardholder|keychains?|零钱包|钱包)\b',
+    'pants': r'\b(pants|trousers|jeans|shorts|joggers|sweatpants|leggings|denim|cargo|bottoms|长裤|短裤|牛仔裤|休闲裤|运动裤)\b',
+    'clothing': r'\b(shirts?|t-?shirts?|tees?|hoodies?|jackets?|coats?|sweaters?|sweatshirts?|jerseys?|tracksuits?|dresses?|skirts?|vests?|tops?|clothing|衬衫|卫衣|夹克|外套|毛衣|短袖|长袖|裙)\b',
+    'accessories': r'\b(caps?|hats?|belts?|glasses|sunglasses|scarves?|ties?|bracelets?|rings?|necklaces?|earrings?|headphones?|phone cases?|accessor)\b',
+}
+BRAND_PATTERNS = [('Louis Vuitton', r'\b(louis\s*vuitton|lv)\b'), ('Stone Island', r'\bstone\s*island\b'), ('Ralph Lauren', r'\bralph\s*lauren\b'), ('Nike', r'\bnike\b'), ('Adidas', r'\badidas\b'), ('Puma', r'\bpuma\b'), ('Balenciaga', r'\bbalenciaga\b'), ('Dior', r'\bdior\b'), ('Moncler', r'\bmoncler\b'), ('The North Face', r'\bthe\s*north\s*face\b'), ('New Balance', r'\bnew\s*balance\b'), ('Gucci', r'\bgucci\b'), ('Prada', r'\bprada\b'), ('Supreme', r'\bsupreme\b')]
+
+def classify_product(info: dict) -> str:
+    title_text = f"{info.get('title', '')} {info.get('subcategory', '')}".lower()
+    text = f"{title_text} {info.get('category', '')}".lower()
+    if re.search(CATEGORY_PATTERNS['shoe'], title_text, re.I): return 'shoe'
+    if re.search(CATEGORY_PATTERNS['watches'], title_text, re.I): return 'watches'
+    if re.search(CATEGORY_PATTERNS['fragrance'], title_text, re.I): return 'fragrance'
+    if re.search(CATEGORY_PATTERNS['bags'], title_text, re.I): return 'bags'
+    if re.search(CATEGORY_PATTERNS['wallets'], title_text, re.I): return 'ACC'
+    has_pants = bool(re.search(CATEGORY_PATTERNS['pants'], title_text, re.I))
+    has_clothing = bool(re.search(CATEGORY_PATTERNS['clothing'], title_text, re.I))
+    mixed_set = bool(re.search(r'\b(set|outfit|collection)\b', title_text, re.I))
+    if has_pants and not (has_clothing and mixed_set): return 'pants'
+    if has_clothing or info.get('category') == 'Clothing': return 'clothing'
+    if re.search(CATEGORY_PATTERNS['accessories'], title_text, re.I) or info.get('category') == 'Accessories': return 'ACC'
+    return 'ACC'
+
+def subcategory_for(category: str, info: dict) -> str:
+    text = f"{info.get('title', '')} {info.get('subcategory', '')}".lower()
+    rules = {'pants': [('Jeans', r'jeans|denim'), ('Shorts', r'shorts'), ('Sweatpants', r'joggers|sweatpants|track pants'), ('Trousers', r'pants|trousers|cargo')], 'clothing': [('Hoodies', r'hoodies?|sweatshirts?'), ('Jackets', r'jackets?|coats?|outerwear'), ('Sweaters', r'sweaters?|knitwear'), ('Shirts', r'shirts?|tees?|t-?shirts?|jerseys?'), ('Dresses', r'dresses?|skirts?')], 'shoe': [('Sneakers', r'sneakers?|running shoes?'), ('Boots', r'boots?'), ('Sandals', r'sandals?|slides?')], 'bags': [('Backpacks', r'backpacks?'), ('Shoulder Bags', r'shoulder bags?|crossbody|handbags?')], 'fragrance': [('Perfume', r'perfumes?|fragrances?|colognes?|parfum')], 'watches': [('Watches', r'watch(?:es)?|腕表|手表')]}
+    for label, pattern in rules.get(category, []):
+        if re.search(pattern, text, re.I): return label
+    return info.get('subcategory') if info.get('subcategory') and info.get('subcategory').lower() != 'unspecified' else 'Selection'
+
+def brand_for(info: dict) -> str:
+    text = f"{info.get('title', '')} {info.get('subcategory', '')}"
+    for label, pattern in BRAND_PATTERNS:
+        if re.search(pattern, text, re.I): return label
+    return 'Unbranded'
+
 def main() -> None:
     old_download = json.loads(DOWNLOAD_REPORT.read_text(encoding='utf-8'))
     image_by_url = {}
@@ -94,7 +135,6 @@ def main() -> None:
             elif ws.title == 'product_images':
                 image_rows[pid].append({'url': str(get('image_url') or '').strip(), 'order': get('image_order') or 999})
 
-    category_map = {'Clothing': 'clothing', 'Shoes': 'shoe', 'Pants': 'pants', 'Accessories': 'ACC', 'Watches': 'watches'}
     grouped = []
     for pid, rows in sku_rows.items():
         info = products.get(pid, {})
@@ -122,9 +162,9 @@ def main() -> None:
                 'sourceProductId': pid,
                 'name': info.get('title', f'Kakobuy Product {pid}'),
                 'catalogName': info.get('title', f'Kakobuy Product {pid}'),
-                'category': category_map.get(info.get('category'), 'ACC'),
-                'subCategory': info.get('subcategory') or 'Selection',
-                'brand': 'Unbranded',
+                'category': classify_product(info),
+                'subCategory': subcategory_for(classify_product(info), info),
+                'brand': brand_for(info),
                 'price': float(price),
                 'referencePrice': float(price),
                 'currency': 'USD',
@@ -136,7 +176,7 @@ def main() -> None:
                 'shopUrl': info.get('source_url', ''),
                 'url': platform_url,
                 'images': images[:16],
-                'tags': [value for value in ['kakobuy', info.get('subcategory', ''), info.get('category', '')] if value],
+                'tags': [value for value in ['kakobuy', subcategory_for(classify_product(info), info), classify_product(info)] if value],
                 'collectedAt': collected_at,
                 'sourceSkuIds': [row['sku_id'] for row in selected if row['sku_id']],
                 'priceRmb': next((float(row['price_rmb']) for row in selected if row['price_rmb']), None),
@@ -147,7 +187,7 @@ def main() -> None:
     OUTPUT_JSON.write_text(json.dumps(grouped, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     header = 'export type Product = { id: string; name: string; catalogName: string; category: string; subCategory: string; brand: string; price: number; referencePrice: number | null; currency: string; description: string; sizes: string[]; colors: string[]; stock: string; shop: string; shopUrl: string; url: string; images: string[]; tags: string[]; collectedAt: string; sourceProductId?: string; sourceSkuIds?: string[]; priceRmb?: number | null; priceCheckedAt?: string }\n'
     body = 'export const products: Product[] = ' + json.dumps(grouped, ensure_ascii=False, indent=2) + ' as Product[];\n'
-    footer = 'export const categoryLabels: Record<string, string> = { clothing: "Clothing", shoe: "Shoes", pants: "Pants", ACC: "Accessories", watches: "Watches" };\nexport const categoryOrder = ["all", "clothing", "shoe", "pants", "ACC", "watches"];\n'
+    footer = 'export const categoryLabels: Record<string, string> = { clothing: "Clothing", shoe: "Shoes", pants: "Pants", bags: "Bags", fragrance: "Fragrance", ACC: "Accessories", watches: "Watches" };\nexport const categoryOrder = ["all", "clothing", "pants", "shoe", "bags", "fragrance", "watches", "ACC"];\n'
     OUTPUT_TS.write_text(header + body + footer, encoding='utf-8')
     print(f'Generated {len(grouped)} grouped Kakobuy products with local images; unique source products: {len(sku_rows)}')
 

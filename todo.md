@@ -406,3 +406,12 @@
 - [ ] Classify apparel variant labels as Size and preserve shoe/accessory specifications as other options.
 - [ ] Update generated product records and detail-page labels for apparel size selection.
 - [ ] Validate apparel, footwear, and accessory detail pages and save a checkpoint.
+
+
+## Kakobuy 分类重整
+
+- [ ] Audit raw category, subcategory, title, and variant-label distributions.
+- [ ] Detect products whose title indicates pants, shorts, jeans, trousers, or bottoms but are currently mapped to Accessories.
+- [ ] Define deterministic precedence rules for clothing, pants, shoes, watches, fragrance, bags, wallets, and other accessories.
+- [ ] Rebuild category, subcategory, and brand labels while keeping product IDs, prices, images, and Kakobuy links unchanged.
+- [ ] Validate the Pants category, category counts, brand filters, and representative detail pages.

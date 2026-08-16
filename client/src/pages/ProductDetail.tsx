@@ -6,7 +6,7 @@ import { ArrowLeft, ArrowUpRight, Check, ChevronLeft, ChevronRight, Heart, Info,
 import { products } from "@/data/products";
 import { readFavorites, rememberVisit, saveFavorites } from "@/lib/catalogMemory";
 
-const englishCategoryLabels: Record<string, string> = { clothing: "CLOTHING", shoe: "SHOES", pants: "PANTS", ACC: "ACCESSORIES", watches: "WATCHES" };
+const englishCategoryLabels: Record<string, string> = { clothing: "CLOTHING", shoe: "SHOES", pants: "PANTS", bags: "BAGS", fragrance: "FRAGRANCE", ACC: "ACCESSORIES", watches: "WATCHES" };
 type PlatformSource = { name: string; url: string; primary?: boolean };
 function platformSourcesFor(product: (typeof products)[number]): PlatformSource[] {
   const sourceId = product.sourceProductId || product.id;
