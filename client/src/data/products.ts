@@ -1,4 +1,4 @@
-export type Product = { id: string; name: string; catalogName: string; category: string; subCategory: string; brand: string; price: number; referencePrice: number | null; currency: string; description: string; sizes: string[]; colors: string[]; stock: string; shop: string; shopUrl: string; url: string; images: string[]; tags: string[]; collectedAt: string; sourceProductId?: string; sourceSkuIds?: string[]; priceRmb?: number | null; priceCheckedAt?: string }
+export type Product = { id: string; name: string; catalogName: string; category: string; subCategory: string; reviewStatus?: "reviewed" | "suspected" | "unreviewed"; reviewNote?: string; brand: string; price: number; referencePrice: number | null; currency: string; description: string; sizes: string[]; colors: string[]; stock: string; shop: string; shopUrl: string; url: string; images: string[]; tags: string[]; collectedAt: string; sourceProductId?: string; sourceSkuIds?: string[]; priceRmb?: number | null; priceCheckedAt?: string }
 export const products: Product[] = [
   {
     "id": "kb-7576550615-49-82",

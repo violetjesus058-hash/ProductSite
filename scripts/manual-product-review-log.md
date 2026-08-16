@@ -197,3 +197,17 @@ The single local gallery image clearly shows a Burkina Faso football fan jersey.
 
 - Source product ID: `7601613265` (Corrected to Pants/Jeans; WK339 thumbnail clearly shows a jeans-only product.)
 - Source product ID `7578478202` was already classified as Pants/Shorts and required no new override.
+
+## AI Audit: Clothing Priority Batch - 2026-08-16
+
+- Source product ID: `7543352763` (Corrected to Pants/Jeans; High Quality 2-JE-002 thumbnail shows jeans-only product.)
+- Source product ID: `7543334883` (Corrected to Shoes/Sneakers; High-Quality Fashion Premium 1-AM-001 thumbnail shows sneakers.)
+- No ambiguous product was added to SUSPECTED_REVIEW in this batch; mixed apparel and unclear images remain unchanged.
+
+## AI Audit: Clothing Pants and Scarf Batch - 2026-08-16
+
+- Source product ID: `7603630018` (Corrected to Pants/Trousers; CK9500 thumbnail clearly shows a pants-only product.)
+- Source product ID: `7543327119` (Corrected to Accessories/Scarves; High Quality Scarf 001 thumbnail clearly shows scarves only.)
+- No ambiguous case was added to SUSPECTED_REVIEW in this batch.
+
+- Source product ID: `7601743943` (Corrected to Pants/Trousers; K5512 straight-leg trouser thumbnail clearly shows a pants-only product.)

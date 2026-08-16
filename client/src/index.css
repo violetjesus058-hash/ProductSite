@@ -178,13 +178,16 @@ a { color:inherit; text-decoration:none; }
 .demo-product-badge { position:absolute; top:10px; right:10px; z-index:3; display:inline-flex; align-items:center; min-height:24px; padding:0 8px; border:1px solid rgba(24,23,21,.16); border-radius:999px; background:rgba(247,245,240,.92); color:#24221f; font-size:9px; font-weight:800; letter-spacing:.12em; line-height:1; box-shadow:0 3px 10px rgba(30,25,18,.08); backdrop-filter:blur(8px); }
 .demo-product-badge.is-popular { color:#b94d3d; border-color:rgba(185,77,61,.35); }
 .demo-product-badge.is-new { color:#24221f; background:#f6c7ba; border-color:#d98977; }
+.suspected-review-badge { position:absolute; top:10px; left:10px; z-index:4; display:inline-flex; align-items:center; min-height:24px; padding:0 8px; border:1px dashed #9b8b5c; background:rgba(250,247,229,.94); color:#6d5b2d; font-size:9px; font-weight:800; letter-spacing:.1em; line-height:1; box-shadow:0 3px 10px rgba(30,25,18,.08); backdrop-filter:blur(8px); }
 @media (max-width:760px) { .demo-product-badge { top:7px; right:7px; min-height:21px; padding:0 6px; font-size:8px; letter-spacing:.08em; } }
 
 /* Editorial Pinboard reminder: CURATED is a restrained selection signal for shoes, watches, wallets, and fragrance-related catalog items. */
 .curated-product-badge { position:absolute; top:10px; right:10px; z-index:4; display:inline-flex; align-items:center; min-height:24px; padding:0 8px; border:1px solid rgba(24,23,21,.2); border-radius:999px; background:rgba(250,248,242,.94); color:#24221f; font-size:9px; font-weight:800; letter-spacing:.1em; line-height:1; box-shadow:0 3px 10px rgba(30,25,18,.08); backdrop-filter:blur(8px); }
+.demo-product-badge + .suspected-review-badge { top:40px; }
+.suspected-review-badge + .curated-product-badge { top:40px; }
 .demo-product-badge + .curated-product-badge { top:40px; }
 .curated-product-badge::first-letter { color:#c95846; }
-@media (max-width:760px) { .curated-product-badge { top:7px; right:7px; min-height:21px; padding:0 6px; font-size:8px; letter-spacing:.06em; } .demo-product-badge + .curated-product-badge { top:34px; } }
+@media (max-width:760px) { .suspected-review-badge { top:7px; left:7px; min-height:21px; padding:0 6px; font-size:8px; letter-spacing:.06em; } .curated-product-badge { top:7px; right:7px; min-height:21px; padding:0 6px; font-size:8px; letter-spacing:.06em; } .demo-product-badge + .suspected-review-badge { top:34px; } .suspected-review-badge + .curated-product-badge { top:34px; } .demo-product-badge + .curated-product-badge { top:34px; } }
 
 /* Editorial Pinboard reminder: record controls stay compact and tactile, with paper-white popovers anchored to the upper-right archive header. */
 .header-menu { position:relative; display:flex; }

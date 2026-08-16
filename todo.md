@@ -447,3 +447,11 @@
 - [ ] Clothing 完成后自动切换到下一个尚未完成的类目。
 - [ ] 按 Pants、Shoes、Bags、Fragrance、Watches、Accessories 顺序完成全目录审核。
 - [ ] 每个类目完成后保存审核日志、统计和构建检查结果。
+
+
+## AI 审计规则更新
+
+- [ ] Add a review-status field for suspected mismatches that require later confirmation.
+- [ ] Keep suspected cases out of MANUAL_OVERRIDES until evidence is conclusive.
+- [ ] Continue Clothing with priority on clearly visible pants, hats, and scarves.
+- [ ] Verify Clothing completion before switching to Pants.

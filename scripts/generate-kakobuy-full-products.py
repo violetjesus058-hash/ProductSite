@@ -46,6 +46,11 @@ CATEGORY_PATTERNS = {
     'accessories': r'\b(caps?|hats?|belts?|glasses|sunglasses|scarves?|ties?|bracelets?|rings?|necklaces?|earrings?|headphones?|phone cases?|accessor)\b',
 }
 BRAND_PATTERNS = [('Louis Vuitton', r'\b(louis\s*vuitton|lv)\b'), ('Stone Island', r'\bstone\s*island\b'), ('Ralph Lauren', r'\bralph\s*lauren\b'), ('Nike', r'\bnike\b'), ('Adidas', r'\badidas\b'), ('Puma', r'\bpuma\b'), ('Balenciaga', r'\bbalenciaga\b'), ('Dior', r'\bdior\b'), ('Moncler', r'\bmoncler\b'), ('The North Face', r'\bthe\s*north\s*face\b'), ('New Balance', r'\bnew\s*balance\b'), ('Gucci', r'\bgucci\b'), ('Prada', r'\bprada\b'), ('Supreme', r'\bsupreme\b')]
+# Confirmed visual findings only. Suspected cases remain separate and never alter category fields.
+SUSPECTED_REVIEW = {
+    # Add sourceProductId: note when a product looks suspicious but the cover alone is not conclusive.
+}
+
 MANUAL_OVERRIDES = {
     '7543307459': {'category': 'clothing', 'subCategory': 'Shirts', 'primary_image_index': 2, 'review_note': 'Manual review: use third gallery image as catalog cover.'},
     '7601623089': {'category': 'clothing', 'subCategory': 'Hoodies', 'review_note': 'Manual review: cover image shows two hooded zip-up sweatshirts.'},
@@ -77,6 +82,11 @@ MANUAL_OVERRIDES = {
     '7576502955': {'category': 'pants', 'subCategory': 'Jeans', 'review_note': 'AI Audit: thumbnail clearly shows a jeans-only product; corrected to pants/jeans.'},
     '7543371979': {'category': 'accessories', 'subCategory': 'Caps', 'review_note': 'AI Audit: High Quality Knitted Hat from Factory thumbnail clearly shows knit hats only; corrected to accessories/caps.'},
     '7601613265': {'category': 'pants', 'subCategory': 'Jeans', 'review_note': 'AI Audit: WK339 jeans thumbnail clearly shows a pants-only denim product; corrected to pants/jeans.'},
+    '7543352763': {'category': 'pants', 'subCategory': 'Jeans', 'review_note': 'AI Audit: High Quality 2-JE-002 thumbnail clearly shows a jeans-only product; corrected to pants/jeans.'},
+    '7543334883': {'category': 'shoe', 'subCategory': 'Sneakers', 'review_note': 'AI Audit: High-Quality Fashion Premium 1-AM-001 thumbnail clearly shows sneakers; corrected to shoes/sneakers.'},
+    '7603630018': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'AI Audit: CK9500 curved-leg trouser thumbnail clearly shows a pants-only product; corrected to pants/trousers.'},
+    '7543327119': {'category': 'accessories', 'subCategory': 'Scarves', 'review_note': 'AI Audit: High Quality Scarf 001 thumbnail clearly shows scarves only; corrected to accessories/scarves.'},
+    '7601743943': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'AI Audit: K5512 straight-leg trouser thumbnail clearly shows a pants-only product; corrected to pants/trousers.'},
 }
 
 def classify_product(info: dict) -> str:
@@ -190,6 +200,7 @@ def main() -> None:
             if not images:
                 continue
             override = MANUAL_OVERRIDES.get(pid, {})
+            suspected = SUSPECTED_REVIEW.get(pid, {})
             display_images = images[:16]
             primary_index = override.get('primary_image_index')
             if isinstance(primary_index, int) and 0 <= primary_index < len(display_images):
@@ -203,6 +214,8 @@ def main() -> None:
                 'catalogName': info.get('title', f'Kakobuy Product {pid}'),
                 'category': override.get('category') or inferred_category,
                 'subCategory': override.get('subCategory') or inferred_subcategory,
+                'reviewStatus': 'suspected' if suspected else ('reviewed' if override else 'unreviewed'),
+                'reviewNote': suspected.get('review_note') or override.get('review_note') or '',
                 'brand': brand_for(info),
                 'price': float(price),
                 'referencePrice': float(price),
@@ -224,7 +237,7 @@ def main() -> None:
 
     grouped.sort(key=lambda item: (item['category'], item['catalogName'].lower(), item['price'], item['id']))
     OUTPUT_JSON.write_text(json.dumps(grouped, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    header = 'export type Product = { id: string; name: string; catalogName: string; category: string; subCategory: string; brand: string; price: number; referencePrice: number | null; currency: string; description: string; sizes: string[]; colors: string[]; stock: string; shop: string; shopUrl: string; url: string; images: string[]; tags: string[]; collectedAt: string; sourceProductId?: string; sourceSkuIds?: string[]; priceRmb?: number | null; priceCheckedAt?: string }\n'
+    header = 'export type Product = { id: string; name: string; catalogName: string; category: string; subCategory: string; reviewStatus?: "reviewed" | "suspected" | "unreviewed"; reviewNote?: string; brand: string; price: number; referencePrice: number | null; currency: string; description: string; sizes: string[]; colors: string[]; stock: string; shop: string; shopUrl: string; url: string; images: string[]; tags: string[]; collectedAt: string; sourceProductId?: string; sourceSkuIds?: string[]; priceRmb?: number | null; priceCheckedAt?: string }\n'
     body = 'export const products: Product[] = ' + json.dumps(grouped, ensure_ascii=False, indent=2) + ' as Product[];\n'
     footer = 'export const categoryLabels: Record<string, string> = { clothing: "Clothing", shoe: "Shoes", pants: "Pants", bags: "Bags", fragrance: "Fragrance", ACC: "Accessories", watches: "Watches" };\nexport const categoryOrder = ["all", "clothing", "pants", "shoe", "bags", "fragrance", "watches", "ACC"];\n'
     OUTPUT_TS.write_text(header + body + footer, encoding='utf-8')
