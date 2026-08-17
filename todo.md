@@ -519,3 +519,10 @@
 - [ ] Mark the already scanned second batch only once and load the next unreviewed batch.
 - [ ] Continue visual review and record evidence-based category overrides.
 - [ ] Preserve suspected mixed or unclear products without forced category changes.
+
+## Clothing 继续审核
+
+- [ ] Restore the Clothing audit breakpoint and inspect the current compact batch.
+- [ ] Review Clothing images for clear Pants, Caps, Scarves, Shoes, Bags, or other cross-category items.
+- [ ] Add evidence-based manual overrides and keep ambiguous mixed sets as SUSPECTED_REVIEW.
+- [ ] Mark the completed batch, verify remaining count, and continue the next Clothing batch.
