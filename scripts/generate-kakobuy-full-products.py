@@ -171,6 +171,17 @@ SUSPECTED_REVIEW = {
 MANUAL_OVERRIDES = {
     '7543307459': {'category': 'clothing', 'subCategory': 'Shirts', 'primary_image_index': 2, 'review_note': 'Manual review: use third gallery image as catalog cover.'},
     '7576530885': {'primary_image_index': 2, 'remove_image_indices': [0], 'review_note': 'Manual image review: remove the original first image and promote the original fourth gallery image to the cover.'},
+    '7576623430': {'primary_image_index': 6, 'review_note': 'Manual image review: replace blank/size-chart cover with the clear single-shirt gallery image.'},
+    '7543348805': {'primary_image_index': 4, 'review_note': 'Manual image review: replace blank cover with a clear single-shirt gallery image.'},
+    '7543366669': {'primary_image_index': 4, 'review_note': 'Manual image review: replace the mixed/blank cover with a clear single-beanie gallery image.'},
+    '7543332937': {'primary_image_index': 4, 'review_note': 'Manual image review: replace blank/size-chart cover with the clear single-shirt gallery image.'},
+    '7576584181': {'primary_image_index': 1, 'review_note': 'Manual image review: use the clear single-hoodie gallery image as the catalog cover.'},
+    '7576695090': {'primary_image_index': 3, 'review_note': 'Manual image review: use the clear single-shorts gallery image; exclude contact and size-chart images.'},
+    '7578440914': {'primary_image_index': 1, 'review_note': 'Manual image review: replace size-chart cover with a clear single-shoe gallery image.'},
+    '7611885929': {'primary_image_index': 1, 'review_note': 'Manual image review: replace size-chart cover with a clear single-shoe gallery image.'},
+    '7545254650': {'primary_image_index': 1, 'review_note': 'Manual image review: replace size-chart cover with a clear single-shoe gallery image.'},
+    '7578496024': {'primary_image_path': '/product-images/7578496024-single-bottle.webp', 'review_note': 'Manual image review: use a source-derived single-bottle crop as the catalog cover; retain the original collage in the gallery.'},
+    '7786196426': {'primary_image_path': '/product-images/7786196426-single-watch.webp', 'review_note': 'Manual image review: use a source-derived single-watch crop as the catalog cover; retain the original collage in the gallery.'},
     '7601623089': {'category': 'clothing', 'subCategory': 'Hoodies', 'review_note': 'Manual review: cover image shows two hooded zip-up sweatshirts.'},
     '7603560398': {'category': 'clothing', 'subCategory': 'Hoodies', 'review_note': 'Manual review: cover image shows three hooded sweatshirts.'},
     '7578517746': {'category': 'clothing', 'subCategory': 'Jackets', 'review_note': 'Manual review: cover image shows a padded jacket; retain body-weight size labels.'},
@@ -186,7 +197,7 @@ MANUAL_OVERRIDES = {
     '7601668247': {'category': 'pants', 'subCategory': 'Sweatpants', 'review_note': 'AI Audit: misclassified as clothing, corrected to pants/sweatpants.'},
     '7601753745': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'AI Audit: misclassified as clothing, corrected to pants/trousers.'},
     '7603615668': {'category': 'pants', 'subCategory': 'Jeans', 'review_note': 'AI Audit: misclassified as clothing, corrected to pants/jeans.'},
-    '7578509826': {'category': 'pants', 'subCategory': 'Jeans', 'review_note': 'AI Audit: misclassified as clothing, corrected to pants/jeans.'},
+    '7578509826': {'category': 'pants', 'subCategory': 'Jeans', 'primary_image_index': 6, 'review_note': 'AI Audit: misclassified as clothing, corrected to pants/jeans; manual image review replaces the blank/size-chart cover with a clear single-shirt gallery image.'},
     '7578515778': {'category': 'pants', 'subCategory': 'Jeans', 'review_note': 'AI Audit: thumbnail clearly shows a pants-only product assortment; corrected to pants/jeans.'},
     '7545207144': {'category': 'pants', 'subCategory': 'Jeans', 'review_note': 'AI Audit: High-Quality 3-JE-001 thumbnail clearly shows a pants-only assortment; corrected to pants/jeans.'},
     '7601654481': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'AI Audit: thumbnail clearly shows a pants-only product; corrected to pants/trousers.'},
@@ -414,6 +425,9 @@ def main() -> None:
             display_images = images[:16]
             remove_indices = {index for index in override.get('remove_image_indices', []) if isinstance(index, int)}
             display_images = [image for index, image in enumerate(display_images) if index not in remove_indices]
+            custom_primary = override.get('primary_image_path')
+            if isinstance(custom_primary, str) and custom_primary:
+                display_images = [custom_primary] + [image for image in display_images if image != custom_primary]
             primary_index = override.get('primary_image_index')
             if isinstance(primary_index, int) and 0 <= primary_index < len(display_images):
                 display_images = [display_images[primary_index]] + [image for index, image in enumerate(display_images) if index != primary_index]
