@@ -50,6 +50,10 @@ BRAND_PATTERNS = [('Louis Vuitton', r'\b(louis\s*vuitton|lv)\b'), ('Stone Island
 # Confirmed visual findings only. Suspected cases remain separate and never alter category fields.
 SUSPECTED_REVIEW = {
     # Add sourceProductId: note when a product looks suspicious but the cover alone is not conclusive.
+    '7543327097': {'review_note': 'Pants audit: thumbnail/title indicate a shorts-and-short-sleeve mixed set; retain current Pants/Shorts classification pending detail-page confirmation.'},
+    '7773126421': {'review_note': 'Pants audit: long-sleeve-and-long-pants set is mixed apparel; retain current Pants/Trousers classification pending detail-page confirmation.'},
+    '7545310284': {'review_note': 'Pants audit: hooded sweatshirt, sweatpants, and down-jacket set is mixed apparel; retain current Pants/Sweatpants classification pending detail-page confirmation.'},
+    '7776165618': {'review_note': 'Pants audit: thumbnail shows a shorts-and-short-sleeve mixed set; retain current Pants/Shorts classification pending detail-page confirmation.'},
 }
 
 MANUAL_OVERRIDES = {
@@ -102,6 +106,21 @@ MANUAL_OVERRIDES = {
     '7601653203': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'AI Audit: K5308 flared-trouser thumbnail clearly shows a pants-only product; corrected to pants/trousers.'},
     '7601720055': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'AI Audit: CK6669 curved-leg trouser thumbnail clearly shows a pants-only product; corrected to pants/trousers.'},
     '7601734009': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'AI Audit: K5305 flared-trouser thumbnail clearly shows a pants-only product; corrected to pants/trousers.'},
+    '7578509830': {'category': 'clothing', 'subCategory': 'Jackets', 'review_note': 'Pants audit: thumbnail clearly shows denim jackets/coats rather than pants; corrected to clothing/jackets.'},
+    '7543323077': {'category': 'clothing', 'subCategory': 'Jackets', 'review_note': 'Pants audit: High-Quality Denim Jacket - 001-CN thumbnail clearly shows denim jackets/coats rather than pants; corrected to clothing/jackets.'},
+    '7576502949': {'category': 'pants', 'subCategory': 'Shorts', 'review_note': 'Pants audit: thumbnail shows shorts-only assortments despite the generic pants title; corrected subcategory to pants/shorts.'},
+    '7785584510': {'category': 'clothing', 'subCategory': 'Shirts', 'review_note': 'Fragrance audit: thumbnail clearly shows a football jersey rather than fragrance; corrected to clothing/shirts.'},
+    '7578486178': {'category': 'bags', 'subCategory': 'Shoulder Bags', 'review_note': 'Accessories audit: source title and thumbnail clearly show a shoulder/crossbody bag; corrected to bags/shoulder bags.'},
+    '7576570355': {'category': 'bags', 'subCategory': 'Shoulder Bags', 'review_note': 'Accessories audit: source title and thumbnail clearly show a travel handbag; corrected to bags/shoulder bags.'},
+    '7578468490': {'category': 'clothing', 'subCategory': 'Underwear', 'review_note': 'Accessories audit: title and thumbnail clearly show men’s underwear/briefs; corrected to clothing/underwear.'},
+    '7574783515': {'category': 'clothing', 'subCategory': 'Sets', 'review_note': 'Accessories audit: title and thumbnail clearly show a training short-sleeve clothing set; corrected to clothing/sets.'},
+    '7578480194': {'category': 'shoe', 'subCategory': 'Sneakers', 'review_note': 'Accessories audit: title and thumbnail clearly show leather sports shoes; corrected to shoes/sneakers.'},
+    '7578480258': {'category': 'fragrance', 'subCategory': 'Perfume', 'review_note': 'Accessories audit: title and thumbnail clearly show perfume; corrected to fragrance/perfume.'},
+    '7576493523': {'category': 'watches', 'subCategory': 'Watches', 'review_note': 'Accessories audit: title and thumbnail clearly show a wristwatch; corrected to watches.'},
+    '7576582179': {'category': 'bags', 'subCategory': 'Backpacks', 'review_note': 'Accessories audit: title and thumbnail clearly show a backpack; corrected to bags/backpacks.'},
+    '7576558465': {'category': 'ACC', 'subCategory': 'Caps', 'review_note': 'Accessories audit: title and thumbnail clearly show a fashion cap; corrected to accessories/caps.'},
+    '7576593843': {'category': 'ACC', 'subCategory': 'Scarves', 'review_note': 'Accessories audit: title and thumbnail clearly show a scarf; corrected to accessories/scarves.'},
+    '7601699767': {'category': 'pants', 'subCategory': 'Jeans', 'review_note': 'Clothing audit: title and thumbnail clearly show NZ7346 denim jeans rather than clothing; corrected to pants/jeans.'},
 }
 
 def classify_product(info: dict) -> str:

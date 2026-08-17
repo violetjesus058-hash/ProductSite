@@ -225,3 +225,35 @@ Confirmed from compact audit thumbnails and applied as deterministic overrides:
 - 7601734009 — K5305 flared trousers -> Pants / Trousers.
 
 Mixed hoodie/trouser sets and other boundary cases were retained in Clothing and not automatically reclassified. The latest visible batch had no additional clearly isolated pants, hats, or scarves.
+
+
+## AI-led Pants audit notes — 2026-08-17
+
+The AI audit view is being used as intended: compact high-density cards, screenshot-based visual review, deterministic overrides only for clear mismatches, and SUSPECTED for mixed sets.
+
+Pants batch findings:
+
+- The first Pants batch consisted primarily of clearly visible jeans, trousers, cargo pants, curved-leg pants, and shorts; no broad category errors were identified from the thumbnails.
+- `7543327097` — Factory self-operated high-quality trendy shorts and short-sleeve suit: retained in Pants/Shorts and marked SUSPECTED because it is a mixed shorts-and-shirt set.
+- `7773126421` — High-Quality Versatile Comfortable Set with Long Sleeve and Long Pants: retained in Pants/Trousers and marked SUSPECTED because it is a mixed apparel set.
+- `7545310284` — Factory Hooded Sweatshirt and Sweatpants Down Jacket with QR Code: retained in Pants/Sweatpants and marked SUSPECTED because it is a mixed sweatshirt, sweatpants, and down-jacket set.
+- `7578509830` — High-quality denim jacket and coat-001-CN: clear clothing/jacket product found in Pants and corrected to Clothing/Jackets.
+
+The visible next Pants batch contains mostly clear pants-only items, including camouflage pants, jeans, cargo pants, curved-leg trousers, and shorts. Continue scanning it without asking the user for item-by-item confirmation.
+
+
+## Continuous category handoff audit — 2026-08-17
+
+Pants reached zero remaining in the audit view after the final 24-product batch. The visible records were pants, jeans, cargo pants, camouflage pants, work pants, or shorts. Confirmed corrections included denim jackets moved to Clothing/Jackets and generic pants thumbnails showing shorts moved to Pants/Shorts. Mixed apparel sets remain marked SUSPECTED.
+
+Shoes completed two batches with no clear category mismatch from the thumbnails. Bags completed with no clear category mismatch; the visible records were backpacks, crossbody bags, handbags, and travel bags.
+
+Fragrance review found one clear mismatch: source `7785584510`, titled `26-26 Season Cologne 2nd Club Fan Edition`, has a football jersey thumbnail rather than fragrance and was corrected to Clothing/Shirts. The remaining fragrance thumbnails showed perfume or cologne products. The generator was rebuilt after applying this correction.
+
+
+Watches review completed with 14 unique products; thumbnails were all wristwatches and no clear mismatch was found.
+
+Accessories review identified clear mismatches from title and primary thumbnail: `7578486178` and `7576570355` moved to Bags/Shoulder Bags; `7578468490` moved to Clothing/Underwear; `7574783515` corrected from the earlier incorrect Caps override to Clothing/Sets; `7578480194` moved to Shoes/Sneakers; `7578480258` moved to Fragrance/Perfume; `7576493523` moved to Watches; `7576582179` moved to Bags/Backpacks; `7576558465` set to Accessories/Caps; `7576593843` set to Accessories/Scarves. `7785584510` was previously corrected from Fragrance to Clothing/Shirts. Data regeneration completed; TypeScript check and production build passed.
+
+
+Accessories follow-up: the primary thumbnail batch confirmed the listed caps, scarves, phone cases, belts, card holders, and bags; only clear cross-category items were moved as recorded above. After regeneration, the Clothing view exposed `7601699767` / `NZ7346牛仔裤` with a denim-jeans thumbnail; it was corrected to Pants/Jeans. TypeScript check and production build passed again.

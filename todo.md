@@ -473,3 +473,20 @@
 - [ ] Add suspected cases without applying unconfirmed category overrides.
 - [ ] Handoff automatically to Pants and subsequent categories after category exhaustion.
 - [ ] Stop only after all unique source products have a completed audit record.
+
+
+## Pants 品类 AI 审计
+
+- [ ] Start the next unreviewed Pants batch in AI Audit View.
+- [ ] Validate Jeans, Trousers, Shorts, and Sweatpants subcategories against the primary image.
+- [ ] Correct only clearly misclassified Pants records with evidence-based overrides.
+- [ ] Mark mixed apparel sets or unclear images as SUSPECTED instead of reclassifying them.
+- [ ] Verify Pants completion and continue to the next unreviewed category.
+
+
+## AI 主导审核模式确认
+
+- [ ] Repair the SUSPECTED_REVIEW generator field format before continuing Pants audit.
+- [ ] Use compact high-resolution screenshots for AI-led visual inspection without requiring user confirmation per item.
+- [ ] Automatically apply confirmed MANUAL_OVERRIDES, record SUSPECTED cases, and advance to the next unreviewed batch.
+- [ ] Continue category handoff after Pants completion.
