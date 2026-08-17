@@ -80,8 +80,11 @@ function readAuditSession(): AuditSession | null {
 export default function Home() {
   const [, navigate] = useLocation();
   const [auditSession] = useState<AuditSession | null>(() => readAuditSession());
-  // Final catalog preview opens on the complete catalog; audit category recovery is opt-in via AI Audit View.
-  const [category, setCategory] = useState("all");
+  const secondPassRequested = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("audit") === "accessories-second-pass";
+  const auditResumeRequested = secondPassRequested || (typeof window !== "undefined" && window.localStorage.getItem("audit:audit-mode") === "1");
+  const isAccessoriesSecondPass = secondPassRequested;
+  // Final catalog preview opens on the complete catalog; the explicit Accessories second-pass URL opts into its isolated audit queue.
+  const [category, setCategory] = useState(() => (secondPassRequested ? "ACC" : auditResumeRequested ? auditSession?.category || "all" : "all"));
   const [brand, setBrand] = useState(() => auditSession?.brand || "all");
   const [query, setQuery] = useState(() => auditSession?.query || "");
   const [sort, setSort] = useState(() => auditSession?.sort || "random"); // Keep the audit shuffle stable across reloads
@@ -94,13 +97,14 @@ export default function Home() {
   
   // Audit Mode State
   const [seenIds, setSeenIds] = useState<string[]>(() => {
-    const saved = localStorage.getItem("audit:seen-ids");
+    const storageKey = secondPassRequested ? "audit:accessories-second-pass-seen-ids" : "audit:seen-ids";
+    const saved = localStorage.getItem(storageKey);
     return saved ? JSON.parse(saved) : [];
   });
   const [shuffleSeed, setShuffleSeed] = useState(() => auditSession?.shuffleSeed || Date.now());
   const [pageSize, setPageSize] = useState(() => auditSession?.pageSize || 40);
-  // Final catalog preview defaults to normal browsing; AI Audit View is opt-in and can be re-enabled manually.
-  const [isAiAuditView, setIsAiAuditView] = useState(false);
+  // Final catalog preview defaults to normal browsing; AI Audit View resumes only when explicitly requested.
+  const [isAiAuditView, setIsAiAuditView] = useState(() => secondPassRequested || (auditResumeRequested && auditSession?.isAiAuditView === true));
   const reviewKey = (product: (typeof products)[number]) => product.sourceProductId || product.id;
   const isReviewed = (product: (typeof products)[number]) => seenIds.includes(reviewKey(product));
   const changeAuditCategory = (nextCategory: string) => {
@@ -192,7 +196,7 @@ export default function Home() {
 
   // Once a category has no unseen records, move the audit view to the next category with remaining records.
   useEffect(() => {
-    if (!isAiAuditView || category === "all" || totalRemainingInCategory > 0) return;
+    if (!isAiAuditView || isAccessoriesSecondPass || category === "all" || totalRemainingInCategory > 0) return;
     const nextCategory = categoryOrder
       .filter((id) => id !== "all" && id !== category)
       .find((id) => products.some((product) => product.category === id && !isReviewed(product)));
@@ -207,7 +211,8 @@ export default function Home() {
   const markPageAsSeen = () => {
     const newSeen = Array.from(new Set([...seenIds, ...visible.map(reviewKey)]));
     setSeenIds(newSeen);
-    localStorage.setItem("audit:seen-ids", JSON.stringify(newSeen));
+    const storageKey = isAccessoriesSecondPass ? "audit:accessories-second-pass-seen-ids" : "audit:seen-ids";
+    localStorage.setItem(storageKey, JSON.stringify(newSeen));
     setShuffleSeed(Date.now());
     window.scrollTo({ top: 0, behavior: "smooth" });
   };

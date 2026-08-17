@@ -533,3 +533,11 @@
 - [ ] Exit AI Audit View and persist normal catalog browsing mode.
 - [ ] Verify category navigation, ordinary product grid, and product detail entry.
 - [ ] Save a preview checkpoint for the user.
+
+## Accessories second-pass audit
+
+- [ ] Re-audit the entire Accessories category independently of the prior reviewed state.
+- [ ] Inspect hats, scarves, wallets, belts, phone cases, electronics, bags, shoes, clothing, and mixed sets.
+- [ ] Add only evidence-based category overrides and retain ambiguous products as SUSPECTED_REVIEW.
+- [ ] Regenerate the catalog and verify the corrected Accessories category in normal preview mode.
+- [ ] Save a second-pass audit checkpoint.
