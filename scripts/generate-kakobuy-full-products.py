@@ -36,6 +36,60 @@ def clean_title(value: str, fallback: str) -> str:
     return value or fallback
 
 
+def optimize_display_title(info: dict, category: str, subcategory: str, fallback: str) -> str:
+    """Use source wording when meaningful; replace ID-like titles with evidence-based generic names."""
+    title = clean_title(str(info.get('title', '') or ''), '')
+    original = str(info.get('title_original', '') or '')
+    source_text = f'{title} {original}'.lower()
+    if re.search(r'[\u4e00-\u9fff]', title) or re.search(r'[\u4e00-\u9fff]', original):
+        translated = original or title
+        translations = [
+            ('高品质', 'High-Quality'), ('高质量', 'High-Quality'), ('精品', 'Premium'), ('时尚', 'Fashion'), ('经典', 'Classic'), ('百搭', 'Versatile'),
+            ('皮带', 'Belt'), ('腰带', 'Belt'), ('包包', 'Bag'), ('内裤', 'Underwear'), ('套装', 'Clothing Set'), ('卫衣', 'Hoodie'), ('衬衫', 'Shirt'),
+            ('短袖', 'Short-Sleeve Shirt'), ('长袖', 'Long-Sleeve Shirt'), ('牛仔裤', 'Jeans'), ('裤子', 'Pants'), ('裤', 'Pants'), ('帽子', 'Hat'), ('帽', 'Hat'),
+            ('运动鞋', 'Sneakers'), ('鞋子', 'Shoes'), ('鞋', 'Shoes'), ('手表', 'Watch'), ('香水', 'Perfume'), ('手机壳', 'Phone Case'), ('眼镜', 'Glasses'),
+            ('手链', 'Bracelet'), ('项链', 'Necklace'), ('袜子', 'Socks'), ('袜', 'Socks'), ('羽绒服', 'Puffer Jacket'), ('夹克', 'Jacket'), ('外套', 'Jacket'),
+            ('毛衣', 'Sweater'), ('围巾', 'Scarf'), ('钱包', 'Wallet'), ('卡包', 'Card Holder'), ('耳机', 'Headphones'), ('裙子', 'Skirt'), ('裙', 'Skirt'), ('背心', 'Vest'),
+        ]
+        for token, label in translations:
+            translated = translated.replace(token, f' {label} ')
+        translated = re.sub(r'[\u4e00-\u9fff]', ' ', translated)
+        translated = re.sub(r'[_:：；;]+', ' ', translated)
+        translated = re.sub(r'[（(（]\s*(?:[A-Z]{1,5}[-_]\d+|\d+[-_][A-Z]{1,5}[-_]\d+)\s*[）)）]', ' ', translated, flags=re.I)
+        translated = re.sub(r'\s+(?:\d+[-_][A-Z]{1,5}[-_]\d+|[A-Z]{1,5}[-_]\d{2,})\s*$', '', translated, flags=re.I)
+        if re.match(r'^(?:High-Quality|High Quality|Fashion|Premium)', translated, re.I):
+            translated = re.sub(r'\s+\d{1,4}\s*$', '', translated)
+        translated = re.sub(r'\b([A-Za-z]+(?:-[A-Za-z]+)?)\s+\1\b', r'\1', translated, flags=re.I)
+        translated = re.sub(r'\s+', ' ', translated).strip(' -')
+        if translated and not re.search(r'[\u4e00-\u9fff]', translated):
+            return translated
+    generic_title = re.match(r'^(?:catalog item|kakobuy product|all[-_ ]?[a-z]+|high[- ]?quality|high-quality|rep high[- ]?quality|rep high quality|fashion hat|fashion trend|high-quality fashion)', title, re.I)
+    if generic_title:
+        title = re.sub(r'\s*(?:[（(]\s*)?(?:\d+[-_][A-Z]{1,5}[-_]\d+|[A-Z]{1,5}[-_]\d{2,}|\d{1,4})\s*(?:[）)])?\s*$', '', title, flags=re.I).strip(' -')
+    generic_exact = bool(re.fullmatch(r'(?:all|rep high[- ]?quality|high[- ]?quality|gs\.\d+|[a-z]{1,5}\.[0-9]{4,})', title, re.I))
+    identifier_like = generic_exact or bool(re.search(r'\b(?:catalog item|kakobuy product)\b|(?:all[-_ ]?[a-z]+|high[- ]?quality|high-quality|rep high[- ]?quality|rep high quality)\s*\d*[-_ ]?(?:[a-z]{1,5}[-_ ]?\d+)?|\b\d+[-_][a-z]{1,5}[-_]\d+\b', title, re.I))
+    if not identifier_like:
+        return title or fallback
+
+    code_match = re.search(r'\b(?:\d+[-_])?([A-Z]{1,5})[-_]\d+\b', title, re.I)
+    code = code_match.group(1).upper() if code_match else ''
+    code_labels = {
+        'TS': 'T-Shirt', 'TST': 'T-Shirt', 'ST': 'T-Shirt', 'SS': 'Short-Sleeve Shirt',
+        'HD': 'Hoodie', 'HDS': 'Hoodie', 'SW': 'Sweater', 'JE': 'Jeans', 'LO': 'Lounge Pants',
+        'PT': 'Pants', 'HB': 'Handbag', 'FH': 'Fashion Hat', 'KH': 'Knit Hat', 'UN': 'Underwear',
+        'PHD': 'Puffer Jacket', 'VT': 'Vest', 'RC': 'Jacket', 'CL': 'Clothing Set',
+    }
+    chinese_labels = [('内裤', 'Underwear'), ('卫衣', 'Hoodie'), ('套装', 'Clothing Set'), ('牛仔裤', 'Jeans'), ('裤', 'Pants'), ('帽', 'Hat'), ('鞋', 'Shoes'), ('包', 'Bag'), ('手表', 'Watch'), ('香水', 'Perfume')]
+    for token, label in chinese_labels:
+        if token in original:
+            return f'High-Quality {label}'
+    if code in code_labels:
+        return f'High-Quality {code_labels[code]}'
+    category_labels = {'clothing': 'Apparel', 'pants': 'Pants', 'shoe': 'Shoes', 'bags': 'Bag', 'fragrance': 'Perfume', 'watches': 'Watch', 'ACC': 'Accessory'}
+    sub_label = {'Underwear': 'Underwear', 'Sets': 'Clothing Set', 'Hoodies': 'Hoodie', 'Jackets': 'Jacket', 'Sweaters': 'Sweater', 'Shirts': 'Shirt', 'Caps': 'Cap', 'Watches': 'Watch', 'Sandals': 'Sandals'}.get(subcategory)
+    return f'High-Quality {sub_label or category_labels.get(category, "Product")}'
+
+
 CATEGORY_PATTERNS = {
     'shoe': r'\b(shoes?|sneakers?|boots?|slides?|sandals?|loafers?|mules?|running shoes?)\b',
     'watches': r'\b(watch(?:es)?|smart watch(?:es)?|mechanical watch(?:es)?|腕表|手表)\b',
@@ -250,6 +304,7 @@ def main() -> None:
                 raw_title = str(get('title_en_platform') or get('title_original') or '').strip()
                 products[pid] = {
                     'title': clean_title(raw_title, f'Kakobuy Product {pid}'),
+                    'title_original': str(get('title_original') or '').strip(),
                     'source_url': str(get('source_url') or '').strip(),
                     'platform_url': str(get('primary_platform_url') or '').strip(),
                     'category': str(get('category') or 'Unclassified').strip(),
@@ -267,6 +322,7 @@ def main() -> None:
                     'platform_url': str(get('platform_url') or '').strip(),
                     'checked_at': str(get('price_checked_at') or '').strip(),
                     'title': clean_title(str(get('title_en_platform') or get('title_original') or '').strip(), ''),
+                    'title_original': str(get('title_original') or '').strip(),
                     'category': str(get('category') or '').strip(),
                     'subcategory': str(get('subcategory') or '').strip(),
                 })
@@ -303,11 +359,12 @@ def main() -> None:
                 display_images = [display_images[primary_index]] + [image for index, image in enumerate(display_images) if index != primary_index]
             inferred_category = classify_product(info)
             inferred_subcategory = subcategory_for(inferred_category, info)
+            display_title = optimize_display_title(info, override.get('category') or inferred_category, override.get('subCategory') or inferred_subcategory, f'Kakobuy Product {pid}')
             grouped.append({
                 'id': f'kb-{pid}-{price.replace(".", "-")}',
                 'sourceProductId': pid,
-                'name': info.get('title', f'Kakobuy Product {pid}'),
-                'catalogName': info.get('title', f'Kakobuy Product {pid}'),
+                'name': display_title,
+                'catalogName': display_title,
                 'category': override.get('category') or inferred_category,
                 'subCategory': override.get('subCategory') or inferred_subcategory,
                 'reviewStatus': 'suspected' if suspected else ('reviewed' if override else 'unreviewed'),

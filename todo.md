@@ -548,3 +548,12 @@
 - [ ] Remove the desktop Brands / All Brands / Unbranded sidebar module.
 - [ ] Verify sidebar spacing and mobile layout after removal.
 - [ ] Save a checkpoint for the UI change.
+
+
+## Optimize Kakobuy product titles
+
+- [ ] Analyze source title fields and identify all Catalog Item / ID-only display titles.
+- [ ] Build title cleaning and source-field fallback rules without inventing product facts.
+- [ ] Regenerate products and measure remaining identifier-style titles.
+- [ ] Verify optimized titles on the home grid and product detail pages.
+- [ ] Save a checkpoint for the title optimization.
