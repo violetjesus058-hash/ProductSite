@@ -80,7 +80,8 @@ function readAuditSession(): AuditSession | null {
 export default function Home() {
   const [, navigate] = useLocation();
   const [auditSession] = useState<AuditSession | null>(() => readAuditSession());
-  const [category, setCategory] = useState(() => auditSession?.category || "clothing"); // Resume the last audit category after regeneration
+  // Final catalog preview opens on the complete catalog; audit category recovery is opt-in via AI Audit View.
+  const [category, setCategory] = useState("all");
   const [brand, setBrand] = useState(() => auditSession?.brand || "all");
   const [query, setQuery] = useState(() => auditSession?.query || "");
   const [sort, setSort] = useState(() => auditSession?.sort || "random"); // Keep the audit shuffle stable across reloads
@@ -98,7 +99,8 @@ export default function Home() {
   });
   const [shuffleSeed, setShuffleSeed] = useState(() => auditSession?.shuffleSeed || Date.now());
   const [pageSize, setPageSize] = useState(() => auditSession?.pageSize || 40);
-  const [isAiAuditView, setIsAiAuditView] = useState(() => auditSession?.isAiAuditView || false);
+  // Final catalog preview defaults to normal browsing; AI Audit View is opt-in and can be re-enabled manually.
+  const [isAiAuditView, setIsAiAuditView] = useState(false);
   const reviewKey = (product: (typeof products)[number]) => product.sourceProductId || product.id;
   const isReviewed = (product: (typeof products)[number]) => seenIds.includes(reviewKey(product));
   const changeAuditCategory = (nextCategory: string) => {

@@ -526,3 +526,10 @@
 - [ ] Review Clothing images for clear Pants, Caps, Scarves, Shoes, Bags, or other cross-category items.
 - [ ] Add evidence-based manual overrides and keep ambiguous mixed sets as SUSPECTED_REVIEW.
 - [ ] Mark the completed batch, verify remaining count, and continue the next Clothing batch.
+
+## Final catalog preview mode
+
+- [ ] Confirm the final generated product data and manual overrides.
+- [ ] Exit AI Audit View and persist normal catalog browsing mode.
+- [ ] Verify category navigation, ordinary product grid, and product detail entry.
+- [ ] Save a preview checkpoint for the user.
