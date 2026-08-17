@@ -11,6 +11,9 @@ function englishValue(value: string, fallback: string) { return /[\u4e00-\u9fff]
 function localSetting(key: string, fallback: string) { if (typeof window === "undefined") return fallback; return window.localStorage.getItem(key) || fallback; }
 function cleanTitle(value: string) { return value.replace(/📏.*$/, "").replace(/pls add whatsapp.*$/i, "").replace(/whatsapp[:：]?\s*\d+/gi, "").replace(/\s+/g, " ").trim(); }
 function isSizeOnlyCardTitle(value: string) { return /^(?:\d{2}\s*-\s*\d{2})(?:\s+(?:XXS|XS|S|M|L|XL|XXL|XXXL|4XL)(?:\s*-\s*(?:XXS|XS|S|M|L|XL|XXL|XXXL|4XL))?)?$/i.test(value.trim()) || /^(?:XXS|XS|S|M|L|XL|XXL|XXXL|4XL)\s*-\s*(?:XXS|XS|S|M|L|XL|XXL|XXXL|4XL)$/i.test(value.trim()); }
+const CATALOG_RETURN_KEY = "catalog:return-context:v1";
+type CatalogReturnContext = { category: string; brand: string; query: string; sort: string; scrollY: number };
+function readCatalogReturnContext(): CatalogReturnContext | null { if (typeof window === "undefined") return null; try { const raw = window.sessionStorage.getItem(CATALOG_RETURN_KEY); if (!raw) return null; const parsed = JSON.parse(raw) as Partial<CatalogReturnContext>; if (!parsed || typeof parsed !== "object" || typeof parsed.category !== "string" || typeof parsed.brand !== "string" || typeof parsed.query !== "string" || typeof parsed.sort !== "string" || typeof parsed.scrollY !== "number") return null; return parsed as CatalogReturnContext; } catch { return null; } }
 const englishCategoryLabels: Record<string, string> = { all: "ALL PRODUCTS", clothing: "CLOTHING", shoe: "SHOES", pants: "PANTS", bags: "BAGS", fragrance: "FRAGRANCE", ACC: "ACCESSORIES", watches: "WATCHES" };
 const navItems = [
   { id: "all", label: englishCategoryLabels.all, count: products.length },
@@ -82,11 +85,12 @@ export default function Home() {
   const secondPassRequested = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("audit") === "accessories-second-pass";
   const auditResumeRequested = secondPassRequested || (typeof window !== "undefined" && window.localStorage.getItem("audit:audit-mode") === "1");
   const isAccessoriesSecondPass = secondPassRequested;
-  // Final catalog preview opens on the complete catalog; the explicit Accessories second-pass URL opts into its isolated audit queue.
-  const [category, setCategory] = useState(() => (secondPassRequested ? "ACC" : auditResumeRequested ? auditSession?.category || "all" : "all"));
-  const [brand, setBrand] = useState(() => auditSession?.brand || "all");
-  const [query, setQuery] = useState(() => auditSession?.query || "");
-  const [sort, setSort] = useState(() => auditSession?.sort || "random"); // Keep the audit shuffle stable across reloads
+  const [returnContext] = useState(() => readCatalogReturnContext());
+  // Final catalog preview opens on the complete catalog; a pending return context restores the previous catalog view.
+  const [category, setCategory] = useState(() => (secondPassRequested ? "ACC" : returnContext?.category || (auditResumeRequested ? auditSession?.category || "all" : "all")));
+  const [brand, setBrand] = useState(() => returnContext?.brand || auditSession?.brand || "all");
+  const [query, setQuery] = useState(() => returnContext?.query || auditSession?.query || "");
+  const [sort, setSort] = useState(() => returnContext?.sort || auditSession?.sort || "random"); // Keep the audit shuffle stable across reloads
     const [favorites, setFavorites] = useState<string[]>(() => readFavorites());
   const [history, setHistory] = useState<HistoryEntry[]>(() => readHistory());
   const [openPanel, setOpenPanel] = useState<"favorites" | "history" | null>(null);
@@ -105,6 +109,7 @@ export default function Home() {
   const reviewKey = (product: (typeof products)[number]) => product.sourceProductId || product.id;
   const isReviewed = (product: (typeof products)[number]) => seenIds.includes(reviewKey(product));
   const changeAuditCategory = (nextCategory: string) => {
+    if (nextCategory !== category) window.sessionStorage.removeItem(CATALOG_RETURN_KEY);
     setCategory(nextCategory);
     setBrand("all");
     if (isAiAuditView && nextCategory !== "all") {
@@ -218,9 +223,20 @@ export default function Home() {
     }
   };
 
-  useEffect(() => { window.scrollTo({ top: 0, left: 0, behavior: "auto" });   }, [brand, category, query, sort]);
+    useEffect(() => {
+    const shouldRestore = Boolean(returnContext && returnContext.category === category && returnContext.brand === brand && returnContext.query === query && returnContext.sort === sort);
+    if (shouldRestore) {
+      window.requestAnimationFrame(() => window.scrollTo({ top: returnContext!.scrollY, left: 0, behavior: "auto" }));
+      window.sessionStorage.removeItem(CATALOG_RETURN_KEY);
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    }
+  }, [brand, category, query, sort, returnContext]);
 
 
+
+  const saveReturnContext = () => { window.sessionStorage.setItem(CATALOG_RETURN_KEY, JSON.stringify({ category, brand, query, sort, scrollY: window.scrollY } satisfies CatalogReturnContext)); };
+  const openProduct = (id: string) => { saveReturnContext(); navigate(`/product/${id}`); };
   const toggleFavorite = (id: string) => setFavorites((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
   const favoriteProducts = favorites.map((id) => products.find((item) => item.id === id)).filter(Boolean) as typeof products;
   const historyProducts = history.map((entry) => ({ entry, product: products.find((item) => item.id === entry.id) })).filter((item) => item.product) as { entry: HistoryEntry; product: (typeof products)[number] }[];
@@ -237,7 +253,7 @@ export default function Home() {
       <div className="rail-footer"><span>CATALOG / 01</span><span>2026</span></div>
     </aside>
     <main className="catalog-main">
-      <header className="catalog-header"><div className="mobile-brand"><img src="/manus-storage/catalog-mark_f15a35f4.png" alt="" /> <span>Material Catalog</span></div><div className="search-wrap"><Search size={17} strokeWidth={1.8} /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search brands, products, or categories" aria-label="Search products" />{query && <button onClick={() => setQuery("")}>Clear</button>}</div><div className="header-actions"><div className="header-menu"><button className={`header-icon header-record-button ${openPanel === "favorites" ? "is-active" : ""}`} aria-label={`Saved items, ${favoriteProducts.length}`} aria-expanded={openPanel === "favorites"} onClick={() => setOpenPanel(openPanel === "favorites" ? null : "favorites")}><Heart size={18} fill={favoriteProducts.length ? "currentColor" : "none"} /><span>{favoriteProducts.length}</span></button>{openPanel === "favorites" && <div className="record-popover"><div className="record-popover-head"><strong>SAVED ITEMS</strong><button onClick={() => setOpenPanel(null)} aria-label="Close saved items"><X size={15} /></button></div>{favoriteProducts.length ? favoriteProducts.map((product) => <button className="record-row" key={product.id} onClick={() => navigate(`/product/${product.id}`)}><img src={product.images[0]} alt="" /><span><strong>{cleanTitle(product.catalogName || product.name)}</strong><small>{money(product.price, product.currency)}</small></span><ArrowUpRight size={14} /></button>) : <p className="record-empty">Your saved products will appear here.</p>}</div>}</div><div className="header-menu"><button className={`header-icon header-record-button ${openPanel === "history" ? "is-active" : ""}`} aria-label={`Browsing history, ${historyProducts.length}`} aria-expanded={openPanel === "history"} onClick={() => { setHistory(readHistory()); setOpenPanel(openPanel === "history" ? null : "history"); }}><HistoryIcon size={18} /><span>{historyProducts.length}</span></button>{openPanel === "history" && <div className="record-popover"><div className="record-popover-head"><strong>BROWSING HISTORY</strong><button onClick={() => setOpenPanel(null)} aria-label="Close browsing history"><X size={15} /></button></div>{historyProducts.length ? historyProducts.map(({ entry, product }) => <button className="record-row" key={product.id} onClick={() => navigate(`/product/${product.id}`)}><img src={product.images[0]} alt="" /><span><strong>{cleanTitle(product.catalogName || product.name)}</strong><small>Viewed {formatVisitTime(entry.visitedAt)}</small></span><ArrowUpRight size={14} /></button>) : <p className="record-empty">Products you open will appear here.</p>}</div>}</div><span className="live-status"><i /> <span className="demo-label">Demo</span> · Browsing {demoViewers} · Historical visits 20K+</span></div></header>
+      <header className="catalog-header"><div className="mobile-brand"><img src="/manus-storage/catalog-mark_f15a35f4.png" alt="" /> <span>Material Catalog</span></div><div className="search-wrap"><Search size={17} strokeWidth={1.8} /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search brands, products, or categories" aria-label="Search products" />{query && <button onClick={() => setQuery("")}>Clear</button>}</div><div className="header-actions"><div className="header-menu"><button className={`header-icon header-record-button ${openPanel === "favorites" ? "is-active" : ""}`} aria-label={`Saved items, ${favoriteProducts.length}`} aria-expanded={openPanel === "favorites"} onClick={() => setOpenPanel(openPanel === "favorites" ? null : "favorites")}><Heart size={18} fill={favoriteProducts.length ? "currentColor" : "none"} /><span>{favoriteProducts.length}</span></button>{openPanel === "favorites" && <div className="record-popover"><div className="record-popover-head"><strong>SAVED ITEMS</strong><button onClick={() => setOpenPanel(null)} aria-label="Close saved items"><X size={15} /></button></div>{favoriteProducts.length ? favoriteProducts.map((product) => <button className="record-row" key={product.id} onClick={() => openProduct(product.id)}><img src={product.images[0]} alt="" /><span><strong>{cleanTitle(product.catalogName || product.name)}</strong><small>{money(product.price, product.currency)}</small></span><ArrowUpRight size={14} /></button>) : <p className="record-empty">Your saved products will appear here.</p>}</div>}</div><div className="header-menu"><button className={`header-icon header-record-button ${openPanel === "history" ? "is-active" : ""}`} aria-label={`Browsing history, ${historyProducts.length}`} aria-expanded={openPanel === "history"} onClick={() => { setHistory(readHistory()); setOpenPanel(openPanel === "history" ? null : "history"); }}><HistoryIcon size={18} /><span>{historyProducts.length}</span></button>{openPanel === "history" && <div className="record-popover"><div className="record-popover-head"><strong>BROWSING HISTORY</strong><button onClick={() => setOpenPanel(null)} aria-label="Close browsing history"><X size={15} /></button></div>{historyProducts.length ? historyProducts.map(({ entry, product }) => <button className="record-row" key={product.id} onClick={() => openProduct(product.id)}><img src={product.images[0]} alt="" /><span><strong>{cleanTitle(product.catalogName || product.name)}</strong><small>Viewed {formatVisitTime(entry.visitedAt)}</small></span><ArrowUpRight size={14} /></button>) : <p className="record-empty">Products you open will appear here.</p>}</div>}</div><span className="live-status"><i /> <span className="demo-label">Demo</span> · Browsing {demoViewers} · Historical visits 20K+</span></div></header>
       
       <div className="catalog-toolbar">
         <div className="result-label">
@@ -276,7 +292,7 @@ export default function Home() {
             
             if (isAiAuditView) {
               return (
-                <article key={product.id} className="bg-white border border-black/5 p-1 flex flex-col gap-1 cursor-pointer hover:border-black/20" onClick={() => navigate(`/product/${product.id}`)}>
+                <article key={product.id} className="bg-white border border-black/5 p-1 flex flex-col gap-1 cursor-pointer hover:border-black/20" onClick={() => openProduct(product.id)}>
                   <div className="aspect-square overflow-hidden bg-gray-50 relative">
                     <img src={image} alt="" className="w-full h-full object-cover" />
                     <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-[8px] text-white px-1 truncate">
@@ -288,7 +304,7 @@ export default function Home() {
               );
             }
             
-            return <Fragment key={product.id}><article className={`product-card card-${index % 7}`} onClick={() => navigate(`/product/${product.id}`)}><div className="product-image-wrap"><img src={image} alt={title} loading={index < 8 ? "eager" : "lazy"} /><div className="image-wash" />{demoBadge(product.price) && <span className={`demo-product-badge ${demoBadge(product.price) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price)}</span>}{product.reviewStatus === "suspected" && <span className="suspected-review-badge" aria-label="Suspected category mismatch">SUSPECTED</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}<button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "Remove from saved items" : "Save product"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={10} /></span></div><div className="product-info">{displayBrand && <div className="product-brand">{displayBrand}</div>}{cardTitle && <h3 className="product-name">{cardTitle}</h3>}<div className="product-price">{money(product.price, "USD")} <span className="product-currency">USD</span></div></div></article></Fragment>; 
+            return <Fragment key={product.id}><article className={`product-card card-${index % 7}`} onClick={() => openProduct(product.id)}><div className="product-image-wrap"><img src={image} alt={title} loading={index < 8 ? "eager" : "lazy"} /><div className="image-wash" />{demoBadge(product.price) && <span className={`demo-product-badge ${demoBadge(product.price) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price)}</span>}{product.reviewStatus === "suspected" && <span className="suspected-review-badge" aria-label="Suspected category mismatch">SUSPECTED</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}<button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "Remove from saved items" : "Save product"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={10} /></span></div><div className="product-info">{displayBrand && <div className="product-brand">{displayBrand}</div>}{cardTitle && <h3 className="product-name">{cardTitle}</h3>}<div className="product-price">{money(product.price, "USD")} <span className="product-currency">USD</span></div></div></article></Fragment>; 
           })}
         </section>
         
