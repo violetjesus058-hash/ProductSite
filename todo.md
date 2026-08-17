@@ -498,3 +498,10 @@
 - [ ] Restore the active category and batch after products.ts regeneration or page reload.
 - [ ] Resume from the last incomplete Accessories batch instead of defaulting to Clothing.
 - [ ] Verify category handoff and stop only after all unique source products are audited.
+
+## Accessories 断点续审
+
+- [ ] Restore the last Accessories audit session and inspect the current compact batch.
+- [ ] Review Accessories images in batches and classify clear caps, scarves, wallets, belts, bags, phone cases, and mixed items.
+- [ ] Add only evidence-based manual overrides; keep ambiguous products marked SUSPECTED_REVIEW.
+- [ ] Regenerate products, verify audit cursor restoration, and continue the next Accessories batch.

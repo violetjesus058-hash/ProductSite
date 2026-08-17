@@ -51,7 +51,12 @@ function readAuditSession(): AuditSession | null {
   if (typeof window === "undefined") return null;
   try {
     const raw = window.localStorage.getItem(AUDIT_SESSION_KEY);
-    if (!raw) return null;
+    const fallbackCategory = window.localStorage.getItem("audit:last-category");
+    const fallbackAuditMode = window.localStorage.getItem("audit:audit-mode") === "1";
+    if (!raw) {
+      if (!fallbackCategory || !fallbackAuditMode) return null;
+      return { category: categoryOrder.includes(fallbackCategory) ? fallbackCategory : "clothing", brand: "all", subCategory: "all", query: "", sort: "random", shuffleSeed: Date.now(), pageSize: 80, isAiAuditView: true, batchSourceIds: [], updatedAt: Date.now() };
+    }
     const parsed = JSON.parse(raw) as Partial<AuditSession>;
     if (!parsed || typeof parsed !== "object") return null;
     const validCategory = typeof parsed.category === "string" && (parsed.category === "all" || categoryOrder.includes(parsed.category));
@@ -96,6 +101,15 @@ export default function Home() {
   const [isAiAuditView, setIsAiAuditView] = useState(() => auditSession?.isAiAuditView || false);
   const reviewKey = (product: (typeof products)[number]) => product.sourceProductId || product.id;
   const isReviewed = (product: (typeof products)[number]) => seenIds.includes(reviewKey(product));
+  const changeAuditCategory = (nextCategory: string) => {
+    setCategory(nextCategory);
+    setBrand("all");
+    setSubCategory("all");
+    if (isAiAuditView && nextCategory !== "all") {
+      window.localStorage.setItem("audit:last-category", nextCategory);
+      window.localStorage.setItem("audit:audit-mode", "1");
+    }
+  };
 
   const [pageStyle, setPageStyle] = useState(() => localSetting("material-catalog:style", "default"));
   const [fontSizeLevel, setFontSizeLevel] = useState(() => Number(localSetting("material-catalog:font-size", "0")));
@@ -149,6 +163,8 @@ export default function Home() {
   // the same seed plus the same seen source IDs recreates the unfinished batch instead of restarting Clothing.
   useEffect(() => {
     if (!isAiAuditView || category === "all") return;
+    window.localStorage.setItem("audit:last-category", category);
+    window.localStorage.setItem("audit:audit-mode", "1");
     const session: AuditSession = {
       category,
       brand,
@@ -211,12 +227,12 @@ export default function Home() {
   const resetFilters = () => { setCategory("all"); setBrand("all"); setSubCategory("all"); setQuery(""); };
 
   return <div className={`catalog-shell catalog-style-${pageStyle} type-size-${fontSizeLevel} tracking-level-${letterSpacingLevel}`}>
-    <nav className="mobile-icon-rail" aria-label="Mobile categories"><button className={category === "all" ? "is-active" : ""} onClick={() => { setCategory("all"); setBrand("all"); setSubCategory("all"); }} aria-label="All products"><HomeIcon size={17} /><span>ALL</span></button>{navItems.slice(1).map((item) => <button key={item.id} className={category === item.id ? "is-active" : ""} onClick={() => { setCategory(item.id); setBrand("all"); setSubCategory("all"); }} aria-label={item.label}><span>{item.id === "ACC" ? "ACC" : item.label.slice(0, 5)}</span></button>)}<button aria-label="Saved items" onClick={() => setOpenPanel("favorites")}><Heart size={17} /></button><button aria-label="Display settings" onClick={() => setSettingsOpen(true)}><Settings2 size={17} /></button><button className={`mobile-expand-button ${subCategoryOpen ? "is-active" : ""}`} aria-label="Expand subcategories" aria-expanded={subCategoryOpen} onClick={() => setSubCategoryOpen((open) => !open)}><ChevronDown size={16} /><span>MORE</span></button>{subCategoryOpen && <div className="mobile-subcategory-panel"><div className="mobile-subcategory-head"><strong>{category === "all" ? "ALL CATEGORIES" : englishCategoryLabels[category]}</strong><button onClick={() => setSubCategoryOpen(false)} aria-label="Close subcategories"><X size={14} /></button></div>{subCategoryItems.map((item) => <button key={item} className={subCategory === item ? "is-selected" : ""} onClick={() => { setSubCategory(item); setSubCategoryOpen(false); }}>{item === "all" ? "ALL SUBCATEGORIES" : englishValue(item, "SUBCATEGORY")}</button>)}</div>}</nav>
+    <nav className="mobile-icon-rail" aria-label="Mobile categories"><button className={category === "all" ? "is-active" : ""} onClick={() => changeAuditCategory("all")} aria-label="All products"><HomeIcon size={17} /><span>ALL</span></button>{navItems.slice(1).map((item) => <button key={item.id} className={category === item.id ? "is-active" : ""} onClick={() => changeAuditCategory(item.id)} aria-label={item.label}><span>{item.id === "ACC" ? "ACC" : item.label.slice(0, 5)}</span></button>)}<button aria-label="Saved items" onClick={() => setOpenPanel("favorites")}><Heart size={17} /></button><button aria-label="Display settings" onClick={() => setSettingsOpen(true)}><Settings2 size={17} /></button><button className={`mobile-expand-button ${subCategoryOpen ? "is-active" : ""}`} aria-label="Expand subcategories" aria-expanded={subCategoryOpen} onClick={() => setSubCategoryOpen((open) => !open)}><ChevronDown size={16} /><span>MORE</span></button>{subCategoryOpen && <div className="mobile-subcategory-panel"><div className="mobile-subcategory-head"><strong>{category === "all" ? "ALL CATEGORIES" : englishCategoryLabels[category]}</strong><button onClick={() => setSubCategoryOpen(false)} aria-label="Close subcategories"><X size={14} /></button></div>{subCategoryItems.map((item) => <button key={item} className={subCategory === item ? "is-selected" : ""} onClick={() => { setSubCategory(item); setSubCategoryOpen(false); }}>{item === "all" ? "ALL SUBCATEGORIES" : englishValue(item, "SUBCATEGORY")}</button>)}</div>}</nav>
     <aside className="catalog-rail">
       <button className="brand-lockup" onClick={resetFilters} aria-label="Back to ALL PRODUCTS"><img src="/manus-storage/catalog-mark_f15a35f4.png" alt="" className="brand-mark" /><span className="brand-type">MATERIAL<br /><em>CATALOG</em></span></button>
       <div className="rail-rule" /><div className="rail-kicker">BROWSE BY</div>
       <nav className="category-nav" aria-label="Product categories">
-        {navItems.map((item) => <button key={item.id} className={`category-link ${category === item.id ? "is-active" : ""}`} onClick={() => { setCategory(item.id); setBrand("all"); setSubCategory("all"); }}><span>{item.label}</span></button>)}
+        {navItems.map((item) => <button key={item.id} className={`category-link ${category === item.id ? "is-active" : ""}`} onClick={() => changeAuditCategory(item.id)}><span>{item.label}</span></button>)}
       </nav>
       <div className="rail-rule brand-rule" /><div className="rail-kicker brand-kicker">BRANDS</div>
       <nav className="brand-nav" aria-label="Brand selection">
@@ -236,8 +252,11 @@ export default function Home() {
         <div className="flex items-center gap-4">
           <button 
             onClick={() => {
-              setIsAiAuditView(!isAiAuditView);
-              setPageSize(isAiAuditView ? 40 : 80);
+              const nextAuditMode = !isAiAuditView;
+              setIsAiAuditView(nextAuditMode);
+              setPageSize(nextAuditMode ? 80 : 40);
+              window.localStorage.setItem("audit:audit-mode", nextAuditMode ? "1" : "0");
+              if (nextAuditMode && category !== "all") window.localStorage.setItem("audit:last-category", category);
             }} 
             className={`text-[10px] uppercase tracking-widest px-3 py-1 rounded border ${isAiAuditView ? "bg-black text-white border-black" : "border-black/20 opacity-60"}`}
           >

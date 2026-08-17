@@ -54,6 +54,7 @@ SUSPECTED_REVIEW = {
     '7773126421': {'review_note': 'Pants audit: long-sleeve-and-long-pants set is mixed apparel; retain current Pants/Trousers classification pending detail-page confirmation.'},
     '7545310284': {'review_note': 'Pants audit: hooded sweatshirt, sweatpants, and down-jacket set is mixed apparel; retain current Pants/Sweatpants classification pending detail-page confirmation.'},
     '7776165618': {'review_note': 'Pants audit: thumbnail shows a shorts-and-short-sleeve mixed set; retain current Pants/Shorts classification pending detail-page confirmation.'},
+    '7545203334': {'review_note': 'Accessories audit: thumbnail shows a mixed sportswear set; retain current Accessories classification pending full detail-page confirmation.'},
 }
 
 MANUAL_OVERRIDES = {
@@ -121,6 +122,15 @@ MANUAL_OVERRIDES = {
     '7576558465': {'category': 'ACC', 'subCategory': 'Caps', 'review_note': 'Accessories audit: title and thumbnail clearly show a fashion cap; corrected to accessories/caps.'},
     '7576593843': {'category': 'ACC', 'subCategory': 'Scarves', 'review_note': 'Accessories audit: title and thumbnail clearly show a scarf; corrected to accessories/scarves.'},
     '7601699767': {'category': 'pants', 'subCategory': 'Jeans', 'review_note': 'Clothing audit: title and thumbnail clearly show NZ7346 denim jeans rather than clothing; corrected to pants/jeans.'},
+    '7543362649': {'category': 'clothing', 'subCategory': 'Sportswear', 'review_note': 'Accessories audit: title and thumbnail clearly show a training-clothes apparel product; corrected to clothing/sportswear.'},
+    '7783164819': {'category': 'clothing', 'subCategory': 'Shirts', 'review_note': 'Accessories audit: title and thumbnail clearly show a long-sleeve apparel product; corrected to clothing/shirts.'},
+    '7789908090': {'category': 'clothing', 'subCategory': 'Sportswear', 'review_note': 'Accessories audit: title and thumbnail clearly show fashion apparel rather than an accessory; corrected to clothing/sportswear.'},
+    '7782578621': {'category': 'clothing', 'subCategory': 'Shirts', 'review_note': 'Accessories audit: title and thumbnail clearly show an Algeria football jersey; corrected to clothing/shirts.'},
+    '7552674207': {'category': 'clothing', 'subCategory': 'Underwear', 'review_note': 'Accessories audit: title and thumbnail clearly show underwear; corrected to clothing/underwear.'},
+    '7543334869': {'category': 'clothing', 'subCategory': 'Sportswear', 'review_note': 'Accessories audit: title and thumbnail clearly show soccer training apparel; corrected to clothing/sportswear.'},
+    '7615081442': {'category': 'clothing', 'subCategory': 'Underwear', 'review_note': 'Accessories audit: title and thumbnail clearly show cotton underwear; corrected to clothing/underwear.'},
+    '7612091525': {'category': 'clothing', 'subCategory': 'Socks', 'review_note': 'Accessories audit: title and thumbnail clearly show cotton basketball socks; corrected to clothing/socks.'},
+    '7578512126': {'category': 'clothing', 'subCategory': 'Underwear', 'review_note': 'Accessories audit: title and thumbnail clearly show underwear; corrected to clothing/underwear.'},
 }
 
 def classify_product(info: dict) -> str:
