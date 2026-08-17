@@ -565,3 +565,12 @@
 - [ ] Remove the original first image and promote the original fourth image to the cover.
 - [ ] Verify the detail gallery, thumbnails, and product card after regeneration.
 - [ ] Save a checkpoint for the image correction.
+
+
+## Single-product cover image priority
+
+- [ ] Analyze current cover image ordering and identify local gallery images that are multi-product collages.
+- [ ] Prefer a clear single-product image whenever one exists in the same gallery.
+- [ ] Use a collage or multi-product image only when no single-product image is available.
+- [ ] Regenerate and verify representative cards and detail galleries.
+- [ ] Save a checkpoint for the cover-image selection update.

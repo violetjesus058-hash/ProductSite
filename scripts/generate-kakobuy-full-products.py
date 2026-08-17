@@ -7,6 +7,7 @@ from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
 from openpyxl import load_workbook
+from PIL import Image, ImageFilter, ImageStat
 
 ROOT = Path('/home/ubuntu/product-catalog-site')
 WORKBOOK = Path('/home/ubuntu/upload/pasted_file_drov2V_Kakobuy_SKU_数据表.xlsx')
@@ -26,6 +27,38 @@ def money(value: object) -> str:
 
 def canon(url: object) -> str:
     return re.sub(r'\?.*$', '', str(url or '').strip()).lower()
+
+
+def collage_score(image_path: str) -> float:
+    """Estimate whether a local image is a collage; lower score is preferred as a cover."""
+    try:
+        path = ROOT / 'client/public' / image_path.lstrip('/')
+        with Image.open(path) as source:
+            image = source.convert('L').resize((32, 32))
+        edges = image.filter(ImageFilter.FIND_EDGES)
+        pixels = list(edges.getdata())
+        edge_mean = sum(pixels) / max(1, len(pixels))
+        row_means = [sum(pixels[y * 32:(y + 1) * 32]) / 32 for y in range(32)]
+        col_means = [sum(pixels[x::32]) / 32 for x in range(32)]
+        horizontal_peaks = sum(value > edge_mean * 1.9 and value > 34 for value in row_means)
+        vertical_peaks = sum(value > edge_mean * 1.9 and value > 34 for value in col_means)
+        contrast = ImageStat.Stat(image).stddev[0]
+        return (horizontal_peaks + vertical_peaks) * 2.2 + edge_mean * 0.15 + contrast * 0.04
+    except Exception:
+        return 999.0
+
+
+def preferred_single_image(images: list[str]) -> int | None:
+    candidates = images[:4]
+    if len(candidates) < 2:
+        return None
+    scores = [(collage_score(image), index) for index, image in enumerate(candidates)]
+    best_score, best_index = min(scores)
+    current_score = scores[0][0]
+    # Only replace the current cover when another image is materially less collage-like.
+    if best_index != 0 and best_score + 3.0 < current_score:
+        return best_index
+    return None
 
 
 def clean_title(value: str, fallback: str) -> str:
@@ -360,6 +393,10 @@ def main() -> None:
             primary_index = override.get('primary_image_index')
             if isinstance(primary_index, int) and 0 <= primary_index < len(display_images):
                 display_images = [display_images[primary_index]] + [image for index, image in enumerate(display_images) if index != primary_index]
+            elif not remove_indices:
+                preferred_index = preferred_single_image(display_images)
+                if preferred_index is not None:
+                    display_images = [display_images[preferred_index]] + [image for index, image in enumerate(display_images) if index != preferred_index]
             inferred_category = classify_product(info)
             inferred_subcategory = subcategory_for(inferred_category, info)
             display_title = optimize_display_title(info, override.get('category') or inferred_category, override.get('subCategory') or inferred_subcategory, f'Kakobuy Product {pid}')
