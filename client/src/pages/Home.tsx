@@ -241,10 +241,6 @@ export default function Home() {
       <nav className="category-nav" aria-label="Product categories">
         {navItems.map((item) => <button key={item.id} className={`category-link ${category === item.id ? "is-active" : ""}`} onClick={() => changeAuditCategory(item.id)}><span>{item.label}</span></button>)}
       </nav>
-      <div className="rail-rule brand-rule" /><div className="rail-kicker brand-kicker">BRANDS</div>
-      <nav className="brand-nav" aria-label="Brand selection">
-        {brandItems.map((item) => <button key={item.id} className={`brand-link ${brand === item.id ? "is-active" : ""}`} onClick={() => setBrand(item.id)}><span>{englishValue(item.label, "BRAND")}</span></button>)}
-      </nav>
       <div className="rail-footer"><span>CATALOG / 01</span><span>2026</span></div>
     </aside>
     <main className="catalog-main">

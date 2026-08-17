@@ -541,3 +541,10 @@
 - [ ] Add only evidence-based category overrides and retain ambiguous products as SUSPECTED_REVIEW.
 - [ ] Regenerate the catalog and verify the corrected Accessories category in normal preview mode.
 - [ ] Save a second-pass audit checkpoint.
+
+
+## Remove Brands sidebar module
+
+- [ ] Remove the desktop Brands / All Brands / Unbranded sidebar module.
+- [ ] Verify sidebar spacing and mobile layout after removal.
+- [ ] Save a checkpoint for the UI change.
