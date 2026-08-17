@@ -10,6 +10,7 @@ import { formatVisitTime, readFavorites, readHistory, saveFavorites, type Histor
 function englishValue(value: string, fallback: string) { return /[\u4e00-\u9fff]/.test(value) ? fallback : value; }
 function localSetting(key: string, fallback: string) { if (typeof window === "undefined") return fallback; return window.localStorage.getItem(key) || fallback; }
 function cleanTitle(value: string) { return value.replace(/📏.*$/, "").replace(/pls add whatsapp.*$/i, "").replace(/whatsapp[:：]?\s*\d+/gi, "").replace(/\s+/g, " ").trim(); }
+function isSizeOnlyCardTitle(value: string) { return /^(?:\d{2}\s*-\s*\d{2})(?:\s+(?:XXS|XS|S|M|L|XL|XXL|XXXL|4XL)(?:\s*-\s*(?:XXS|XS|S|M|L|XL|XXL|XXXL|4XL))?)?$/i.test(value.trim()) || /^(?:XXS|XS|S|M|L|XL|XXL|XXXL|4XL)\s*-\s*(?:XXS|XS|S|M|L|XL|XXL|XXXL|4XL)$/i.test(value.trim()); }
 const englishCategoryLabels: Record<string, string> = { all: "ALL PRODUCTS", clothing: "CLOTHING", shoe: "SHOES", pants: "PANTS", bags: "BAGS", fragrance: "FRAGRANCE", ACC: "ACCESSORIES", watches: "WATCHES" };
 const navItems = [
   { id: "all", label: englishCategoryLabels.all, count: products.length },
@@ -270,6 +271,7 @@ export default function Home() {
             const image = product.images[0]; 
             const isFav = favorites.includes(product.id); 
             const title = englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`); 
+            const cardTitle = isSizeOnlyCardTitle(title) ? "" : title;
             
             if (isAiAuditView) {
               return (
@@ -280,12 +282,12 @@ export default function Home() {
                       {product.sourceProductId}
                     </div>
                   </div>
-                  <div className="text-[9px] leading-tight truncate opacity-70">{title}</div>
+                  {cardTitle && <div className="text-[9px] leading-tight truncate opacity-70">{cardTitle}</div>}
                 </article>
               );
             }
             
-            return <Fragment key={product.id}><article className={`product-card card-${index % 7}`} onClick={() => navigate(`/product/${product.id}`)}><div className="product-image-wrap"><img src={image} alt={title} loading={index < 8 ? "eager" : "lazy"} /><div className="image-wash" />{demoBadge(product.price) && <span className={`demo-product-badge ${demoBadge(product.price) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price)}</span>}{product.reviewStatus === "suspected" && <span className="suspected-review-badge" aria-label="Suspected category mismatch">SUSPECTED</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}<button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "Remove from saved items" : "Save product"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={10} /></span></div><div className="product-info"><div className="product-meta"><span className="product-brand">{englishValue(product.brand, "UNBRANDED")}</span><span className="product-price">{money(product.price, product.currency)}</span></div><h3 className="product-name">{title}</h3></div></article></Fragment>; 
+            return <Fragment key={product.id}><article className={`product-card card-${index % 7}`} onClick={() => navigate(`/product/${product.id}`)}><div className="product-image-wrap"><img src={image} alt={title} loading={index < 8 ? "eager" : "lazy"} /><div className="image-wash" />{demoBadge(product.price) && <span className={`demo-product-badge ${demoBadge(product.price) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price)}</span>}{product.reviewStatus === "suspected" && <span className="suspected-review-badge" aria-label="Suspected category mismatch">SUSPECTED</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}<button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "Remove from saved items" : "Save product"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={10} /></span></div><div className="product-info"><div className="product-meta"><span className="product-brand">{englishValue(product.brand, "UNBRANDED")}</span><span className="product-price">{money(product.price, product.currency)}</span></div>{cardTitle && <h3 className="product-name">{cardTitle}</h3>}</div></article></Fragment>; 
           })}
         </section>
         
