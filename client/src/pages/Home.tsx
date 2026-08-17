@@ -37,7 +37,6 @@ const AUDIT_SESSION_KEY = "audit:session:v2";
 type AuditSession = {
   category: string;
   brand: string;
-  subCategory: string;
   query: string;
   sort: string;
   shuffleSeed: number;
@@ -55,7 +54,7 @@ function readAuditSession(): AuditSession | null {
     const fallbackAuditMode = window.localStorage.getItem("audit:audit-mode") === "1";
     if (!raw) {
       if (!fallbackCategory || !fallbackAuditMode) return null;
-      return { category: categoryOrder.includes(fallbackCategory) ? fallbackCategory : "clothing", brand: "all", subCategory: "all", query: "", sort: "random", shuffleSeed: Date.now(), pageSize: 80, isAiAuditView: true, batchSourceIds: [], updatedAt: Date.now() };
+      return { category: categoryOrder.includes(fallbackCategory) ? fallbackCategory : "clothing", brand: "all", query: "", sort: "random", shuffleSeed: Date.now(), pageSize: 80, isAiAuditView: true, batchSourceIds: [], updatedAt: Date.now() };
     }
     const parsed = JSON.parse(raw) as Partial<AuditSession>;
     if (!parsed || typeof parsed !== "object") return null;
@@ -63,7 +62,6 @@ function readAuditSession(): AuditSession | null {
     return {
       category: validCategory ? parsed.category! : "clothing",
       brand: typeof parsed.brand === "string" ? parsed.brand : "all",
-      subCategory: typeof parsed.subCategory === "string" ? parsed.subCategory : "all",
       query: typeof parsed.query === "string" ? parsed.query : "",
       sort: typeof parsed.sort === "string" ? parsed.sort : "random",
       shuffleSeed: typeof parsed.shuffleSeed === "number" ? parsed.shuffleSeed : Date.now(),
@@ -92,8 +90,6 @@ export default function Home() {
   const [history, setHistory] = useState<HistoryEntry[]>(() => readHistory());
   const [openPanel, setOpenPanel] = useState<"favorites" | "history" | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [subCategory, setSubCategory] = useState(() => auditSession?.subCategory || "all");
-  const [subCategoryOpen, setSubCategoryOpen] = useState(false);
   
   // Audit Mode State
   const [seenIds, setSeenIds] = useState<string[]>(() => {
@@ -110,7 +106,6 @@ export default function Home() {
   const changeAuditCategory = (nextCategory: string) => {
     setCategory(nextCategory);
     setBrand("all");
-    setSubCategory("all");
     if (isAiAuditView && nextCategory !== "all") {
       window.localStorage.setItem("audit:last-category", nextCategory);
       window.localStorage.setItem("audit:audit-mode", "1");
@@ -140,10 +135,9 @@ export default function Home() {
     const filtered = products.filter((product) => {
       const matchesCategory = category === "all" || product.category === category;
       const matchesBrand = brand === "all" || product.brand === brand;
-      const matchesSubCategory = subCategory === "all" || product.subCategory === subCategory;
       const isNotSeen = !isReviewed(product);
       const haystack = [product.name, product.catalogName, product.brand, product.subCategory].join(" ").toLowerCase();
-      return matchesCategory && matchesBrand && matchesSubCategory && isNotSeen && (!term || haystack.includes(term));
+      return matchesCategory && matchesBrand && isNotSeen && (!term || haystack.includes(term));
     });
 
     let result = [...filtered];
@@ -163,7 +157,7 @@ export default function Home() {
     }
     
     return result.slice(0, pageSize);
-  }, [brand, category, query, sort, subCategory, seenIds, shuffleSeed, pageSize]);
+  }, [brand, category, query, sort, seenIds, shuffleSeed, pageSize]);
 
   // Persist the complete audit cursor. The shuffle seed is the batch cursor: after data regeneration,
   // the same seed plus the same seen source IDs recreates the unfinished batch instead of restarting Clothing.
@@ -174,7 +168,6 @@ export default function Home() {
     const session: AuditSession = {
       category,
       brand,
-      subCategory,
       query,
       sort,
       shuffleSeed,
@@ -184,7 +177,7 @@ export default function Home() {
       updatedAt: Date.now(),
     };
     window.localStorage.setItem(AUDIT_SESSION_KEY, JSON.stringify(session));
-  }, [brand, category, isAiAuditView, pageSize, query, seenIds, shuffleSeed, sort, subCategory, visible]);
+  }, [brand, category, isAiAuditView, pageSize, query, seenIds, shuffleSeed, sort, visible]);
 
   const totalRemainingInCategory = useMemo(() => {
     return products.filter(p => {
@@ -203,8 +196,7 @@ export default function Home() {
     if (nextCategory) {
       setCategory(nextCategory);
       setBrand("all");
-      setSubCategory("all");
-      setShuffleSeed(Date.now());
+        setShuffleSeed(Date.now());
     }
   }, [category, isAiAuditView, seenIds, totalRemainingInCategory]);
 
@@ -225,16 +217,16 @@ export default function Home() {
     }
   };
 
-  useEffect(() => { window.scrollTo({ top: 0, left: 0, behavior: "auto" }); }, [brand, category, subCategory, query, sort]);
+  useEffect(() => { window.scrollTo({ top: 0, left: 0, behavior: "auto" });   }, [brand, category, query, sort]);
+
 
   const toggleFavorite = (id: string) => setFavorites((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
   const favoriteProducts = favorites.map((id) => products.find((item) => item.id === id)).filter(Boolean) as typeof products;
   const historyProducts = history.map((entry) => ({ entry, product: products.find((item) => item.id === entry.id) })).filter((item) => item.product) as { entry: HistoryEntry; product: (typeof products)[number] }[];
-  const subCategoryItems = useMemo(() => { const scoped = category === "all" ? products : products.filter((product) => product.category === category); const counts = new Map<string, number>(); scoped.forEach((product) => { if (product.subCategory) counts.set(product.subCategory, (counts.get(product.subCategory) || 0) + 1); }); const values = Array.from(counts.keys()).sort((a, b) => (counts.get(b) || 0) - (counts.get(a) || 0) || a.localeCompare(b)); return ["all", ...values]; }, [category]);
-  const resetFilters = () => { setCategory("all"); setBrand("all"); setSubCategory("all"); setQuery(""); };
+  const resetFilters = () => { setCategory("all"); setBrand("all"); setQuery(""); };
 
   return <div className={`catalog-shell catalog-style-${pageStyle} type-size-${fontSizeLevel} tracking-level-${letterSpacingLevel}`}>
-    <nav className="mobile-icon-rail" aria-label="Mobile categories"><button className={category === "all" ? "is-active" : ""} onClick={() => changeAuditCategory("all")} aria-label="All products"><HomeIcon size={17} /><span>ALL</span></button>{navItems.slice(1).map((item) => <button key={item.id} className={category === item.id ? "is-active" : ""} onClick={() => changeAuditCategory(item.id)} aria-label={item.label}><span>{item.id === "ACC" ? "ACC" : item.label.slice(0, 5)}</span></button>)}<button aria-label="Saved items" onClick={() => setOpenPanel("favorites")}><Heart size={17} /></button><button aria-label="Display settings" onClick={() => setSettingsOpen(true)}><Settings2 size={17} /></button><button className={`mobile-expand-button ${subCategoryOpen ? "is-active" : ""}`} aria-label="Expand subcategories" aria-expanded={subCategoryOpen} onClick={() => setSubCategoryOpen((open) => !open)}><ChevronDown size={16} /><span>MORE</span></button>{subCategoryOpen && <div className="mobile-subcategory-panel"><div className="mobile-subcategory-head"><strong>{category === "all" ? "ALL CATEGORIES" : englishCategoryLabels[category]}</strong><button onClick={() => setSubCategoryOpen(false)} aria-label="Close subcategories"><X size={14} /></button></div>{subCategoryItems.map((item) => <button key={item} className={subCategory === item ? "is-selected" : ""} onClick={() => { setSubCategory(item); setSubCategoryOpen(false); }}>{item === "all" ? "ALL SUBCATEGORIES" : englishValue(item, "SUBCATEGORY")}</button>)}</div>}</nav>
+    <nav className="mobile-icon-rail" aria-label="Mobile categories"><button className={category === "all" ? "is-active" : ""} onClick={() => changeAuditCategory("all")} aria-label="All products"><HomeIcon size={17} /><span>ALL</span></button>{navItems.slice(1).map((item) => <button key={item.id} className={category === item.id ? "is-active" : ""} onClick={() => changeAuditCategory(item.id)} aria-label={item.label}><span>{item.id === "ACC" ? "ACC" : item.label.slice(0, 5)}</span></button>)}<button aria-label="Saved items" onClick={() => setOpenPanel("favorites")}><Heart size={17} /></button><button aria-label="Display settings" onClick={() => setSettingsOpen(true)}><Settings2 size={17} /></button></nav>
     <aside className="catalog-rail">
       <button className="brand-lockup" onClick={resetFilters} aria-label="Back to ALL PRODUCTS"><img src="/manus-storage/catalog-mark_f15a35f4.png" alt="" className="brand-mark" /><span className="brand-type">MATERIAL<br /><em>CATALOG</em></span></button>
       <div className="rail-rule" /><div className="rail-kicker">BROWSE BY</div>

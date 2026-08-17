@@ -583,3 +583,11 @@
 - [ ] Preserve every existing Kakobuy URL and avoid duplicate products.
 - [ ] Validate URL templates, ID substitution, and detail-page platform buttons.
 - [ ] Save a checkpoint for the data-only platform link update.
+
+## 本轮：移除非统一口径子类模块
+
+- [ ] 确认移动端子类展开模块及相关状态逻辑
+- [ ] 移除不统一口径的子类展开模块
+- [ ] 保留已审核的大类导航与正常商品浏览
+- [ ] 运行 TypeScript 检查、生产构建并验证移动端
+- [ ] 保存稳定检查点并汇报结果
