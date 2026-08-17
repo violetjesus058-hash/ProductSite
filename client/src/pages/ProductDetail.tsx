@@ -15,12 +15,12 @@ function platformSourcesFor(product: (typeof products)[number]): PlatformSource[
   const kakobuyUrl = isKakobuy ? product.url : `https://www.kakobuy.com/item/details?url=${encodedWeidianUrl}&affcode=vxxss`;
   const sources: PlatformSource[] = [
     { name: "Kakobuy", url: kakobuyUrl, primary: isKakobuy },
-    { name: "Oopbuy", url: `https://oopbuy.com/product/weidian/${sourceId}?inviteCode=Y5DH4UF2W` },
-    { name: "Litbuy", url: `https://litbuy.com/product/weidian/${sourceId}?inviteCode=XXGYH4Z80` },
     { name: "Superbuy", url: `https://www.superbuy.com/en/page/buy/?nTag=Home-search&from=search-input&url=${encodedWeidianUrl}&partnercode=E6miyW` },
-    { name: "GTbuy", url: `https://gtbuy.com/product/weidian/${sourceId}?inviteCode=XO78PVRZW` },
   ];
-  if (!isKakobuy) sources.unshift({ name: "Fansbuy", url: product.url || `https://fansbuy.com/item-micro-${product.id}.html?promotionCode=R0dfTU9DRzA2VTk`, primary: true });
+  for (const [name, url] of Object.entries(product.platformLinks || {})) {
+    if (url && !sources.some((source) => source.name === name)) sources.push({ name, url });
+  }
+  if (!isKakobuy && product.url && !sources.some((source) => source.name === "Fansbuy")) sources.unshift({ name: "Fansbuy", url: product.url, primary: true });
   return sources;
 }
 function primarySourceFor(product: (typeof products)[number]) { return platformSourcesFor(product).find((source) => source.primary) || platformSourcesFor(product)[0]; }

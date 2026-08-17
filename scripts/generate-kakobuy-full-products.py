@@ -29,6 +29,30 @@ def canon(url: object) -> str:
     return re.sub(r'\?.*$', '', str(url or '').strip()).lower()
 
 
+def platform_links_for(source_id: str) -> dict[str, str]:
+    """Build additional agent-platform URLs from the existing Weidian ID only."""
+    weidian_url = f'https://weidian.com/item.html?itemID={source_id}'
+    return {
+        'Litbuy': f'https://litbuy.com/product/weidian/{source_id}?inviteCode=XXGYH4Z80',
+        'GTbuy': f'https://gtbuy.com/product/weidian/{source_id}?inviteCode=XO78PVRZW',
+        'Oopbuy': f'https://oopbuy.com/product/weidian/{source_id}?inviteCode=Y5DH4UF2W',
+        'Hipobuy': f'https://hipobuy.com/product/weidian/{source_id}?inviteCode=P6PP29VX7',
+        'Fansbuy': f'https://fansbuy.com/item-micro-{source_id}.html?promotionCode=R0dfTU9DRzA2VTk',
+        'LoveGoBuy': f'https://www.lovegobuy.com/product?shop_type=weidian&id={source_id}&invite_code=U577HX',
+        'Hoobuy': f'https://hoobuy.com/product/2/{source_id}?inviteCode=K8l2grxX',
+        'UsFans': f'https://www.usfans.com/product/3/{source_id}?ref=BCSLQC',
+        'AllChinaBuy': f'https://www.allchinabuy.com/en/page/buy/?nTag=Home-search&from=search-input&_search=url&position=&url={weidian_url}&partnercode=EEa5go',
+        'Mulebuy': f'https://mulebuy.com/product/?shop_type=weidian&id={source_id}&ref=200209428',
+        'AcBuy': f'https://www.acbuy.com/product?id={source_id}&source=WD&u=3FLN4S',
+        'Joyagoo': f'https://joyagoo.com/product?platform=WEIDIAN&id={source_id}&ref=300950678',
+        'OrientDig': f'https://orientdig.com/product/?shop_type=weidian&id={source_id}&ref=100245718',
+        'Sugargoo': f'https://www.sugargoo.com/products?productLink={weidian_url}&memberId=3229305473717352480',
+        'BBDBuyEU': f'https://www.bbdbuyeu.com/goods/WEIDIAN/{source_id}?inviteCode=j4zwj7',
+        'VigorBuy': f'https://vigorbuy.com/product/2/{source_id}?inviteCode=jkNlpqAP',
+        'Fishgoo': f'https://www.fishgoo.com/#/product?productLink={weidian_url}&memberId=TG2665ux5KieI',
+    }
+
+
 def collage_score(image_path: str) -> float:
     """Estimate whether a local image is a collage; lower score is preferred as a cover."""
     try:
@@ -420,6 +444,7 @@ def main() -> None:
                 'shop': info.get('seller') or 'Kakobuy',
                 'shopUrl': info.get('source_url', ''),
                 'url': platform_url,
+                'platformLinks': platform_links_for(pid),
                 'images': display_images,
                 'tags': [value for value in ['kakobuy', subcategory_for(classify_product(info), info), classify_product(info)] if value],
                 'collectedAt': collected_at,
@@ -430,7 +455,7 @@ def main() -> None:
 
     grouped.sort(key=lambda item: (item['category'], item['catalogName'].lower(), item['price'], item['id']))
     OUTPUT_JSON.write_text(json.dumps(grouped, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    header = 'export type Product = { id: string; name: string; catalogName: string; category: string; subCategory: string; reviewStatus?: "reviewed" | "suspected" | "unreviewed"; reviewNote?: string; brand: string; price: number; referencePrice: number | null; currency: string; description: string; sizes: string[]; colors: string[]; stock: string; shop: string; shopUrl: string; url: string; images: string[]; tags: string[]; collectedAt: string; sourceProductId?: string; sourceSkuIds?: string[]; priceRmb?: number | null; priceCheckedAt?: string }\n'
+    header = 'export type Product = { id: string; name: string; catalogName: string; category: string; subCategory: string; reviewStatus?: "reviewed" | "suspected" | "unreviewed"; reviewNote?: string; brand: string; price: number; referencePrice: number | null; currency: string; description: string; sizes: string[]; colors: string[]; stock: string; shop: string; shopUrl: string; url: string; platformLinks?: Record<string, string>; images: string[]; tags: string[]; collectedAt: string; sourceProductId?: string; sourceSkuIds?: string[];\n priceRmb?: number | null; priceCheckedAt?: string }\n'
     body = 'export const products: Product[] = ' + json.dumps(grouped, ensure_ascii=False, indent=2) + ' as Product[];\n'
     footer = 'export const categoryLabels: Record<string, string> = { clothing: "Clothing", shoe: "Shoes", pants: "Pants", bags: "Bags", fragrance: "Fragrance", ACC: "Accessories", watches: "Watches" };\nexport const categoryOrder = ["all", "clothing", "pants", "shoe", "bags", "fragrance", "watches", "ACC"];\n'
     OUTPUT_TS.write_text(header + body + footer, encoding='utf-8')

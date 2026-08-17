@@ -574,3 +574,12 @@
 - [ ] Use a collage or multi-product image only when no single-product image is available.
 - [ ] Regenerate and verify representative cards and detail galleries.
 - [ ] Save a checkpoint for the cover-image selection update.
+
+
+## Add purchasing platform links
+
+- [ ] Inventory existing Weidian IDs and current platform link fields.
+- [ ] Add only missing Litbuy, GTBuy, Oopbuy, Hipobuy, Fansbuy, LoveGoBuy, Hoobuy, UsFans, AllChinaBuy, Mulebuy, AcBuy, Joyagoo, OrientDig, Sugargoo, BBDBuyEU, VigorBuy, and Fishgoo links.
+- [ ] Preserve every existing Kakobuy URL and avoid duplicate products.
+- [ ] Validate URL templates, ID substitution, and detail-page platform buttons.
+- [ ] Save a checkpoint for the data-only platform link update.
