@@ -13,7 +13,8 @@ WORKBOOK = Path('/home/ubuntu/upload/pasted_file_drov2V_Kakobuy_SKU_数据表.xl
 DOWNLOAD_REPORT = ROOT / 'scripts/product-image-download-report.json'
 COVER_LIST = ROOT / 'scripts/kakobuy-cover-download-list.json'
 OUTPUT_JSON = ROOT / 'scripts/kakobuy-full-products.json'
-OUTPUT_TS = ROOT / 'client/src/data/products.kakobuy-full.ts'
+# products.ts is the active frontend data module imported by Home.tsx and detail pages.
+OUTPUT_TS = ROOT / 'client/src/data/products.ts'
 
 
 def money(value: object) -> str:
@@ -87,6 +88,20 @@ MANUAL_OVERRIDES = {
     '7603630018': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'AI Audit: CK9500 curved-leg trouser thumbnail clearly shows a pants-only product; corrected to pants/trousers.'},
     '7543327119': {'category': 'accessories', 'subCategory': 'Scarves', 'review_note': 'AI Audit: High Quality Scarf 001 thumbnail clearly shows scarves only; corrected to accessories/scarves.'},
     '7601743943': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'AI Audit: K5512 straight-leg trouser thumbnail clearly shows a pants-only product; corrected to pants/trousers.'},
+    '7603683608': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'AI Audit: KJ6267 cargo-trouser thumbnail clearly shows a pants-only product; corrected to pants/trousers.'},
+    '7601688665': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'AI Audit: CK9556 straight-leg trouser thumbnail clearly shows a pants-only product; corrected to pants/trousers.'},
+    '7543404477': {'category': 'accessories', 'subCategory': 'Caps', 'review_note': 'AI Audit: High Quality Knitted 3-AT-001 thumbnail clearly shows knit caps only; corrected to accessories/caps.'},
+    '7603633944': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'AI Audit: CK6606 curved-leg trouser thumbnail clearly shows a pants-only product; corrected to pants/trousers.'},
+    '7742257053': {'category': 'pants', 'subCategory': 'Shorts', 'review_note': 'AI Audit: thumbnail clearly shows a shorts-only product; corrected to pants/shorts.'},
+    '7601666909': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'AI Audit: CK3367 camouflage-trouser thumbnail clearly shows a pants-only product; corrected to pants/trousers.'},
+    '7603563092': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'AI Audit: CK9621 curved-leg trouser thumbnail clearly shows a pants-only product; corrected to pants/trousers.'},
+    '7601688735': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'AI Audit: K6110 cargo-trouser thumbnail clearly shows a pants-only product; corrected to pants/trousers.'},
+    '7603591798': {'category': 'pants', 'subCategory': 'Jeans', 'review_note': 'AI Audit: NZ7591 denim-trouser thumbnail clearly shows a pants-only product; corrected to pants/jeans.'},
+    '7601761663': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'AI Audit: CK9551 straight-leg trouser thumbnail clearly shows a pants-only product; corrected to pants/trousers.'},
+    '7545274624': {'category': 'accessories', 'subCategory': 'Caps', 'review_note': 'AI Audit: REP High Quality 1-FH-001 thumbnail clearly shows knit caps only; corrected to accessories/caps.'},
+    '7601653203': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'AI Audit: K5308 flared-trouser thumbnail clearly shows a pants-only product; corrected to pants/trousers.'},
+    '7601720055': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'AI Audit: CK6669 curved-leg trouser thumbnail clearly shows a pants-only product; corrected to pants/trousers.'},
+    '7601734009': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'AI Audit: K5305 flared-trouser thumbnail clearly shows a pants-only product; corrected to pants/trousers.'},
 }
 
 def classify_product(info: dict) -> str:

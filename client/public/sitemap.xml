@@ -3,6 +3,8 @@
   <url><loc>https://productsite-8wf.pages.dev/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576550615-49-82</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7611840843-49-82</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7782578621-14-47</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7782578621-17-68</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7543313315-30-47</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576546619-12-70</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7615053508-12-70</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -378,6 +380,8 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576599907-98-03</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578440930-7-88</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576598443-13-79</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7574783515-9-45</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7574783515-13-31</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576550655-9-11</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576550655-12-19</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7773159903-31-98</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -388,6 +392,19 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576574241-11-25</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576574241-14-31</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576574241-15-91</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543404477-15-24</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543371979-9-45</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543371979-24-88</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543371979-46-09</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543327119-36-64</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543327119-39-54</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543327119-44-36</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543327119-49-18</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543327119-51-11</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545274624-11-58</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545274624-12-54</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545274624-13-31</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545274624-15-24</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7789896230-66-70</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7789896230-72-96</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7545248724-19-10</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -986,8 +1003,6 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603523408-20-09</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7785625776-14-47</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7785625776-17-68</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7782578621-14-47</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7782578621-17-68</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576540787-30-38</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576695090-30-47</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576787728-9-65</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -1055,24 +1070,13 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7543416115-24-88</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7543416115-144-63</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603647872-32-63</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601666909-29-09</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603566780-28-93</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601743753-30-06</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601639507-32-63</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603561014-23-79</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7603633944-23-79</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7603641850-30-86</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601720055-25-07</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7603553408-35-36</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601720125-29-25</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601649187-29-25</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7603630018-23-79</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7603616148-24-27</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603578542-26-52</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601761663-24-27</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601688665-27-81</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601661003-25-56</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7603563092-22-02</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601656693-25-07</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576613745-80-36</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576613745-107-03</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -1202,7 +1206,6 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576554555-50-14</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576554555-53-04</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576554555-55-93</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543352763-30-47</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7545294490-30-47</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7545294490-33-75</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7545294490-41-47</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -1287,17 +1290,8 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578419186-43-39</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578419186-45-32</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578419186-45-90</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543404477-15-24</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543371979-9-45</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543371979-24-88</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543371979-46-09</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576633989-19-10</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576633989-24-88</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543327119-36-64</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543327119-39-54</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543327119-44-36</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543327119-49-18</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543327119-51-11</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7543307459-19-10</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7543371987-13-31</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7543371987-14-47</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -1314,17 +1308,6 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576584181-36-26</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576584181-63-26</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576584181-65-57</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545207144-17-17</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545207144-21-03</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545207144-38-57</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545207144-43-39</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545207144-46-48</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545207144-48-21</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545207144-53-04</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545207144-73-86</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545207144-81-96</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545207144-83-50</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545207144-85-05</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576574219-32-79</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576574219-36-64</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576574219-40-50</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -1365,8 +1348,6 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7545248720-74-83</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7545248720-76-95</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576767828-17-36</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543334883-54-00</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543334883-73-09</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7543364725-29-51</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7545292452-15-24</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7545292452-17-17</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -1476,19 +1457,12 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7785623850-14-47</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7785623850-17-68</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603559462-28-29</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601753745-27-32</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603632286-39-54</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603673630-22-99</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601734009-27-81</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601653203-26-52</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601743943-27-32</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601688735-32-14</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601661111-21-54</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603600564-25-56</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601666947-32-31</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603608542-28-29</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7603683608-28-93</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7603667852-33-75</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603580118-34-23</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601621215-20-09</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603558644-53-04</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -1533,12 +1507,9 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7552643545-43-23</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7782551119-14-47</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7782551119-17-68</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7603548814-30-38</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601699767-20-09</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601680115-21-38</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601680119-21-38</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7603615668-23-47</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7603591798-21-38</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7782561121-14-47</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7782561121-17-68</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7785574614-14-47</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -1569,21 +1540,8 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7782625947-17-68</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7785556878-20-09</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7785556878-23-31</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545274624-11-58</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545274624-12-54</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545274624-13-31</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545274624-15-24</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576505455-41-47</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576505455-43-39</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576505455-44-36</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576505455-48-21</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576505455-49-18</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576505455-73-28</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7545296400-24-88</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7545296400-30-67</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543396675-9-65</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543396675-25-72</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543396675-43-88</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578446804-11-38</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578446804-16-40</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576570407-21-03</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -1621,7 +1579,6 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603527120-36-97</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603535114-39-54</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603491452-39-54</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601668247-26-20</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601674283-23-47</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601609465-29-41</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601595589-29-41</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -1631,8 +1588,6 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603489110-29-41</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7785509052-14-47</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7785509052-17-68</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601613265-20-09</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601654481-21-38</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603613768-29-41</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603611880-30-70</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601715653-29-41</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -1651,8 +1606,6 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578501940-19-10</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578501940-27-97</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578501940-71-16</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578509826-19-10</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578509826-22-95</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578468480-24-88</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578468480-30-67</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578468480-34-52</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -1666,8 +1619,6 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576718556-13-12</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7574851953-15-27</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7574851953-16-88</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7742257053-13-37</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7742257053-14-19</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576597933-19-10</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576597933-26-81</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576597933-32-59</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -1716,34 +1667,15 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576609763-52-07</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576609763-53-04</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576609763-67-50</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576502955-24-88</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576502955-30-67</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576524975-28-93</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576651148-28-93</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576592113-13-12</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576702740-13-12</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578515778-44-36</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578515778-46-29</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578515778-52-07</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578515778-54-00</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578515778-57-86</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578442860-21-01</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578442860-29-49</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578442860-38-19</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578505862-18-32</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578505862-32-59</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576560505-13-12</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578482254-17-17</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578482254-21-03</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578482254-38-57</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578482254-43-39</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578482254-46-48</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578482254-48-21</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578482254-53-04</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578482254-73-86</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578482254-81-96</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578482254-83-50</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578482254-85-05</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576732184-13-31</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578505946-13-12</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578470372-9-65</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -1771,20 +1703,9 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576501373-35-68</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576532849-13-12</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576641228-13-12</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576695114-15-24</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576695114-17-36</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576695114-26-81</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576590095-32-59</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7574856585-13-12</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576621643-13-12</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578442864-28-55</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578442864-31-82</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578442864-36-84</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578442864-38-19</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578442864-44-55</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578442864-57-09</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578442864-67-31</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578442864-82-93</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578460514-18-32</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578460514-20-25</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578460514-32-79</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -1796,14 +1717,6 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7574853817-24-88</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7574853817-28-74</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576530885-19-10</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578478202-23-15</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578478202-25-07</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578478202-27-00</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578478202-27-97</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578478202-28-93</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578478202-32-79</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578478202-34-72</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578478202-36-64</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576505437-17-17</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576505437-31-82</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576505437-44-17</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -1827,10 +1740,6 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578505876-30-86</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578505876-34-72</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7578505876-59-79</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7574783515-9-45</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576507291-9-45</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7574783515-13-31</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576507291-13-31</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576605827-24-69</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576513279-13-12</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7576607783-13-31</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -1888,6 +1797,7 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601748033-24-11</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601686601-35-36</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603616114-24-27</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601666909-29-09</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601645545-27-32</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601694365-15-91</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601702267-23-79</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -1896,6 +1806,7 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601753665-25-72</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603661670-26-52</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603572834-25-72</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601743753-30-06</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603586834-30-86</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601662897-25-72</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603628128-30-86</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -1905,12 +1816,15 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603612176-15-91</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601627577-25-72</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603626034-29-09</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7603633944-23-79</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7603641850-30-86</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603578494-25-07</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603655752-23-79</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603555396-25-72</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603598460-26-52</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601757885-25-07</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601738065-26-36</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601720055-25-07</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601649547-27-97</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603549426-25-07</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601732143-27-97</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -1918,6 +1832,7 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601718331-25-72</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601655081-26-52</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603619942-30-86</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7603553408-35-36</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601635579-25-07</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601731837-23-95</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601748025-25-72</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -1932,14 +1847,19 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603624016-29-25</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603582672-29-09</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601743759-26-52</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7603630018-23-79</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603667598-27-32</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7603616148-24-27</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601714047-25-07</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603637834-25-07</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601761663-24-27</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601688665-27-81</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603565088-24-27</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601646851-31-82</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603665804-25-07</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601698349-23-79</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603555356-25-07</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7603563092-22-02</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603608354-27-32</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601649425-26-84</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601712079-22-99</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -1977,6 +1897,7 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7574848039-19-10</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601684401-29-25</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603632074-26-52</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543352763-30-47</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7543398539-15-24</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7543398539-17-36</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7543398539-26-81</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -1990,6 +1911,17 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7545213080-24-11</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7545213080-27-97</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7545213080-28-93</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545207144-17-17</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545207144-21-03</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545207144-38-57</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545207144-43-39</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545207144-46-48</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545207144-48-21</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545207144-53-04</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545207144-73-86</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545207144-81-96</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545207144-83-50</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7545207144-85-05</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7771360772-16-27</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7543323077-47-25</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7543323077-48-21</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -2047,6 +1979,7 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603634242-27-32</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603553560-36-97</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603573026-23-95</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601753745-27-32</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601671009-33-75</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603651992-25-72</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603585022-32-14</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -2056,10 +1989,14 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601639541-24-27</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603614062-25-07</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601587437-30-86</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601734009-27-81</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601653203-26-52</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603569180-25-72</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601743943-27-32</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601678529-28-29</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601708359-23-47</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603559368-15-91</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601688735-32-14</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601704045-23-79</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601668661-28-29</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603588458-19-45</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -2085,10 +2022,12 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601641587-25-72</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601751939-28-29</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603594702-37-93</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7603683608-28-93</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603561334-31-50</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603648042-27-32</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603604644-27-32</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601663175-35-36</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7603667852-33-75</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601749993-25-07</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603644178-23-47</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603681644-25-07</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -2100,16 +2039,75 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601646887-30-86</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603523208-20-09</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603554700-21-86</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7603548814-30-38</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601632889-25-40</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7603615668-23-47</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601670255-22-66</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7603591798-21-38</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603554672-22-66</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601603317-21-38</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603584210-24-11</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603560450-24-11</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603542896-22-66</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576505455-41-47</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576505455-43-39</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576505455-44-36</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576505455-48-21</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576505455-49-18</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576505455-73-28</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543396675-9-65</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543396675-25-72</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543396675-43-88</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601668247-26-20</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601613265-20-09</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603507412-20-90</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7601699751-22-66</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7601654481-21-38</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7603535098-22-66</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578509826-19-10</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578509826-22-95</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7742257053-13-37</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7742257053-14-19</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576502955-24-88</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576502955-30-67</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576524975-28-93</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578515778-44-36</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578515778-46-29</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578515778-52-07</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578515778-54-00</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578515778-57-86</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578482254-17-17</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578482254-21-03</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578482254-38-57</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578482254-43-39</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578482254-46-48</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578482254-48-21</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578482254-53-04</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578482254-73-86</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578482254-81-96</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578482254-83-50</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578482254-85-05</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576695114-15-24</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576695114-17-36</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576695114-26-81</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578442864-28-55</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578442864-31-82</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578442864-36-84</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578442864-38-19</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578442864-44-55</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578442864-57-09</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578442864-67-31</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578442864-82-93</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578478202-23-15</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578478202-25-07</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578478202-27-00</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578478202-27-97</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578478202-28-93</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578478202-32-79</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578478202-34-72</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7578478202-36-64</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576507291-9-45</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7576507291-13-31</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7543378609-53-81</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7614911740-53-81</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7543325019-15-05</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -2143,6 +2141,8 @@
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7543309423-67-50</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7614865968-43-23</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7611811399-50-14</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543334883-54-00</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://productsite-8wf.pages.dev/product/kb-7543334883-73-09</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7543386595-64-80</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7543386611-48-21</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://productsite-8wf.pages.dev/product/kb-7545228852-70-97</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>

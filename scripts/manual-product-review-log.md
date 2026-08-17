@@ -211,3 +211,17 @@ The single local gallery image clearly shows a Burkina Faso football fan jersey.
 - No ambiguous case was added to SUSPECTED_REVIEW in this batch.
 
 - Source product ID: `7601743943` (Corrected to Pants/Trousers; K5512 straight-leg trouser thumbnail clearly shows a pants-only product.)
+
+
+## Continuous AI audit notes — Clothing batches (2026-08-17)
+
+Confirmed from compact audit thumbnails and applied as deterministic overrides:
+
+- 7603591798 — NZ7591 jeans -> Pants / Jeans.
+- 7601761663 — CK9551 straight-leg trousers -> Pants / Trousers.
+- 7545274624 — REP High Quality 1-FH-001 knit caps -> Accessories / Caps.
+- 7601653203 — K5308 flared trousers -> Pants / Trousers.
+- 7601720055 — CK6669 curved-leg trousers -> Pants / Trousers.
+- 7601734009 — K5305 flared trousers -> Pants / Trousers.
+
+Mixed hoodie/trouser sets and other boundary cases were retained in Clothing and not automatically reclassified. The latest visible batch had no additional clearly isolated pants, hats, or scarves.

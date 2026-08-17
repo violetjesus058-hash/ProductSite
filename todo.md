@@ -464,3 +464,12 @@
 - [ ] Automatically switch to the next category with unreviewed products when the current category is exhausted.
 - [ ] Stop advancing and show a completed state when every source product has been reviewed.
 - [ ] Preserve suspected cases as reviewable records without treating them as confirmed corrections.
+
+
+## 连续 AI 审核循环
+
+- [ ] Define a per-batch completion record before advancing to the next batch.
+- [ ] Continue Clothing automatically after each verified visual audit batch.
+- [ ] Add suspected cases without applying unconfirmed category overrides.
+- [ ] Handoff automatically to Pants and subsequent categories after category exhaustion.
+- [ ] Stop only after all unique source products have a completed audit record.
