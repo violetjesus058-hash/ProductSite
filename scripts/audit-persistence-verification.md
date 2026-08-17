@@ -1,0 +1,3 @@
+# Audit persistence verification
+
+On 2026-08-17, the homepage was opened and AI Audit View was enabled. Before enabling, the regular catalog showed 40 large cards and Clothing with 257 remaining. After enabling, the page showed compact audit cards with sourceProductId labels and the batch control reported 80 unique source products and 187 remaining in Clothing. Reloading the homepage preserved the compact audit layout, Clothing category, Random Audit sorting, the same first batch source IDs, and the 187 remaining count. This confirms the persisted audit session restores the active category and batch cursor across reloads.

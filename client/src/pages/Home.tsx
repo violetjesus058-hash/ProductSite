@@ -33,17 +33,57 @@ function seededRandom(seed: number) {
   return x - Math.floor(x);
 }
 
+const AUDIT_SESSION_KEY = "audit:session:v2";
+type AuditSession = {
+  category: string;
+  brand: string;
+  subCategory: string;
+  query: string;
+  sort: string;
+  shuffleSeed: number;
+  pageSize: number;
+  isAiAuditView: boolean;
+  batchSourceIds: string[];
+  updatedAt: number;
+};
+
+function readAuditSession(): AuditSession | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(AUDIT_SESSION_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as Partial<AuditSession>;
+    if (!parsed || typeof parsed !== "object") return null;
+    const validCategory = typeof parsed.category === "string" && (parsed.category === "all" || categoryOrder.includes(parsed.category));
+    return {
+      category: validCategory ? parsed.category! : "clothing",
+      brand: typeof parsed.brand === "string" ? parsed.brand : "all",
+      subCategory: typeof parsed.subCategory === "string" ? parsed.subCategory : "all",
+      query: typeof parsed.query === "string" ? parsed.query : "",
+      sort: typeof parsed.sort === "string" ? parsed.sort : "random",
+      shuffleSeed: typeof parsed.shuffleSeed === "number" ? parsed.shuffleSeed : Date.now(),
+      pageSize: typeof parsed.pageSize === "number" ? parsed.pageSize : 80,
+      isAiAuditView: parsed.isAiAuditView !== false,
+      batchSourceIds: Array.isArray(parsed.batchSourceIds) ? parsed.batchSourceIds.filter((id): id is string => typeof id === "string") : [],
+      updatedAt: typeof parsed.updatedAt === "number" ? parsed.updatedAt : Date.now(),
+    };
+  } catch {
+    return null;
+  }
+}
+
 export default function Home() {
   const [, navigate] = useLocation();
-  const [category, setCategory] = useState("clothing"); // Default to clothing as requested
-  const [brand, setBrand] = useState("all");
-  const [query, setQuery] = useState("");
-  const [sort, setSort] = useState("random"); // Default to random as requested
-  const [favorites, setFavorites] = useState<string[]>(() => readFavorites());
+  const [auditSession] = useState<AuditSession | null>(() => readAuditSession());
+  const [category, setCategory] = useState(() => auditSession?.category || "clothing"); // Resume the last audit category after regeneration
+  const [brand, setBrand] = useState(() => auditSession?.brand || "all");
+  const [query, setQuery] = useState(() => auditSession?.query || "");
+  const [sort, setSort] = useState(() => auditSession?.sort || "random"); // Keep the audit shuffle stable across reloads
+    const [favorites, setFavorites] = useState<string[]>(() => readFavorites());
   const [history, setHistory] = useState<HistoryEntry[]>(() => readHistory());
   const [openPanel, setOpenPanel] = useState<"favorites" | "history" | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [subCategory, setSubCategory] = useState("all");
+  const [subCategory, setSubCategory] = useState(() => auditSession?.subCategory || "all");
   const [subCategoryOpen, setSubCategoryOpen] = useState(false);
   
   // Audit Mode State
@@ -51,9 +91,9 @@ export default function Home() {
     const saved = localStorage.getItem("audit:seen-ids");
     return saved ? JSON.parse(saved) : [];
   });
-  const [shuffleSeed, setShuffleSeed] = useState(() => Date.now());
-  const [pageSize, setPageSize] = useState(40);
-  const [isAiAuditView, setIsAiAuditView] = useState(false);
+  const [shuffleSeed, setShuffleSeed] = useState(() => auditSession?.shuffleSeed || Date.now());
+  const [pageSize, setPageSize] = useState(() => auditSession?.pageSize || 40);
+  const [isAiAuditView, setIsAiAuditView] = useState(() => auditSession?.isAiAuditView || false);
   const reviewKey = (product: (typeof products)[number]) => product.sourceProductId || product.id;
   const isReviewed = (product: (typeof products)[number]) => seenIds.includes(reviewKey(product));
 
@@ -65,7 +105,7 @@ export default function Home() {
   useEffect(() => { window.localStorage.setItem("material-catalog:style", pageStyle); }, [pageStyle]);
   useEffect(() => { window.localStorage.setItem("material-catalog:font-size", String(fontSizeLevel)); }, [fontSizeLevel]);
   useEffect(() => { window.localStorage.setItem("material-catalog:letter-spacing", String(letterSpacingLevel)); }, [letterSpacingLevel]);
-  
+
   const [demoViewers] = useState(() => Math.floor(Math.random() * 151) + 150);
   
   const brandItems = useMemo(() => {
@@ -104,6 +144,25 @@ export default function Home() {
     
     return result.slice(0, pageSize);
   }, [brand, category, query, sort, subCategory, seenIds, shuffleSeed, pageSize]);
+
+  // Persist the complete audit cursor. The shuffle seed is the batch cursor: after data regeneration,
+  // the same seed plus the same seen source IDs recreates the unfinished batch instead of restarting Clothing.
+  useEffect(() => {
+    if (!isAiAuditView || category === "all") return;
+    const session: AuditSession = {
+      category,
+      brand,
+      subCategory,
+      query,
+      sort,
+      shuffleSeed,
+      pageSize,
+      isAiAuditView,
+      batchSourceIds: visible.map(reviewKey),
+      updatedAt: Date.now(),
+    };
+    window.localStorage.setItem(AUDIT_SESSION_KEY, JSON.stringify(session));
+  }, [brand, category, isAiAuditView, pageSize, query, seenIds, shuffleSeed, sort, subCategory, visible]);
 
   const totalRemainingInCategory = useMemo(() => {
     return products.filter(p => {

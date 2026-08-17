@@ -490,3 +490,11 @@
 - [ ] Use compact high-resolution screenshots for AI-led visual inspection without requiring user confirmation per item.
 - [ ] Automatically apply confirmed MANUAL_OVERRIDES, record SUSPECTED cases, and advance to the next unreviewed batch.
 - [ ] Continue category handoff after Pants completion.
+
+
+## 连续 AI 审核持久化恢复
+
+- [ ] Persist active category, current batch, reviewed source IDs, suspected queue, and last audit timestamp.
+- [ ] Restore the active category and batch after products.ts regeneration or page reload.
+- [ ] Resume from the last incomplete Accessories batch instead of defaulting to Clothing.
+- [ ] Verify category handoff and stop only after all unique source products are audited.
