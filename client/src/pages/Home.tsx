@@ -1,5 +1,5 @@
 // Editorial Pinboard reminder: the homepage is a browsable catalog wall, not a centered storefront; images lead, copy follows.
-import { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { ArrowUpRight, Bell, ChevronDown, Heart, History as HistoryIcon, Home as HomeIcon, MessageCircle, Search, Settings2, X, RefreshCw, CheckCircle2 } from "lucide-react";
 import { products, categoryLabels, categoryOrder } from "@/data/products";
@@ -223,14 +223,30 @@ export default function Home() {
     }
   };
 
-    useEffect(() => {
+  useLayoutEffect(() => {
+    const previousScrollRestoration = window.history.scrollRestoration;
+    window.history.scrollRestoration = "manual";
     const shouldRestore = Boolean(returnContext && returnContext.category === category && returnContext.brand === brand && returnContext.query === query && returnContext.sort === sort);
-    if (shouldRestore) {
-      window.requestAnimationFrame(() => window.scrollTo({ top: returnContext!.scrollY, left: 0, behavior: "auto" }));
-      window.sessionStorage.removeItem(CATALOG_RETURN_KEY);
-    } else {
-      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-    }
+    const targetY = shouldRestore ? Math.max(0, returnContext!.scrollY) : 0;
+    let frameOne = 0;
+    let frameTwo = 0;
+    let restoreTimer = 0;
+    const restore = () => window.scrollTo({ top: targetY, left: 0, behavior: "auto" });
+    restore();
+    frameOne = window.requestAnimationFrame(() => {
+      restore();
+      frameTwo = window.requestAnimationFrame(() => {
+        restore();
+        restoreTimer = window.setTimeout(restore, 120);
+      });
+    });
+    if (shouldRestore) window.sessionStorage.removeItem(CATALOG_RETURN_KEY);
+    return () => {
+      window.cancelAnimationFrame(frameOne);
+      window.cancelAnimationFrame(frameTwo);
+      window.clearTimeout(restoreTimer);
+      window.history.scrollRestoration = previousScrollRestoration;
+    };
   }, [brand, category, query, sort, returnContext]);
 
 
