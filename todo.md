@@ -557,3 +557,11 @@
 - [ ] Regenerate products and measure remaining identifier-style titles.
 - [ ] Verify optimized titles on the home grid and product detail pages.
 - [ ] Save a checkpoint for the title optimization.
+
+
+## Product image order correction
+
+- [ ] Locate source product 7576530885 and confirm its four-image gallery.
+- [ ] Remove the original first image and promote the original fourth image to the cover.
+- [ ] Verify the detail gallery, thumbnails, and product card after regeneration.
+- [ ] Save a checkpoint for the image correction.

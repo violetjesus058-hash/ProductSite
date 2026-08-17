@@ -113,6 +113,7 @@ SUSPECTED_REVIEW = {
 
 MANUAL_OVERRIDES = {
     '7543307459': {'category': 'clothing', 'subCategory': 'Shirts', 'primary_image_index': 2, 'review_note': 'Manual review: use third gallery image as catalog cover.'},
+    '7576530885': {'primary_image_index': 2, 'remove_image_indices': [0], 'review_note': 'Manual image review: remove the original first image and promote the original fourth gallery image to the cover.'},
     '7601623089': {'category': 'clothing', 'subCategory': 'Hoodies', 'review_note': 'Manual review: cover image shows two hooded zip-up sweatshirts.'},
     '7603560398': {'category': 'clothing', 'subCategory': 'Hoodies', 'review_note': 'Manual review: cover image shows three hooded sweatshirts.'},
     '7578517746': {'category': 'clothing', 'subCategory': 'Jackets', 'review_note': 'Manual review: cover image shows a padded jacket; retain body-weight size labels.'},
@@ -354,6 +355,8 @@ def main() -> None:
             override = MANUAL_OVERRIDES.get(pid, {})
             suspected = SUSPECTED_REVIEW.get(pid, {})
             display_images = images[:16]
+            remove_indices = {index for index in override.get('remove_image_indices', []) if isinstance(index, int)}
+            display_images = [image for index, image in enumerate(display_images) if index not in remove_indices]
             primary_index = override.get('primary_image_index')
             if isinstance(primary_index, int) and 0 <= primary_index < len(display_images):
                 display_images = [display_images[primary_index]] + [image for index, image in enumerate(display_images) if index != primary_index]
