@@ -131,6 +131,8 @@ MANUAL_OVERRIDES = {
     '7615081442': {'category': 'clothing', 'subCategory': 'Underwear', 'review_note': 'Accessories audit: title and thumbnail clearly show cotton underwear; corrected to clothing/underwear.'},
     '7612091525': {'category': 'clothing', 'subCategory': 'Socks', 'review_note': 'Accessories audit: title and thumbnail clearly show cotton basketball socks; corrected to clothing/socks.'},
     '7578512126': {'category': 'clothing', 'subCategory': 'Underwear', 'review_note': 'Accessories audit: title and thumbnail clearly show underwear; corrected to clothing/underwear.'},
+    '7614875914': {'category': 'shoe', 'subCategory': 'Sandals', 'review_note': 'Accessories audit: title and thumbnail clearly show casual slippers; corrected to shoes/sandals.'},
+    '7543321151': {'category': 'clothing', 'subCategory': 'Sportswear', 'review_note': 'Accessories audit: title and thumbnail clearly show a PSG training suit; corrected to clothing/sportswear.'},
 }
 
 def classify_product(info: dict) -> str:

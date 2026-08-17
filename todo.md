@@ -505,3 +505,17 @@
 - [ ] Review Accessories images in batches and classify clear caps, scarves, wallets, belts, bags, phone cases, and mixed items.
 - [ ] Add only evidence-based manual overrides; keep ambiguous products marked SUSPECTED_REVIEW.
 - [ ] Regenerate products, verify audit cursor restoration, and continue the next Accessories batch.
+
+## Accessories 第二批恢复与继续
+
+- [ ] Restore the preview and confirm the second Accessories batch.
+- [ ] Mark the already scanned second batch reviewed without re-reviewing the first batch.
+- [ ] Continue the next unreviewed Accessories batch and record evidence-based corrections.
+- [ ] Verify remaining count and persist the new audit cursor.
+
+## Accessories 继续审核
+
+- [ ] Restore the current Accessories audit breakpoint after the previous preview failure.
+- [ ] Mark the already scanned second batch only once and load the next unreviewed batch.
+- [ ] Continue visual review and record evidence-based category overrides.
+- [ ] Preserve suspected mixed or unclear products without forced category changes.

@@ -49,3 +49,8 @@ Generic catalog items were not changed without conclusive visual evidence. The s
 ## Continuity note
 
 The first Accessories batch was marked reviewed before the preview browser entered a crash loop. The second batch was visually scanned and its four clear apparel corrections were regenerated successfully. A later preview reload rendered the catalog but did not expose interactive elements before the browser subsystem failed again, so the second batch was intentionally not marked reviewed in localStorage. The persistent backup keys were strengthened in Home.tsx, and TypeScript/build validation passed. Resume by opening Accessories AI Audit View and reviewing the second batch; do not re-mark the first batch.
+
+
+## Resume attempt 2026-08-17
+
+The preview service was restarted. The rendered preview still opened on CLOTHING with 696 remaining, and the interactive browser crashed again before the Accessories category could be selected. The second Accessories batch remains intentionally unmarked in browser progress; its four evidence-based corrections are already in generated data. Do not count the second batch as completed until the interactive preview can confirm the batch and persist its seen source IDs.
