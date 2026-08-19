@@ -54,6 +54,9 @@ function readCategoryErrorFlags(): Record<string, CategoryErrorFlag> {
     return parsed && typeof parsed === "object" ? parsed as Record<string, CategoryErrorFlag> : {};
   } catch { return {}; }
 }
+function writeCategoryErrorFlags(flags: Record<string, CategoryErrorFlag>) {
+  if (typeof window !== "undefined") window.localStorage.setItem(CATEGORY_FLAG_KEY, JSON.stringify(flags));
+}
 type AuditSession = {
   category: string;
   brand: string;
@@ -140,7 +143,13 @@ export default function Home() {
   const [letterSpacingLevel, setLetterSpacingLevel] = useState(() => Number(localSetting("material-catalog:letter-spacing", "0")));
   
   useEffect(() => saveFavorites(favorites), [favorites]);
-  useEffect(() => { window.localStorage.setItem(CATEGORY_FLAG_KEY, JSON.stringify(categoryErrorFlags)); }, [categoryErrorFlags]);
+  useEffect(() => { writeCategoryErrorFlags(categoryErrorFlags); }, [categoryErrorFlags]);
+  useEffect(() => {
+    const refreshFlags = () => setCategoryErrorFlags(readCategoryErrorFlags());
+    window.addEventListener("pageshow", refreshFlags);
+    window.addEventListener("focus", refreshFlags);
+    return () => { window.removeEventListener("pageshow", refreshFlags); window.removeEventListener("focus", refreshFlags); };
+  }, []);
   useEffect(() => { window.localStorage.setItem("material-catalog:style", pageStyle); }, [pageStyle]);
   useEffect(() => { window.localStorage.setItem("material-catalog:font-size", String(fontSizeLevel)); }, [fontSizeLevel]);
   useEffect(() => { window.localStorage.setItem("material-catalog:letter-spacing", String(letterSpacingLevel)); }, [letterSpacingLevel]);
@@ -274,9 +283,11 @@ export default function Home() {
   const toggleFavorite = (id: string) => setFavorites((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
   const toggleCategoryErrorFlag = (product: (typeof products)[number]) => {
     setCategoryErrorFlags((current) => {
-      const next = { ...current };
+      // Merge with the latest persisted map before changing one card, so rapid clicks never replace earlier flags.
+      const next = { ...readCategoryErrorFlags(), ...current };
       if (next[product.id]) delete next[product.id];
       else next[product.id] = { productId: product.id, sourceProductId: product.sourceProductId || product.id, category: product.category, subCategory: product.subCategory, flaggedAt: Date.now() };
+      writeCategoryErrorFlags(next);
       return next;
     });
   };
@@ -318,7 +329,8 @@ export default function Home() {
           {seenIds.length > 0 && (
             <button onClick={resetAuditProgress} className="text-[10px] uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">Reset Progress</button>
           )}
-          <label className="sort-select">Sort <select value={sort} onChange={(e) => setSort(e.target.value)}><option value="random">Random Audit</option><option value="curated">Curated</option><option value="price-low">Price: Low to High</option><option value="price-high">Price: High to Low</option></select><ChevronDown size={14} /></label>
+          {Object.keys(categoryErrorFlags).length > 0 && <span className="category-flag-count">Flagged {Object.keys(categoryErrorFlags).length}</span>}
+          <label className="sort-select">Sort <select value={sort} onChange={(e) => setSort(e.target.value)}><option value="random">{isAiAuditView ? "Random Audit" : "Random"}</option><option value="curated">Curated</option><option value="price-low">Price: Low to High</option><option value="price-high">Price: High to Low</option></select><ChevronDown size={14} /></label>
         </div>
       </div>
 
