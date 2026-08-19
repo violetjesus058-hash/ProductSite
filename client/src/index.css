@@ -87,6 +87,9 @@ a { color:inherit; text-decoration:none; }
 .product-brand { min-height:12px; color:var(--ink-soft); font-size:10px; letter-spacing:.04em; text-transform:uppercase; }
 .product-name { margin-top:6px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size:12px; font-weight:700; }
 .product-price { margin-top:9px; color:var(--ink); font-size:12px; font-weight:700; }
+/* Product card image system: one consistent portrait frame, no auto-height gray tail, while detail galleries keep their original aspect ratios. */
+.product-card .product-image-wrap { aspect-ratio:4 / 5; min-height:0 !important; background:var(--paper-deep); }
+.product-card .product-image-wrap img { width:100%; height:100%; min-height:0 !important; object-fit:cover; }
 .product-currency { margin-left:4px; color:var(--ink-soft); font-size:9px; font-weight:600; letter-spacing:.12em; }
 .product-sub { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:5px; color:var(--ink-soft); font-size:10px; }
 .product-sub span { overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
