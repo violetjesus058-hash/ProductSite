@@ -282,7 +282,6 @@ export default function Home() {
         <div className="result-label">
           <span className="coral-dot" /> 
           {brand !== "all" ? englishValue(brand, "SELECTED BRAND") : category === "all" ? "ALL PRODUCTS" : englishCategoryLabels[category] || category.toUpperCase()}
-          <span className="audit-counter ml-3 text-xs opacity-50">({totalRemainingInCategory} remaining)</span>
         </div>
         <div className="flex items-center gap-4">
           {isAiAuditView && <button
@@ -334,7 +333,7 @@ export default function Home() {
         <div className="audit-controls py-20 flex flex-col items-center justify-center border-t border-black/5 mt-20">
           <div className="text-center mb-8">
             <h4 className="text-2xl font-light tracking-tight mb-2">Batch Review Complete</h4>
-            <p className="text-sm opacity-50">This batch contains {visible.length} unique source products. Mark it complete to automatically load the next unreviewed batch; {Math.max(totalRemainingInCategory - new Set(visible.map(reviewKey)).size, 0)} remain in {englishCategoryLabels[category] || category}.</p>
+            <p className="text-sm opacity-50">Mark this batch complete to automatically load the next unreviewed batch.</p>
           </div>
           <button 
             onClick={markPageAsSeen}
