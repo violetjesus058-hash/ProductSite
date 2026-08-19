@@ -1,0 +1,10 @@
+import fs from "node:fs";
+const source = fs.readFileSync("client/src/data/products.ts", "utf8");
+const start = source.indexOf("export const products: Product[] = [") + "export const products: Product[] = ".length;
+const end = source.indexOf("] as Product[];", start) + 1;
+const products = JSON.parse(source.slice(start, end));
+const tally = (items) => Object.entries(items.reduce((m, value) => ((m[value || "(blank)"] = (m[value || "(blank)"] || 0) + 1), m), {})).sort((a, b) => b[1] - a[1]);
+const sourceCounts = tally(products.map(p => p.sourceProductId || p.id));
+const categorySourceCounts = Object.fromEntries(tally([...new Set(products.map(p => p.category))]).map(([category]) => [category, new Set(products.filter(p => p.category === category).map(p => p.sourceProductId || p.id)).size]));
+const priceGroups = products.filter(p => p.sourceProductId).length - new Set(products.map(p => `${p.sourceProductId}|${p.price}`)).size;
+console.log(JSON.stringify({ skuCount: products.length, uniqueSourceCount: new Set(products.map(p => p.sourceProductId || p.id)).size, duplicateSkuOverSource: products.length - new Set(products.map(p => p.sourceProductId || p.id)).size, repeatedSameSourceAndPrice: priceGroups, categories: tally(products.map(p => p.category)), categoryUniqueSources: categorySourceCounts, subCategories: tally(products.map(p => p.subCategory)), auditReviewedCount: products.filter(p => p.reviewStatus === "reviewed").length, auditSuspectedCount: products.filter(p => p.reviewStatus === "suspected").length, auditUnreviewedCount: products.filter(p => !p.reviewStatus || p.reviewStatus === "unreviewed").length }, null, 2));

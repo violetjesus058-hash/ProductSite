@@ -1,7 +1,7 @@
 // Editorial Pinboard reminder: the homepage is a browsable catalog wall, not a centered storefront; images lead, copy follows.
 import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "wouter";
-import { ArrowUpRight, Bell, ChevronDown, Heart, History as HistoryIcon, Home as HomeIcon, MessageCircle, Search, Settings2, X, RefreshCw, CheckCircle2 } from "lucide-react";
+import { ArrowUpRight, Bell, ChevronDown, Flag, Heart, History as HistoryIcon, Home as HomeIcon, MessageCircle, Search, Settings2, X, RefreshCw, CheckCircle2 } from "lucide-react";
 import { products, categoryLabels, categoryOrder } from "@/data/products";
 import { formatVisitTime, readFavorites, readHistory, saveFavorites, type HistoryEntry } from "@/lib/catalogMemory";
 
@@ -45,6 +45,15 @@ function seededRandom(seed: number) {
 }
 
 const AUDIT_SESSION_KEY = "audit:session:v2";
+const CATEGORY_FLAG_KEY = "catalog:category-error-flags:v1";
+type CategoryErrorFlag = { productId: string; sourceProductId: string; category: string; subCategory: string; flaggedAt: number };
+function readCategoryErrorFlags(): Record<string, CategoryErrorFlag> {
+  if (typeof window === "undefined") return {};
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(CATEGORY_FLAG_KEY) || "{}");
+    return parsed && typeof parsed === "object" ? parsed as Record<string, CategoryErrorFlag> : {};
+  } catch { return {}; }
+}
 type AuditSession = {
   category: string;
   brand: string;
@@ -100,6 +109,7 @@ export default function Home() {
   const [sort, setSort] = useState(() => returnContext?.sort || auditSession?.sort || "random"); // Keep the audit shuffle stable across reloads
     const [favorites, setFavorites] = useState<string[]>(() => readFavorites());
   const [history, setHistory] = useState<HistoryEntry[]>(() => readHistory());
+  const [categoryErrorFlags, setCategoryErrorFlags] = useState<Record<string, CategoryErrorFlag>>(() => readCategoryErrorFlags());
   const [openPanel, setOpenPanel] = useState<"favorites" | "history" | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   
@@ -130,6 +140,7 @@ export default function Home() {
   const [letterSpacingLevel, setLetterSpacingLevel] = useState(() => Number(localSetting("material-catalog:letter-spacing", "0")));
   
   useEffect(() => saveFavorites(favorites), [favorites]);
+  useEffect(() => { window.localStorage.setItem(CATEGORY_FLAG_KEY, JSON.stringify(categoryErrorFlags)); }, [categoryErrorFlags]);
   useEffect(() => { window.localStorage.setItem("material-catalog:style", pageStyle); }, [pageStyle]);
   useEffect(() => { window.localStorage.setItem("material-catalog:font-size", String(fontSizeLevel)); }, [fontSizeLevel]);
   useEffect(() => { window.localStorage.setItem("material-catalog:letter-spacing", String(letterSpacingLevel)); }, [letterSpacingLevel]);
@@ -148,7 +159,7 @@ export default function Home() {
     const filtered = products.filter((product) => {
       const matchesCategory = category === "all" || product.category === category;
       const matchesBrand = brand === "all" || product.brand === brand;
-      const isNotSeen = !isReviewed(product);
+      const isNotSeen = isAiAuditView ? !isReviewed(product) : true;
       const haystack = [product.name, product.catalogName, product.brand, product.subCategory].join(" ").toLowerCase();
       return matchesCategory && matchesBrand && isNotSeen && (!term || haystack.includes(term));
     });
@@ -170,7 +181,7 @@ export default function Home() {
     }
     
     return result.slice(0, pageSize);
-  }, [brand, category, query, sort, seenIds, shuffleSeed, pageSize]);
+  }, [brand, category, isAiAuditView, query, sort, seenIds, shuffleSeed, pageSize]);
 
   // Persist the complete audit cursor. The shuffle seed is the batch cursor: after data regeneration,
   // the same seed plus the same seen source IDs recreates the unfinished batch instead of restarting Clothing.
@@ -261,6 +272,14 @@ export default function Home() {
   const saveReturnContext = () => { window.sessionStorage.setItem(CATALOG_RETURN_KEY, JSON.stringify({ category, brand, query, sort, scrollY: window.scrollY } satisfies CatalogReturnContext)); };
   const openProduct = (id: string) => { saveReturnContext(); navigate(`/product/${id}`); };
   const toggleFavorite = (id: string) => setFavorites((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
+  const toggleCategoryErrorFlag = (product: (typeof products)[number]) => {
+    setCategoryErrorFlags((current) => {
+      const next = { ...current };
+      if (next[product.id]) delete next[product.id];
+      else next[product.id] = { productId: product.id, sourceProductId: product.sourceProductId || product.id, category: product.category, subCategory: product.subCategory, flaggedAt: Date.now() };
+      return next;
+    });
+  };
   const favoriteProducts = favorites.map((id) => products.find((item) => item.id === id)).filter(Boolean) as typeof products;
   const historyProducts = history.map((entry) => ({ entry, product: products.find((item) => item.id === entry.id) })).filter((item) => item.product) as { entry: HistoryEntry; product: (typeof products)[number] }[];
   const resetFilters = () => { setCategory("all"); setBrand("all"); setQuery(""); };
@@ -314,9 +333,10 @@ export default function Home() {
             
             if (isAiAuditView) {
               return (
-                <article key={product.id} className="bg-white border border-black/5 p-1 flex flex-col gap-1 cursor-pointer hover:border-black/20" onClick={() => openProduct(product.id)}>
+                <article key={product.id} className={`audit-card bg-white border border-black/5 p-1 flex flex-col gap-1 cursor-pointer hover:border-black/20 ${categoryErrorFlags[product.id] ? "is-category-flagged" : ""}`} onClick={() => openProduct(product.id)}>
                   <div className="aspect-square overflow-hidden bg-gray-50 relative">
                     <img src={image} alt="" className="w-full h-full object-cover" />
+                    <button className={`category-flag-button ${categoryErrorFlags[product.id] ? "is-flagged" : ""}`} onClick={(event) => { event.stopPropagation(); toggleCategoryErrorFlag(product); }} aria-label={categoryErrorFlags[product.id] ? "Unmark category error" : "Mark category error"} title={categoryErrorFlags[product.id] ? "Unmark category error" : "Mark category error"}><Flag size={11} /></button>
                     <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-[8px] text-white px-1 truncate">
                       {product.sourceProductId}
                     </div>
@@ -326,11 +346,11 @@ export default function Home() {
               );
             }
             
-            return <Fragment key={product.id}><article className={`product-card card-${index % 7}`} onClick={() => openProduct(product.id)}><div className="product-image-wrap"><img src={image} alt={title} loading={index < 8 ? "eager" : "lazy"} /><div className="image-wash" />{demoBadge(product.price) && <span className={`demo-product-badge ${demoBadge(product.price) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price)}</span>}{product.reviewStatus === "suspected" && <span className="suspected-review-badge" aria-label="Suspected category mismatch">SUSPECTED</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}<button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "Remove from saved items" : "Save product"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={10} /></span></div><div className="product-info">{displayBrand && <div className="product-brand">{displayBrand}</div>}{cardTitle && <h3 className="product-name">{cardTitle}</h3>}<div className="product-price">{money(product.price, "USD")} <span className="product-currency">USD</span></div></div></article></Fragment>; 
+            return <Fragment key={product.id}><article className={`product-card card-${index % 7} ${categoryErrorFlags[product.id] ? "is-category-flagged" : ""}`} onClick={() => openProduct(product.id)}><div className="product-image-wrap"><img src={image} alt={title} loading={index < 8 ? "eager" : "lazy"} /><div className="image-wash" />{demoBadge(product.price) && <span className={`demo-product-badge ${demoBadge(product.price) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price)}</span>}{product.reviewStatus === "suspected" && <span className="suspected-review-badge" aria-label="Suspected category mismatch">SUSPECTED</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}<button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "Remove from saved items" : "Save product"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><button className={`category-flag-button ${categoryErrorFlags[product.id] ? "is-flagged" : ""}`} onClick={(event) => { event.stopPropagation(); toggleCategoryErrorFlag(product); }} aria-label={categoryErrorFlags[product.id] ? "Unmark category error" : "Mark category error"} title={categoryErrorFlags[product.id] ? "Unmark category error" : "Mark category error"}><Flag size={13} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={10} /></span></div><div className="product-info">{displayBrand && <div className="product-brand">{displayBrand}</div>}{cardTitle && <h3 className="product-name">{cardTitle}</h3>}<div className="product-price">{money(product.price, "USD")} <span className="product-currency">USD</span></div></div></article></Fragment>; 
           })}
         </section>
         
-        <div className="audit-controls py-20 flex flex-col items-center justify-center border-t border-black/5 mt-20">
+        {isAiAuditView && <div className="audit-controls py-20 flex flex-col items-center justify-center border-t border-black/5 mt-20">
           <div className="text-center mb-8">
             <h4 className="text-2xl font-light tracking-tight mb-2">Batch Review Complete</h4>
             <p className="text-sm opacity-50">Mark this batch complete to automatically load the next unreviewed batch.</p>
@@ -343,7 +363,7 @@ export default function Home() {
             <span className="text-sm font-medium tracking-widest uppercase">Mark as Reviewed & Next Batch</span>
             <RefreshCw size={16} className="opacity-50 group-hover:rotate-180 transition-transform duration-500" />
           </button>
-        </div>
+        </div>}
       </> : <div className="empty-state">
         <div className="empty-icon">✦</div>
         <h3>No products found</h3>
