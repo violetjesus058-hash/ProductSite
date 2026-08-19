@@ -10,7 +10,14 @@ import { formatVisitTime, readFavorites, readHistory, saveFavorites, type Histor
 function englishValue(value: string, fallback: string) { return /[\u4e00-\u9fff]/.test(value) ? fallback : value; }
 function localSetting(key: string, fallback: string) { if (typeof window === "undefined") return fallback; return window.localStorage.getItem(key) || fallback; }
 function cleanTitle(value: string) { return value.replace(/📏.*$/, "").replace(/pls add whatsapp.*$/i, "").replace(/whatsapp[:：]?\s*\d+/gi, "").replace(/\s+/g, " ").trim(); }
-function isSizeOnlyCardTitle(value: string) { return /^(?:\d{2}\s*-\s*\d{2})(?:\s+(?:XXS|XS|S|M|L|XL|XXL|XXXL|4XL)(?:\s*-\s*(?:XXS|XS|S|M|L|XL|XXL|XXXL|4XL))?)?$/i.test(value.trim()) || /^(?:XXS|XS|S|M|L|XL|XXL|XXXL|4XL)\s*-\s*(?:XXS|XS|S|M|L|XL|XXL|XXXL|4XL)$/i.test(value.trim()); }
+function isSizeOnlyCardTitle(value: string) {
+  const normalized = value.replace(/^[*#\s]+/, "").replace(/[：:]+$/, "").trim();
+  const sizeToken = "(?:XXS|XS|S|M|L|XL|XXL|XXXL|4XL)";
+  const numericRange = "\\d{2}\\s*[-–]\\s*\\d{2}";
+  const sizeRange = new RegExp(`^(?:${numericRange}|${sizeToken}\\s*[-–]\\s*${sizeToken})(?:\\s+(?:${sizeToken}|\\d{2,3}[-–]\\d{2,3}kg))*$`, "i");
+  const sizeWithGenericType = new RegExp(`^(?:${numericRange})(?:\\s+(?:pants|shorts|shirt|shirts|tee|t-shirt|hoodie|jacket|sweater|shoes|sneakers|apparel|clothing|selection))?$`, "i");
+  return sizeRange.test(normalized) || sizeWithGenericType.test(normalized);
+}
 const CATALOG_RETURN_KEY = "catalog:return-context:v1";
 type CatalogReturnContext = { category: string; brand: string; query: string; sort: string; scrollY: number };
 function readCatalogReturnContext(): CatalogReturnContext | null { if (typeof window === "undefined") return null; try { const raw = window.sessionStorage.getItem(CATALOG_RETURN_KEY); if (!raw) return null; const parsed = JSON.parse(raw) as Partial<CatalogReturnContext>; if (!parsed || typeof parsed !== "object" || typeof parsed.category !== "string" || typeof parsed.brand !== "string" || typeof parsed.query !== "string" || typeof parsed.sort !== "string" || typeof parsed.scrollY !== "number") return null; return parsed as CatalogReturnContext; } catch { return null; } }
@@ -83,7 +90,7 @@ export default function Home() {
   const [, navigate] = useLocation();
   const [auditSession] = useState<AuditSession | null>(() => readAuditSession());
   const secondPassRequested = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("audit") === "accessories-second-pass";
-  const auditResumeRequested = secondPassRequested || (typeof window !== "undefined" && window.localStorage.getItem("audit:audit-mode") === "1");
+  const auditResumeRequested = secondPassRequested || (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("audit") === "1");
   const isAccessoriesSecondPass = secondPassRequested;
   const [returnContext] = useState(() => readCatalogReturnContext());
   // Final catalog preview opens on the complete catalog; a pending return context restores the previous catalog view.
@@ -278,7 +285,7 @@ export default function Home() {
           <span className="audit-counter ml-3 text-xs opacity-50">({totalRemainingInCategory} remaining)</span>
         </div>
         <div className="flex items-center gap-4">
-          <button 
+          {isAiAuditView && <button
             onClick={() => {
               const nextAuditMode = !isAiAuditView;
               setIsAiAuditView(nextAuditMode);
@@ -289,7 +296,7 @@ export default function Home() {
             className={`text-[10px] uppercase tracking-widest px-3 py-1 rounded border ${isAiAuditView ? "bg-black text-white border-black" : "border-black/20 opacity-60"}`}
           >
             AI Audit View
-          </button>
+          </button>}
           {seenIds.length > 0 && (
             <button onClick={resetAuditProgress} className="text-[10px] uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">Reset Progress</button>
           )}
