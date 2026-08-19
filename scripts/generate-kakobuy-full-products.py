@@ -169,6 +169,9 @@ SUSPECTED_REVIEW = {
 }
 
 MANUAL_OVERRIDES = {
+    '7576679472': {'primary_image_index': 3, 'review_note': 'Manual image review: replace size-chart cover with a clear single-polo gallery image.'},
+    '7545224884': {'primary_image_index': 2, 'review_note': 'Manual image review: replace multi-shirt collage with a clear single-shirt gallery image.'},
+    '7574761499': {'primary_image_index': 0, 'review_note': 'Manual image review: replace mixed cover with a clear single-shirt gallery image.'},
     '7543307459': {'category': 'clothing', 'subCategory': 'Shirts', 'primary_image_index': 2, 'review_note': 'Manual review: use third gallery image as catalog cover.'},
     '7576530885': {'primary_image_index': 2, 'remove_image_indices': [0], 'review_note': 'Manual image review: remove the original first image and promote the original fourth gallery image to the cover.'},
     '7576623430': {'primary_image_index': 6, 'review_note': 'Manual image review: replace blank/size-chart cover with the clear single-shirt gallery image.'},
@@ -177,10 +180,10 @@ MANUAL_OVERRIDES = {
     '7543332937': {'primary_image_index': 4, 'review_note': 'Manual image review: replace blank/size-chart cover with the clear single-shirt gallery image.'},
     '7576584181': {'primary_image_index': 1, 'review_note': 'Manual image review: use the clear single-hoodie gallery image as the catalog cover.'},
     '7576695090': {'primary_image_index': 3, 'review_note': 'Manual image review: use the clear single-shorts gallery image; exclude contact and size-chart images.'},
-    '7578440914': {'primary_image_index': 1, 'review_note': 'Manual image review: replace size-chart cover with a clear single-shoe gallery image.'},
-    '7611885929': {'primary_image_index': 1, 'review_note': 'Manual image review: replace size-chart cover with a clear single-shoe gallery image.'},
-    '7545254650': {'primary_image_index': 1, 'review_note': 'Manual image review: replace size-chart cover with a clear single-shoe gallery image.'},
-    '7543424263': {'primary_image_index': 1, 'review_note': 'Shoes image review: replace size-chart cover with a clear single-shoe gallery image.'},
+    '7578440914': {'primary_image_index': 2, 'review_note': 'Manual image review: replace size-chart cover with a clear single-shoe gallery image; account for the downloaded cover entry.'},
+    '7611885929': {'primary_image_index': 2, 'review_note': 'Manual image review: replace size-chart cover with a clear single-shoe gallery image; account for the downloaded cover entry.'},
+    '7545254650': {'primary_image_index': 2, 'review_note': 'Manual image review: replace size-chart cover with a clear single-shoe gallery image; account for the downloaded cover entry.'},
+    '7543424263': {'primary_image_index': 2, 'review_note': 'Shoes image review: replace size-chart cover with a clear single-shoe gallery image; account for the downloaded cover entry.'},
     '7543386595': {'primary_image_index': 1, 'review_note': 'Shoes image review: replace size-chart cover with a clear single-sneaker gallery image.'},
     '7576647651': {'primary_image_index': 2, 'review_note': 'Shoes image review: replace size-chart/color-grid cover with a clear single-shoe gallery image.'},
     '7614865968': {'primary_image_index': 2, 'review_note': 'Shoes image review: replace size-chart/color-grid cover with a clear single-shoe gallery image.'},
