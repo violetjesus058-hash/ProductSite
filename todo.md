@@ -726,3 +726,15 @@
 - [ ] 检查 pageSize、slice、AI Audit、收藏/标记状态和本地存储是否导致卡片隐藏。
 - [ ] 决定并实现“完整目录浏览”与“审计批次浏览”的清晰数量口径。
 - [ ] 验证桌面端和 390px 移动端卡片数量与筛选结果一致。
+
+## ALL PRODUCTS 全量渲染确认（2026-08-19）
+- [ ] 确认普通 ALL PRODUCTS 路径不再使用 `slice(0, 40)`。
+- [ ] 确认全量首页包含 Clothing、Pants、Shoes、Bags、Fragrance、Watches 和 Accessories/ACC。
+- [ ] 用数据总数和 DOM/渲染路径验证 2,192 张展示卡片。
+- [ ] 保持 AI Audit View 的 80 张批次限制，不影响普通全量浏览。
+
+## 所有品类全量渲染（2026-08-19）
+- [ ] 验证 Clothing、Pants、Shoes、Bags、Fragrance、Watches、ACC 和历史 accessories 普通浏览均不截断。
+- [ ] 确认品牌筛选和搜索筛选也显示各自完整结果，而不是前 40 张。
+- [ ] 保留 AI Audit View 的批次截断，仅限审核模式生效。
+- [ ] 逐类统计卡片数量并完成桌面/移动端验证。

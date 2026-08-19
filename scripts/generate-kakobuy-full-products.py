@@ -470,13 +470,16 @@ def main() -> None:
                     display_images = [display_images[preferred_index]] + [image for index, image in enumerate(display_images) if index != preferred_index]
             inferred_category = classify_product(info)
             inferred_subcategory = subcategory_for(inferred_category, info)
-            display_title = optimize_display_title(info, override.get('category') or inferred_category, override.get('subCategory') or inferred_subcategory, f'Kakobuy Product {pid}')
+            final_category = override.get('category') or inferred_category
+            if str(final_category).strip().lower() == 'accessories':
+                final_category = 'ACC'
+            display_title = optimize_display_title(info, final_category, override.get('subCategory') or inferred_subcategory, f'Kakobuy Product {pid}')
             grouped.append({
                 'id': f'kb-{pid}-{price.replace(".", "-")}',
                 'sourceProductId': pid,
                 'name': display_title,
                 'catalogName': display_title,
-                'category': override.get('category') or inferred_category,
+                'category': final_category,
                 'subCategory': override.get('subCategory') or inferred_subcategory,
                 'reviewStatus': 'suspected' if suspected else ('reviewed' if override else 'unreviewed'),
                 'reviewNote': suspected.get('review_note') or override.get('review_note') or '',
