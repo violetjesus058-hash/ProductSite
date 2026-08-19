@@ -163,7 +163,7 @@ export default function Home() {
     return [{ id: "all", label: "ALL BRANDS", count: scoped.length }, ...Array.from(counts.entries()).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 14).map(([id, count]) => ({ id, label: id, count }))];
   }, [category]);
 
-  const visible = useMemo(() => {
+  const filteredProducts = useMemo(() => {
     const term = query.trim().toLowerCase();
     const filtered = products.filter((product) => {
       const matchesCategory = category === "all" || product.category === category;
@@ -188,9 +188,12 @@ export default function Home() {
     } else {
       result.sort((a, b) => a.id.localeCompare(b.id));
     }
-    
-    return result.slice(0, pageSize);
-  }, [brand, category, isAiAuditView, query, sort, seenIds, shuffleSeed, pageSize]);
+    return result;
+  }, [brand, category, isAiAuditView, query, sort, seenIds, shuffleSeed]);
+
+  // Normal browsing shows the complete filtered catalog. AI Audit View intentionally keeps a compact review batch.
+  const visible = isAiAuditView ? filteredProducts.slice(0, pageSize) : filteredProducts;
+  const visibleSourceCount = new Set(visible.map(reviewKey)).size;
 
   // Persist the complete audit cursor. The shuffle seed is the batch cursor: after data regeneration,
   // the same seed plus the same seen source IDs recreates the unfinished batch instead of restarting Clothing.
@@ -312,6 +315,7 @@ export default function Home() {
         <div className="result-label">
           <span className="coral-dot" /> 
           {brand !== "all" ? englishValue(brand, "SELECTED BRAND") : category === "all" ? "ALL PRODUCTS" : englishCategoryLabels[category] || category.toUpperCase()}
+          {!isAiAuditView && <span className="result-count" aria-live="polite">{visible.length.toLocaleString()} cards · {visibleSourceCount.toLocaleString()} items</span>}
         </div>
         <div className="flex items-center gap-4">
           {isAiAuditView && <button
