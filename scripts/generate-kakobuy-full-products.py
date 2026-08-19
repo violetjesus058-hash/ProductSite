@@ -176,7 +176,7 @@ MANUAL_OVERRIDES = {
     '7576530885': {'primary_image_index': 2, 'remove_image_indices': [0], 'review_note': 'Manual image review: remove the original first image and promote the original fourth gallery image to the cover.'},
     '7576623430': {'primary_image_index': 6, 'review_note': 'Manual image review: replace blank/size-chart cover with the clear single-shirt gallery image.'},
     '7543348805': {'primary_image_index': 4, 'review_note': 'Manual image review: replace blank cover with a clear single-shirt gallery image.'},
-    '7543366669': {'primary_image_index': 4, 'review_note': 'Manual image review: replace the mixed/blank cover with a clear single-beanie gallery image.'},
+    '7543366669': {'category': 'ACC', 'subCategory': 'Caps', 'primary_image_index': 4, 'review_note': 'Clothing first-image audit: cover clearly shows a knit beanie assortment; corrected to accessories/caps and use a clean single-beanie gallery image.'},
     '7543332937': {'primary_image_index': 4, 'review_note': 'Manual image review: replace blank/size-chart cover with the clear single-shirt gallery image.'},
     '7576584181': {'primary_image_index': 1, 'review_note': 'Manual image review: use the clear single-hoodie gallery image as the catalog cover.'},
     '7576695090': {'primary_image_index': 3, 'review_note': 'Manual image review: use the clear single-shorts gallery image; exclude contact and size-chart images.'},
@@ -320,7 +320,26 @@ MANUAL_OVERRIDES = {
     '7612130579': {'category': 'ACC', 'subCategory': 'Caps', 'review_note': 'Accessories second-pass audit: title clearly identifies a breathable baseball cap; normalized to accessories/caps.'},
     '7554525338': {'category': 'ACC', 'subCategory': 'Caps', 'review_note': 'Accessories second-pass audit: title clearly identifies a hat; normalized to accessories/caps.'},
     '7612130605': {'category': 'watches', 'subCategory': 'Watches', 'review_note': 'Accessories second-pass audit: title clearly identifies a mechanical wristwatch; corrected to watches.'},
+    '7578492088': {'category': 'shoe', 'subCategory': 'Sneakers', 'review_note': 'Accessories first-image audit: cover clearly shows high-top canvas shoes; corrected to shoes/sneakers.'},
+    '7547272552': {'category': 'fragrance', 'subCategory': 'Perfume', 'review_note': 'Accessories first-image audit: cover clearly shows perfume packaging; corrected to fragrance/perfume.'},
+    '7545264630': {'category': 'ACC', 'subCategory': 'Caps', 'review_note': 'Clothing first-image audit: cover clearly shows a cap assortment; corrected to accessories/caps.'},
+    '7603647872': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'Clothing first-image audit: cover clearly shows full-length trousers; corrected to pants/trousers.'},
+    '7601639507': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'Clothing first-image audit: cover clearly shows full-length trousers; corrected to pants/trousers.'},
+    '7603561014': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'Clothing first-image audit: cover clearly shows full-length trousers; corrected to pants/trousers.'},
+    '7601720125': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'Clothing first-image audit: cover clearly shows full-length trousers; corrected to pants/trousers.'},
+    '7601649187': {'category': 'pants', 'subCategory': 'Jeans', 'review_note': 'Clothing first-image audit: cover clearly shows denim jeans; corrected to pants/jeans.'},
+    '7603578542': {'category': 'pants', 'subCategory': 'Jeans', 'review_note': 'Clothing first-image audit: cover clearly shows denim jeans; corrected to pants/jeans.'},
+    '7601661003': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'Clothing first-image audit: cover clearly shows full-length trousers; corrected to pants/trousers.'},
+    '7601656693': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'Clothing first-image audit: cover clearly shows full-length trousers; corrected to pants/trousers.'},
+    '7601717983': {'category': 'pants', 'subCategory': 'Jeans', 'review_note': 'Clothing first-image audit: cover clearly shows a single jeans product; corrected to pants/jeans.'},
+    '7603559462': {'category': 'pants', 'subCategory': 'Shorts', 'review_note': 'Clothing first-image audit: cover clearly shows shorts; corrected to pants/shorts.'},
+    '7603632286': {'category': 'pants', 'subCategory': 'Trousers', 'review_note': 'Clothing first-image audit: cover clearly shows cargo trousers; corrected to pants/trousers.'},
+    '7601661111': {'category': 'pants', 'subCategory': 'Jeans', 'review_note': 'Clothing first-image audit: cover clearly shows denim jeans; corrected to pants/jeans.'},
+    '7603600564': {'category': 'pants', 'subCategory': 'Jeans', 'review_note': 'Clothing first-image audit: cover clearly shows denim jeans; corrected to pants/jeans.'},
+    '7601680115': {'category': 'pants', 'subCategory': 'Jeans', 'review_note': 'Clothing first-image audit: cover clearly shows denim jeans; corrected to pants/jeans.'},
+    '7601680119': {'category': 'pants', 'subCategory': 'Jeans', 'review_note': 'Clothing first-image audit: cover clearly shows denim jeans; corrected to pants/jeans.'},
 }
+
 
 def classify_product(info: dict) -> str:
     title_text = f"{info.get('title', '')} {info.get('subcategory', '')}".lower()
