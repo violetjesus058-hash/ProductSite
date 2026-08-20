@@ -98,7 +98,7 @@ def preferred_single_image(images: list[str]) -> int | None:
 def clean_title(value: str, fallback: str) -> str:
     value = re.sub(r'📏.*$', '', value)
     value = re.sub(r'whatsapp[:：]?\s*\+?[\d\s().+\-（）]+', '', value, flags=re.I)
-    value = re.sub(r'(?:pls\s+add\s+whatsapp|pls\s+contact|please\s+contact|if\s+(?:u|you)\s+need\s+(?:size\s+)?recommendation).*$', '', value, flags=re.I)
+    value = re.sub(r'(?:pls\s+add(?:\s+whatsapp)?|pls\s+contact|please\s+contact|if\s+(?:u|you)\s+need(?:\s+(?:size\s+)?recommendation)?).*$', '', value, flags=re.I)
     value = re.sub(r'\b\d{7,}\b', '', value)
     value = re.sub(r'[（(]\s*[）)]', '', value)
     value = re.sub(r'[（(]\s*$', '', value)
@@ -115,6 +115,8 @@ def editorial_descriptor(category: str, subcategory: str, title: str) -> str:
     if category == 'shoe' and re.search(r'\b(?:sneaker|shoe|boot|sandal)\b', text): return 'Everyday'
     if category == 'pants': return 'Everyday'
     if category in {'bags', 'ACC'} and re.search(r'\b(?:wallet|belt|card holder|bag|bracelet|watch|glasses)\b', text): return 'Daily Essential'
+    if category == 'bags': return 'Daily Carry'
+    if category == 'ACC': return 'Daily Essential'
     if category == 'fragrance': return 'Everyday'
     if category == 'watches': return 'Everyday'
     if category == 'clothing': return 'Everyday'
@@ -126,6 +128,8 @@ def editorial_descriptor(category: str, subcategory: str, title: str) -> str:
 def finalize_display_title(title: str, category: str, subcategory: str) -> str:
     """Keep card titles concise while preserving source wording and factual category terms."""
     title = re.sub(r'^\*?\s*\d{2}-\d{2}(?:[A-Z]{1,5})?\s*(?:[/|:-]\s*)?', '', title, flags=re.I)
+    title = re.sub(r'\s+[A-Z]{1,5}[-_]\d{2,}\s*$', '', title, flags=re.I)
+    title = re.sub(r'^[A-Z]\s+(?=(?:Fashion|Classic|Premium|Versatile)\b)', '', title, flags=re.I)
     title = re.sub(r'\s+', ' ', title).strip(' -/:')
     generic = bool(re.match(r'^(?:high[- ]?quality|rep high[- ]?quality|fashion|premium|versatile|classic|catalog item|kakobuy product)\b', title, re.I))
     descriptor = editorial_descriptor(category, subcategory, title)
@@ -146,7 +150,7 @@ def finalize_display_title(title: str, category: str, subcategory: str) -> str:
         candidate = f'{compact} {word}'.strip()
         if len(candidate) > 39: break
         compact = candidate
-    return f'{compact}…' if compact else title[:39].rstrip() + '…'
+    return compact or title[:39].rstrip()
 
 
 def optimize_display_title(info: dict, category: str, subcategory: str, fallback: str) -> str:
@@ -192,7 +196,7 @@ def optimize_display_title(info: dict, category: str, subcategory: str, fallback
         title = re.sub(r'\s*(?:[（(]\s*)?(?:\d+[-_][A-Z]{1,5}[-_]\d+|[A-Z]{1,5}[-_]\d{2,}|\d{1,4})\s*(?:[）)])?\s*$', '', title, flags=re.I).strip(' -')
     size_only = bool(re.fullmatch(r'[*]?\s*\d+\s*[-–]\s*\d+(?:\s+\d+)?(?:\s+[A-Z]{1,5})?', title, re.I))
     generic_exact = size_only or bool(re.fullmatch(r'(?:all|rep high[- ]?quality|high[- ]?quality|gs\.\d+|[a-z]{1,5}\.[0-9]{4,})', title, re.I))
-    identifier_like = generic_exact or bool(re.search(r'\b(?:catalog item|kakobuy product)\b|(?:all[-_ ]?[a-z]+|high[- ]?quality|high-quality|rep high[- ]?quality|rep high quality)\s*\d*[-_ ]?(?:[a-z]{1,5}[-_ ]?\d+)?|\b\d+[-_][a-z]{1,5}[-_]\d+\b', title, re.I))
+    identifier_like = generic_exact or bool(re.fullmatch(r'[A-Z0-9]{2,}[._-]?', title, re.I)) or bool(re.search(r'\b(?:catalog item|kakobuy product)\b|(?:all[-_ ]?[a-z]+|high[- ]?quality|high-quality|rep high[- ]?quality|rep high quality)\s*\d*[-_ ]?(?:[a-z]{1,5}[-_ ]?\d+)?|\b\d+[-_][a-z]{1,5}[-_ ]?\d+\b', title, re.I))
     if not identifier_like:
         return finalize_display_title(title or fallback, category, subcategory)
 
@@ -234,6 +238,102 @@ SUSPECTED_REVIEW = {
     '7545310284': {'review_note': 'Pants audit: hooded sweatshirt, sweatpants, and down-jacket set is mixed apparel; retain current Pants/Sweatpants classification pending detail-page confirmation.'},
     '7776165618': {'review_note': 'Pants audit: thumbnail shows a shorts-and-short-sleeve mixed set; retain current Pants/Shorts classification pending detail-page confirmation.'},
     '7545203334': {'review_note': 'Accessories audit: thumbnail shows a mixed sportswear set; retain current Accessories classification pending full detail-page confirmation.'},
+}
+
+AI_TITLE_OVERRIDES = {
+    '7542974543': 'Urban Streetwear Outfit',
+    '7543046447': 'Graphic Print T-Shirts',
+    '7543309413': 'Assorted Low-Cut Socks',
+    '7543313325': 'Assorted Logo T-Shirts',
+    '7543327115': 'Black Textured Metal-Buckle Belt',
+    '7543332937': 'Printed Crewneck T-Shirt',
+    '7543336857': 'Double GG Buckle Belt',
+    '7543342823': 'Black Full-Zip Hoodie',
+    '7543346835': 'Cable-Knit Quarter-Zip Sweaters',
+    '7543348805': 'Compass Graphic T-Shirt',
+    '7543364725': 'White Polo with Red-Navy Trim',
+    '7543368735': 'Black Logo Crewneck Sweatshirt',
+    '7543368745': 'Heart Embroidered Hoodie Set',
+    '7543374625': 'Black Crewneck Sweater Red Heart',
+    '7543382897': 'Graphic T-Shirt Selection',
+    '7543386603': 'Black Hooded Jacket',
+    '7543398543': 'Everyday Lightweight No-Show Socks',
+    '7544656828': 'Hoodie and Sweatpants Set',
+    '7545207126': 'Blue and Black Hoodie',
+    '7545217100': 'Light Gray Crewneck Sweater',
+    '7545221002': 'Everyday Apparel',
+    '7545221022': 'Graphic Logo T-Shirts',
+    '7545238802': 'Letter Logo T-Shirt',
+    '7545260684': 'Everyday Hoodie',
+    '7545270868': 'Grey Quilted Snap-Front Vest',
+    '7545272892': 'Logo Print T-Shirts',
+    '7545294490': 'Quarter-Zip Pullover Sweaters',
+    '7545296400': 'Gray Jogger Sweatpants',
+    '7545312262': 'Gray Zip Hoodie & Joggers',
+    '7545316058': 'Floral Hoodie & Jogger Set',
+    '7552721905': 'Monogram Jacquard Belt',
+    '7554525338': 'Everyday Cap',
+    '7574787017': 'Ribbed Logo Tank Tops',
+    '7574802935': 'Quarter-Zip Athletic Tops',
+    '7574808617': 'Graphic Tee Selection',
+    '7576483261': 'Assorted Patterned Bags',
+    '7576491587': 'Daily Essential Belt',
+    '7576538857': 'Ribbed Tank Tops',
+    '7576546619': 'Black Croc-Embossed Belt',
+    '7576548605': 'Black Eau de Parfum',
+    '7576550609': 'Floral Print Hoodie Set',
+    '7576552591': 'Blue Hoodie and Sweatpants Set',
+    '7576554555': 'Ripped Light Wash Jeans',
+    '7576564461': 'Clothing Size Chart (S–XL)',
+    '7576566371': 'Who Cares Novelty Watch',
+    '7576570407': 'Graphic T‑Shirt Selection',
+    '7576574207': 'Graphic Hoodies & Joggers',
+    '7576574219': 'Grey Snap-Front Puffer Vest',
+    '7576584181': 'Black Graphic Hoodie',
+    '7576593843': 'Beige Plaid Fringe Scarf',
+    '7576597943': 'Monogram Shield Sunglasses',
+    '7576599901': 'Crocodile Motif Chain Bracelet',
+    '7576605827': 'Assorted Track Jackets & Pants',
+    '7576605833': 'Portable Speaker',
+    '7576607783': 'Assorted Crew Neck T-Shirts',
+    '7576609789': 'Grey LA Logo Cap',
+    '7576617677': 'H Buckle Belt',
+    '7576619633': 'Assorted Eyewear Frames',
+    '7576619639': 'Puffer Jackets & Hoodies',
+    '7576619721': 'Ape Head Graphic Tee',
+    '7576679368': 'Graphic Crewneck Tees',
+    '7576686904': 'Assorted Graphic T-Shirts',
+    '7576695090': 'Beige Plaid Drawstring Shorts',
+    '7576702822': 'City Polo Shirts',
+    '7576704688': 'Assorted Graphic T-Shirts',
+    '7576742276': 'Soccer Training Tracksuit Sets',
+    '7576767828': 'Clothing Selection Image',
+    '7576787728': 'Training Tracksuit Sets',
+    '7578399472': 'Black Striped Tracksuit Set',
+    '7578406954': 'Hoodie and Sweatpants Set',
+    '7578419186': 'Track Jacket and Pants',
+    '7578446804': 'Clothing Selection - Unclear',
+    '7578456650': 'Assorted Graphic T-Shirts',
+    '7578458552': 'Black Hooded Jacket Set',
+    '7578460522': 'Slim Oval Buckle Belt',
+    '7578468476': 'Ornate Link Bracelet',
+    '7578468480': 'Puffer Jackets',
+    '7578470372': 'Long-Sleeve Training Tracksuit Set',
+    '7578482250': 'Smartwatch Selection',
+    '7578503954': 'Graphic Crewneck T-Shirt',
+    '7578505866': 'Monogram Tote & Pouch Set',
+    '7578535932': 'Printed Wallets & Card Holders',
+    '7601623089': 'Gray & Olive Zip-Up Hoodies',
+    '7603539016': 'Imagination Graphic Long Sleeve',
+    '7603560398': 'Pullover Hoodies - Gray Cream Blue',
+    '7603586106': 'Fleetwood Mac Graphic Henleys',
+    '7612177793': 'Daily Essential Belt',
+    '7615053508': 'Black Croc-Embossed Belt',
+    '7615155794': 'Slim Oval-Buckle Belt',
+    '7615163710': 'Grey LA Logo Baseball Cap',
+    '7778049033': 'Black Slip-On Clog',
+    '7782631879': 'Everyday Jersey',
+    '7786821585': 'Assorted Silver Rings',
 }
 
 MANUAL_OVERRIDES = {
@@ -544,7 +644,8 @@ def main() -> None:
             final_category = override.get('category') or inferred_category
             if str(final_category).strip().lower() == 'accessories':
                 final_category = 'ACC'
-            display_title = optimize_display_title(info, final_category, override.get('subCategory') or inferred_subcategory, f'Kakobuy Product {pid}')
+            title_override = AI_TITLE_OVERRIDES.get(pid)
+            display_title = finalize_display_title(title_override, final_category, override.get('subCategory') or inferred_subcategory) if title_override else optimize_display_title(info, final_category, override.get('subCategory') or inferred_subcategory, f'Kakobuy Product {pid}')
             grouped.append({
                 'id': f'kb-{pid}-{price.replace(".", "-")}',
                 'sourceProductId': pid,

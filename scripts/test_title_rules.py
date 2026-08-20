@@ -14,6 +14,7 @@ cases = [
     ('High-Quality Fashion', 'clothing', 'Shirts'),
     ('High-Quality Fashion Versatile Shoes', 'shoe', 'Sneakers'),
 ]
+print('override_debug', module.AI_TITLE_OVERRIDES.get('7545260684'), module.AI_TITLE_OVERRIDES.get('7576491587'), module.AI_TITLE_OVERRIDES.get('7782631879'))
 for title, category, subcategory in cases:
     info = {'title': title, 'title_original': title}
     matched = bool(re.fullmatch(r'[*]?\s*\d+\s*[-–]\s*\d+(?:\s+\d+)?(?:\s+[A-Z]{1,5})?', title, re.I))

@@ -834,3 +834,13 @@
 - [x] Enforce a short-title character budget and remove incomplete size-only or identifier-only titles.
 - [x] Verify representative clothing, pants, shoes, accessories, and branded products on desktop and mobile cards.
 - [x] Run tests, TypeScript, production build, and save a checkpoint.
+
+
+## 2026-08-20 Full catalog title audit and repair
+- [x] Audit all 2,192 catalog cards and classify identifier-only, SKU-like, size-only, truncated, duplicated, contact-residue, and semantically weak titles.
+- [x] Produce before/after title quality statistics by category and problem type.
+- [x] Repair every source-determinable title from Kakobuy fields without inventing unsupported product claims.
+- [x] Use all available product images and category/subcategory evidence for remaining uncertain titles; keep conservative generic names when visual evidence is insufficient.
+- [x] Ensure the example `22543C25` and all similar code-only titles are replaced with readable catalog titles.
+- [x] Enforce title length, English wording, and no-contact/no-size-only constraints across all 2,192 cards.
+- [x] Verify representative categories and mobile/desktop card rendering, then save a checkpoint with the full statistics.
