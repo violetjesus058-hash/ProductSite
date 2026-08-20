@@ -7,6 +7,6 @@ describe("safe product image fallback", () => {
   });
 
   it("returns the stable catalog placeholder after the last source fails", () => {
-    expect(nextSafeImageSource(["only.jpg"], 0)).toEqual({ source: "/manus-storage/catalog-detail-stilllife_f1f3f213.jpg", index: 0, failedAll: true });
+    expect(nextSafeImageSource(["only.jpg"], 0)).toEqual({ source: "/catalog-detail-stilllife.jpg", index: 0, failedAll: true });
   });
 });

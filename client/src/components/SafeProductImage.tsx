@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-const FALLBACK_IMAGE = "/manus-storage/catalog-detail-stilllife_f1f3f213.jpg";
+const FALLBACK_IMAGE = "/catalog-detail-stilllife.jpg";
 
 export function nextSafeImageSource(sources: string[], currentIndex: number, fallback = FALLBACK_IMAGE) {
   const nextIndex = currentIndex + 1;
