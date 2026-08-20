@@ -42,7 +42,7 @@ export default function RequestProductDialog({ open, onClose }: { open: boolean;
         <label>产品描述<textarea required rows={4} value={form.description} onChange={(event) => update("description", event.target.value)} placeholder="请说明品牌、品类、款式或你希望加入的原因" /></label>
         <label>补充说明<span className="optional-label">可选</span><textarea rows={2} value={form.notes} onChange={(event) => update("notes", event.target.value)} placeholder="尺码、颜色或其他要求" /></label>
         {message && <div className={`request-message ${requestCode ? "is-success" : "is-error"}`}>{message}{requestCode && <strong>申请编号：{requestCode}</strong>}</div>}
-        <div className="request-form-actions"><button type="submit" className="request-submit" disabled={submitting || !isCloudflareWorkerConfigured()}>{submitting ? "提交中…" : "提交申请"}</button><a className="request-discord" href="https://discord.gg/jtc399kUQV" target="_blank" rel="noreferrer"><MessageCircle size={15} /> Discord 反馈</a></div>
+        <div className="request-form-actions"><button type="submit" className="request-submit" disabled={submitting || !isCloudflareWorkerConfigured()}>{submitting ? "提交中…" : "提交申请"}</button><a className="request-discord" href="https://discord.gg/jtc399kUQV" target="_blank" rel="noreferrer"><MessageCircle size={15} /> Discord 反馈</a></div><a className="request-status-link" href="/requests/status">已有申请编号？查询处理状态</a>
       </form>
     </section>
   </div>;
