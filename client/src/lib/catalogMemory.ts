@@ -1,9 +1,11 @@
 /* Editorial Pinboard reminder: these lightweight browser-local records keep personal catalog actions private, reversible, and visually secondary to the product archive. */
 
 export type HistoryEntry = { id: string; visitedAt: number };
+export type EngagementEntry = { id: string; seconds: number; lastViewedAt: number };
 
 const FAVORITES_KEY = "material-catalog:favorites";
 const HISTORY_KEY = "material-catalog:history";
+const ENGAGEMENT_KEY = "material-catalog:engagement:v1";
 
 function readJson<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback;
@@ -26,6 +28,17 @@ export function saveHistory(entries: HistoryEntry[]) {
 export function rememberVisit(id: string) {
   const next = [{ id, visitedAt: Date.now() }, ...readHistory().filter((entry) => entry.id !== id)].slice(0, 24);
   saveHistory(next);
+  return next;
+}
+export function readEngagement() { return readJson<EngagementEntry[]>(ENGAGEMENT_KEY, []); }
+export function recordDwellTime(id: string, seconds: number) {
+  const safeSeconds = Math.max(0, Math.min(1800, Math.round(seconds)));
+  if (!safeSeconds) return readEngagement();
+  const current = readEngagement();
+  const existing = current.find((entry) => entry.id === id);
+  const nextEntry = { id, seconds: Math.min(7200, (existing?.seconds || 0) + safeSeconds), lastViewedAt: Date.now() };
+  const next = [nextEntry, ...current.filter((entry) => entry.id !== id)].sort((a, b) => b.lastViewedAt - a.lastViewedAt).slice(0, 80);
+  if (typeof window !== "undefined") window.localStorage.setItem(ENGAGEMENT_KEY, JSON.stringify(next));
   return next;
 }
 export function formatVisitTime(timestamp: number) {

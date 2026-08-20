@@ -4,8 +4,9 @@ import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "wouter";
 import { ArrowLeft, ArrowUpRight, Check, ChevronLeft, ChevronRight, Heart, Info, Share2, ShoppingBag } from "lucide-react";
 import { products } from "@/data/products";
-import { readFavorites, rememberVisit, saveFavorites } from "@/lib/catalogMemory";
+import { readEngagement, readFavorites, recordDwellTime, rememberVisit, saveFavorites } from "@/lib/catalogMemory";
 import SafeProductImage from "@/components/SafeProductImage";
+import { rankBehavioralRecommendations } from "@/lib/categoryRecommendations";
 
 const englishCategoryLabels: Record<string, string> = { clothing: "CLOTHING", shoe: "SHOES", pants: "PANTS", bags: "BAGS", fragrance: "FRAGRANCE", ACC: "ACCESSORIES", watches: "WATCHES" };
 type PlatformSource = { name: string; url: string; primary?: boolean };
@@ -103,11 +104,35 @@ export default function ProductDetail() {
     };
     for (let index = 0; index < 60; index += 1) buckets.forEach((bucket) => { if (bucket.length > 0) add(bucket[index % bucket.length]); });
     allCandidates.forEach(add);
-    return result;
-  }, [product]);
+    return rankBehavioralRecommendations(result, products, new Set(readFavorites()), readEngagement());
+  }, [product, liked]);
   useEffect(() => { setRecommendationCount(24); window.scrollTo({ top: 0, left: 0, behavior: "auto" }); }, [product?.id]);
   useEffect(() => { const node = recommendationSentinel.current; if (!node || recommended.length === 0) return; const observer = new IntersectionObserver((entries) => { if (entries[0]?.isIntersecting) setRecommendationCount((count) => count + 24); }, { rootMargin: "700px" }); observer.observe(node); return () => observer.disconnect(); }, [recommended.length, recommendationCount]);
-  useEffect(() => { if (product) rememberVisit(product.id); }, [product?.id]);
+  useEffect(() => {
+    if (!product) return;
+    rememberVisit(product.id);
+    let activeSince = Date.now();
+    let totalSeconds = 0;
+    const flushActiveSegment = () => {
+      totalSeconds += Math.max(0, (Date.now() - activeSince) / 1000);
+      activeSince = Date.now();
+    };
+    const onVisibilityChange = () => {
+      if (document.visibilityState === "hidden") flushActiveSegment();
+      else activeSince = Date.now();
+    };
+    const commit = () => {
+      if (document.visibilityState === "visible") flushActiveSegment();
+      recordDwellTime(product.id, totalSeconds);
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    window.addEventListener("pagehide", commit);
+    return () => {
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      window.removeEventListener("pagehide", commit);
+      commit();
+    };
+  }, [product?.id]);
   useEffect(() => {
     if (!product) return;
     const title = englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`);

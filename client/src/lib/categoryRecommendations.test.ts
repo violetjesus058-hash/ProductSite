@@ -1,10 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { buildCategoryRecommendationPool } from "./categoryRecommendations";
+import { buildCategoryRecommendationPool, rankBehavioralRecommendations } from "./categoryRecommendations";
 
 type TestProduct = {
   id: string;
   category: string;
   images: string[];
+  subCategory?: string;
+  brand?: string;
+  tags?: string[];
 };
 
 const catalog: TestProduct[] = [
@@ -25,5 +28,15 @@ describe("buildCategoryRecommendationPool", () => {
     const pool = buildCategoryRecommendationPool("fragrance", catalog as never);
     expect(pool.map((item) => item.id)).toEqual(["acc-1", "pants-1", "pants-2", "shoe-1"]);
     expect(new Set(pool.map((item) => item.id)).size).toBe(pool.length);
+  });
+
+  it("raises products matching a favorite item's subcategory", () => {
+    const behaviorCatalog = [
+      { id: "favorite", category: "pants", subCategory: "cargo", images: ["favorite.jpg"], brand: "Unbranded", tags: ["utility"] },
+      { id: "ordinary", category: "shoe", subCategory: "sneakers", images: ["ordinary.jpg"], brand: "Unbranded", tags: [] },
+      { id: "matched", category: "pants", subCategory: "cargo", images: ["matched.jpg"], brand: "Unbranded", tags: ["utility"] },
+    ];
+    const ranked = rankBehavioralRecommendations(behaviorCatalog.slice(1) as never, behaviorCatalog as never, new Set(["favorite"]));
+    expect(ranked.map((item) => item.id)).toEqual(["matched", "ordinary"]);
   });
 });

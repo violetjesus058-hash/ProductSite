@@ -4,10 +4,10 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { useLocation } from "wouter";
 import { ArrowUpRight, Bell, ChevronDown, Flag, Heart, History as HistoryIcon, Home as HomeIcon, MessageCircle, Search, Settings2, X, RefreshCw, CheckCircle2 } from "lucide-react";
 import { products, categoryLabels, categoryOrder } from "@/data/products";
-import { formatVisitTime, readFavorites, readHistory, saveFavorites, type HistoryEntry } from "@/lib/catalogMemory";
+import { formatVisitTime, readEngagement, readFavorites, readHistory, saveFavorites, type HistoryEntry, type EngagementEntry } from "@/lib/catalogMemory";
 import RequestProductDialog from "@/components/RequestProductDialog";
 import SafeProductImage from "@/components/SafeProductImage";
-import { buildCategoryRecommendationPool } from "@/lib/categoryRecommendations";
+import { buildCategoryRecommendationPool, rankBehavioralRecommendations } from "@/lib/categoryRecommendations";
 
 // Editorial Pinboard audit view: compact evidence-first cards, restrained motion, and sequential category handoff after a category is fully reviewed.
 
@@ -123,6 +123,7 @@ export default function Home() {
   const [sort, setSort] = useState(() => returnContext?.sort || auditSession?.sort || "random"); // Keep the audit shuffle stable across reloads
     const [favorites, setFavorites] = useState<string[]>(() => readFavorites());
   const [history, setHistory] = useState<HistoryEntry[]>(() => readHistory());
+  const [engagement, setEngagement] = useState<EngagementEntry[]>(() => readEngagement());
   const [categoryRecommendationCount, setCategoryRecommendationCount] = useState(24);
   const categoryRecommendationSentinel = useRef<HTMLDivElement | null>(null);
   const categoryRecommendationBusy = useRef(false);
@@ -157,7 +158,13 @@ export default function Home() {
   const [fontSizeLevel, setFontSizeLevel] = useState(() => Number(localSetting("material-catalog:font-size", "0")));
   const [letterSpacingLevel, setLetterSpacingLevel] = useState(() => Number(localSetting("material-catalog:letter-spacing", "0")));
   
-  useEffect(() => saveFavorites(favorites), [favorites]);
+  useEffect(() => { saveFavorites(favorites); }, [favorites]);
+  useEffect(() => {
+    const refreshEngagement = () => setEngagement(readEngagement());
+    window.addEventListener("focus", refreshEngagement);
+    window.addEventListener("pageshow", refreshEngagement);
+    return () => { window.removeEventListener("focus", refreshEngagement); window.removeEventListener("pageshow", refreshEngagement); };
+  }, []);
   useEffect(() => { writeCategoryErrorFlags(categoryErrorFlags); }, [categoryErrorFlags]);
   useEffect(() => {
     const refreshFlags = () => setCategoryErrorFlags(readCategoryErrorFlags());
@@ -210,10 +217,10 @@ export default function Home() {
   const visible = isAiAuditView ? filteredProducts.slice(0, pageSize) : filteredProducts;
   const visibleSourceCount = new Set(visible.map(reviewKey)).size;
 
-  const categoryRecommendationPool = useMemo(
-    () => buildCategoryRecommendationPool(category, products, new Set(visible.map((product) => product.id))),
-    [category, visible],
-  );
+  const categoryRecommendationPool = useMemo(() => {
+    const pool = buildCategoryRecommendationPool(category, products, new Set(visible.map((product) => product.id)));
+    return rankBehavioralRecommendations(pool, products, new Set(favorites), engagement);
+  }, [category, visible, favorites, engagement]);
 
   useEffect(() => {
     setCategoryRecommendationCount(24);
