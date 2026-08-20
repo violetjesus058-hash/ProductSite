@@ -196,6 +196,8 @@ MANUAL_OVERRIDES = {
     '7611881149': {'primary_image_index': 2, 'review_note': 'Shoes image review: replace product/contact collage with a clear single-boot gallery image.'},
     '7578496024': {'primary_image_path': '/product-images/7578496024-single-bottle.webp', 'review_note': 'Manual image review: use a source-derived single-bottle crop as the catalog cover; retain the original collage in the gallery.'},
     '7786196426': {'primary_image_path': '/product-images/7786196426-single-watch.webp', 'review_note': 'Manual image review: use a source-derived single-watch crop as the catalog cover; retain the original collage in the gallery.'},
+    '7778863173': {'primary_image_path': '/manus-storage/kb-7778863173-cover_a7bcd7b2.gif', 'review_note': 'User-provided cover override: use the supplied GIF as the catalog main image because the generated cover was blank.'},
+    '7576599899': {'category': 'pants', 'subCategory': 'Shorts', 'review_note': 'User screenshot review: title and visible product image identify a pants/shorts item, not a generic clothing item; corrected to pants/shorts.'},
     '7601623089': {'category': 'clothing', 'subCategory': 'Hoodies', 'review_note': 'Manual review: cover image shows two hooded zip-up sweatshirts.'},
     '7603560398': {'category': 'clothing', 'subCategory': 'Hoodies', 'review_note': 'Manual review: cover image shows three hooded sweatshirts.'},
     '7578517746': {'category': 'clothing', 'subCategory': 'Jackets', 'review_note': 'Manual review: cover image shows a padded jacket; retain body-weight size labels.'},
@@ -464,7 +466,7 @@ def main() -> None:
             primary_index = override.get('primary_image_index')
             if isinstance(primary_index, int) and 0 <= primary_index < len(display_images):
                 display_images = [display_images[primary_index]] + [image for index, image in enumerate(display_images) if index != primary_index]
-            elif not remove_indices:
+            elif not remove_indices and not custom_primary:
                 preferred_index = preferred_single_image(display_images)
                 if preferred_index is not None:
                     display_images = [display_images[preferred_index]] + [image for index, image in enumerate(display_images) if index != preferred_index]

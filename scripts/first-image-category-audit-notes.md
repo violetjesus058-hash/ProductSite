@@ -98,3 +98,12 @@ Clothing 15 个首图批次、Accessories/ACC 3 个批次、Pants 2 个批次、
 生成结果保持 2,192 条 SKU、1,153 个唯一源商品，重复源商品未增加，TypeScript 检查和生产构建通过。审计统计为 355 条 reviewed、15 条 suspected、1,822 条 unreviewed；其中 unreviewed 是系统现有审核状态，不代表本轮首图扫描遗漏，而是需要后续在 AI Audit View 中继续推进的状态。
 
 仍未自动修正的项目包括无法从首图确定单一类别的上下装套装、袜子/内衣边界项和首图信息不足的商品。它们已记录为疑似或保留现类，下一步应查看完整产品画廊后再决定，避免把套装错误拆入 Pants 或 Clothing。
+
+
+## 用户截图复核：7778863173 与 Clothing 边界项（2026-08-20）
+
+- `7778863173` 的 `57.70` 与 `57.86` 两个价格组原本使用通用 Kakobuy 占位主图；已设置用户提供的 `/manus-storage/kb-7778863173-cover_a7bcd7b2.gif` 为首图，并保留原始画廊数据。
+- 截图中 `High-Quality Pants Versatile`（sourceProductId `7576599899`，9.45 USD）首图明确为短裤/裤装，已从 `clothing/Selection` 修正为 `pants/Shorts`。
+- `High-Quality Underwear`、`High-Quality Underwear H`、`High-Quality Socks` 属于服饰大类下的 Underwear/Socks 子类，当前归入 `clothing` 是符合现有大类体系的，不作为错误迁移到 Accessories。
+- `High-Quality Clothing Set 4-001` 为服装套装，保留在 Clothing；`High-Quality Apparel` 的尺码图/规格图只能证明图片质量需要后续优化，不能仅凭尺码图确认其大类错误，暂不强行改类。
+- 本轮未创建重复商品；总量保持 2,192 张展示卡片。
