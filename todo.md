@@ -861,3 +861,11 @@
 - [x] Generate concise English titles using `style/scene + product type + key feature`, with a maximum length and no unsupported claims.
 - [x] Apply the new title system across all 2,192 cards while preserving confirmed brand, club, team, and product distinctions.
 - [x] Run three quality audits for model residue, source-code residue, repetition, unsupported wording, and title length; verify desktop/mobile cards and save a checkpoint.
+
+
+## 2026-08-20 Broken product image audit
+- [x] Audit all 2,192 product image arrays and classify missing, empty, invalid, remote, local, placeholder, and duplicate image sources.
+- [x] Identify the affected cards shown as broken images and trace their source product IDs and image URLs.
+- [x] Repair invalid/local image references and choose a verified gallery fallback for products with a failed main image.
+- [x] Add frontend image-load failure protection so a broken image cannot leave a broken-image icon and alt text as the card visual.
+- [x] Run an image quality/statistics audit, verify desktop and 390px mobile cards, run tests/build, and save a checkpoint.
