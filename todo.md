@@ -781,18 +781,18 @@
 - [x] 重新触发 Cloudflare Worker 部署并确认 D1 绑定成功。
 
 ## 申请后台元数据扩展（2026-08-20）
-- [ ] 扩展 D1 申请表字段，保存脱敏 IP、国家/地区、设备类型、浏览器、操作系统和 User-Agent 摘要。
-- [ ] 在 Worker 提交接口中从 Cloudflare 请求头服务端采集元数据，不信任前端传值。
-- [ ] 在管理员详情页展示完整申请资料、访问元数据和提交/更新时间。
-- [ ] 保持公开状态查询页不显示 IP、国家、设备等隐私字段。
-- [ ] 执行 D1 迁移、测试、重新部署 Worker 并验证现有申请记录兼容。
+- [x] 扩展 D1 申请表字段，保存脱敏 IP、国家/地区、设备类型、浏览器、操作系统和 User-Agent 摘要。
+- [x] 在 Worker 提交接口中从 Cloudflare 请求头服务端采集元数据，不信任前端传值。
+- [x] 在管理员详情页展示完整申请资料、访问元数据和提交/更新时间。
+- [x] 保持公开状态查询页不显示 IP、国家、设备等隐私字段。
+- [x] 执行 D1 迁移、测试、重新部署 Worker 并验证现有申请记录兼容。
 
 ## 申请表单英文与安全增强（2026-08-20）
-- [ ] 将申请上新表单、申请状态页和管理员页面可见文案统一为自然英文。
-- [ ] 增加前端输入长度、链接协议、必填字段和提交状态校验。
-- [ ] 增加 Worker 服务端字段清理、请求体限制、危险链接拦截和基础频率限制。
-- [ ] 保持公开状态查询页不显示 IP、国家、设备和 User-Agent。
-- [ ] 完成测试、构建、Cloudflare 部署和英文界面回归验证。
+- [x] 将申请上新表单、申请状态页和管理员页面可见文案统一为自然英文。
+- [x] 增加前端输入长度、链接协议、必填字段和提交状态校验。
+- [x] 增加 Worker 服务端字段清理、请求体限制、危险链接拦截和基础频率限制。
+- [x] 保持公开状态查询页不显示 IP、国家、设备和 User-Agent。
+- [x] 完成测试、构建、Cloudflare 部署和英文界面回归验证。
 
 
 ## 2026-08-20 English request flow and security
@@ -803,4 +803,4 @@
 - [x] Expand the admin request view with masked IP, country/region, city, device, browser, operating system, and User-Agent summary fields.
 - [x] Run Vitest, TypeScript checks, and the production build successfully.
 - [x] Push the change to ProductSite main at commit 97f4151.
-- [ ] Verify the updated English request flow and admin reply flow against the live Cloudflare Pages/Worker deployment.
+- [x] Verify the updated English request flow and admin reply flow against the live Cloudflare Pages/Worker deployment.
