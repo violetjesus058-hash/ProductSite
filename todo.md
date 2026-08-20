@@ -818,3 +818,11 @@
 ## 2026-08-20 Request and Discord entry spacing
 - [x] Increase the vertical gap between REQUEST A PRODUCT and DISCORD FEEDBACK in the desktop rail.
 - [x] Verify the spacing remains balanced on the mobile layout and save a checkpoint.
+
+
+## 2026-08-20 Product detail recommendation architecture
+- [x] Audit the current CURATED DISCOVERY / Recommended products markup and styles on product detail pages.
+- [x] Rework the recommendation header into a clearer editorial hierarchy with a compact eyebrow, title, supporting copy, and exploration cue.
+- [x] Separate platform purchase links from the recommendation header so platform buttons do not visually compete with the recommendation title.
+- [x] Keep the recommendation product waterfall directly connected to the redesigned header.
+- [x] Verify desktop and mobile product detail pages, then save a checkpoint.
