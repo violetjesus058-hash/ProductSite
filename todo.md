@@ -804,3 +804,12 @@
 - [x] Run Vitest, TypeScript checks, and the production build successfully.
 - [x] Push the change to ProductSite main at commit 97f4151.
 - [x] Verify the updated English request flow and admin reply flow against the live Cloudflare Pages/Worker deployment.
+
+
+## 2026-08-20 tRPC HTML response regression
+- [x] Reproduce the homepage API query that receives `<!doctype html>` instead of JSON.
+- [x] Identify whether the failure comes from the local server route, Vite fallback, or tRPC client base URL.
+- [x] Fix the API routing/client configuration without breaking the existing catalog page.
+- [x] Add or update a Vitest regression test for the corrected API path or server behavior.
+- [x] Run TypeScript, tests, production build, and homepage browser verification.
+- [x] Save a checkpoint after the fix.
