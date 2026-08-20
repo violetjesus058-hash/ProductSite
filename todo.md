@@ -813,3 +813,8 @@
 - [x] Add or update a Vitest regression test for the corrected API path or server behavior.
 - [x] Run TypeScript, tests, production build, and homepage browser verification.
 - [x] Save a checkpoint after the fix.
+
+
+## 2026-08-20 Request and Discord entry spacing
+- [x] Increase the vertical gap between REQUEST A PRODUCT and DISCORD FEEDBACK in the desktop rail.
+- [x] Verify the spacing remains balanced on the mobile layout and save a checkpoint.
