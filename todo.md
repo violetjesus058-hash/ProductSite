@@ -914,6 +914,11 @@
 - [x] 验证首页、品类页、推荐瀑布流和详情页的图片加载与失败占位表现。
 - [ ] 验证桌面端和移动端布局，并保存图片修复检查点。
 
-- [ ] 检查图片修复版本的 Git 状态、分支和远程地址。
-- [ ] 提交并推送图片修复版本到 GitHub ProductSite 的 main。
-- [ ] 核对 GitHub 远程提交，并说明 Cloudflare Pages 部署确认方式。
+- [x] 检查图片修复版本的 Git 状态、分支和远程地址。
+- [x] 提交并推送图片修复版本到 GitHub ProductSite 的 main。
+- [x] 核对 GitHub 远程提交，并说明 Cloudflare Pages 部署确认方式。
+
+- [x] 从结果栏移除 CONTINUE EXPLORING 按钮。
+- [x] 从结果栏移除 cards/items 产品数量统计，保留品类名称。
+- [x] 验证桌面端、移动端、品类切换和推荐区持续滚动不受影响，并保存检查点。
+- [x] 明确验证 ALL PRODUCTS、CLOTHING、PANTS、SHOES、BAGS、FRAGRANCE、WATCHES、ACCESSORIES 均不显示数量统计。

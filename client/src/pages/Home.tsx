@@ -364,8 +364,6 @@ export default function Home() {
         <div className="result-label">
           <span className="coral-dot" /> 
           {brand !== "all" ? englishValue(brand, "SELECTED BRAND") : category === "all" ? "ALL PRODUCTS" : englishCategoryLabels[category] || category.toUpperCase()}
-          {!isAiAuditView && categoryRecommendationPool.length > 0 && <button className="recommendation-jump" onClick={() => document.getElementById("category-recommendation")?.scrollIntoView({ behavior: "smooth", block: "start" })}>CONTINUE EXPLORING <ArrowUpRight size={12} /></button>}
-          {!isAiAuditView && <span className="result-count" aria-live="polite">{visible.length.toLocaleString()} cards · {visibleSourceCount.toLocaleString()} items</span>}
         </div>
         <div className="flex items-center gap-4">
           {isAiAuditView && <button
