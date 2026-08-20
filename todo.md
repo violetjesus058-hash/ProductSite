@@ -844,3 +844,11 @@
 - [x] Ensure the example `22543C25` and all similar code-only titles are replaced with readable catalog titles.
 - [x] Enforce title length, English wording, and no-contact/no-size-only constraints across all 2,192 cards.
 - [x] Verify representative categories and mobile/desktop card rendering, then save a checkpoint with the full statistics.
+
+
+## 2026-08-20 Three-pass title review: model plus category
+- [x] First pass: audit all 2,192 titles for model/code plus `Pants`, `Jeans`, `Shorts`, `Hoodie`, `Jersey`, `Shirt`, `Shoes`, `Bag`, or similar category suffixes.
+- [x] Replace model-plus-category titles using Kakobuy source fields, subcategory, and available product-image evidence; do not invent unsupported details.
+- [x] Second pass: audit other identifier-like, weak, duplicated, incomplete, and generic titles across every category.
+- [x] Third pass: validate title length, English wording, duplicate patterns, price/SKU contamination, and desktop/mobile card display.
+- [x] Run tests, TypeScript, production build, full statistics, and save a checkpoint.

@@ -153,6 +153,25 @@ def finalize_display_title(title: str, category: str, subcategory: str) -> str:
     return compact or title[:39].rstrip()
 
 
+def conservative_category_title(category: str, subcategory: str, fallback: str) -> str:
+    sub = str(subcategory or '').strip().lower()
+    if category == 'pants':
+        return {'trousers': 'Everyday Trousers', 'jeans': 'Everyday Jeans', 'sweatpants': 'Everyday Sweatpants', 'shorts': 'Everyday Shorts'}.get(sub, 'Everyday Pants')
+    if category == 'clothing':
+        return {'jackets': 'Everyday Jacket', 'shirts': 'Everyday Shirt', 'hoodies': 'Everyday Hoodie', 'sweaters': 'Everyday Sweater', 'sets': 'Everyday Clothing Set'}.get(sub, 'Everyday Apparel')
+    if category == 'shoe':
+        return {'sneakers': 'Everyday Sneakers', 'sandals': 'Everyday Sandals', 'boots': 'Everyday Boots'}.get(sub, 'Everyday Shoes')
+    if category == 'ACC':
+        return 'Everyday Accessories'
+    if category == 'bags':
+        return 'Everyday Bag'
+    if category == 'fragrance':
+        return 'Everyday Fragrance'
+    if category == 'watches':
+        return 'Everyday Watch'
+    return fallback
+
+
 def optimize_display_title(info: dict, category: str, subcategory: str, fallback: str) -> str:
     """Use source wording when meaningful; replace ID-like titles with concise evidence-based names."""
     title = clean_title(str(info.get('title', '') or ''), '')
@@ -190,6 +209,10 @@ def optimize_display_title(info: dict, category: str, subcategory: str, fallback
                 sub_label = {'Underwear': 'Underwear', 'Sets': 'Clothing Set', 'Hoodies': 'Hoodie', 'Jackets': 'Jacket', 'Sweaters': 'Sweater', 'Shirts': 'Shirt', 'Caps': 'Cap', 'Watches': 'Watch', 'Sandals': 'Sandals'}.get(subcategory)
                 category_label = {'clothing': 'Apparel', 'pants': 'Pants', 'shoe': 'Shoes', 'bags': 'Bag', 'fragrance': 'Perfume', 'watches': 'Watch', 'ACC': 'Accessory'}.get(category, 'Product')
                 return finalize_display_title(f'High-Quality {sub_label or category_label}', category, subcategory)
+            translated_model_category_like = bool(re.fullmatch(r'(?:[A-Z]{1,8}\d{1,6}|\d{1,8}[A-Z]{1,8}\d*|[A-Z0-9]{2,}[-_.]\d+)(?:\s+|[-_])(?:Pants|Jeans|Shorts|Trousers|Hoodie|Jersey|Shirt|Sweater|Jacket|Shoes?|Sneakers?|Boots?|Bag|Wallet|Belt|Cap|Hat|Socks?|Underwear|Watch|Perfume|Accessory)(?:\s+(?:S-XL|S-L|M-XXL|\d+[-–]\d+))?', translated, re.I))
+            if translated_model_category_like:
+                fallback_label = conservative_category_title(category, subcategory, fallback)
+                return finalize_display_title(fallback_label, category, subcategory)
             return finalize_display_title(translated, category, subcategory)
     generic_title = re.match(r'^(?:catalog item|kakobuy product|all[-_ ]?[a-z]+|high[- ]?quality|high-quality|rep high[- ]?quality|rep high quality|fashion hat|fashion trend|high-quality fashion)', title, re.I)
     if generic_title:
@@ -197,6 +220,10 @@ def optimize_display_title(info: dict, category: str, subcategory: str, fallback
     size_only = bool(re.fullmatch(r'[*]?\s*\d+\s*[-–]\s*\d+(?:\s+\d+)?(?:\s+[A-Z]{1,5})?', title, re.I))
     generic_exact = size_only or bool(re.fullmatch(r'(?:all|rep high[- ]?quality|high[- ]?quality|gs\.\d+|[a-z]{1,5}\.[0-9]{4,})', title, re.I))
     identifier_like = generic_exact or bool(re.fullmatch(r'[A-Z0-9]{2,}[._-]?', title, re.I)) or bool(re.search(r'\b(?:catalog item|kakobuy product)\b|(?:all[-_ ]?[a-z]+|high[- ]?quality|high-quality|rep high[- ]?quality|rep high quality)\s*\d*[-_ ]?(?:[a-z]{1,5}[-_ ]?\d+)?|\b\d+[-_][a-z]{1,5}[-_ ]?\d+\b', title, re.I))
+    model_category_like = bool(re.fullmatch(r'(?:[A-Z]{1,8}\d{1,6}|\d{1,8}[A-Z]{1,8}\d*|[A-Z0-9]{2,}[-_.]\d+)(?:\s+|[-_])(?:Pants|Jeans|Shorts|Trousers|Hoodie|Jersey|Shirt|Sweater|Jacket|Shoes?|Sneakers?|Boots?|Bag|Wallet|Belt|Cap|Hat|Socks?|Underwear|Watch|Perfume|Accessory)(?:\s+(?:S-XL|S-L|M-XXL|\d+[-–]\d+))?', title, re.I))
+    if model_category_like:
+        fallback_label = conservative_category_title(category, subcategory, fallback)
+        return finalize_display_title(fallback_label, category, subcategory)
     if not identifier_like:
         return finalize_display_title(title or fallback, category, subcategory)
 
@@ -271,6 +298,7 @@ AI_TITLE_OVERRIDES = {
     '7545296400': 'Gray Jogger Sweatpants',
     '7545312262': 'Gray Zip Hoodie & Joggers',
     '7545316058': 'Floral Hoodie & Jogger Set',
+    '7547224894': 'Everyday Fragrance',
     '7552721905': 'Monogram Jacquard Belt',
     '7554525338': 'Everyday Cap',
     '7574787017': 'Ribbed Logo Tank Tops',
@@ -282,6 +310,7 @@ AI_TITLE_OVERRIDES = {
     '7576546619': 'Black Croc-Embossed Belt',
     '7576548605': 'Black Eau de Parfum',
     '7576550609': 'Floral Print Hoodie Set',
+    '7576550615': 'Everyday Sneakers',
     '7576552591': 'Blue Hoodie and Sweatpants Set',
     '7576554555': 'Ripped Light Wash Jeans',
     '7576564461': 'Clothing Size Chart (S–XL)',
@@ -320,18 +349,22 @@ AI_TITLE_OVERRIDES = {
     '7578468480': 'Puffer Jackets',
     '7578470372': 'Long-Sleeve Training Tracksuit Set',
     '7578482250': 'Smartwatch Selection',
+    '7578496024': 'Everyday Fragrance',
     '7578503954': 'Graphic Crewneck T-Shirt',
     '7578505866': 'Monogram Tote & Pouch Set',
     '7578535932': 'Printed Wallets & Card Holders',
     '7601623089': 'Gray & Olive Zip-Up Hoodies',
     '7603539016': 'Imagination Graphic Long Sleeve',
+    '7603548814': 'Everyday Jeans',
     '7603560398': 'Pullover Hoodies - Gray Cream Blue',
     '7603586106': 'Fleetwood Mac Graphic Henleys',
+    '7611840843': 'Everyday Sneakers',
     '7612177793': 'Daily Essential Belt',
     '7615053508': 'Black Croc-Embossed Belt',
     '7615155794': 'Slim Oval-Buckle Belt',
     '7615163710': 'Grey LA Logo Baseball Cap',
     '7778049033': 'Black Slip-On Clog',
+    '7782557155': 'Barcelona Home Fan Version',
     '7782631879': 'Everyday Jersey',
     '7786821585': 'Assorted Silver Rings',
 }

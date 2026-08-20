@@ -1,0 +1,52 @@
+{
+  "total": 2192,
+  "matched": 4,
+  "byCategory": {
+    "clothing": 4
+  },
+  "bySubCategory": {
+    "clothing/Shirts": 4
+  },
+  "examples": [
+    {
+      "id": "kb-7782649737-14-47",
+      "sourceProductId": "7782649737",
+      "title": "2026-2027 Arsenal Home Club Fan Version",
+      "category": "clothing",
+      "subCategory": "Shirts",
+      "images": [
+        "/product-images/b6277557e0b8d0349011_kakobuy.webp"
+      ]
+    },
+    {
+      "id": "kb-7782649737-17-68",
+      "sourceProductId": "7782649737",
+      "title": "2026-2027 Arsenal Home Club Fan Version",
+      "category": "clothing",
+      "subCategory": "Shirts",
+      "images": [
+        "/product-images/b6277557e0b8d0349011_kakobuy.webp"
+      ]
+    },
+    {
+      "id": "kb-7782529533-20-09",
+      "sourceProductId": "7782529533",
+      "title": "2026-2027 Arsenal Home Club Player Version",
+      "category": "clothing",
+      "subCategory": "Shirts",
+      "images": [
+        "/product-images/289300bd28068011cf5d_kakobuy.webp"
+      ]
+    },
+    {
+      "id": "kb-7782529533-23-31",
+      "sourceProductId": "7782529533",
+      "title": "2026-2027 Arsenal Home Club Player Version",
+      "category": "clothing",
+      "subCategory": "Shirts",
+      "images": [
+        "/product-images/289300bd28068011cf5d_kakobuy.webp"
+      ]
+    }
+  ]
+}
