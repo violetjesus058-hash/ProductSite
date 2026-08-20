@@ -14,6 +14,6 @@ export default defineConfig({
   },
   test: {
     environment: "node",
-    include: ["server/**/*.test.ts", "server/**/*.spec.ts", "cloudflare-worker/**/*.test.ts"],
+    include: ["server/**/*.test.ts", "server/**/*.spec.ts", "cloudflare-worker/**/*.test.ts", "client/src/**/*.test.ts"],
   },
 });

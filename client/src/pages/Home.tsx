@@ -7,6 +7,7 @@ import { products, categoryLabels, categoryOrder } from "@/data/products";
 import { formatVisitTime, readFavorites, readHistory, saveFavorites, type HistoryEntry } from "@/lib/catalogMemory";
 import RequestProductDialog from "@/components/RequestProductDialog";
 import SafeProductImage from "@/components/SafeProductImage";
+import { buildCategoryRecommendationPool } from "@/lib/categoryRecommendations";
 
 // Editorial Pinboard audit view: compact evidence-first cards, restrained motion, and sequential category handoff after a category is fully reviewed.
 
@@ -122,6 +123,9 @@ export default function Home() {
   const [sort, setSort] = useState(() => returnContext?.sort || auditSession?.sort || "random"); // Keep the audit shuffle stable across reloads
     const [favorites, setFavorites] = useState<string[]>(() => readFavorites());
   const [history, setHistory] = useState<HistoryEntry[]>(() => readHistory());
+  const [categoryRecommendationCount, setCategoryRecommendationCount] = useState(24);
+  const categoryRecommendationSentinel = useRef<HTMLDivElement | null>(null);
+  const categoryRecommendationBusy = useRef(false);
   const [categoryErrorFlags, setCategoryErrorFlags] = useState<Record<string, CategoryErrorFlag>>(() => readCategoryErrorFlags());
   const [openPanel, setOpenPanel] = useState<"favorites" | "history" | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -205,6 +209,30 @@ export default function Home() {
   // Normal browsing shows the complete filtered catalog. AI Audit View intentionally keeps a compact review batch.
   const visible = isAiAuditView ? filteredProducts.slice(0, pageSize) : filteredProducts;
   const visibleSourceCount = new Set(visible.map(reviewKey)).size;
+
+  const categoryRecommendationPool = useMemo(
+    () => buildCategoryRecommendationPool(category, products, new Set(visible.map((product) => product.id))),
+    [category, visible],
+  );
+
+  useEffect(() => {
+    setCategoryRecommendationCount(24);
+    categoryRecommendationBusy.current = false;
+  }, [category, brand, query, sort]);
+
+  useEffect(() => {
+    if (isAiAuditView || categoryRecommendationPool.length === 0) return;
+    const node = categoryRecommendationSentinel.current;
+    if (!node) return;
+    const observer = new IntersectionObserver((entries) => {
+      if (!entries[0]?.isIntersecting || categoryRecommendationBusy.current) return;
+      categoryRecommendationBusy.current = true;
+      setCategoryRecommendationCount((count) => count + 24);
+      window.requestAnimationFrame(() => { categoryRecommendationBusy.current = false; });
+    }, { rootMargin: "900px 0px" });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [categoryRecommendationPool.length, isAiAuditView, categoryRecommendationCount]);
 
   // Persist the complete audit cursor. The shuffle seed is the batch cursor: after data regeneration,
   // the same seed plus the same seen source IDs recreates the unfinished batch instead of restarting Clothing.
@@ -379,6 +407,29 @@ export default function Home() {
           })}
         </section>
         
+        {!isAiAuditView && categoryRecommendationPool.length > 0 && <section className="category-recommendation" aria-labelledby="category-recommendation-title">
+          <div className="category-recommendation-head">
+            <div>
+              <span className="recommendation-kicker">CURATED DISCOVERY <i>/ 03</i></span>
+              <h2 id="category-recommendation-title">Recommended products</h2>
+              <p>Continue exploring a considered selection from this catalog.</p>
+            </div>
+            <span className="category-recommendation-aside">MORE TO EXPLORE</span>
+          </div>
+          <div className="category-recommendation-waterfall">
+            {Array.from({ length: categoryRecommendationCount }, (_, index) => {
+              const product = categoryRecommendationPool[index % categoryRecommendationPool.length];
+              const title = englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`);
+              const displayBrand = product.brand && product.brand.toLowerCase() !== "unbranded" ? englishValue(product.brand, "") : "";
+              return <article key={`${product.id}-category-recommendation-${index}`} className={`category-recommendation-card recommendation-size-${index % 7}`} onClick={() => openProduct(product.id)}>
+                <div className="category-recommendation-image"><SafeProductImage sources={product.images} alt={title} loading="lazy" /><span className="category-recommendation-open"><ArrowUpRight size={12} /></span></div>
+                <div className="category-recommendation-meta">{displayBrand && <span className="category-recommendation-brand">{displayBrand}</span>}<strong>{title}</strong><span>{money(product.price, "USD")}</span></div>
+              </article>;
+            })}
+          </div>
+          <div ref={categoryRecommendationSentinel} className="category-recommendation-sentinel" aria-hidden="true" />
+        </section>}
+
         {isAiAuditView && <div className="audit-controls py-20 flex flex-col items-center justify-center border-t border-black/5 mt-20">
           <div className="text-center mb-8">
             <h4 className="text-2xl font-light tracking-tight mb-2">Batch Review Complete</h4>
