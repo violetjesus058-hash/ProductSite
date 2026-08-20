@@ -776,6 +776,6 @@
 - [x] 增加用户申请编号查询页面，展示处理状态和管理员回复。
 
 ## Cloudflare 部署错误修复（2026-08-20）
-- [ ] 将 Cloudflare D1 真实 database_id 写入 `cloudflare-worker/wrangler.toml`。
-- [ ] 将正确 Pages 来源写入 `ALLOWED_ORIGIN` 配置占位并同步 GitHub。
-- [ ] 重新触发 Cloudflare Worker 部署并确认 D1 绑定成功。
+- [x] 将 Cloudflare D1 真实 database_id 写入 `cloudflare-worker/wrangler.toml`。
+- [x] 将正确 Pages 来源写入 `ALLOWED_ORIGIN` 配置占位并同步 GitHub。
+- [x] 重新触发 Cloudflare Worker 部署并确认 D1 绑定成功。
