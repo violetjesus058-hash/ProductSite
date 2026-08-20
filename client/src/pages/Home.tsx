@@ -1,9 +1,11 @@
 // Editorial Pinboard reminder: the homepage is a browsable catalog wall, not a centered storefront; images lead, copy follows.
 import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { useLocation } from "wouter";
 import { ArrowUpRight, Bell, ChevronDown, Flag, Heart, History as HistoryIcon, Home as HomeIcon, MessageCircle, Search, Settings2, X, RefreshCw, CheckCircle2 } from "lucide-react";
 import { products, categoryLabels, categoryOrder } from "@/data/products";
 import { formatVisitTime, readFavorites, readHistory, saveFavorites, type HistoryEntry } from "@/lib/catalogMemory";
+import RequestProductDialog from "@/components/RequestProductDialog";
 
 // Editorial Pinboard audit view: compact evidence-first cards, restrained motion, and sequential category handoff after a category is fully reviewed.
 
@@ -99,6 +101,13 @@ function readAuditSession(): AuditSession | null {
 }
 
 export default function Home() {
+  // The useAuth hook provides authentication state.
+  // To implement login/logout, call logout(), or start login from an event
+  // handler: onClick={() => startLogin()} (imported from "@/const"). Never call
+  // startLogin() during render (no href={startLogin()}) — it mints a one-time
+  // nonce cookie and must run only at the moment of navigation.
+  let { user, loading, error, isAuthenticated, logout } = useAuth();
+
   const [, navigate] = useLocation();
   const [auditSession] = useState<AuditSession | null>(() => readAuditSession());
   const secondPassRequested = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("audit") === "accessories-second-pass";
@@ -115,6 +124,7 @@ export default function Home() {
   const [categoryErrorFlags, setCategoryErrorFlags] = useState<Record<string, CategoryErrorFlag>>(() => readCategoryErrorFlags());
   const [openPanel, setOpenPanel] = useState<"favorites" | "history" | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [requestProductOpen, setRequestProductOpen] = useState(false);
   
   // Audit Mode State
   const [seenIds, setSeenIds] = useState<string[]>(() => {
@@ -307,6 +317,7 @@ export default function Home() {
       <nav className="category-nav" aria-label="Product categories">
         {navItems.map((item) => <button key={item.id} className={`category-link ${category === item.id ? "is-active" : ""}`} onClick={() => changeAuditCategory(item.id)}><span>{item.label}</span></button>)}
       </nav>
+      <div className="rail-request-area"><button className="rail-request-link" onClick={() => setRequestProductOpen(true)}><span>申请上新产品</span><MessageCircle size={14} /></button><a className="rail-discord-link" href="https://discord.gg/jtc399kUQV" target="_blank" rel="noreferrer"><span>DISCORD FEEDBACK</span><ArrowUpRight size={12} /></a></div>
       <div className="rail-footer"><span>CATALOG / 01</span><span>2026</span></div>
     </aside>
     <main className="catalog-main">
@@ -389,5 +400,6 @@ export default function Home() {
       </div>}
     </main>
     {settingsOpen && <div className="settings-overlay" onClick={() => setSettingsOpen(false)}><div className="settings-modal" onClick={(e) => e.stopPropagation()}><div className="settings-head"><strong>DISPLAY SETTINGS</strong><button onClick={() => setSettingsOpen(false)} aria-label="Close settings"><X size={18} /></button></div><div className="settings-body"><div className="settings-section"><label>PAGE STYLE</label><div className="style-grid">{["default", "white", "gray", "black", "green"].map((s) => <button key={s} className={`style-opt is-${s} ${pageStyle === s ? "is-active" : ""}`} onClick={() => setPageStyle(s)} aria-label={`Switch to ${s} style`} />)}</div></div><div className="settings-section"><label>FONT SIZE</label><input type="range" min="0" max="2" step="1" value={fontSizeLevel} onChange={(e) => setFontSizeLevel(Number(e.target.value))} /></div><div className="settings-section"><label>LETTER SPACING</label><input type="range" min="0" max="2" step="1" value={letterSpacingLevel} onChange={(e) => setLetterSpacingLevel(Number(e.target.value))} /></div></div></div></div>}
+    <RequestProductDialog open={requestProductOpen} onClose={() => setRequestProductOpen(false)} />
   </div>;
 }

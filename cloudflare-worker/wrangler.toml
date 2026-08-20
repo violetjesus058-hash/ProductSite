@@ -1,0 +1,17 @@
+name = "productsite-api"
+main = "src/index.ts"
+compatibility_date = "2026-08-20"
+
+# Deploy with: wrangler deploy
+# Create the D1 database in the Cloudflare dashboard, then replace database_id below.
+[[d1_databases]]
+binding = "DB"
+database_name = "productsite-db"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+
+[vars]
+# Replace with the final Cloudflare Pages origin before deployment.
+ALLOWED_ORIGIN = "https://REPLACE_WITH_PAGES_DOMAIN"
+
+# Never commit ADMIN_API_KEY. Set it with:
+# wrangler secret put ADMIN_API_KEY

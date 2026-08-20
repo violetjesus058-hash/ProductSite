@@ -7,6 +7,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import ProductDetail from "./pages/ProductDetail";
+import AdminRequests from "./pages/AdminRequests";
 import NotFound from "./pages/NotFound";
 
 export default function App() {
@@ -26,7 +27,6 @@ export default function App() {
       document.removeEventListener("contextmenu", preventImageContextMenu);
     };
   }, []);
-
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light">
@@ -35,6 +35,7 @@ export default function App() {
           <Switch>
             <Route path="/" component={Home} />
             <Route path="/product/:id" component={ProductDetail} />
+            <Route path="/admin/requests" component={AdminRequests} />
             <Route path="/404" component={NotFound} />
             <Route component={NotFound} />
           </Switch>
