@@ -826,3 +826,11 @@
 - [x] Separate platform purchase links from the recommendation header so platform buttons do not visually compete with the recommendation title.
 - [x] Keep the recommendation product waterfall directly connected to the redesigned header.
 - [x] Verify desktop and mobile product detail pages, then save a checkpoint.
+
+
+## 2026-08-20 Catalog card title refinement
+- [x] Audit the current source-title cleaning and card-title display logic against Kakobuy source fields.
+- [x] Add concise, evidence-based seasonal, use-case, or recommendation wording without inventing materials, performance, ratings, sales, or reviews.
+- [x] Enforce a short-title character budget and remove incomplete size-only or identifier-only titles.
+- [x] Verify representative clothing, pants, shoes, accessories, and branded products on desktop and mobile cards.
+- [x] Run tests, TypeScript, production build, and save a checkpoint.

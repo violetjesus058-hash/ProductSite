@@ -97,17 +97,68 @@ def preferred_single_image(images: list[str]) -> int | None:
 
 def clean_title(value: str, fallback: str) -> str:
     value = re.sub(r'📏.*$', '', value)
-    value = re.sub(r'whatsapp[:：]?\s*\+?\d+', '', value, flags=re.I)
-    value = re.sub(r'pls add whatsapp.*$', '', value, flags=re.I)
-    value = re.sub(r'\s+', ' ', value).strip(' -')
+    value = re.sub(r'whatsapp[:：]?\s*\+?[\d\s().+\-（）]+', '', value, flags=re.I)
+    value = re.sub(r'(?:pls\s+add\s+whatsapp|pls\s+contact|please\s+contact|if\s+(?:u|you)\s+need\s+(?:size\s+)?recommendation).*$', '', value, flags=re.I)
+    value = re.sub(r'\b\d{7,}\b', '', value)
+    value = re.sub(r'[（(]\s*[）)]', '', value)
+    value = re.sub(r'[（(]\s*$', '', value)
+    value = re.sub(r'\s+', ' ', value).strip(' -,:;，；')
     return value or fallback
 
 
+def editorial_descriptor(category: str, subcategory: str, title: str) -> str:
+    """Add a restrained catalog-style use-case phrase only when the source title is generic."""
+    text = f'{title} {subcategory}'.lower()
+    if category == 'pants' and re.search(r'\bshorts\b', text): return 'Warm-Weather'
+    if category == 'clothing' and re.search(r'\b(?:shirt|tee|t-?shirt|jersey)\b', text): return 'Everyday'
+    if category == 'clothing' and re.search(r'\b(?:hoodie|jacket|sweater|coat)\b', text): return 'Layering'
+    if category == 'shoe' and re.search(r'\b(?:sneaker|shoe|boot|sandal)\b', text): return 'Everyday'
+    if category == 'pants': return 'Everyday'
+    if category in {'bags', 'ACC'} and re.search(r'\b(?:wallet|belt|card holder|bag|bracelet|watch|glasses)\b', text): return 'Daily Essential'
+    if category == 'fragrance': return 'Everyday'
+    if category == 'watches': return 'Everyday'
+    if category == 'clothing': return 'Everyday'
+    if category == 'pants': return 'Everyday'
+    if category == 'shoe': return 'Everyday'
+    return ''
+
+
+def finalize_display_title(title: str, category: str, subcategory: str) -> str:
+    """Keep card titles concise while preserving source wording and factual category terms."""
+    title = re.sub(r'^\*?\s*\d{2}-\d{2}(?:[A-Z]{1,5})?\s*(?:[/|:-]\s*)?', '', title, flags=re.I)
+    title = re.sub(r'\s+', ' ', title).strip(' -/:')
+    generic = bool(re.match(r'^(?:high[- ]?quality|rep high[- ]?quality|fashion|premium|versatile|classic|catalog item|kakobuy product)\b', title, re.I))
+    descriptor = editorial_descriptor(category, subcategory, title)
+    if generic and descriptor:
+        title = re.sub(r'^(?:high[- ]?quality|rep high[- ]?quality|fashion|premium|versatile|classic)\s*', '', title, flags=re.I).strip(' -')
+        if not title or re.fullmatch(r'(?:fashion|versatile|apparel|product|item)', title, re.I):
+            category_label = {'clothing': 'Apparel', 'pants': 'Pants', 'shoe': 'Shoes', 'bags': 'Bag', 'fragrance': 'Perfume', 'watches': 'Watch', 'ACC': 'Accessory'}.get(category, 'Product')
+            title = subcategory if subcategory and subcategory.lower() != 'selection' else category_label
+        title = f'{descriptor} {title}'.strip()
+    if len(title) <= 42:
+        return title
+    shortened = re.sub(r'\s*[-|/:].*$', '', title).strip()
+    if len(shortened) <= 42:
+        return shortened
+    words = shortened.split()
+    compact = ''
+    for word in words:
+        candidate = f'{compact} {word}'.strip()
+        if len(candidate) > 39: break
+        compact = candidate
+    return f'{compact}…' if compact else title[:39].rstrip() + '…'
+
+
 def optimize_display_title(info: dict, category: str, subcategory: str, fallback: str) -> str:
-    """Use source wording when meaningful; replace ID-like titles with evidence-based generic names."""
+    """Use source wording when meaningful; replace ID-like titles with concise evidence-based names."""
     title = clean_title(str(info.get('title', '') or ''), '')
-    original = str(info.get('title_original', '') or '')
+    original = clean_title(str(info.get('title_original', '') or ''), '')
     source_text = f'{title} {original}'.lower()
+    size_only_source = bool(re.fullmatch(r'[*]?\s*\d+\s*[-–]\s*\d+(?:\s+\d+)?(?:\s+[A-Z]{1,5})?', title, re.I))
+    if size_only_source:
+        sub_label = {'Underwear': 'Underwear', 'Sets': 'Clothing Set', 'Hoodies': 'Hoodie', 'Jackets': 'Jacket', 'Sweaters': 'Sweater', 'Shirts': 'Shirt', 'Caps': 'Cap', 'Watches': 'Watch', 'Sandals': 'Sandals'}.get(subcategory)
+        category_label = {'clothing': 'Apparel', 'pants': 'Pants', 'shoe': 'Shoes', 'bags': 'Bag', 'fragrance': 'Perfume', 'watches': 'Watch', 'ACC': 'Accessory'}.get(category, 'Product')
+        return finalize_display_title(f'High-Quality {sub_label or category_label}', category, subcategory)
     if re.search(r'[\u4e00-\u9fff]', title) or re.search(r'[\u4e00-\u9fff]', original):
         translated = original or title
         translations = [
@@ -127,16 +178,23 @@ def optimize_display_title(info: dict, category: str, subcategory: str, fallback
         if re.match(r'^(?:High-Quality|High Quality|Fashion|Premium)', translated, re.I):
             translated = re.sub(r'\s+\d{1,4}\s*$', '', translated)
         translated = re.sub(r'\b([A-Za-z]+(?:-[A-Za-z]+)?)\s+\1\b', r'\1', translated, flags=re.I)
-        translated = re.sub(r'\s+', ' ', translated).strip(' -')
+        translated = re.sub(r'^\*?\s*\d{2}-\d{2}(?:[A-Z]{1,5})?\s*(?:[/|:-]\s*)?', '', translated, flags=re.I)
+        translated = re.sub(r'\s+', ' ', translated).strip(' -/:')
         if translated and not re.search(r'[\u4e00-\u9fff]', translated):
-            return translated
+            translated_size_only = bool(re.fullmatch(r'[*]?\s*\d+\s*[-–]\s*\d+(?:\s+\d+)?(?:\s+[A-Z]{1,5})?', translated, re.I))
+            if translated_size_only:
+                sub_label = {'Underwear': 'Underwear', 'Sets': 'Clothing Set', 'Hoodies': 'Hoodie', 'Jackets': 'Jacket', 'Sweaters': 'Sweater', 'Shirts': 'Shirt', 'Caps': 'Cap', 'Watches': 'Watch', 'Sandals': 'Sandals'}.get(subcategory)
+                category_label = {'clothing': 'Apparel', 'pants': 'Pants', 'shoe': 'Shoes', 'bags': 'Bag', 'fragrance': 'Perfume', 'watches': 'Watch', 'ACC': 'Accessory'}.get(category, 'Product')
+                return finalize_display_title(f'High-Quality {sub_label or category_label}', category, subcategory)
+            return finalize_display_title(translated, category, subcategory)
     generic_title = re.match(r'^(?:catalog item|kakobuy product|all[-_ ]?[a-z]+|high[- ]?quality|high-quality|rep high[- ]?quality|rep high quality|fashion hat|fashion trend|high-quality fashion)', title, re.I)
     if generic_title:
         title = re.sub(r'\s*(?:[（(]\s*)?(?:\d+[-_][A-Z]{1,5}[-_]\d+|[A-Z]{1,5}[-_]\d{2,}|\d{1,4})\s*(?:[）)])?\s*$', '', title, flags=re.I).strip(' -')
-    generic_exact = bool(re.fullmatch(r'(?:all|rep high[- ]?quality|high[- ]?quality|gs\.\d+|[a-z]{1,5}\.[0-9]{4,})', title, re.I))
+    size_only = bool(re.fullmatch(r'[*]?\s*\d+\s*[-–]\s*\d+(?:\s+\d+)?(?:\s+[A-Z]{1,5})?', title, re.I))
+    generic_exact = size_only or bool(re.fullmatch(r'(?:all|rep high[- ]?quality|high[- ]?quality|gs\.\d+|[a-z]{1,5}\.[0-9]{4,})', title, re.I))
     identifier_like = generic_exact or bool(re.search(r'\b(?:catalog item|kakobuy product)\b|(?:all[-_ ]?[a-z]+|high[- ]?quality|high-quality|rep high[- ]?quality|rep high quality)\s*\d*[-_ ]?(?:[a-z]{1,5}[-_ ]?\d+)?|\b\d+[-_][a-z]{1,5}[-_]\d+\b', title, re.I))
     if not identifier_like:
-        return title or fallback
+        return finalize_display_title(title or fallback, category, subcategory)
 
     code_match = re.search(r'\b(?:\d+[-_])?([A-Z]{1,5})[-_]\d+\b', title, re.I)
     code = code_match.group(1).upper() if code_match else ''
@@ -149,12 +207,12 @@ def optimize_display_title(info: dict, category: str, subcategory: str, fallback
     chinese_labels = [('内裤', 'Underwear'), ('卫衣', 'Hoodie'), ('套装', 'Clothing Set'), ('牛仔裤', 'Jeans'), ('裤', 'Pants'), ('帽', 'Hat'), ('鞋', 'Shoes'), ('包', 'Bag'), ('手表', 'Watch'), ('香水', 'Perfume')]
     for token, label in chinese_labels:
         if token in original:
-            return f'High-Quality {label}'
+            return finalize_display_title(f'High-Quality {label}', category, subcategory)
     if code in code_labels:
-        return f'High-Quality {code_labels[code]}'
+        return finalize_display_title(f'High-Quality {code_labels[code]}', category, subcategory)
     category_labels = {'clothing': 'Apparel', 'pants': 'Pants', 'shoe': 'Shoes', 'bags': 'Bag', 'fragrance': 'Perfume', 'watches': 'Watch', 'ACC': 'Accessory'}
     sub_label = {'Underwear': 'Underwear', 'Sets': 'Clothing Set', 'Hoodies': 'Hoodie', 'Jackets': 'Jacket', 'Sweaters': 'Sweater', 'Shirts': 'Shirt', 'Caps': 'Cap', 'Watches': 'Watch', 'Sandals': 'Sandals'}.get(subcategory)
-    return f'High-Quality {sub_label or category_labels.get(category, "Product")}'
+    return finalize_display_title(f'High-Quality {sub_label or category_labels.get(category, "Product")}', category, subcategory)
 
 
 CATEGORY_PATTERNS = {
