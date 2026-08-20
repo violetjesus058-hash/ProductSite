@@ -222,16 +222,24 @@ export default function Home() {
 
   useEffect(() => {
     if (isAiAuditView || categoryRecommendationPool.length === 0) return;
-    const node = categoryRecommendationSentinel.current;
-    if (!node) return;
-    const observer = new IntersectionObserver((entries) => {
-      if (!entries[0]?.isIntersecting || categoryRecommendationBusy.current) return;
+    const appendRecommendations = () => {
+      if (categoryRecommendationBusy.current) return;
       categoryRecommendationBusy.current = true;
       setCategoryRecommendationCount((count) => count + 24);
       window.requestAnimationFrame(() => { categoryRecommendationBusy.current = false; });
-    }, { rootMargin: "900px 0px" });
-    observer.observe(node);
-    return () => observer.disconnect();
+    };
+    const node = categoryRecommendationSentinel.current;
+    const observer = node ? new IntersectionObserver((entries) => {
+      if (entries[0]?.isIntersecting) appendRecommendations();
+    }, { rootMargin: "1200px 0px" }) : null;
+    if (node) observer?.observe(node);
+    const onScroll = () => {
+      const distanceToBottom = document.documentElement.scrollHeight - (window.scrollY + window.innerHeight);
+      if (distanceToBottom < 1200) appendRecommendations();
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => { observer?.disconnect(); window.removeEventListener("scroll", onScroll); };
   }, [categoryRecommendationPool.length, isAiAuditView, categoryRecommendationCount]);
 
   // Persist the complete audit cursor. The shuffle seed is the batch cursor: after data regeneration,
@@ -356,6 +364,7 @@ export default function Home() {
         <div className="result-label">
           <span className="coral-dot" /> 
           {brand !== "all" ? englishValue(brand, "SELECTED BRAND") : category === "all" ? "ALL PRODUCTS" : englishCategoryLabels[category] || category.toUpperCase()}
+          {!isAiAuditView && categoryRecommendationPool.length > 0 && <button className="recommendation-jump" onClick={() => document.getElementById("category-recommendation")?.scrollIntoView({ behavior: "smooth", block: "start" })}>CONTINUE EXPLORING <ArrowUpRight size={12} /></button>}
           {!isAiAuditView && <span className="result-count" aria-live="polite">{visible.length.toLocaleString()} cards · {visibleSourceCount.toLocaleString()} items</span>}
         </div>
         <div className="flex items-center gap-4">
@@ -408,7 +417,7 @@ export default function Home() {
         </section>
         
         {!isAiAuditView && categoryRecommendationPool.length > 0 && <section className="category-recommendation" aria-labelledby="category-recommendation-title">
-          <div className="category-recommendation-head">
+          <div id="category-recommendation" className="category-recommendation-head">
             <div>
               <span className="recommendation-kicker">CURATED DISCOVERY <i>/ 03</i></span>
               <h2 id="category-recommendation-title">Recommended products</h2>
