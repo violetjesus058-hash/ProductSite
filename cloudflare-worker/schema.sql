@@ -9,6 +9,14 @@ CREATE TABLE IF NOT EXISTS product_requests (
   notes TEXT,
   status TEXT NOT NULL DEFAULT 'Received' CHECK (status IN ('Received', 'Reviewing', 'Accepted', 'Closed')),
   admin_reply TEXT,
+  ip_address TEXT,
+  country TEXT,
+  region TEXT,
+  city TEXT,
+  device_type TEXT,
+  browser TEXT,
+  operating_system TEXT,
+  user_agent TEXT,
   created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

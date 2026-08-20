@@ -24,3 +24,11 @@
 | PATCH | `/api/admin/requests/:id` | `x-admin-api-key` | 管理员修改状态和回复 |
 
 在 Worker 未绑定前，预览页面会显示“尚未连接 Cloudflare Worker”，提交按钮保持禁用，避免申请内容误以为已经保存。Discord 按钮可以直接使用：<https://discord.gg/jtc399kUQV>。
+
+## 申请元数据扩展
+
+新版 Worker 会在用户提交申请时由 Cloudflare 服务端读取请求元数据，并保存脱敏 IP、国家/地区、城市、设备类型、浏览器、操作系统和 User-Agent 摘要。公开申请状态页不会返回这些字段，只有带有 `x-admin-api-key` 的管理员列表接口会返回。
+
+已有 `product_requests` 表的数据库需要先在 Cloudflare D1 控制台执行 `migrations/002_request_metadata.sql` 中的 8 条 `ALTER TABLE` 语句。执行成功后，再从 GitHub 重新部署 Worker。新提交的申请才会开始记录这些字段，旧申请的元数据会显示为“—”，不会伪造历史数据。
+
+管理员页面会显示用户完整表单资料、时间、脱敏 IP、国家/地区、设备、浏览器、操作系统和 User-Agent 摘要。IP 仅用于后台排查和统计，建议定期清理或按隐私政策保留。

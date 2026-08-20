@@ -779,3 +779,10 @@
 - [x] 将 Cloudflare D1 真实 database_id 写入 `cloudflare-worker/wrangler.toml`。
 - [x] 将正确 Pages 来源写入 `ALLOWED_ORIGIN` 配置占位并同步 GitHub。
 - [x] 重新触发 Cloudflare Worker 部署并确认 D1 绑定成功。
+
+## 申请后台元数据扩展（2026-08-20）
+- [ ] 扩展 D1 申请表字段，保存脱敏 IP、国家/地区、设备类型、浏览器、操作系统和 User-Agent 摘要。
+- [ ] 在 Worker 提交接口中从 Cloudflare 请求头服务端采集元数据，不信任前端传值。
+- [ ] 在管理员详情页展示完整申请资料、访问元数据和提交/更新时间。
+- [ ] 保持公开状态查询页不显示 IP、国家、设备等隐私字段。
+- [ ] 执行 D1 迁移、测试、重新部署 Worker 并验证现有申请记录兼容。

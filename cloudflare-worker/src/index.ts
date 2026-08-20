@@ -15,6 +15,14 @@ type RequestRow = {
   notes: string | null;
   status: string;
   admin_reply: string | null;
+  ip_address: string | null;
+  country: string | null;
+  region: string | null;
+  city: string | null;
+  device_type: string | null;
+  browser: string | null;
+  operating_system: string | null;
+  user_agent: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -57,6 +65,58 @@ export function makeRequestCode() {
   return `REQ-${stamp}-${suffix}`;
 }
 
+export function maskIp(ip: string) {
+  const value = ip.trim();
+  if (!value) return "";
+  if (value.includes(".")) {
+    const parts = value.split(".");
+    return parts.length === 4 ? `${parts[0]}.${parts[1]}.${parts[2]}.0` : "匿名 IP";
+  }
+  if (value.includes(":")) {
+    return `${value.split(":").slice(0, 2).join(":")}::`;
+  }
+  return "匿名 IP";
+}
+
+export function detectDevice(ua: string) {
+  if (/ipad|tablet|kindle|silk/i.test(ua)) return "Tablet";
+  if (/mobile|iphone|android|phone/i.test(ua)) return "Mobile";
+  return "Desktop";
+}
+
+export function detectBrowser(ua: string) {
+  if (/edg\//i.test(ua)) return "Microsoft Edge";
+  if (/opr\//i.test(ua)) return "Opera";
+  if (/firefox\//i.test(ua)) return "Firefox";
+  if (/samsungbrowser\//i.test(ua)) return "Samsung Internet";
+  if (/chrome\//i.test(ua) && !/edg\//i.test(ua)) return "Chrome";
+  if (/safari\//i.test(ua) && !/chrome\//i.test(ua) && !/android/i.test(ua)) return "Safari";
+  return "Other";
+}
+
+export function detectOperatingSystem(ua: string) {
+  if (/windows/i.test(ua)) return "Windows";
+  if (/iphone|ipad|ios/i.test(ua)) return "iOS";
+  if (/android/i.test(ua)) return "Android";
+  if (/mac os|macintosh/i.test(ua)) return "macOS";
+  if (/linux/i.test(ua)) return "Linux";
+  return "Other";
+}
+
+function requestMetadata(request: Request) {
+  const ua = normalizeText(request.headers.get("User-Agent"), 300);
+  return {
+    ipAddress: maskIp(request.headers.get("CF-Connecting-IP") || request.headers.get("X-Forwarded-For") || ""),
+    country: normalizeText(request.headers.get("CF-IPCountry"), 80) || null,
+    region: normalizeText(request.headers.get("CF-Region"), 120) || null,
+    city: normalizeText(request.headers.get("CF-IPCity"), 120) || null,
+    deviceType: detectDevice(ua),
+    browser: detectBrowser(ua),
+    operatingSystem: detectOperatingSystem(ua),
+    userAgent: ua || null,
+  };
+}
+
 function publicRow(row: RequestRow) {
   return {
     requestCode: row.request_code,
@@ -66,6 +126,31 @@ function publicRow(row: RequestRow) {
     description: row.description,
     status: row.status,
     adminReply: row.admin_reply,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
+
+function adminRow(row: RequestRow) {
+  return {
+    id: row.id,
+    requestCode: row.request_code,
+    name: row.name,
+    contact: row.contact,
+    productUrl: row.product_url,
+    imageUrl: row.image_url,
+    description: row.description,
+    notes: row.notes,
+    status: row.status,
+    adminReply: row.admin_reply,
+    ipAddress: row.ip_address,
+    country: row.country,
+    region: row.region,
+    city: row.city,
+    deviceType: row.device_type,
+    browser: row.browser,
+    operatingSystem: row.operating_system,
+    userAgent: row.user_agent,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -87,8 +172,9 @@ async function createRequest(request: Request, env: Env) {
   if (!name || !description) return response(request, env, { error: "请填写姓名和产品描述。" }, 400);
   if (!validUrl(productUrl) || !validUrl(imageUrl)) return response(request, env, { error: "商品链接或图片链接格式不正确。" }, 400);
   const requestCode = makeRequestCode();
-  await env.DB.prepare(`INSERT INTO product_requests (request_code, name, contact, product_url, image_url, description, notes) VALUES (?, ?, ?, ?, ?, ?, ?)`)
-    .bind(requestCode, name, contact || null, productUrl || null, imageUrl || null, description, notes || null)
+  const metadata = requestMetadata(request);
+  await env.DB.prepare(`INSERT INTO product_requests (request_code, name, contact, product_url, image_url, description, notes, ip_address, country, region, city, device_type, browser, operating_system, user_agent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+    .bind(requestCode, name, contact || null, productUrl || null, imageUrl || null, description, notes || null, metadata.ipAddress || null, metadata.country, metadata.region, metadata.city, metadata.deviceType, metadata.browser, metadata.operatingSystem, metadata.userAgent)
     .run();
   return response(request, env, { requestCode, status: "Received" }, 201);
 }
@@ -102,7 +188,7 @@ async function getPublicRequest(request: Request, env: Env, code: string) {
 async function listAdminRequests(request: Request, env: Env) {
   if (!isAdmin(request, env)) return response(request, env, { error: "没有后台访问权限。" }, 401);
   const rows = await env.DB.prepare("SELECT * FROM product_requests ORDER BY datetime(created_at) DESC LIMIT 200").all<RequestRow>();
-  return response(request, env, { items: rows.results || [] });
+  return response(request, env, { items: (rows.results || []).map(adminRow) });
 }
 
 async function updateAdminRequest(request: Request, env: Env, id: string) {
