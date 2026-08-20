@@ -793,3 +793,14 @@
 - [ ] 增加 Worker 服务端字段清理、请求体限制、危险链接拦截和基础频率限制。
 - [ ] 保持公开状态查询页不显示 IP、国家、设备和 User-Agent。
 - [ ] 完成测试、构建、Cloudflare 部署和英文界面回归验证。
+
+
+## 2026-08-20 English request flow and security
+- [x] Translate the public Request a Product dialog, status lookup, homepage entry, and Discord feedback copy into English.
+- [x] Keep the public request response limited to a request ID and status; do not expose IP, country, device, browser, or operating-system metadata to requesters.
+- [x] Add server-side request validation, strict length limits, control-character rejection, URL scheme validation, honeypot rejection, and a generic public error response.
+- [x] Add rate limiting for public submissions, status lookups, and admin API requests, with no-store responses for sensitive endpoints.
+- [x] Expand the admin request view with masked IP, country/region, city, device, browser, operating system, and User-Agent summary fields.
+- [x] Run Vitest, TypeScript checks, and the production build successfully.
+- [x] Push the change to ProductSite main at commit 97f4151.
+- [ ] Verify the updated English request flow and admin reply flow against the live Cloudflare Pages/Worker deployment.
