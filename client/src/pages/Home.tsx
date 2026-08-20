@@ -317,7 +317,7 @@ export default function Home() {
       <nav className="category-nav" aria-label="Product categories">
         {navItems.map((item) => <button key={item.id} className={`category-link ${category === item.id ? "is-active" : ""}`} onClick={() => changeAuditCategory(item.id)}><span>{item.label}</span></button>)}
       </nav>
-      <div className="rail-request-area"><button className="rail-request-link" onClick={() => setRequestProductOpen(true)}><span>申请上新产品</span><MessageCircle size={14} /></button><a className="rail-discord-link" href="https://discord.gg/jtc399kUQV" target="_blank" rel="noreferrer"><span>DISCORD FEEDBACK</span><ArrowUpRight size={12} /></a></div>
+      <div className="rail-request-area"><button className="rail-request-link" onClick={() => setRequestProductOpen(true)}><span>REQUEST A PRODUCT</span><MessageCircle size={14} /></button><a className="rail-discord-link" href="https://discord.gg/jtc399kUQV" target="_blank" rel="noreferrer"><span>DISCORD FEEDBACK</span><ArrowUpRight size={12} /></a></div>
       <div className="rail-footer"><span>CATALOG / 01</span><span>2026</span></div>
     </aside>
     <main className="catalog-main">

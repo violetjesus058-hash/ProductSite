@@ -29,6 +29,9 @@ type RequestRow = {
 
 const statuses = new Set(["Received", "Reviewing", "Accepted", "Closed"]);
 const jsonHeaders = { "content-type": "application/json; charset=UTF-8" };
+const submissionWindows = new Map<string, number[]>();
+const MAX_REQUEST_BYTES = 12_000;
+const MAX_SUBMISSIONS_PER_MINUTE = 5;
 
 function corsHeaders(request: Request, env: Env): Headers {
   const origin = request.headers.get("Origin") || "";
@@ -46,7 +49,26 @@ function response(request: Request, env: Env, body: unknown, status = 200) {
 }
 
 function normalizeText(value: unknown, maxLength: number) {
-  return typeof value === "string" ? value.trim().slice(0, maxLength) : "";
+  return typeof value === "string"
+    ? value.replace(/[\\u0000-\\u0008\\u000B\\u000C\\u000E-\\u001F\\u007F]/g, "").trim().slice(0, maxLength)
+    : "";
+}
+
+function rawClientIp(request: Request) {
+  return (request.headers.get("CF-Connecting-IP") || request.headers.get("X-Forwarded-For") || "anonymous").split(",")[0].trim().slice(0, 120);
+}
+
+function isRateLimited(request: Request) {
+  const now = Date.now();
+  const key = rawClientIp(request);
+  const recent = (submissionWindows.get(key) || []).filter((time) => now - time < 60_000);
+  if (recent.length >= MAX_SUBMISSIONS_PER_MINUTE) {
+    submissionWindows.set(key, recent);
+    return true;
+  }
+  recent.push(now);
+  submissionWindows.set(key, recent);
+  return false;
 }
 
 export function validUrl(value: string) {
@@ -162,7 +184,19 @@ function isAdmin(request: Request, env: Env) {
 }
 
 async function createRequest(request: Request, env: Env) {
-  const input = await request.json().catch(() => null) as Record<string, unknown> | null;
+  const declaredLength = Number(request.headers.get("Content-Length") || 0);
+  if (declaredLength > MAX_REQUEST_BYTES) return response(request, env, { error: "The request is too large." }, 413);
+  if (!request.headers.get("Content-Type")?.toLowerCase().startsWith("application/json")) return response(request, env, { error: "Unsupported request format." }, 415);
+  if (isRateLimited(request)) return response(request, env, { error: "Too many requests. Please wait a minute and try again." }, 429);
+  const rawBody = await request.text();
+  if (new TextEncoder().encode(rawBody).byteLength > MAX_REQUEST_BYTES) return response(request, env, { error: "The request is too large." }, 413);
+  let input: Record<string, unknown> | null = null;
+  try {
+    input = JSON.parse(rawBody || "null") as Record<string, unknown> | null;
+  } catch {
+    return response(request, env, { error: "Invalid request body." }, 400);
+  }
+  if (normalizeText(input?.website, 200)) return response(request, env, { error: "Unable to process this request." }, 400);
   const name = normalizeText(input?.name, 80);
   const contact = normalizeText(input?.contact, 160);
   const productUrl = normalizeText(input?.productUrl, 500);

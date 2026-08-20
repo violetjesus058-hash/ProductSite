@@ -539,3 +539,6 @@ a { color:inherit; text-decoration:none; }
 .admin-detail-section .admin-field { margin:15px 0 0; }
 .admin-detail-section .admin-save { margin-left:0; }
 @media (max-width:760px) { .admin-detail-section { padding:13px; }.admin-meta-grid { grid-template-columns:1fr; }.admin-detail-heading { margin-left:13px; margin-right:13px; } }
+
+.request-honeypot { position:absolute !important; left:-10000px !important; width:1px !important; height:1px !important; opacity:0 !important; pointer-events:none !important; }
+.request-privacy-note { margin:0; color:#aaa69e; font-size:10px; line-height:1.55; }

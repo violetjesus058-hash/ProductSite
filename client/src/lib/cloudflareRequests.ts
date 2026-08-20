@@ -5,6 +5,7 @@ export type ProductRequestInput = {
   imageUrl: string;
   description: string;
   notes: string;
+  website?: string;
 };
 
 export type ProductRequestResult = {

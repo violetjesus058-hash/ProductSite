@@ -2,7 +2,18 @@ import { FormEvent, useState } from "react";
 import { MessageCircle, X } from "lucide-react";
 import { isCloudflareWorkerConfigured, submitProductRequest, type ProductRequestInput } from "@/lib/cloudflareRequests";
 
-const initialForm: ProductRequestInput = { name: "", contact: "", productUrl: "", imageUrl: "", description: "", notes: "" };
+const initialForm: ProductRequestInput = { name: "", contact: "", productUrl: "", imageUrl: "", description: "", notes: "", website: "" };
+const maxLengths = { name: 80, contact: 160, productUrl: 500, imageUrl: 500, description: 2000, notes: 1000 } as const;
+
+function isSafeUrl(value: string) {
+  if (!value.trim()) return true;
+  try {
+    const url = new URL(value.trim());
+    return url.protocol === "https:" || url.protocol === "http:";
+  } catch {
+    return false;
+  }
+}
 
 export default function RequestProductDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [form, setForm] = useState(initialForm);
@@ -16,14 +27,17 @@ export default function RequestProductDialog({ open, onClose }: { open: boolean;
     event.preventDefault();
     setMessage("");
     setRequestCode("");
+    const cleanForm = Object.fromEntries(Object.entries(form).map(([field, value]) => [field, value.trim()])) as ProductRequestInput;
+    if (!cleanForm.name || !cleanForm.description) { setMessage("Please enter your name and a product description."); return; }
+    if (!isSafeUrl(cleanForm.productUrl) || !isSafeUrl(cleanForm.imageUrl)) { setMessage("Please use a valid HTTP or HTTPS link."); return; }
     setSubmitting(true);
     try {
-      const result = await submitProductRequest(form);
+      const result = await submitProductRequest(cleanForm);
       setRequestCode(result.requestCode);
-      setMessage("申请已提交，我们会尽快查看。");
+      setMessage("Your request has been received. We will review it shortly.");
       setForm(initialForm);
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "提交失败，请稍后重试。");
+      setMessage(error instanceof Error ? error.message : "The request could not be submitted. Please try again later.");
     } finally {
       setSubmitting(false);
     }
@@ -31,18 +45,20 @@ export default function RequestProductDialog({ open, onClose }: { open: boolean;
 
   return <div className="request-dialog-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
     <section className="request-dialog" role="dialog" aria-modal="true" aria-labelledby="request-product-title">
-      <div className="request-dialog-head"><div><span className="request-eyebrow">CATALOG REQUEST</span><h2 id="request-product-title">申请上新产品</h2></div><button className="request-close" onClick={onClose} aria-label="关闭申请表单"><X size={18} /></button></div>
-      <p className="request-intro">告诉我们你希望加入目录的产品，我们会根据链接和图片进行审核。</p>
-      {!isCloudflareWorkerConfigured() && <div className="request-config-note">当前预览尚未连接 Cloudflare Worker。完成 Worker 配置后，这里的提交内容才会正式保存到 D1。</div>}
-      <form onSubmit={submit} className="request-form">
-        <label>姓名或昵称<input required value={form.name} onChange={(event) => update("name", event.target.value)} placeholder="例如 Alex" /></label>
-        <label>联系方式<span className="optional-label">可选</span><input value={form.contact} onChange={(event) => update("contact", event.target.value)} placeholder="Email / Discord 用户名" /></label>
-        <label>商品链接<span className="optional-label">可选</span><input type="url" value={form.productUrl} onChange={(event) => update("productUrl", event.target.value)} placeholder="https://..." /></label>
-        <label>商品图片链接<span className="optional-label">可选</span><input type="url" value={form.imageUrl} onChange={(event) => update("imageUrl", event.target.value)} placeholder="https://..." /></label>
-        <label>产品描述<textarea required rows={4} value={form.description} onChange={(event) => update("description", event.target.value)} placeholder="请说明品牌、品类、款式或你希望加入的原因" /></label>
-        <label>补充说明<span className="optional-label">可选</span><textarea rows={2} value={form.notes} onChange={(event) => update("notes", event.target.value)} placeholder="尺码、颜色或其他要求" /></label>
-        {message && <div className={`request-message ${requestCode ? "is-success" : "is-error"}`}>{message}{requestCode && <strong>申请编号：{requestCode}</strong>}</div>}
-        <div className="request-form-actions"><button type="submit" className="request-submit" disabled={submitting || !isCloudflareWorkerConfigured()}>{submitting ? "提交中…" : "提交申请"}</button><a className="request-discord" href="https://discord.gg/jtc399kUQV" target="_blank" rel="noreferrer"><MessageCircle size={15} /> Discord 反馈</a></div><a className="request-status-link" href="/requests/status">已有申请编号？查询处理状态</a>
+      <div className="request-dialog-head"><div><span className="request-eyebrow">CATALOG REQUEST</span><h2 id="request-product-title">Request a Product</h2></div><button className="request-close" onClick={onClose} aria-label="Close request form"><X size={18} /></button></div>
+      <p className="request-intro">Tell us which product you would like to see in the catalog. We review the product details and links before adding anything.</p>
+      {!isCloudflareWorkerConfigured() && <div className="request-config-note">This preview is not connected to the request service yet. Submissions will be saved after the Cloudflare Worker is configured.</div>}
+      <form onSubmit={submit} className="request-form" noValidate>
+        <label>Name or nickname<input required maxLength={maxLengths.name} value={form.name} onChange={(event) => update("name", event.target.value)} placeholder="e.g. Alex" autoComplete="name" /></label>
+        <label>Contact <span className="optional-label">Optional</span><input maxLength={maxLengths.contact} value={form.contact} onChange={(event) => update("contact", event.target.value)} placeholder="Email or Discord username" autoComplete="email" /></label>
+        <label>Product link <span className="optional-label">Optional</span><input type="url" maxLength={maxLengths.productUrl} value={form.productUrl} onChange={(event) => update("productUrl", event.target.value)} placeholder="https://..." inputMode="url" /></label>
+        <label>Product image link <span className="optional-label">Optional</span><input type="url" maxLength={maxLengths.imageUrl} value={form.imageUrl} onChange={(event) => update("imageUrl", event.target.value)} placeholder="https://..." inputMode="url" /></label>
+        <label>Product description<textarea required maxLength={maxLengths.description} rows={4} value={form.description} onChange={(event) => update("description", event.target.value)} placeholder="Tell us the brand, category, style, and why it should be added." /></label>
+        <label>Additional notes <span className="optional-label">Optional</span><textarea maxLength={maxLengths.notes} rows={2} value={form.notes} onChange={(event) => update("notes", event.target.value)} placeholder="Size, color, or other requirements" /></label>
+        <input className="request-honeypot" tabIndex={-1} autoComplete="off" aria-hidden="true" value={form.website} onChange={(event) => update("website", event.target.value)} />
+        <p className="request-privacy-note">For abuse prevention, Cloudflare records limited request metadata such as an approximate IP, country, and device type. These details are visible only to catalog administrators and are not shown on the public status page.</p>
+        {message && <div className={`request-message ${requestCode ? "is-success" : "is-error"}`}>{message}{requestCode && <strong>Request ID: {requestCode}</strong>}</div>}
+        <div className="request-form-actions"><button type="submit" className="request-submit" disabled={submitting || !isCloudflareWorkerConfigured()}>{submitting ? "Submitting…" : "Submit request"}</button><a className="request-discord" href="https://discord.gg/jtc399kUQV" target="_blank" rel="noreferrer"><MessageCircle size={15} /> Discord feedback</a></div><a className="request-status-link" href="/requests/status">Already have a request ID? Check status</a>
       </form>
     </section>
   </div>;
