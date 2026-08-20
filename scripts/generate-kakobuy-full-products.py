@@ -53,34 +53,44 @@ def platform_links_for(source_id: str) -> dict[str, str]:
     }
 
 
-def collage_score(image_path: str) -> float:
-    """Estimate whether a local image is a collage; lower score is preferred as a cover."""
+_IMAGE_QUALITY_CACHE: dict[str, float] = {}
+
+
+def image_quality_score(image_path: str) -> float:
+    """Score cover suitability: blank/near-uniform images are rejected, clear single images score lower."""
+    if image_path in _IMAGE_QUALITY_CACHE:
+        return _IMAGE_QUALITY_CACHE[image_path]
     try:
         path = ROOT / 'client/public' / image_path.lstrip('/')
         with Image.open(path) as source:
-            image = source.convert('L').resize((32, 32))
-        edges = image.filter(ImageFilter.FIND_EDGES)
-        pixels = list(edges.getdata())
-        edge_mean = sum(pixels) / max(1, len(pixels))
-        row_means = [sum(pixels[y * 32:(y + 1) * 32]) / 32 for y in range(32)]
-        col_means = [sum(pixels[x::32]) / 32 for x in range(32)]
-        horizontal_peaks = sum(value > edge_mean * 1.9 and value > 34 for value in row_means)
-        vertical_peaks = sum(value > edge_mean * 1.9 and value > 34 for value in col_means)
-        contrast = ImageStat.Stat(image).stddev[0]
-        return (horizontal_peaks + vertical_peaks) * 2.2 + edge_mean * 0.15 + contrast * 0.04
+            image = source.convert('L').resize((48, 48))
+        pixels = list(image.getdata())
+        stats = ImageStat.Stat(image)
+        mean = stats.mean[0]
+        deviation = stats.stddev[0]
+        near_white = sum(pixel >= 248 for pixel in pixels) / max(1, len(pixels))
+        near_black = sum(pixel <= 7 for pixel in pixels) / max(1, len(pixels))
+        # Pure white/black placeholders and blank panels must never remain covers.
+        if deviation < 4.5 or near_white > 0.985 or near_black > 0.985:
+            score = 10000.0
+        else:
+            score = collage_score(image_path)
+        _IMAGE_QUALITY_CACHE[image_path] = score
+        return score
     except Exception:
-        return 999.0
+        _IMAGE_QUALITY_CACHE[image_path] = 10000.0
+        return 10000.0
 
 
 def preferred_single_image(images: list[str]) -> int | None:
-    candidates = images[:4]
-    if len(candidates) < 2:
+    """Choose a clear later gallery image when the first image is blank or materially worse."""
+    if len(images) < 2:
         return None
-    scores = [(collage_score(image), index) for index, image in enumerate(candidates)]
+    candidates = list(enumerate(images[:16]))
+    scores = [(image_quality_score(image), index) for index, image in candidates]
     best_score, best_index = min(scores)
-    current_score = scores[0][0]
-    # Only replace the current cover when another image is materially less collage-like.
-    if best_index != 0 and best_score + 3.0 < current_score:
+    current_score = image_quality_score(images[0])
+    if best_index != 0 and (current_score >= 10000.0 or best_score + 3.0 < current_score):
         return best_index
     return None
 
@@ -197,6 +207,7 @@ MANUAL_OVERRIDES = {
     '7578496024': {'primary_image_path': '/product-images/7578496024-single-bottle.webp', 'review_note': 'Manual image review: use a source-derived single-bottle crop as the catalog cover; retain the original collage in the gallery.'},
     '7786196426': {'primary_image_path': '/product-images/7786196426-single-watch.webp', 'review_note': 'Manual image review: use a source-derived single-watch crop as the catalog cover; retain the original collage in the gallery.'},
     '7778863173': {'primary_image_path': '/manus-storage/kb-7778863173-cover_a7bcd7b2.gif', 'review_note': 'User-provided cover override: use the supplied GIF as the catalog main image because the generated cover was blank.'},
+    '7576540787': {'category': 'pants', 'subCategory': 'Shorts', 'primary_image_index': 2, 'review_note': 'User screenshot review: the first gallery image is blank; use the later single-shorts image as the catalog cover and classify as pants/shorts.'},
     '7576599899': {'category': 'pants', 'subCategory': 'Shorts', 'review_note': 'User screenshot review: title and visible product image identify a pants/shorts item, not a generic clothing item; corrected to pants/shorts.'},
     '7601623089': {'category': 'clothing', 'subCategory': 'Hoodies', 'review_note': 'Manual review: cover image shows two hooded zip-up sweatshirts.'},
     '7603560398': {'category': 'clothing', 'subCategory': 'Hoodies', 'review_note': 'Manual review: cover image shows three hooded sweatshirts.'},

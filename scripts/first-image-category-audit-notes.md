@@ -107,3 +107,8 @@ Clothing 15 个首图批次、Accessories/ACC 3 个批次、Pants 2 个批次、
 - `High-Quality Underwear`、`High-Quality Underwear H`、`High-Quality Socks` 属于服饰大类下的 Underwear/Socks 子类，当前归入 `clothing` 是符合现有大类体系的，不作为错误迁移到 Accessories。
 - `High-Quality Clothing Set 4-001` 为服装套装，保留在 Clothing；`High-Quality Apparel` 的尺码图/规格图只能证明图片质量需要后续优化，不能仅凭尺码图确认其大类错误，暂不强行改类。
 - 本轮未创建重复商品；总量保持 2,192 张展示卡片。
+
+
+## 空白首图自动替换规则验证（2026-08-20）
+
+已增强 `preferred_single_image`：现在会检查同一商品最多 16 张画廊图，跳过近纯白/近纯黑/低变化占位图，并在首图明显不合适时选择后续清晰图片。示例 `kb-7576540787-30-38` 的空白首图已切换为第 3 张单一短裤图，详情页显示为 Pants/Shorts，画廊仍保留 14 张图片。重新生成后总量保持 2,192 张卡片、1,153 个唯一源商品。
