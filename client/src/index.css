@@ -203,7 +203,10 @@ a { color:inherit; text-decoration:none; }
 .header-record-button.is-active { color:var(--coral); }
 .record-popover { position:absolute; top:34px; right:-8px; z-index:40; width:292px; padding:10px; border:1px solid rgba(28,25,21,.14); background:rgba(250,248,242,.97); box-shadow:0 16px 42px rgba(37,29,18,.16); backdrop-filter:blur(18px); animation:record-popover-in .18s var(--ease-out, cubic-bezier(.23,1,.32,1)); transform-origin:top right; }
 .record-popover-head { display:flex; align-items:center; justify-content:space-between; padding:4px 4px 9px; border-bottom:1px solid var(--line); color:var(--ink-soft); font-size:9px; letter-spacing:.14em; }
+.record-popover-actions { display:flex; align-items:center; gap:9px; }
 .record-popover-head button { display:grid; place-items:center; color:var(--ink-soft); }
+.record-clear-button { padding:2px 0; color:var(--coral); font-size:8px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; transition:opacity .18s, transform .18s; }
+.record-clear-button:hover { opacity:.68; transform:translateY(-1px); }
 .record-row { display:flex; align-items:center; gap:9px; width:100%; padding:9px 4px; text-align:left; color:var(--ink); transition:background .18s, transform .18s; }
 .record-row:hover { background:rgba(201,88,70,.08); transform:translateX(2px); }
 .record-row img { width:38px; height:38px; flex:none; object-fit:cover; background:#e9e5dc; }
