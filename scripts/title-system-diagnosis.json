@@ -1,0 +1,484 @@
+{
+  "totalProducts": 2192,
+  "uniqueTitles": 498,
+  "uniqueTitleRate": 0.2272,
+  "duplicateTitleProducts": 2120,
+  "duplicateTitleClusters": 426,
+  "genericTitleProducts": 92,
+  "styleWordProducts": 1295,
+  "featureWordProducts": 1058,
+  "codeLikeTitles": 18,
+  "averageTitleLength": 23.73,
+  "maxTitleLength": 42,
+  "topTitles": [
+    [
+      "Essential Jacket",
+      93
+    ],
+    [
+      "Essential Apparel",
+      92
+    ],
+    [
+      "Essential Shorts",
+      89
+    ],
+    [
+      "Essential Curved-Leg Pants",
+      58
+    ],
+    [
+      "Essential Clothing Set",
+      55
+    ],
+    [
+      "Essential Jeans",
+      50
+    ],
+    [
+      "Essential Cap",
+      42
+    ],
+    [
+      "Essential Short-Sleeve Shirt",
+      39
+    ],
+    [
+      "Layering Hoodie",
+      34
+    ],
+    [
+      "Essential T-Shirt",
+      32
+    ],
+    [
+      "Essential Sport Sneakers",
+      26
+    ],
+    [
+      "Relaxed Fit Relaxed Fit Short-Sleeve Shirt",
+      25
+    ],
+    [
+      "Essential Flare Jeans",
+      24
+    ],
+    [
+      "Retro Football Jersey",
+      24
+    ],
+    [
+      "Streetwear Graphic Short-Sleeve Shirt",
+      23
+    ],
+    [
+      "Essential Belt",
+      22
+    ],
+    [
+      "Essential Sneakers",
+      22
+    ],
+    [
+      "Layering Sweater",
+      21
+    ],
+    [
+      "Daily Carry Backpacks",
+      19
+    ],
+    [
+      "Essential Watch",
+      18
+    ],
+    [
+      "Essential Hoodie",
+      18
+    ],
+    [
+      "Essential Underwear",
+      17
+    ],
+    [
+      "Layering Jacket",
+      17
+    ],
+    [
+      "Essential Cargo Workwear Pants",
+      17
+    ],
+    [
+      "Essential Straight-Leg Pants",
+      15
+    ],
+    [
+      "Casual Sneakers",
+      15
+    ],
+    [
+      "Long-Sleeve Shirt",
+      14
+    ],
+    [
+      "Essential Accessories",
+      13
+    ],
+    [
+      "Essential Streetwear Clothing Set",
+      13
+    ],
+    [
+      "Gray Zip Hoodie & Joggers",
+      13
+    ]
+  ],
+  "categories": {
+    "ACC": {
+      "products": 255,
+      "uniqueTitles": 62,
+      "uniqueRate": 0.2431,
+      "generic": 0,
+      "styleWord": 168,
+      "featureWord": 104,
+      "sourceFeatureAvailability": {
+        "brand": 255,
+        "sizes": 255,
+        "subCategory": 255,
+        "tags": 255
+      },
+      "titleFeatureUsage": {
+        "Bag": 5,
+        "Cap": 51,
+        "Graphic": 6,
+        "Shirt": 21,
+        "T-Shirt": 9,
+        "Fragrance": 6,
+        "Watch": 4,
+        "Hoodie": 8,
+        "Baseball": 1,
+        "Sweatpants": 1,
+        "Wallet": 6,
+        "Relaxed": 11,
+        "Slim": 2
+      },
+      "topTitles": [
+        [
+          "Essential Cap",
+          42
+        ],
+        [
+          "Essential Belt",
+          22
+        ],
+        [
+          "Essential Accessories",
+          13
+        ],
+        [
+          "Essential Card Holder",
+          12
+        ],
+        [
+          "Essential Necklace",
+          11
+        ],
+        [
+          "Relaxed Fit Relaxed Fit Long-Sleeve Shirt",
+          10
+        ],
+        [
+          "Monogram Tote & Pouch Set",
+          9
+        ],
+        [
+          "Floral Hoodie & Jogger Set",
+          7
+        ]
+      ]
+    },
+    "bags": {
+      "products": 54,
+      "uniqueTitles": 8,
+      "uniqueRate": 0.1481,
+      "generic": 0,
+      "styleWord": 54,
+      "featureWord": 21,
+      "sourceFeatureAvailability": {
+        "brand": 54,
+        "sizes": 54,
+        "subCategory": 54,
+        "tags": 54
+      },
+      "titleFeatureUsage": {
+        "Bag": 21
+      },
+      "topTitles": [
+        [
+          "Daily Carry Backpacks",
+          19
+        ],
+        [
+          "Daily Carry Shoulder Bags",
+          11
+        ],
+        [
+          "Essential Everyday Bag",
+          10
+        ],
+        [
+          "Essential Backpack",
+          4
+        ],
+        [
+          "Daily Carry Fashion 1--001",
+          3
+        ],
+        [
+          "Daily Carry Fashion Classic",
+          3
+        ],
+        [
+          "Daily Carry Classic Fashion",
+          2
+        ],
+        [
+          "Daily Carry Fashion Versatile",
+          2
+        ]
+      ]
+    },
+    "clothing": {
+      "products": 1385,
+      "uniqueTitles": 388,
+      "uniqueRate": 0.2801,
+      "generic": 92,
+      "styleWord": 600,
+      "featureWord": 594,
+      "sourceFeatureAvailability": {
+        "brand": 1385,
+        "sizes": 1385,
+        "subCategory": 1385,
+        "tags": 1385
+      },
+      "titleFeatureUsage": {
+        "Jacket": 156,
+        "Graphic": 55,
+        "Jersey": 79,
+        "Shirt": 166,
+        "T-Shirt": 45,
+        "Shorts": 4,
+        "Hoodie": 158,
+        "Sweatpants": 8,
+        "Jeans": 8,
+        "Football": 31,
+        "Zip-Up": 1,
+        "Pullover": 10,
+        "Relaxed": 35
+      },
+      "topTitles": [
+        [
+          "Essential Apparel",
+          92
+        ],
+        [
+          "Essential Jacket",
+          92
+        ],
+        [
+          "Essential Clothing Set",
+          41
+        ],
+        [
+          "Essential Short-Sleeve Shirt",
+          36
+        ],
+        [
+          "Layering Hoodie",
+          34
+        ],
+        [
+          "Essential T-Shirt",
+          27
+        ],
+        [
+          "Retro Football Jersey",
+          24
+        ],
+        [
+          "Relaxed Fit Relaxed Fit Short-Sleeve Shirt",
+          23
+        ]
+      ]
+    },
+    "fragrance": {
+      "products": 15,
+      "uniqueTitles": 2,
+      "uniqueRate": 0.1333,
+      "generic": 0,
+      "styleWord": 15,
+      "featureWord": 15,
+      "sourceFeatureAvailability": {
+        "brand": 15,
+        "sizes": 15,
+        "subCategory": 15,
+        "tags": 15
+      },
+      "titleFeatureUsage": {
+        "Fragrance": 15
+      },
+      "topTitles": [
+        [
+          "Essential Fragrance",
+          8
+        ],
+        [
+          "Essential Fresh Fragrance",
+          7
+        ]
+      ]
+    },
+    "pants": {
+      "products": 350,
+      "uniqueTitles": 35,
+      "uniqueRate": 0.1,
+      "generic": 0,
+      "styleWord": 328,
+      "featureWord": 202,
+      "sourceFeatureAvailability": {
+        "brand": 350,
+        "sizes": 350,
+        "subCategory": 350,
+        "tags": 350
+      },
+      "titleFeatureUsage": {
+        "Cargo": 17,
+        "Jeans": 83,
+        "Football": 2,
+        "Jersey": 2,
+        "Jacket": 4,
+        "Shirt": 9,
+        "Shorts": 86,
+        "Trousers": 1,
+        "Hoodie": 3,
+        "Relaxed": 1,
+        "Graphic": 11
+      },
+      "topTitles": [
+        [
+          "Essential Shorts",
+          86
+        ],
+        [
+          "Essential Curved-Leg Pants",
+          57
+        ],
+        [
+          "Essential Jeans",
+          50
+        ],
+        [
+          "Essential Flare Jeans",
+          21
+        ],
+        [
+          "Essential Cargo Workwear Pants",
+          17
+        ],
+        [
+          "Essential Straight-Leg Pants",
+          14
+        ],
+        [
+          "Essential Clothing Set",
+          12
+        ],
+        [
+          "Essential Suit Pants",
+          11
+        ]
+      ]
+    },
+    "shoe": {
+      "products": 111,
+      "uniqueTitles": 21,
+      "uniqueRate": 0.1892,
+      "generic": 0,
+      "styleWord": 108,
+      "featureWord": 100,
+      "sourceFeatureAvailability": {
+        "brand": 111,
+        "sizes": 109,
+        "subCategory": 111,
+        "tags": 111
+      },
+      "titleFeatureUsage": {
+        "High-Top": 2,
+        "Sneakers": 100,
+        "Low-Top": 3,
+        "Running": 6,
+        "Graphic": 4
+      },
+      "topTitles": [
+        [
+          "Essential Sport Sneakers",
+          26
+        ],
+        [
+          "Essential Sneakers",
+          22
+        ],
+        [
+          "Casual Sneakers",
+          15
+        ],
+        [
+          "Casual Sport Sneakers",
+          8
+        ],
+        [
+          "Essential Sandals",
+          5
+        ],
+        [
+          "Essential LED Sport Sneakers",
+          4
+        ],
+        [
+          "Essential Skate Sneakers",
+          4
+        ],
+        [
+          "Streetwear Graphic Sneakers",
+          4
+        ]
+      ]
+    },
+    "watches": {
+      "products": 22,
+      "uniqueTitles": 2,
+      "uniqueRate": 0.0909,
+      "generic": 0,
+      "styleWord": 22,
+      "featureWord": 22,
+      "sourceFeatureAvailability": {
+        "brand": 22,
+        "sizes": 22,
+        "subCategory": 22,
+        "tags": 22
+      },
+      "titleFeatureUsage": {
+        "Watch": 22
+      },
+      "topTitles": [
+        [
+          "Essential Watch",
+          16
+        ],
+        [
+          "Essential Mechanical Watch",
+          6
+        ]
+      ]
+    }
+  }
+}

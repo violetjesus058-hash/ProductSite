@@ -869,3 +869,26 @@
 - [x] Repair invalid/local image references and choose a verified gallery fallback for products with a failed main image.
 - [x] Add frontend image-load failure protection so a broken image cannot leave a broken-image icon and alt text as the card visual.
 - [x] Run an image quality/statistics audit, verify desktop and 390px mobile cards, run tests/build, and save a checkpoint.
+
+
+## 2026-08-20 Title system depth diagnosis
+- [x] Measure template coverage, unique-title ratio, duplicate-title clusters, generic-title ratio, and category-level title quality across all 2,192 products.
+- [x] Measure how often source-supported brand, team/club, color, fit, graphic, season, and subcategory features are actually used in titles.
+- [x] Identify where editorial words are generic decoration rather than evidence-based product differentiation.
+- [x] Design a stricter category-specific title strategy for tops, hoodies, jackets, pants, shorts, shoes, jerseys, bags, watches, fragrance, and accessories.
+- [x] Produce a clear diagnosis and execution plan before applying another full-data title rewrite.
+
+
+## 2026-08-20 Continue editorial title optimization
+- [ ] Build feature-first category rules that prioritize identity, product type, structure, graphic/use, and only then editorial style.
+- [ ] Reduce title convergence in Clothing, Pants, and Shoes using source title, subcategory, brand/team, fit, graphic, and image evidence.
+- [ ] Extend differentiated naming to Bags, ACC, Watches, Fragrance, and Jerseys without unsupported claims.
+- [ ] Run full-catalog uniqueness, generic-title, source-feature usage, code-residue, and fact-boundary audits.
+- [ ] Verify desktop/mobile card titles, run tests/build, and save a checkpoint.
+
+- [x] 继续深化 Feature-First 商品标题：读取中文源标题、英文源词和可确认 SKU 类型，减少 Essential Apparel / Essential Trousers 等泛化标题。
+- [x] 重新生成 2,192 条商品并恢复持久图片引用，确保标题优化不引入破图或数据数量变化。
+- [x] 运行标题深度诊断与全量质量检查，记录唯一标题率、泛化标题数、代码型标题数和分类分布。
+- [x] 运行 Vitest、TypeScript 和生产构建，验证本轮标题规则未破坏现有目录和详情页。
+- [x] 对 Clothing、Pants、Shoes、Accessories、Watches、Fragrance 代表性商品做最终视觉/语义抽查。
+- [x] 视觉模型批量复核暂缓：当前内置视觉 API 余额不足，待恢复额度后再重跑弱标题的多模态复核。

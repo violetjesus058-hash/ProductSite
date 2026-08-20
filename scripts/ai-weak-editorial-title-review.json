@@ -1,0 +1,3620 @@
+[
+  {
+    "id": "kb-7511646004-22-34",
+    "sourceProductId": "7511646004",
+    "oldTitle": "Layering Sweater",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7542798673-57-47",
+    "sourceProductId": "7542798673",
+    "oldTitle": "Casual Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7542802651-38-57",
+    "sourceProductId": "7542802651",
+    "oldTitle": "Essential Running Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543307459-19-10",
+    "sourceProductId": "7543307459",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7543307465-13-12",
+    "sourceProductId": "7543307465",
+    "oldTitle": "Streetwear Graphic Apparel",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543309423-67-50",
+    "sourceProductId": "7543309423",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543309425-23-15",
+    "sourceProductId": "7543309425",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543311377-15-24",
+    "sourceProductId": "7543311377",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7543319183-19-10",
+    "sourceProductId": "7543319183",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7543321169-134-80",
+    "sourceProductId": "7543321169",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543323065-24-11",
+    "sourceProductId": "7543323065",
+    "oldTitle": "Layering Hoodie",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543323077-47-25",
+    "sourceProductId": "7543323077",
+    "oldTitle": "Layering Jacket",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543325019-15-05",
+    "sourceProductId": "7543325019",
+    "oldTitle": "Casual Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543327097-18-52",
+    "sourceProductId": "7543327097",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543327113-13-12",
+    "sourceProductId": "7543327113",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7543329037-9-45",
+    "sourceProductId": "7543329037",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7543331013-17-55",
+    "sourceProductId": "7543331013",
+    "oldTitle": "Essential Sweater",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7543332935-48-02",
+    "sourceProductId": "7543332935",
+    "oldTitle": "Casual Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543334869-21-03",
+    "sourceProductId": "7543334869",
+    "oldTitle": "Retro Football Jersey",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543334883-54-00",
+    "sourceProductId": "7543334883",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543336851-13-31",
+    "sourceProductId": "7543336851",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7543338877-15-05",
+    "sourceProductId": "7543338877",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543342819-29-90",
+    "sourceProductId": "7543342819",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7543344865-13-12",
+    "sourceProductId": "7543344865",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7543346825-32-59",
+    "sourceProductId": "7543346825",
+    "oldTitle": "Layering Sweater",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543348799-34-72",
+    "sourceProductId": "7543348799",
+    "oldTitle": "Layering Sweater",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543352763-30-47",
+    "sourceProductId": "7543352763",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543352771-74-25",
+    "sourceProductId": "7543352771",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7543354807-13-12",
+    "sourceProductId": "7543354807",
+    "oldTitle": "Streetwear Graphic Apparel",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543354819-21-22",
+    "sourceProductId": "7543354819",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7543356731-13-31",
+    "sourceProductId": "7543356731",
+    "oldTitle": "Retro Football Jersey",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543360659-17-36",
+    "sourceProductId": "7543360659",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7543362649-10-61",
+    "sourceProductId": "7543362649",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7543364723-67-50",
+    "sourceProductId": "7543364723",
+    "oldTitle": "Essential Low-Top Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543364729-17-55",
+    "sourceProductId": "7543364729",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7543368727-13-12",
+    "sourceProductId": "7543368727",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7543368735-12-54",
+    "sourceProductId": "7543368735",
+    "oldTitle": "Black Logo Crewneck Sweatshirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7543371987-13-31",
+    "sourceProductId": "7543371987",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7543374631-17-17",
+    "sourceProductId": "7543374631",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7543380869-16-59",
+    "sourceProductId": "7543380869",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543384627-13-12",
+    "sourceProductId": "7543384627",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7543386595-64-80",
+    "sourceProductId": "7543386595",
+    "oldTitle": "Casual Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543386611-48-21",
+    "sourceProductId": "7543386611",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543392683-13-12",
+    "sourceProductId": "7543392683",
+    "oldTitle": "Streetwear Graphic Apparel",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543396675-9-65",
+    "sourceProductId": "7543396675",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543398539-15-24",
+    "sourceProductId": "7543398539",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543404481-17-17",
+    "sourceProductId": "7543404481",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543406391-13-12",
+    "sourceProductId": "7543406391",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7543406401-13-12",
+    "sourceProductId": "7543406401",
+    "oldTitle": "Streetwear Graphic Apparel",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543416111-20-25",
+    "sourceProductId": "7543416111",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7543416115-24-88",
+    "sourceProductId": "7543416115",
+    "oldTitle": "Layering Hat Hoodie",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543418327-44-36",
+    "sourceProductId": "7543418327",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543420287-16-97",
+    "sourceProductId": "7543420287",
+    "oldTitle": "Layering Hoodie",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7543429795-20-83",
+    "sourceProductId": "7543429795",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7545197460-18-65",
+    "sourceProductId": "7545197460",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7545197470-17-55",
+    "sourceProductId": "7545197470",
+    "oldTitle": "Essential Hoodie",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7545201386-11-38",
+    "sourceProductId": "7545201386",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7545203334-11-38",
+    "sourceProductId": "7545203334",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7545207138-24-88",
+    "sourceProductId": "7545207138",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7545207144-17-17",
+    "sourceProductId": "7545207144",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7545207146-33-75",
+    "sourceProductId": "7545207146",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7545213080-21-99",
+    "sourceProductId": "7545213080",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7545219044-19-10",
+    "sourceProductId": "7545219044",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7545221002-19-10",
+    "sourceProductId": "7545221002",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7545222940-13-12",
+    "sourceProductId": "7545222940",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7545224884-13-12",
+    "sourceProductId": "7545224884",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7545226858-13-12",
+    "sourceProductId": "7545226858",
+    "oldTitle": "Streetwear Graphic Apparel",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7545228852-70-97",
+    "sourceProductId": "7545228852",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7545238792-28-55",
+    "sourceProductId": "7545238792",
+    "oldTitle": "Layering Hoodie",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7545244822-5-79",
+    "sourceProductId": "7545244822",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7545248726-19-10",
+    "sourceProductId": "7545248726",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7545254650-48-60",
+    "sourceProductId": "7545254650",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7545258750-36-45",
+    "sourceProductId": "7545258750",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7545260684-13-31",
+    "sourceProductId": "7545260684",
+    "oldTitle": "Essential Hoodie",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7545270868-32-79",
+    "sourceProductId": "7545270868",
+    "oldTitle": "Grey Quilted Snap-Front Vest",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7545274630-56-70",
+    "sourceProductId": "7545274630",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7545280784-13-12",
+    "sourceProductId": "7545280784",
+    "oldTitle": "Streetwear Graphic Apparel",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7545286678-13-12",
+    "sourceProductId": "7545286678",
+    "oldTitle": "Streetwear Graphic T-Shirt",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7545286680-19-10",
+    "sourceProductId": "7545286680",
+    "oldTitle": "Layering Hat Hoodie",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7545290530-13-12",
+    "sourceProductId": "7545290530",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7545292452-15-24",
+    "sourceProductId": "7545292452",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7545294490-30-47",
+    "sourceProductId": "7545294490",
+    "oldTitle": "Quarter-Zip Pullover Sweaters",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7545296408-8-68",
+    "sourceProductId": "7545296408",
+    "oldTitle": "Essential Hoodie",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7545296410-13-12",
+    "sourceProductId": "7545296410",
+    "oldTitle": "Streetwear Graphic Apparel",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7545312262-28-93",
+    "sourceProductId": "7545312262",
+    "oldTitle": "Gray Zip Hoodie & Joggers",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7545314260-13-50",
+    "sourceProductId": "7545314260",
+    "oldTitle": "Layering Hoodie",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7552674207-10-93",
+    "sourceProductId": "7552674207",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7554554520-17-52",
+    "sourceProductId": "7554554520",
+    "oldTitle": "Layering Hat Hoodie",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7554623854-4-67",
+    "sourceProductId": "7554623854",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7574737221-21-03",
+    "sourceProductId": "7574737221",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7574761499-13-12",
+    "sourceProductId": "7574761499",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7574761501-13-31",
+    "sourceProductId": "7574761501",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7574763097-16-59",
+    "sourceProductId": "7574763097",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7574779159-11-38",
+    "sourceProductId": "7574779159",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7574783515-9-45",
+    "sourceProductId": "7574783515",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7574796937-13-12",
+    "sourceProductId": "7574796937",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7574796965-18-65",
+    "sourceProductId": "7574796965",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7574808639-13-12",
+    "sourceProductId": "7574808639",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7574843869-13-12",
+    "sourceProductId": "7574843869",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7574846005-29-51",
+    "sourceProductId": "7574846005",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7574848039-17-17",
+    "sourceProductId": "7574848039",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7574851953-15-27",
+    "sourceProductId": "7574851953",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7574853817-24-88",
+    "sourceProductId": "7574853817",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7574856585-13-12",
+    "sourceProductId": "7574856585",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7574863775-13-12",
+    "sourceProductId": "7574863775",
+    "oldTitle": "Streetwear Graphic Apparel",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7574885951-15-24",
+    "sourceProductId": "7574885951",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576493513-19-10",
+    "sourceProductId": "7576493513",
+    "oldTitle": "Layering Sweater",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576501373-33-75",
+    "sourceProductId": "7576501373",
+    "oldTitle": "Layering Hoodie",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576502949-15-05",
+    "sourceProductId": "7576502949",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576502955-24-88",
+    "sourceProductId": "7576502955",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576505437-17-17",
+    "sourceProductId": "7576505437",
+    "oldTitle": "Layering Sweater",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576505455-41-47",
+    "sourceProductId": "7576505455",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576513277-13-12",
+    "sourceProductId": "7576513277",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576513279-13-12",
+    "sourceProductId": "7576513279",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576516991-72-32",
+    "sourceProductId": "7576516991",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576524975-28-93",
+    "sourceProductId": "7576524975",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576530885-19-10",
+    "sourceProductId": "7576530885",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576532849-13-12",
+    "sourceProductId": "7576532849",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576538861-74-25",
+    "sourceProductId": "7576538861",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576540781-24-11",
+    "sourceProductId": "7576540781",
+    "oldTitle": "Layering Sweater",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576540787-30-38",
+    "sourceProductId": "7576540787",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576542737-77-14",
+    "sourceProductId": "7576542737",
+    "oldTitle": "Casual Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576550615-49-82",
+    "sourceProductId": "7576550615",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576550655-9-11",
+    "sourceProductId": "7576550655",
+    "oldTitle": "Essential Sandals",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576551215-13-31",
+    "sourceProductId": "7576551215",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576554553-70-97",
+    "sourceProductId": "7576554553",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576554639-15-24",
+    "sourceProductId": "7576554639",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576560505-13-12",
+    "sourceProductId": "7576560505",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576564467-11-38",
+    "sourceProductId": "7576564467",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576564481-57-86",
+    "sourceProductId": "7576564481",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576568443-36-97",
+    "sourceProductId": "7576568443",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576570353-13-12",
+    "sourceProductId": "7576570353",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576572323-96-42",
+    "sourceProductId": "7576572323",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576574219-32-79",
+    "sourceProductId": "7576574219",
+    "oldTitle": "Grey Snap-Front Puffer Vest",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576576271-13-12",
+    "sourceProductId": "7576576271",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576578243-15-24",
+    "sourceProductId": "7576578243",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576582183-64-80",
+    "sourceProductId": "7576582183",
+    "oldTitle": "Casual Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576586117-31-82",
+    "sourceProductId": "7576586117",
+    "oldTitle": "Layering Hoodie",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576590095-32-59",
+    "sourceProductId": "7576590095",
+    "oldTitle": "Layering Sweater",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576590107-67-50",
+    "sourceProductId": "7576590107",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576592113-13-12",
+    "sourceProductId": "7576592113",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576597949-61-07",
+    "sourceProductId": "7576597949",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576597951-33-75",
+    "sourceProductId": "7576597951",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576599897-21-03",
+    "sourceProductId": "7576599897",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576599899-9-45",
+    "sourceProductId": "7576599899",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576599957-24-88",
+    "sourceProductId": "7576599957",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576607729-67-50",
+    "sourceProductId": "7576607729",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576609763-30-47",
+    "sourceProductId": "7576609763",
+    "oldTitle": "Layering R*L Hoodie",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576613737-24-88",
+    "sourceProductId": "7576613737",
+    "oldTitle": "Layering Hat Hoodie",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576613745-80-36",
+    "sourceProductId": "7576613745",
+    "oldTitle": "Layering Jacket",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576621643-13-12",
+    "sourceProductId": "7576621643",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576633989-19-10",
+    "sourceProductId": "7576633989",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576641228-13-12",
+    "sourceProductId": "7576641228",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576647651-43-23",
+    "sourceProductId": "7576647651",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576651148-28-93",
+    "sourceProductId": "7576651148",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576675416-13-12",
+    "sourceProductId": "7576675416",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576679472-15-91",
+    "sourceProductId": "7576679472",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576691078-21-99",
+    "sourceProductId": "7576691078",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576695114-15-24",
+    "sourceProductId": "7576695114",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576701012-9-65",
+    "sourceProductId": "7576701012",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576702740-13-12",
+    "sourceProductId": "7576702740",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576704736-13-12",
+    "sourceProductId": "7576704736",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576707188-18-52",
+    "sourceProductId": "7576707188",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576718556-13-12",
+    "sourceProductId": "7576718556",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576720474-13-31",
+    "sourceProductId": "7576720474",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576724478-13-12",
+    "sourceProductId": "7576724478",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576732184-13-31",
+    "sourceProductId": "7576732184",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576736298-21-03",
+    "sourceProductId": "7576736298",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576744108-19-10",
+    "sourceProductId": "7576744108",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7576752420-26-81",
+    "sourceProductId": "7576752420",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576761798-13-12",
+    "sourceProductId": "7576761798",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7576769712-13-12",
+    "sourceProductId": "7576769712",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7578397536-6-43",
+    "sourceProductId": "7578397536",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7578403416-16-97",
+    "sourceProductId": "7578403416",
+    "oldTitle": "Layering Sweater",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578405434-56-70",
+    "sourceProductId": "7578405434",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578415114-23-95",
+    "sourceProductId": "7578415114",
+    "oldTitle": "Layering Hoodie",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578415118-53-04",
+    "sourceProductId": "7578415118",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578419176-29-90",
+    "sourceProductId": "7578419176",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7578419186-20-83",
+    "sourceProductId": "7578419186",
+    "oldTitle": "Track Jacket and Pants",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578420980-19-10",
+    "sourceProductId": "7578420980",
+    "oldTitle": "Layering Hoodie",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578420988-42-43",
+    "sourceProductId": "7578420988",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578428992-30-47",
+    "sourceProductId": "7578428992",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7578432628-54-00",
+    "sourceProductId": "7578432628",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578438730-19-29",
+    "sourceProductId": "7578438730",
+    "oldTitle": "Casual Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578440914-112-24",
+    "sourceProductId": "7578440914",
+    "oldTitle": "Casual Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578442860-21-01",
+    "sourceProductId": "7578442860",
+    "oldTitle": "Layering Hoodie",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578442864-28-55",
+    "sourceProductId": "7578442864",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578442932-18-65",
+    "sourceProductId": "7578442932",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7578443378-17-17",
+    "sourceProductId": "7578443378",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7578444786-17-36",
+    "sourceProductId": "7578444786",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7578444796-57-47",
+    "sourceProductId": "7578444796",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578454606-17-52",
+    "sourceProductId": "7578454606",
+    "oldTitle": "Essential Hoodie",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7578460514-18-32",
+    "sourceProductId": "7578460514",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7578465530-13-12",
+    "sourceProductId": "7578465530",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7578468490-4-67",
+    "sourceProductId": "7578468490",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7578474366-11-38",
+    "sourceProductId": "7578474366",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7578478202-23-15",
+    "sourceProductId": "7578478202",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578480194-54-00",
+    "sourceProductId": "7578480194",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578482254-17-17",
+    "sourceProductId": "7578482254",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578486682-16-40",
+    "sourceProductId": "7578486682",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7578488198-22-18",
+    "sourceProductId": "7578488198",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578492088-65-57",
+    "sourceProductId": "7578492088",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578496014-8-68",
+    "sourceProductId": "7578496014",
+    "oldTitle": "Layering Hoodie",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578501944-18-52",
+    "sourceProductId": "7578501944",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7578503906-106-07",
+    "sourceProductId": "7578503906",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578503936-54-00",
+    "sourceProductId": "7578503936",
+    "oldTitle": "Essential Sandals",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578505862-18-32",
+    "sourceProductId": "7578505862",
+    "oldTitle": "Layering Hoodie",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578505864-33-75",
+    "sourceProductId": "7578505864",
+    "oldTitle": "Layering Sweater",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578505876-13-50",
+    "sourceProductId": "7578505876",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7578505936-13-12",
+    "sourceProductId": "7578505936",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7578505946-13-12",
+    "sourceProductId": "7578505946",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7578507832-29-51",
+    "sourceProductId": "7578507832",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7578509826-19-10",
+    "sourceProductId": "7578509826",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578509830-47-25",
+    "sourceProductId": "7578509830",
+    "oldTitle": "Layering Jacket",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578509896-13-12",
+    "sourceProductId": "7578509896",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7578512126-7-88",
+    "sourceProductId": "7578512126",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7578513682-22-34",
+    "sourceProductId": "7578513682",
+    "oldTitle": "Layering Sweater",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578513696-28-93",
+    "sourceProductId": "7578513696",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578515778-44-36",
+    "sourceProductId": "7578515778",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7578517734-34-72",
+    "sourceProductId": "7578517734",
+    "oldTitle": "Layering Sweater",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601575285-25-40",
+    "sourceProductId": "7601575285",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601581439-18-16",
+    "sourceProductId": "7601581439",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601581591-32-14",
+    "sourceProductId": "7601581591",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601587437-30-86",
+    "sourceProductId": "7601587437",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601591507-32-14",
+    "sourceProductId": "7601591507",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601593421-36-97",
+    "sourceProductId": "7601593421",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601595589-29-41",
+    "sourceProductId": "7601595589",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601597525-36-97",
+    "sourceProductId": "7601597525",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601599355-25-40",
+    "sourceProductId": "7601599355",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601603317-21-38",
+    "sourceProductId": "7601603317",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601607215-53-04",
+    "sourceProductId": "7601607215",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601607517-28-13",
+    "sourceProductId": "7601607517",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601609465-29-41",
+    "sourceProductId": "7601609465",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601611335-23-47",
+    "sourceProductId": "7601611335",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601611375-23-47",
+    "sourceProductId": "7601611375",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601613257-39-54",
+    "sourceProductId": "7601613257",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601613265-20-09",
+    "sourceProductId": "7601613265",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601621093-36-97",
+    "sourceProductId": "7601621093",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601621203-28-13",
+    "sourceProductId": "7601621203",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601621215-20-09",
+    "sourceProductId": "7601621215",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601627577-25-72",
+    "sourceProductId": "7601627577",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601628967-34-23",
+    "sourceProductId": "7601628967",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601629141-32-14",
+    "sourceProductId": "7601629141",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601629579-26-52",
+    "sourceProductId": "7601629579",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601631035-34-23",
+    "sourceProductId": "7601631035",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601632871-23-47",
+    "sourceProductId": "7601632871",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601632889-25-40",
+    "sourceProductId": "7601632889",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601635579-25-07",
+    "sourceProductId": "7601635579",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601637005-29-41",
+    "sourceProductId": "7601637005",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601637017-36-97",
+    "sourceProductId": "7601637017",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601637465-25-07",
+    "sourceProductId": "7601637465",
+    "oldTitle": "Streetwear Camo Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601639507-32-63",
+    "sourceProductId": "7601639507",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601639541-24-27",
+    "sourceProductId": "7601639541",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601641587-25-72",
+    "sourceProductId": "7601641587",
+    "oldTitle": "Essential Cargo Pants",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601644775-39-54",
+    "sourceProductId": "7601644775",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601645545-27-32",
+    "sourceProductId": "7601645545",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601646529-34-72",
+    "sourceProductId": "7601646529",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601646851-31-82",
+    "sourceProductId": "7601646851",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601646887-30-86",
+    "sourceProductId": "7601646887",
+    "oldTitle": "Streetwear Camo Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601646967-32-14",
+    "sourceProductId": "7601646967",
+    "oldTitle": "Essential Cargo Pants",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601648541-34-23",
+    "sourceProductId": "7601648541",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601649187-29-25",
+    "sourceProductId": "7601649187",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601649425-26-84",
+    "sourceProductId": "7601649425",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601649547-27-97",
+    "sourceProductId": "7601649547",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601650631-23-47",
+    "sourceProductId": "7601650631",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601652517-32-14",
+    "sourceProductId": "7601652517",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601653203-26-52",
+    "sourceProductId": "7601653203",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601653281-30-54",
+    "sourceProductId": "7601653281",
+    "oldTitle": "Essential Cargo Pants",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601654481-21-38",
+    "sourceProductId": "7601654481",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601654635-23-47",
+    "sourceProductId": "7601654635",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601655007-25-07",
+    "sourceProductId": "7601655007",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601655081-26-52",
+    "sourceProductId": "7601655081",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601655127-27-32",
+    "sourceProductId": "7601655127",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601655327-30-54",
+    "sourceProductId": "7601655327",
+    "oldTitle": "Essential Cargo Pants",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601656369-34-72",
+    "sourceProductId": "7601656369",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601656383-38-73",
+    "sourceProductId": "7601656383",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601656403-34-72",
+    "sourceProductId": "7601656403",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601656693-25-07",
+    "sourceProductId": "7601656693",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601659285-31-50",
+    "sourceProductId": "7601659285",
+    "oldTitle": "Essential Cargo Pants",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601660565-25-40",
+    "sourceProductId": "7601660565",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601661003-25-56",
+    "sourceProductId": "7601661003",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601661111-21-54",
+    "sourceProductId": "7601661111",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601662439-23-47",
+    "sourceProductId": "7601662439",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601662897-25-72",
+    "sourceProductId": "7601662897",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601662919-25-07",
+    "sourceProductId": "7601662919",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601663175-35-36",
+    "sourceProductId": "7601663175",
+    "oldTitle": "Essential Cargo Pants",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601664227-34-72",
+    "sourceProductId": "7601664227",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601664295-29-41",
+    "sourceProductId": "7601664295",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601666467-23-47",
+    "sourceProductId": "7601666467",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601666909-29-09",
+    "sourceProductId": "7601666909",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601666947-32-31",
+    "sourceProductId": "7601666947",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601668231-23-47",
+    "sourceProductId": "7601668231",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601668247-26-20",
+    "sourceProductId": "7601668247",
+    "oldTitle": "Essential Sweatpants",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601668661-28-29",
+    "sourceProductId": "7601668661",
+    "oldTitle": "Essential Cargo Pants",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601670255-22-66",
+    "sourceProductId": "7601670255",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601672145-20-90",
+    "sourceProductId": "7601672145",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601672779-27-32",
+    "sourceProductId": "7601672779",
+    "oldTitle": "Streetwear Camo Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601672915-28-29",
+    "sourceProductId": "7601672915",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601674053-22-66",
+    "sourceProductId": "7601674053",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601674283-23-47",
+    "sourceProductId": "7601674283",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601678529-28-29",
+    "sourceProductId": "7601678529",
+    "oldTitle": "Essential Cargo Pants",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601680063-46-61",
+    "sourceProductId": "7601680063",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601680115-21-38",
+    "sourceProductId": "7601680115",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601680119-21-38",
+    "sourceProductId": "7601680119",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601683819-23-47",
+    "sourceProductId": "7601683819",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601683937-39-54",
+    "sourceProductId": "7601683937",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601684029-23-47",
+    "sourceProductId": "7601684029",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601684401-29-25",
+    "sourceProductId": "7601684401",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601684485-26-52",
+    "sourceProductId": "7601684485",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601686601-35-36",
+    "sourceProductId": "7601686601",
+    "oldTitle": "Streetwear Camo Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601687779-46-77",
+    "sourceProductId": "7601687779",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601687799-25-40",
+    "sourceProductId": "7601687799",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601687919-23-47",
+    "sourceProductId": "7601687919",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601688665-27-81",
+    "sourceProductId": "7601688665",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601688735-32-14",
+    "sourceProductId": "7601688735",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601690009-23-47",
+    "sourceProductId": "7601690009",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601693973-23-47",
+    "sourceProductId": "7601693973",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601694365-15-91",
+    "sourceProductId": "7601694365",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601697807-39-54",
+    "sourceProductId": "7601697807",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601698349-23-79",
+    "sourceProductId": "7601698349",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601699657-36-97",
+    "sourceProductId": "7601699657",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601699751-22-66",
+    "sourceProductId": "7601699751",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601699767-20-09",
+    "sourceProductId": "7601699767",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601701619-18-16",
+    "sourceProductId": "7601701619",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601702267-23-79",
+    "sourceProductId": "7601702267",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601703765-26-20",
+    "sourceProductId": "7601703765",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601704045-23-79",
+    "sourceProductId": "7601704045",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601705701-32-14",
+    "sourceProductId": "7601705701",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601706345-26-68",
+    "sourceProductId": "7601706345",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601708359-23-47",
+    "sourceProductId": "7601708359",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601709663-20-90",
+    "sourceProductId": "7601709663",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601711737-23-47",
+    "sourceProductId": "7601711737",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601712079-22-99",
+    "sourceProductId": "7601712079",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601713631-21-38",
+    "sourceProductId": "7601713631",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601714047-25-07",
+    "sourceProductId": "7601714047",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601715653-29-41",
+    "sourceProductId": "7601715653",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601717983-26-52",
+    "sourceProductId": "7601717983",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601718165-22-02",
+    "sourceProductId": "7601718165",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601718331-25-72",
+    "sourceProductId": "7601718331",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601720055-25-07",
+    "sourceProductId": "7601720055",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601720125-29-25",
+    "sourceProductId": "7601720125",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601731837-23-95",
+    "sourceProductId": "7601731837",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601732143-27-97",
+    "sourceProductId": "7601732143",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601733823-29-09",
+    "sourceProductId": "7601733823",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601734009-27-81",
+    "sourceProductId": "7601734009",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601737921-25-07",
+    "sourceProductId": "7601737921",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7601738065-26-36",
+    "sourceProductId": "7601738065",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601739855-29-09",
+    "sourceProductId": "7601739855",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601741993-30-54",
+    "sourceProductId": "7601741993",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601743753-30-06",
+    "sourceProductId": "7601743753",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601743759-26-52",
+    "sourceProductId": "7601743759",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601743927-27-81",
+    "sourceProductId": "7601743927",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601743943-27-32",
+    "sourceProductId": "7601743943",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601745933-26-52",
+    "sourceProductId": "7601745933",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601748025-25-72",
+    "sourceProductId": "7601748025",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601749993-25-07",
+    "sourceProductId": "7601749993",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601751939-28-29",
+    "sourceProductId": "7601751939",
+    "oldTitle": "Essential Cargo Pants",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601753665-25-72",
+    "sourceProductId": "7601753665",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601753745-27-32",
+    "sourceProductId": "7601753745",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601757885-25-07",
+    "sourceProductId": "7601757885",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601761629-20-25",
+    "sourceProductId": "7601761629",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601761663-24-27",
+    "sourceProductId": "7601761663",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7601763681-24-75",
+    "sourceProductId": "7601763681",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603487410-20-90",
+    "sourceProductId": "7603487410",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603489092-36-97",
+    "sourceProductId": "7603489092",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603489110-29-41",
+    "sourceProductId": "7603489110",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603491452-39-54",
+    "sourceProductId": "7603491452",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603496910-42-27",
+    "sourceProductId": "7603496910",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603497060-23-47",
+    "sourceProductId": "7603497060",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603497114-25-40",
+    "sourceProductId": "7603497114",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603497358-29-25",
+    "sourceProductId": "7603497358",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603499484-36-97",
+    "sourceProductId": "7603499484",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603501374-36-97",
+    "sourceProductId": "7603501374",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603501590-23-47",
+    "sourceProductId": "7603501590",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603507412-20-90",
+    "sourceProductId": "7603507412",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603513266-25-40",
+    "sourceProductId": "7603513266",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603515086-31-50",
+    "sourceProductId": "7603515086",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603515314-34-72",
+    "sourceProductId": "7603515314",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603515334-23-47",
+    "sourceProductId": "7603515334",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603517516-34-72",
+    "sourceProductId": "7603517516",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603519382-36-97",
+    "sourceProductId": "7603519382",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603521210-22-66",
+    "sourceProductId": "7603521210",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603523154-53-04",
+    "sourceProductId": "7603523154",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603523208-20-09",
+    "sourceProductId": "7603523208",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603523408-20-09",
+    "sourceProductId": "7603523408",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603527120-36-97",
+    "sourceProductId": "7603527120",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603533080-31-50",
+    "sourceProductId": "7603533080",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603535098-22-66",
+    "sourceProductId": "7603535098",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603535114-39-54",
+    "sourceProductId": "7603535114",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603537044-42-27",
+    "sourceProductId": "7603537044",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603539216-29-41",
+    "sourceProductId": "7603539216",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603542842-20-09",
+    "sourceProductId": "7603542842",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603542896-22-66",
+    "sourceProductId": "7603542896",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603545066-42-27",
+    "sourceProductId": "7603545066",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603548814-30-38",
+    "sourceProductId": "7603548814",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603549074-23-47",
+    "sourceProductId": "7603549074",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603549426-25-07",
+    "sourceProductId": "7603549426",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603550988-23-47",
+    "sourceProductId": "7603550988",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603552894-23-47",
+    "sourceProductId": "7603552894",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603552928-21-38",
+    "sourceProductId": "7603552928",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603553408-35-36",
+    "sourceProductId": "7603553408",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603553490-21-54",
+    "sourceProductId": "7603553490",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603553560-36-97",
+    "sourceProductId": "7603553560",
+    "oldTitle": "Essential Cargo Pants",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603554672-22-66",
+    "sourceProductId": "7603554672",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603554700-21-86",
+    "sourceProductId": "7603554700",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603555290-24-27",
+    "sourceProductId": "7603555290",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603555356-25-07",
+    "sourceProductId": "7603555356",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603555396-25-72",
+    "sourceProductId": "7603555396",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603556550-21-38",
+    "sourceProductId": "7603556550",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603558644-53-04",
+    "sourceProductId": "7603558644",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603559368-15-91",
+    "sourceProductId": "7603559368",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603560450-24-11",
+    "sourceProductId": "7603560450",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603560596-21-38",
+    "sourceProductId": "7603560596",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603560618-23-47",
+    "sourceProductId": "7603560618",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603561014-23-79",
+    "sourceProductId": "7603561014",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603561334-31-50",
+    "sourceProductId": "7603561334",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603562548-23-47",
+    "sourceProductId": "7603562548",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603562604-23-47",
+    "sourceProductId": "7603562604",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603562996-15-91",
+    "sourceProductId": "7603562996",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603563092-22-02",
+    "sourceProductId": "7603563092",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603563190-25-72",
+    "sourceProductId": "7603563190",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603564390-31-50",
+    "sourceProductId": "7603564390",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603565088-24-27",
+    "sourceProductId": "7603565088",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603565398-27-32",
+    "sourceProductId": "7603565398",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603566394-32-14",
+    "sourceProductId": "7603566394",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603566780-28-93",
+    "sourceProductId": "7603566780",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603569180-25-72",
+    "sourceProductId": "7603569180",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603572242-20-09",
+    "sourceProductId": "7603572242",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603572834-25-72",
+    "sourceProductId": "7603572834",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603573000-29-09",
+    "sourceProductId": "7603573000",
+    "oldTitle": "Streetwear Camo Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603573026-23-95",
+    "sourceProductId": "7603573026",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603573102-26-52",
+    "sourceProductId": "7603573102",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603573126-30-54",
+    "sourceProductId": "7603573126",
+    "oldTitle": "Essential Cargo Pants",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603574242-23-47",
+    "sourceProductId": "7603574242",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603578494-25-07",
+    "sourceProductId": "7603578494",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603578542-26-52",
+    "sourceProductId": "7603578542",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603580118-34-23",
+    "sourceProductId": "7603580118",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603580214-34-23",
+    "sourceProductId": "7603580214",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603582672-29-09",
+    "sourceProductId": "7603582672",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603584210-24-11",
+    "sourceProductId": "7603584210",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603584358-20-90",
+    "sourceProductId": "7603584358",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603585022-32-14",
+    "sourceProductId": "7603585022",
+    "oldTitle": "Essential Cargo Pants",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603586794-25-56",
+    "sourceProductId": "7603586794",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603586834-30-86",
+    "sourceProductId": "7603586834",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603588458-19-45",
+    "sourceProductId": "7603588458",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603590068-41-47",
+    "sourceProductId": "7603590068",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603590286-23-47",
+    "sourceProductId": "7603590286",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603591798-21-38",
+    "sourceProductId": "7603591798",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603593844-39-54",
+    "sourceProductId": "7603593844",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603594702-37-93",
+    "sourceProductId": "7603594702",
+    "oldTitle": "Essential Cargo Pants",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603595896-47-57",
+    "sourceProductId": "7603595896",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603596796-33-75",
+    "sourceProductId": "7603596796",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603598084-25-40",
+    "sourceProductId": "7603598084",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603598460-26-52",
+    "sourceProductId": "7603598460",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603599768-28-93",
+    "sourceProductId": "7603599768",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603600564-25-56",
+    "sourceProductId": "7603600564",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603604644-27-32",
+    "sourceProductId": "7603604644",
+    "oldTitle": "Essential Cargo Pants",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603607736-42-27",
+    "sourceProductId": "7603607736",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603608354-27-32",
+    "sourceProductId": "7603608354",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603608542-28-29",
+    "sourceProductId": "7603608542",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603609730-22-18",
+    "sourceProductId": "7603609730",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603611880-30-70",
+    "sourceProductId": "7603611880",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603612176-15-91",
+    "sourceProductId": "7603612176",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603612194-29-09",
+    "sourceProductId": "7603612194",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603613768-29-41",
+    "sourceProductId": "7603613768",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603613772-23-47",
+    "sourceProductId": "7603613772",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603614062-25-07",
+    "sourceProductId": "7603614062",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603615668-23-47",
+    "sourceProductId": "7603615668",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603616114-24-27",
+    "sourceProductId": "7603616114",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603616148-24-27",
+    "sourceProductId": "7603616148",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603617742-34-72",
+    "sourceProductId": "7603617742",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603619942-30-86",
+    "sourceProductId": "7603619942",
+    "oldTitle": "Streetwear Camo Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603622200-25-72",
+    "sourceProductId": "7603622200",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603623642-25-40",
+    "sourceProductId": "7603623642",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603624016-29-25",
+    "sourceProductId": "7603624016",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603625662-34-72",
+    "sourceProductId": "7603625662",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603626034-29-09",
+    "sourceProductId": "7603626034",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603627678-23-47",
+    "sourceProductId": "7603627678",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603628128-30-86",
+    "sourceProductId": "7603628128",
+    "oldTitle": "Streetwear Camo Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603628156-25-07",
+    "sourceProductId": "7603628156",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603630018-23-79",
+    "sourceProductId": "7603630018",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603631616-23-47",
+    "sourceProductId": "7603631616",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603632074-26-52",
+    "sourceProductId": "7603632074",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603632286-39-54",
+    "sourceProductId": "7603632286",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603633636-28-93",
+    "sourceProductId": "7603633636",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603633944-23-79",
+    "sourceProductId": "7603633944",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603637834-25-07",
+    "sourceProductId": "7603637834",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603640218-26-68",
+    "sourceProductId": "7603640218",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603641850-30-86",
+    "sourceProductId": "7603641850",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603644178-23-47",
+    "sourceProductId": "7603644178",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603647872-32-63",
+    "sourceProductId": "7603647872",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603648042-27-32",
+    "sourceProductId": "7603648042",
+    "oldTitle": "Essential Cargo Pants",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603651992-25-72",
+    "sourceProductId": "7603651992",
+    "oldTitle": "Essential Cargo Pants",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603653908-25-07",
+    "sourceProductId": "7603653908",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603653974-27-32",
+    "sourceProductId": "7603653974",
+    "oldTitle": "Essential Cargo Pants",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603655752-23-79",
+    "sourceProductId": "7603655752",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603655862-35-36",
+    "sourceProductId": "7603655862",
+    "oldTitle": "Streetwear Camo Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603659876-27-32",
+    "sourceProductId": "7603659876",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603661670-26-52",
+    "sourceProductId": "7603661670",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603661872-25-07",
+    "sourceProductId": "7603661872",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603665804-25-07",
+    "sourceProductId": "7603665804",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603667598-27-32",
+    "sourceProductId": "7603667598",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603667852-33-75",
+    "sourceProductId": "7603667852",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603669758-24-27",
+    "sourceProductId": "7603669758",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603673630-22-99",
+    "sourceProductId": "7603673630",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7603677624-33-75",
+    "sourceProductId": "7603677624",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603677628-33-75",
+    "sourceProductId": "7603677628",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603681644-25-07",
+    "sourceProductId": "7603681644",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7603683608-28-93",
+    "sourceProductId": "7603683608",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7611753393-57-47",
+    "sourceProductId": "7611753393",
+    "oldTitle": "Streetwear Graphic Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7611811101-42-43",
+    "sourceProductId": "7611811101",
+    "oldTitle": "Essential Running Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7611811399-50-14",
+    "sourceProductId": "7611811399",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7611823569-54-00",
+    "sourceProductId": "7611823569",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7611829517-53-04",
+    "sourceProductId": "7611829517",
+    "oldTitle": "Casual Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7611839475-33-75",
+    "sourceProductId": "7611839475",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7611840843-49-82",
+    "sourceProductId": "7611840843",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7611851523-45-00",
+    "sourceProductId": "7611851523",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7611861343-36-97",
+    "sourceProductId": "7611861343",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7611883013-54-00",
+    "sourceProductId": "7611883013",
+    "oldTitle": "Casual Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7611885929-112-24",
+    "sourceProductId": "7611885929",
+    "oldTitle": "Casual Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7611888011-61-07",
+    "sourceProductId": "7611888011",
+    "oldTitle": "Casual Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7611891953-28-93",
+    "sourceProductId": "7611891953",
+    "oldTitle": "Casual Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7612091525-1-07",
+    "sourceProductId": "7612091525",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7612105467-16-40",
+    "sourceProductId": "7612105467",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7614789096-48-21",
+    "sourceProductId": "7614789096",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7614789150-67-50",
+    "sourceProductId": "7614789150",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7614865968-43-23",
+    "sourceProductId": "7614865968",
+    "oldTitle": "Casual Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7614881886-67-50",
+    "sourceProductId": "7614881886",
+    "oldTitle": "Essential Low-Top Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7614897840-134-80",
+    "sourceProductId": "7614897840",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7614901864-48-02",
+    "sourceProductId": "7614901864",
+    "oldTitle": "Casual Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7614921680-106-07",
+    "sourceProductId": "7614921680",
+    "oldTitle": "Essential Low-Top Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7614922008-96-42",
+    "sourceProductId": "7614922008",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7614923646-38-57",
+    "sourceProductId": "7614923646",
+    "oldTitle": "Essential Running Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7614935688-59-46",
+    "sourceProductId": "7614935688",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7614943610-77-14",
+    "sourceProductId": "7614943610",
+    "oldTitle": "Casual Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7615081442-3-22",
+    "sourceProductId": "7615081442",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7615163744-7-88",
+    "sourceProductId": "7615163744",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7742228759-29-17",
+    "sourceProductId": "7742228759",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7742284253-16-23",
+    "sourceProductId": "7742284253",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7745183528-20-35",
+    "sourceProductId": "7745183528",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7760379891-46-61",
+    "sourceProductId": "7760379891",
+    "oldTitle": "Essential Running Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7762648301-19-13",
+    "sourceProductId": "7762648301",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7762675943-12-54",
+    "sourceProductId": "7762675943",
+    "oldTitle": "Essential Clothing Set",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7762682043-20-25",
+    "sourceProductId": "7762682043",
+    "oldTitle": "Essential Clothing Set",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7763330642-30-54",
+    "sourceProductId": "7763330642",
+    "oldTitle": "Essential Hoodie",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7765630448-41-92",
+    "sourceProductId": "7765630448",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7765656208-13-83",
+    "sourceProductId": "7765656208",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7768412327-29-81",
+    "sourceProductId": "7768412327",
+    "oldTitle": "Layering Sweater",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7771323426-19-10",
+    "sourceProductId": "7771323426",
+    "oldTitle": "Layering Hoodie",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7771360772-16-27",
+    "sourceProductId": "7771360772",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7771386520-17-35",
+    "sourceProductId": "7771386520",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7773126421-20-57",
+    "sourceProductId": "7773126421",
+    "oldTitle": "Essential Trousers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7773159903-31-98",
+    "sourceProductId": "7773159903",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7778863173-57-70",
+    "sourceProductId": "7778863173",
+    "oldTitle": "Essential Jacket",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7778867065-15-91",
+    "sourceProductId": "7778867065",
+    "oldTitle": "Essential Sandals",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7778955647-45-80",
+    "sourceProductId": "7778955647",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7781906370-14-31",
+    "sourceProductId": "7781906370",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7782478825-20-09",
+    "sourceProductId": "7782478825",
+    "oldTitle": "Retro Football Jersey",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7782489221-21-70",
+    "sourceProductId": "7782489221",
+    "oldTitle": "Long-Sleeve Shirt",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7782537389-20-09",
+    "sourceProductId": "7782537389",
+    "oldTitle": "Retro Football Jersey",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7782539171-21-70",
+    "sourceProductId": "7782539171",
+    "oldTitle": "Long-Sleeve Shirt",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7782551229-14-47",
+    "sourceProductId": "7782551229",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7782556891-20-09",
+    "sourceProductId": "7782556891",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7782565055-14-47",
+    "sourceProductId": "7782565055",
+    "oldTitle": "Retro Football Jersey",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7782570645-10-45",
+    "sourceProductId": "7782570645",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7782570697-10-45",
+    "sourceProductId": "7782570697",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7782578611-10-45",
+    "sourceProductId": "7782578611",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7782582401-20-09",
+    "sourceProductId": "7782582401",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7782592451-10-45",
+    "sourceProductId": "7782592451",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7782596495-12-06",
+    "sourceProductId": "7782596495",
+    "oldTitle": "Argentina Fan Edition",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7782600363-10-45",
+    "sourceProductId": "7782600363",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7782627885-14-47",
+    "sourceProductId": "7782627885",
+    "oldTitle": "Retro Football Jersey",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7782631673-20-09",
+    "sourceProductId": "7782631673",
+    "oldTitle": "Retro Football Jersey",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7783154995-33-26",
+    "sourceProductId": "7783154995",
+    "oldTitle": "Essential Clothing Set",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7783164819-21-70",
+    "sourceProductId": "7783164819",
+    "oldTitle": "Essential Long-Sleeve Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7783206425-15-91",
+    "sourceProductId": "7783206425",
+    "oldTitle": "Essential Sandals",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7785503570-20-09",
+    "sourceProductId": "7785503570",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7785517336-21-70",
+    "sourceProductId": "7785517336",
+    "oldTitle": "Long-Sleeve Shirt",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7785517538-12-06",
+    "sourceProductId": "7785517538",
+    "oldTitle": "Argentina Fan Edition",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7785556850-10-45",
+    "sourceProductId": "7785556850",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7785566472-20-09",
+    "sourceProductId": "7785566472",
+    "oldTitle": "Retro Football Jersey",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7785566670-12-06",
+    "sourceProductId": "7785566670",
+    "oldTitle": "Argentina Fan Edition",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7785570674-12-06",
+    "sourceProductId": "7785570674",
+    "oldTitle": "Argentina Fan Edition",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7785572556-12-06",
+    "sourceProductId": "7785572556",
+    "oldTitle": "Argentina Fan Edition",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7785588342-10-45",
+    "sourceProductId": "7785588342",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7785597966-21-70",
+    "sourceProductId": "7785597966",
+    "oldTitle": "Long-Sleeve Shirt",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7785597984-21-70",
+    "sourceProductId": "7785597984",
+    "oldTitle": "Long-Sleeve Shirt",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7785603868-21-70",
+    "sourceProductId": "7785603868",
+    "oldTitle": "Long-Sleeve Shirt",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7785604046-10-45",
+    "sourceProductId": "7785604046",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7785613826-21-70",
+    "sourceProductId": "7785613826",
+    "oldTitle": "Long-Sleeve Shirt",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7785615952-14-47",
+    "sourceProductId": "7785615952",
+    "oldTitle": "Retro Football Jersey",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7785617860-10-45",
+    "sourceProductId": "7785617860",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7785627796-20-09",
+    "sourceProductId": "7785627796",
+    "oldTitle": "Retro Football Jersey",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7785631716-10-45",
+    "sourceProductId": "7785631716",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7785643650-14-47",
+    "sourceProductId": "7785643650",
+    "oldTitle": "Retro Football Jersey",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7786237616-40-98",
+    "sourceProductId": "7786237616",
+    "oldTitle": "Essential Running Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7789811586-17-52",
+    "sourceProductId": "7789811586",
+    "oldTitle": "Essential Shorts",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7789836932-39-06",
+    "sourceProductId": "7789836932",
+    "oldTitle": "Layering Jacket",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7789870682-28-77",
+    "sourceProductId": "7789870682",
+    "oldTitle": "Essential Jeans",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7789886524-40-02",
+    "sourceProductId": "7789886524",
+    "oldTitle": "Essential Sneakers",
+    "error": "HTTPSConnectionPool(host='api.manus.im', port=443): Max retries exceeded with url: /api/llm-proxy/v1/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"
+  },
+  {
+    "id": "kb-7789908090-16-10",
+    "sourceProductId": "7789908090",
+    "oldTitle": "Essential Apparel",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7794496347-19-13",
+    "sourceProductId": "7794496347",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  },
+  {
+    "id": "kb-7797541608-19-13",
+    "sourceProductId": "7797541608",
+    "oldTitle": "Essential T-Shirt",
+    "error": "'choices'"
+  }
+]

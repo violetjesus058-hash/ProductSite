@@ -1,838 +1,19 @@
 {
   "total": 2192,
-  "issueCards": 273,
+  "issueCards": 72,
   "issueCounts": {
-    "generic_weak": 273
+    "generic_weak": 72
   },
   "byCategory": {
-    "ACC": {
-      "generic_weak": 5
-    },
     "clothing": {
-      "generic_weak": 194
-    },
-    "pants": {
-      "generic_weak": 52
-    },
-    "shoe": {
-      "generic_weak": 22
+      "generic_weak": 72
     }
   },
   "examples": [
     {
-      "id": "kb-7543346841-14-47",
-      "sourceProductId": "7543346841",
-      "title": "Daily Essential Accessory",
-      "category": "ACC",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7760342617-21-70",
-      "sourceProductId": "7760342617",
-      "title": "Daily Essential Accessory",
-      "category": "ACC",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7543313315-30-47",
-      "sourceProductId": "7543313315",
-      "title": "Daily Essential Accessory",
-      "category": "ACC",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7576491587-12-70",
-      "sourceProductId": "7576491587",
-      "title": "Daily Essential Belt",
-      "category": "ACC",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7612177793-12-70",
-      "sourceProductId": "7612177793",
-      "title": "Daily Essential Belt",
-      "category": "ACC",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7545292452-15-24",
-      "sourceProductId": "7545292452",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603562996-15-91",
-      "sourceProductId": "7603562996",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7545292452-17-17",
-      "sourceProductId": "7545292452",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7578444786-17-36",
-      "sourceProductId": "7578444786",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601581439-18-16",
-      "sourceProductId": "7601581439",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601701619-18-16",
-      "sourceProductId": "7601701619",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7545221002-19-10",
-      "sourceProductId": "7545221002",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601621215-20-09",
-      "sourceProductId": "7601621215",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603523408-20-09",
-      "sourceProductId": "7603523408",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603542842-20-09",
-      "sourceProductId": "7603542842",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603572242-20-09",
-      "sourceProductId": "7603572242",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601672145-20-90",
-      "sourceProductId": "7601672145",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601709663-20-90",
-      "sourceProductId": "7601709663",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603487410-20-90",
-      "sourceProductId": "7603487410",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603584358-20-90",
-      "sourceProductId": "7603584358",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601713631-21-38",
-      "sourceProductId": "7601713631",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603552928-21-38",
-      "sourceProductId": "7603552928",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603560596-21-38",
-      "sourceProductId": "7603560596",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603609730-22-18",
-      "sourceProductId": "7603609730",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601674053-22-66",
-      "sourceProductId": "7601674053",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603521210-22-66",
-      "sourceProductId": "7603521210",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603673630-22-99",
-      "sourceProductId": "7603673630",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601611375-23-47",
-      "sourceProductId": "7601611375",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601632871-23-47",
-      "sourceProductId": "7601632871",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601654635-23-47",
-      "sourceProductId": "7601654635",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601668231-23-47",
-      "sourceProductId": "7601668231",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601683819-23-47",
-      "sourceProductId": "7601683819",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601684029-23-47",
-      "sourceProductId": "7601684029",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601687919-23-47",
-      "sourceProductId": "7601687919",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603560618-23-47",
-      "sourceProductId": "7603560618",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603562548-23-47",
-      "sourceProductId": "7603562548",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603627678-23-47",
-      "sourceProductId": "7603627678",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7574853817-24-88",
-      "sourceProductId": "7574853817",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601737921-25-07",
-      "sourceProductId": "7601737921",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601599355-25-40",
-      "sourceProductId": "7601599355",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601660565-25-40",
-      "sourceProductId": "7601660565",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601672145-25-40",
-      "sourceProductId": "7601672145",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601687799-25-40",
-      "sourceProductId": "7601687799",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603513266-25-40",
-      "sourceProductId": "7603513266",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601621203-28-13",
-      "sourceProductId": "7601621203",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603608542-28-29",
-      "sourceProductId": "7603608542",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7574853817-28-74",
-      "sourceProductId": "7574853817",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603566780-28-93",
-      "sourceProductId": "7603566780",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603599768-28-93",
-      "sourceProductId": "7603599768",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601637005-29-41",
-      "sourceProductId": "7601637005",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601715653-29-41",
-      "sourceProductId": "7601715653",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603489110-29-41",
-      "sourceProductId": "7603489110",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603515086-31-50",
-      "sourceProductId": "7603515086",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603533080-31-50",
-      "sourceProductId": "7603533080",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603564390-31-50",
-      "sourceProductId": "7603564390",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601629141-32-14",
-      "sourceProductId": "7601629141",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603566394-32-14",
-      "sourceProductId": "7603566394",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601666947-32-31",
-      "sourceProductId": "7601666947",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601628967-34-23",
-      "sourceProductId": "7601628967",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601631035-34-23",
-      "sourceProductId": "7601631035",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601648541-34-23",
-      "sourceProductId": "7601648541",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603580118-34-23",
-      "sourceProductId": "7603580118",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603580214-34-23",
-      "sourceProductId": "7603580214",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601664227-34-72",
-      "sourceProductId": "7601664227",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601593421-36-97",
-      "sourceProductId": "7601593421",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601621093-36-97",
-      "sourceProductId": "7601621093",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603489092-36-97",
-      "sourceProductId": "7603489092",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603499484-36-97",
-      "sourceProductId": "7603499484",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603519382-36-97",
-      "sourceProductId": "7603519382",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601697807-39-54",
-      "sourceProductId": "7601697807",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603535114-39-54",
-      "sourceProductId": "7603535114",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603590068-41-47",
-      "sourceProductId": "7603590068",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603496910-42-27",
-      "sourceProductId": "7603496910",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601680063-46-61",
-      "sourceProductId": "7601680063",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601687779-46-77",
-      "sourceProductId": "7601687779",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603595896-47-57",
-      "sourceProductId": "7603595896",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7601607215-53-04",
-      "sourceProductId": "7601607215",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603523154-53-04",
-      "sourceProductId": "7603523154",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7603558644-53-04",
-      "sourceProductId": "7603558644",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7576538861-74-25",
-      "sourceProductId": "7576538861",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7576538861-96-42",
-      "sourceProductId": "7576538861",
-      "title": "Everyday Apparel",
-      "category": "clothing",
-      "subCategory": "Selection",
-      "flags": [
-        "generic_weak"
-      ]
-    },
-    {
-      "id": "kb-7545260684-13-31",
-      "sourceProductId": "7545260684",
-      "title": "Everyday Hoodie",
+      "id": "kb-7578496014-8-68",
+      "sourceProductId": "7578496014",
+      "title": "Layering Hoodie",
       "category": "clothing",
       "subCategory": "Hoodies",
       "flags": [
@@ -840,9 +21,339 @@
       ]
     },
     {
-      "id": "kb-7603556550-21-38",
-      "sourceProductId": "7603556550",
-      "title": "Everyday Jacket",
+      "id": "kb-7545314260-13-50",
+      "sourceProductId": "7545314260",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Hoodies",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7543420287-16-97",
+      "sourceProductId": "7543420287",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Hoodies",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7578505862-18-32",
+      "sourceProductId": "7578505862",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Selection",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7545314260-19-10",
+      "sourceProductId": "7545314260",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Hoodies",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7578420980-19-10",
+      "sourceProductId": "7578420980",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Selection",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7771323426-19-10",
+      "sourceProductId": "7771323426",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Hoodies",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7578442860-21-01",
+      "sourceProductId": "7578442860",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Selection",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7771323426-22-60",
+      "sourceProductId": "7771323426",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Hoodies",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7578415114-23-95",
+      "sourceProductId": "7578415114",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Hoodies",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7543323065-24-11",
+      "sourceProductId": "7543323065",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Hoodies",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7545238792-28-55",
+      "sourceProductId": "7545238792",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Hoodies",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7578442860-29-49",
+      "sourceProductId": "7578442860",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Selection",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7545314260-30-86",
+      "sourceProductId": "7545314260",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Hoodies",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7545238792-31-82",
+      "sourceProductId": "7545238792",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Hoodies",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7576586117-31-82",
+      "sourceProductId": "7576586117",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Selection",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7578505862-32-59",
+      "sourceProductId": "7578505862",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Selection",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7576501373-33-75",
+      "sourceProductId": "7576501373",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Selection",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7545314260-34-72",
+      "sourceProductId": "7545314260",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Hoodies",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7578496014-34-72",
+      "sourceProductId": "7578496014",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Hoodies",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7576501373-35-68",
+      "sourceProductId": "7576501373",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Selection",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7578496014-36-64",
+      "sourceProductId": "7578496014",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Hoodies",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7545238792-36-84",
+      "sourceProductId": "7545238792",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Hoodies",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7545238792-38-19",
+      "sourceProductId": "7545238792",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Hoodies",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7578442860-38-19",
+      "sourceProductId": "7578442860",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Selection",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7578496014-38-57",
+      "sourceProductId": "7578496014",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Hoodies",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7578496014-41-47",
+      "sourceProductId": "7578496014",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Hoodies",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7545238792-44-55",
+      "sourceProductId": "7545238792",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Hoodies",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7543323065-49-95",
+      "sourceProductId": "7543323065",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Hoodies",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7545238792-57-09",
+      "sourceProductId": "7545238792",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Hoodies",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7545314260-59-79",
+      "sourceProductId": "7545314260",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Hoodies",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7545238792-67-31",
+      "sourceProductId": "7545238792",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Hoodies",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7578496014-67-50",
+      "sourceProductId": "7578496014",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Hoodies",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7545238792-82-93",
+      "sourceProductId": "7545238792",
+      "title": "Layering Hoodie",
+      "category": "clothing",
+      "subCategory": "Hoodies",
+      "flags": [
+        "generic_weak"
+      ]
+    },
+    {
+      "id": "kb-7789836932-39-06",
+      "sourceProductId": "7789836932",
+      "title": "Layering Jacket",
       "category": "clothing",
       "subCategory": "Jackets",
       "flags": [
@@ -850,9 +361,9 @@
       ]
     },
     {
-      "id": "kb-7601611335-23-47",
-      "sourceProductId": "7601611335",
-      "title": "Everyday Jacket",
+      "id": "kb-7543323077-47-25",
+      "sourceProductId": "7543323077",
+      "title": "Layering Jacket",
       "category": "clothing",
       "subCategory": "Jackets",
       "flags": [
@@ -860,9 +371,9 @@
       ]
     },
     {
-      "id": "kb-7601650631-23-47",
-      "sourceProductId": "7601650631",
-      "title": "Everyday Jacket",
+      "id": "kb-7578509830-47-25",
+      "sourceProductId": "7578509830",
+      "title": "Layering Jacket",
       "category": "clothing",
       "subCategory": "Jackets",
       "flags": [
@@ -870,9 +381,9 @@
       ]
     },
     {
-      "id": "kb-7601662439-23-47",
-      "sourceProductId": "7601662439",
-      "title": "Everyday Jacket",
+      "id": "kb-7543323077-48-21",
+      "sourceProductId": "7543323077",
+      "title": "Layering Jacket",
       "category": "clothing",
       "subCategory": "Jackets",
       "flags": [
@@ -880,9 +391,9 @@
       ]
     },
     {
-      "id": "kb-7601666467-23-47",
-      "sourceProductId": "7601666467",
-      "title": "Everyday Jacket",
+      "id": "kb-7578509830-48-21",
+      "sourceProductId": "7578509830",
+      "title": "Layering Jacket",
       "category": "clothing",
       "subCategory": "Jackets",
       "flags": [
@@ -890,9 +401,9 @@
       ]
     },
     {
-      "id": "kb-7601674283-23-47",
-      "sourceProductId": "7601674283",
-      "title": "Everyday Jacket",
+      "id": "kb-7543323077-50-14",
+      "sourceProductId": "7543323077",
+      "title": "Layering Jacket",
       "category": "clothing",
       "subCategory": "Jackets",
       "flags": [
@@ -900,9 +411,9 @@
       ]
     },
     {
-      "id": "kb-7601690009-23-47",
-      "sourceProductId": "7601690009",
-      "title": "Everyday Jacket",
+      "id": "kb-7578509830-50-14",
+      "sourceProductId": "7578509830",
+      "title": "Layering Jacket",
       "category": "clothing",
       "subCategory": "Jackets",
       "flags": [
@@ -910,9 +421,9 @@
       ]
     },
     {
-      "id": "kb-7601693973-23-47",
-      "sourceProductId": "7601693973",
-      "title": "Everyday Jacket",
+      "id": "kb-7543323077-60-75",
+      "sourceProductId": "7543323077",
+      "title": "Layering Jacket",
       "category": "clothing",
       "subCategory": "Jackets",
       "flags": [
@@ -920,9 +431,9 @@
       ]
     },
     {
-      "id": "kb-7601711737-23-47",
-      "sourceProductId": "7601711737",
-      "title": "Everyday Jacket",
+      "id": "kb-7578509830-60-75",
+      "sourceProductId": "7578509830",
+      "title": "Layering Jacket",
       "category": "clothing",
       "subCategory": "Jackets",
       "flags": [
@@ -930,9 +441,9 @@
       ]
     },
     {
-      "id": "kb-7603497060-23-47",
-      "sourceProductId": "7603497060",
-      "title": "Everyday Jacket",
+      "id": "kb-7543323077-61-71",
+      "sourceProductId": "7543323077",
+      "title": "Layering Jacket",
       "category": "clothing",
       "subCategory": "Jackets",
       "flags": [
@@ -940,9 +451,9 @@
       ]
     },
     {
-      "id": "kb-7603501590-23-47",
-      "sourceProductId": "7603501590",
-      "title": "Everyday Jacket",
+      "id": "kb-7578509830-61-71",
+      "sourceProductId": "7578509830",
+      "title": "Layering Jacket",
       "category": "clothing",
       "subCategory": "Jackets",
       "flags": [
@@ -950,9 +461,9 @@
       ]
     },
     {
-      "id": "kb-7603515334-23-47",
-      "sourceProductId": "7603515334",
-      "title": "Everyday Jacket",
+      "id": "kb-7543323077-63-64",
+      "sourceProductId": "7543323077",
+      "title": "Layering Jacket",
       "category": "clothing",
       "subCategory": "Jackets",
       "flags": [
@@ -960,9 +471,9 @@
       ]
     },
     {
-      "id": "kb-7603549074-23-47",
-      "sourceProductId": "7603549074",
-      "title": "Everyday Jacket",
+      "id": "kb-7578509830-63-64",
+      "sourceProductId": "7578509830",
+      "title": "Layering Jacket",
       "category": "clothing",
       "subCategory": "Jackets",
       "flags": [
@@ -970,9 +481,9 @@
       ]
     },
     {
-      "id": "kb-7603550988-23-47",
-      "sourceProductId": "7603550988",
-      "title": "Everyday Jacket",
+      "id": "kb-7543323077-71-36",
+      "sourceProductId": "7543323077",
+      "title": "Layering Jacket",
       "category": "clothing",
       "subCategory": "Jackets",
       "flags": [
@@ -980,9 +491,9 @@
       ]
     },
     {
-      "id": "kb-7603552894-23-47",
-      "sourceProductId": "7603552894",
-      "title": "Everyday Jacket",
+      "id": "kb-7578509830-71-36",
+      "sourceProductId": "7578509830",
+      "title": "Layering Jacket",
       "category": "clothing",
       "subCategory": "Jackets",
       "flags": [
@@ -990,9 +501,9 @@
       ]
     },
     {
-      "id": "kb-7603562604-23-47",
-      "sourceProductId": "7603562604",
-      "title": "Everyday Jacket",
+      "id": "kb-7576613745-80-36",
+      "sourceProductId": "7576613745",
+      "title": "Layering Jacket",
       "category": "clothing",
       "subCategory": "Jackets",
       "flags": [
@@ -1000,9 +511,9 @@
       ]
     },
     {
-      "id": "kb-7603574242-23-47",
-      "sourceProductId": "7603574242",
-      "title": "Everyday Jacket",
+      "id": "kb-7576613745-107-03",
+      "sourceProductId": "7576613745",
+      "title": "Layering Jacket",
       "category": "clothing",
       "subCategory": "Jackets",
       "flags": [
@@ -1010,211 +521,211 @@
       ]
     },
     {
-      "id": "kb-7603590286-23-47",
-      "sourceProductId": "7603590286",
-      "title": "Everyday Jacket",
+      "id": "kb-7578403416-16-97",
+      "sourceProductId": "7578403416",
+      "title": "Layering Sweater",
       "category": "clothing",
-      "subCategory": "Jackets",
+      "subCategory": "Sweaters",
       "flags": [
         "generic_weak"
       ]
     },
     {
-      "id": "kb-7603613772-23-47",
-      "sourceProductId": "7603613772",
-      "title": "Everyday Jacket",
+      "id": "kb-7576505437-17-17",
+      "sourceProductId": "7576505437",
+      "title": "Layering Sweater",
       "category": "clothing",
-      "subCategory": "Jackets",
+      "subCategory": "Selection",
       "flags": [
         "generic_weak"
       ]
     },
     {
-      "id": "kb-7603631616-23-47",
-      "sourceProductId": "7603631616",
-      "title": "Everyday Jacket",
+      "id": "kb-7576493513-19-10",
+      "sourceProductId": "7576493513",
+      "title": "Layering Sweater",
       "category": "clothing",
-      "subCategory": "Jackets",
+      "subCategory": "Sweaters",
       "flags": [
         "generic_weak"
       ]
     },
     {
-      "id": "kb-7601575285-25-40",
-      "sourceProductId": "7601575285",
-      "title": "Everyday Jacket",
+      "id": "kb-7511646004-22-34",
+      "sourceProductId": "7511646004",
+      "title": "Layering Sweater",
       "category": "clothing",
-      "subCategory": "Jackets",
+      "subCategory": "Sweaters",
       "flags": [
         "generic_weak"
       ]
     },
     {
-      "id": "kb-7603497114-25-40",
-      "sourceProductId": "7603497114",
-      "title": "Everyday Jacket",
+      "id": "kb-7578513682-22-34",
+      "sourceProductId": "7578513682",
+      "title": "Layering Sweater",
       "category": "clothing",
-      "subCategory": "Jackets",
+      "subCategory": "Selection",
       "flags": [
         "generic_weak"
       ]
     },
     {
-      "id": "kb-7603598084-25-40",
-      "sourceProductId": "7603598084",
-      "title": "Everyday Jacket",
+      "id": "kb-7576540781-24-11",
+      "sourceProductId": "7576540781",
+      "title": "Layering Sweater",
       "category": "clothing",
-      "subCategory": "Jackets",
+      "subCategory": "Selection",
       "flags": [
         "generic_weak"
       ]
     },
     {
-      "id": "kb-7603623642-25-40",
-      "sourceProductId": "7603623642",
-      "title": "Everyday Jacket",
+      "id": "kb-7576540781-26-04",
+      "sourceProductId": "7576540781",
+      "title": "Layering Sweater",
       "category": "clothing",
-      "subCategory": "Jackets",
+      "subCategory": "Selection",
       "flags": [
         "generic_weak"
       ]
     },
     {
-      "id": "kb-7601703765-26-20",
-      "sourceProductId": "7601703765",
-      "title": "Everyday Jacket",
+      "id": "kb-7768412327-29-81",
+      "sourceProductId": "7768412327",
+      "title": "Layering Sweater",
       "category": "clothing",
-      "subCategory": "Jackets",
+      "subCategory": "Sweaters",
       "flags": [
         "generic_weak"
       ]
     },
     {
-      "id": "kb-7601607517-28-13",
-      "sourceProductId": "7601607517",
-      "title": "Everyday Jacket",
+      "id": "kb-7576505437-31-82",
+      "sourceProductId": "7576505437",
+      "title": "Layering Sweater",
       "category": "clothing",
-      "subCategory": "Jackets",
+      "subCategory": "Selection",
       "flags": [
         "generic_weak"
       ]
     },
     {
-      "id": "kb-7603633636-28-93",
-      "sourceProductId": "7603633636",
-      "title": "Everyday Jacket",
+      "id": "kb-7768412327-32-37",
+      "sourceProductId": "7768412327",
+      "title": "Layering Sweater",
       "category": "clothing",
-      "subCategory": "Jackets",
+      "subCategory": "Sweaters",
       "flags": [
         "generic_weak"
       ]
     },
     {
-      "id": "kb-7601595589-29-41",
-      "sourceProductId": "7601595589",
-      "title": "Everyday Jacket",
+      "id": "kb-7543346825-32-59",
+      "sourceProductId": "7543346825",
+      "title": "Layering Sweater",
       "category": "clothing",
-      "subCategory": "Jackets",
+      "subCategory": "Sweaters",
       "flags": [
         "generic_weak"
       ]
     },
     {
-      "id": "kb-7601609465-29-41",
-      "sourceProductId": "7601609465",
-      "title": "Everyday Jacket",
+      "id": "kb-7576590095-32-59",
+      "sourceProductId": "7576590095",
+      "title": "Layering Sweater",
       "category": "clothing",
-      "subCategory": "Jackets",
+      "subCategory": "Selection",
       "flags": [
         "generic_weak"
       ]
     },
     {
-      "id": "kb-7601664295-29-41",
-      "sourceProductId": "7601664295",
-      "title": "Everyday Jacket",
+      "id": "kb-7578505864-33-75",
+      "sourceProductId": "7578505864",
+      "title": "Layering Sweater",
       "category": "clothing",
-      "subCategory": "Jackets",
+      "subCategory": "Sweaters",
       "flags": [
         "generic_weak"
       ]
     },
     {
-      "id": "kb-7603539216-29-41",
-      "sourceProductId": "7603539216",
-      "title": "Everyday Jacket",
+      "id": "kb-7543348799-34-72",
+      "sourceProductId": "7543348799",
+      "title": "Layering Sweater",
       "category": "clothing",
-      "subCategory": "Jackets",
+      "subCategory": "Sweaters",
       "flags": [
         "generic_weak"
       ]
     },
     {
-      "id": "kb-7603613768-29-41",
-      "sourceProductId": "7603613768",
-      "title": "Everyday Jacket",
+      "id": "kb-7578517734-34-72",
+      "sourceProductId": "7578517734",
+      "title": "Layering Sweater",
       "category": "clothing",
-      "subCategory": "Jackets",
+      "subCategory": "Sweaters",
       "flags": [
         "generic_weak"
       ]
     },
     {
-      "id": "kb-7603611880-30-70",
-      "sourceProductId": "7603611880",
-      "title": "Everyday Jacket",
+      "id": "kb-7768412327-38-33",
+      "sourceProductId": "7768412327",
+      "title": "Layering Sweater",
       "category": "clothing",
-      "subCategory": "Jackets",
+      "subCategory": "Sweaters",
       "flags": [
         "generic_weak"
       ]
     },
     {
-      "id": "kb-7601581591-32-14",
-      "sourceProductId": "7601581591",
-      "title": "Everyday Jacket",
+      "id": "kb-7576540781-42-43",
+      "sourceProductId": "7576540781",
+      "title": "Layering Sweater",
       "category": "clothing",
-      "subCategory": "Jackets",
+      "subCategory": "Selection",
       "flags": [
         "generic_weak"
       ]
     },
     {
-      "id": "kb-7601591507-32-14",
-      "sourceProductId": "7601591507",
-      "title": "Everyday Jacket",
+      "id": "kb-7576505437-44-17",
+      "sourceProductId": "7576505437",
+      "title": "Layering Sweater",
       "category": "clothing",
-      "subCategory": "Jackets",
+      "subCategory": "Selection",
       "flags": [
         "generic_weak"
       ]
     },
     {
-      "id": "kb-7601652517-32-14",
-      "sourceProductId": "7601652517",
-      "title": "Everyday Jacket",
+      "id": "kb-7576505437-46-09",
+      "sourceProductId": "7576505437",
+      "title": "Layering Sweater",
       "category": "clothing",
-      "subCategory": "Jackets",
+      "subCategory": "Selection",
       "flags": [
         "generic_weak"
       ]
     },
     {
-      "id": "kb-7601705701-32-14",
-      "sourceProductId": "7601705701",
-      "title": "Everyday Jacket",
+      "id": "kb-7768412327-47-53",
+      "sourceProductId": "7768412327",
+      "title": "Layering Sweater",
       "category": "clothing",
-      "subCategory": "Jackets",
+      "subCategory": "Sweaters",
       "flags": [
         "generic_weak"
       ]
     },
     {
-      "id": "kb-7601646529-34-72",
-      "sourceProductId": "7601646529",
-      "title": "Everyday Jacket",
+      "id": "kb-7768412327-48-38",
+      "sourceProductId": "7768412327",
+      "title": "Layering Sweater",
       "category": "clothing",
-      "subCategory": "Jackets",
+      "subCategory": "Sweaters",
       "flags": [
         "generic_weak"
       ]

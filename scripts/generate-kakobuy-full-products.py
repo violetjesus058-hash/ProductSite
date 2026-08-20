@@ -231,6 +231,87 @@ def menswear_editorial_title(title: str, category: str, subcategory: str, source
     return candidate
 
 
+def feature_first_title(title: str, category: str, subcategory: str, source_text: str) -> str:
+    """Prefer verified identity/type/structure features over decorative editorial words."""
+    lower = f'{title} {source_text}'.lower()
+    weak = bool(re.match(r'^(?:essential|everyday|daily essential|warm-weather|classic|minimalist|streetwear|relaxed fit|high[- ]?quality|fashion|premium)\b', title, re.I))
+    if not weak:
+        return title
+    identity = ''
+    for label, pattern in BRAND_PATTERNS:
+        if re.search(pattern, lower, re.I):
+            identity = label
+            break
+    if not identity:
+        for team in ['Arsenal', 'Barcelona', 'Manchester United', 'Real Madrid', 'AC Milan', 'Inter Milan', 'Liverpool', 'PSG']:
+            if team.lower() in lower:
+                identity = team
+                break
+    product_type = menswear_product_type(category, subcategory, lower)
+    chinese_type_map = [('球迷足球队服', 'Football Jersey'), ('足球队服', 'Football Jersey'), ('球衣', 'Football Jersey'), ('运动鞋', 'Running Sneakers'), ('短袖', 'T-Shirt'), ('短T恤', 'T-Shirt'), ('长袖', 'Long-Sleeve Shirt'), ('卫衣', 'Hoodie'), ('外套', 'Jacket'), ('夹克', 'Jacket'), ('套装', 'Clothing Set'), ('内裤', 'Underwear'), ('牛仔裤', 'Jeans'), ('喇叭裤', 'Flare Jeans'), ('短裤', 'Shorts'), ('裤子', 'Pants')]
+    for token, label in chinese_type_map:
+        if token in lower:
+            product_type = label
+            break
+    code_type_map = [(r'(?:^|[-_ ])(?:HD|HDS)(?:[-_ ]|$)', 'Hoodie'), (r'(?:^|[-_ ])(?:TS|TST|SS)(?:[-_ ]|$)', 'T-Shirt'), (r'(?:^|[-_ ])(?:PT|LO)(?:[-_ ]|$)', 'Pants'), (r'(?:^|[-_ ])(?:JE)(?:[-_ ]|$)', 'Jeans'), (r'(?:^|[-_ ])(?:CL)(?:[-_ ]|$)', 'Clothing Set')]
+    extra_type_map = [
+        (r'short[- ]?sleeve|短袖', 'Short-Sleeve Shirt'), (r'curved[- ]?(?:blade|knife)|弯刀', 'Curved-Leg Pants'), (r'straight[- ]?(?:leg|pants)|直筒', 'Straight-Leg Pants'),
+        (r'work[- ]?pants|工装裤', 'Workwear Pants'), (r'suit[- ]?pants|西裤', 'Suit Pants'), (r'camo|camouflage|迷彩', 'Camo Pants'),
+        (r'skate', 'Skate Sneakers'), (r'canvas|帆布', 'Canvas Sneakers'), (r'dad sneakers?', 'Dad Sneakers'), (r'high[- ]?top|高帮', 'High-Top Sneakers'),
+        (r'low[- ]?(?:cut|top)', 'Low-Top Sneakers'), (r'sports? shoes?|运动鞋', 'Sport Sneakers'),
+        (r'phone case|手机壳', 'Phone Case'), (r'necklace|项链', 'Necklace'), (r'bracelet|手链', 'Bracelet'),
+        (r'scarf|围巾', 'Scarf'), (r'headphones?|耳机', 'Headphones'), (r'sunglasses?|墨镜', 'Sunglasses'),
+        (r'perfume|fragrance|香水', 'Fragrance'), (r'watch|腕表|手表', 'Watch'), (r'jersey|football|soccer|球衣|足球', 'Football Jersey'),
+    ]
+    for pattern, label in extra_type_map:
+        if re.search(pattern, lower, re.I):
+            product_type = label
+            break
+    for pattern, label in code_type_map:
+        if re.search(pattern, lower, re.I):
+            product_type = label
+            break
+    feature = ''
+    feature_map = [
+        ('wide[- ]?leg', 'Wide-Leg'), ('oversized|oversize', 'Oversized'), ('relaxed|loose fit', 'Relaxed Fit'),
+        ('cargo', 'Cargo'), ('washed|distressed|ripped', 'Washed'), ('graphic|logo|print|letter', 'Graphic'),
+        ('zip[- ]?up|full[- ]?zip', 'Zip-Up'), ('quilted|puffer', 'Quilted'), ('ribbed|knit', 'Ribbed'),
+        ('striped|stripe', 'Striped'), ('plaid|check', 'Plaid'), ('camo|camouflage', 'Camo'),
+        ('low[- ]?top', 'Low-Top'), ('high[- ]?top', 'High-Top'), ('running|runner', 'Running'), ('led', 'LED'), ('fresh|清新', 'Fresh'), ('sweet|甜蜜', 'Sweet'), ('floral|花朵|花卉', 'Floral'),
+    ]
+    for pattern, label in feature_map:
+        if re.search(pattern, lower, re.I):
+            feature = label
+            break
+    chinese_feature_map = [('印花|图案|字母|logo', 'Graphic'), ('破洞', 'Distressed'), ('宽松', 'Relaxed Fit'), ('大V领|V领', 'V-Neck'), ('爱心', 'Heart Graphic'), ('条纹', 'Striped'), ('格子', 'Plaid'), ('石头|潮牌', 'Streetwear'), ('方形', 'Square'), ('机械', 'Mechanical'), ('高街', 'Streetwear'), ('纯色', 'Minimalist')]
+    for pattern, label in chinese_feature_map:
+        if re.search(pattern, lower, re.I):
+            feature = label
+            break
+    if identity:
+        prefix = identity
+    elif re.search(r'football|soccer|jersey|arsenal|barcelona|club', lower):
+        prefix = 'Retro'
+    elif feature in {'Graphic', 'Camo', 'Striped', 'Plaid'}:
+        prefix = 'Streetwear'
+    elif feature in {'Washed', 'Ribbed'} or re.search(r'vintage|heritage', lower):
+        prefix = 'Vintage'
+    elif feature in {'Oversized', 'Relaxed Fit', 'Wide-Leg'}:
+        prefix = 'Relaxed Fit'
+    elif re.search(r'minimal|plain|solid|clean', lower):
+        prefix = 'Minimalist'
+    elif re.search(r'casual', lower):
+        prefix = 'Casual'
+    else:
+        prefix = 'Essential'
+    parts = [prefix]
+    if feature and feature.lower() not in product_type.lower():
+        parts.append(feature)
+    parts.append(product_type)
+    candidate = re.sub(r'\s+', ' ', ' '.join(parts)).strip()
+    return candidate[:42].rstrip() if len(candidate) > 42 else candidate
+
+
 def conservative_category_title(category: str, subcategory: str, fallback: str) -> str:
     sub = str(subcategory or '').strip().lower()
     if category == 'pants':
@@ -623,6 +704,16 @@ MANUAL_OVERRIDES = {
 }
 
 
+def sanitize_final_title(title: str, category: str, subcategory: str, source_text: str) -> str:
+    value = re.sub(r'\s+', ' ', str(title or '')).strip(' -/:')
+    model_category = re.fullmatch(r'(?:[A-Z]{1,8}\d{1,6}|\d{1,8}[A-Z]{1,8}\d*|[A-Z0-9]{2,}[-_.]\d+)(?:\s+|[-_])(?:Pants|Jeans|Shorts|Trousers|Hoodie|Jersey|Shirt|Sweater|Jacket|Shoes?|Sneakers?|Boots?|Bag|Wallet|Belt|Cap|Hat|Socks?|Underwear|Watch|Perfume|Accessory)', value, re.I)
+    hard_bad = bool(re.fullmatch(r'[A-Za-z]?\d{0,2}', value)) or bool(re.fullmatch(r'\d+(?:\s+\d+)?(?:\s+High[- ]?Quality)?', value, re.I)) or bool(re.match(r'^\d+\s+\d+\s+High[- ]?Quality', value, re.I)) or bool(model_category)
+    if hard_bad:
+        base = conservative_category_title(category, subcategory, value)
+        value = feature_first_title(base, category, subcategory, source_text)
+    return finalize_display_title(value or conservative_category_title(category, subcategory, value), category, subcategory)
+
+
 def classify_product(info: dict) -> str:
     title_text = f"{info.get('title', '')} {info.get('subcategory', '')}".lower()
     text = f"{title_text} {info.get('category', '')}".lower()
@@ -758,7 +849,10 @@ def main() -> None:
             title_override = AI_TITLE_OVERRIDES.get(pid)
             resolved_subcategory = override.get('subCategory') or inferred_subcategory
             display_title = finalize_display_title(title_override, final_category, resolved_subcategory) if title_override else optimize_display_title(info, final_category, resolved_subcategory, f'Kakobuy Product {pid}')
-            display_title = finalize_display_title(menswear_editorial_title(display_title, final_category, resolved_subcategory, f"{info.get('title', '')} {info.get('title_original', '')} {display_title}"), final_category, resolved_subcategory)
+            source_text = f"{info.get('title', '')} {info.get('title_original', '')} {resolved_subcategory}"
+            display_title = feature_first_title(display_title, final_category, resolved_subcategory, source_text)
+            display_title = finalize_display_title(menswear_editorial_title(display_title, final_category, resolved_subcategory, f"{source_text} {display_title}"), final_category, resolved_subcategory)
+            display_title = sanitize_final_title(display_title, final_category, resolved_subcategory, source_text)
             grouped.append({
                 'id': f'kb-{pid}-{price.replace(".", "-")}',
                 'sourceProductId': pid,
