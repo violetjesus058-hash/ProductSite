@@ -852,3 +852,12 @@
 - [x] Second pass: audit other identifier-like, weak, duplicated, incomplete, and generic titles across every category.
 - [x] Third pass: validate title length, English wording, duplicate patterns, price/SKU contamination, and desktop/mobile card display.
 - [x] Run tests, TypeScript, production build, full statistics, and save a checkpoint.
+
+
+## 2026-08-20 Menswear editorial title system
+- [x] Define a controlled 20-30 template vocabulary for essential, streetwear, vintage, retro/performance, minimalist, and casual/everyday titles.
+- [x] Map category and subcategory terms for menswear, shoes, bags, jerseys, watches, fragrance, and accessories.
+- [x] Extract supported title features from Kakobuy source text, category/subcategory, brand, colors, visible graphics, fit words, and product-image evidence.
+- [x] Generate concise English titles using `style/scene + product type + key feature`, with a maximum length and no unsupported claims.
+- [x] Apply the new title system across all 2,192 cards while preserving confirmed brand, club, team, and product distinctions.
+- [x] Run three quality audits for model residue, source-code residue, repetition, unsupported wording, and title length; verify desktop/mobile cards and save a checkpoint.

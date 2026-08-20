@@ -131,6 +131,10 @@ def finalize_display_title(title: str, category: str, subcategory: str) -> str:
     title = re.sub(r'\s+[A-Z]{1,5}[-_]\d{2,}\s*$', '', title, flags=re.I)
     title = re.sub(r'^[A-Z]\s+(?=(?:Fashion|Classic|Premium|Versatile)\b)', '', title, flags=re.I)
     title = re.sub(r'\s+', ' ', title).strip(' -/:')
+    title = re.sub(r'\bEveryday\s+Everyday\b', 'Everyday', title, flags=re.I)
+    title = re.sub(r'\bWarm-Weather\s+Fashion\s+Versatile\b', 'Warm-Weather', title, flags=re.I)
+    title = re.sub(r'\bLayering\s+Hat\s+Hoodie\s+Clothing Set\b', 'Layering Hoodie', title, flags=re.I)
+    title = re.sub(r'\s+-?\d{2,4}(?:-[A-Z]{1,5})?$', '', title, flags=re.I)
     generic = bool(re.match(r'^(?:high[- ]?quality|rep high[- ]?quality|fashion|premium|versatile|classic|catalog item|kakobuy product)\b', title, re.I))
     descriptor = editorial_descriptor(category, subcategory, title)
     if generic and descriptor:
@@ -151,6 +155,80 @@ def finalize_display_title(title: str, category: str, subcategory: str) -> str:
         if len(candidate) > 39: break
         compact = candidate
     return compact or title[:39].rstrip()
+
+
+def menswear_product_type(category: str, subcategory: str, text: str) -> str:
+    t = text.lower()
+    if category == 'pants':
+        if re.search(r'\bjeans?\b|denim', t) or str(subcategory).lower() == 'jeans': return 'Jeans'
+        if re.search(r'\bshorts?\b', t) or str(subcategory).lower() == 'shorts': return 'Shorts'
+        if re.search(r'cargo', t): return 'Cargo Pants'
+        if re.search(r'wide[- ]?leg', t): return 'Wide-Leg Pants'
+        if str(subcategory).lower() == 'trousers': return 'Trousers'
+        if str(subcategory).lower() == 'sweatpants': return 'Sweatpants'
+        return 'Pants'
+    if category == 'clothing':
+        if re.search(r'\bjersey\b|football|soccer|club|arsenal|barcelona|manchester', t): return 'Football Jersey'
+        if re.search(r'hoodie|hooded', t) or str(subcategory).lower() == 'hoodies': return 'Hoodie'
+        if re.search(r'jacket|coat|parka|puffer', t) or str(subcategory).lower() == 'jackets': return 'Jacket'
+        if re.search(r'sweater|knit|crewneck', t) or str(subcategory).lower() == 'sweaters': return 'Sweater'
+        if re.search(r'long[- ]?sleeve', t): return 'Long-Sleeve Shirt'
+        if re.search(r'shirt|tee|t-?shirt', t) or str(subcategory).lower() == 'shirts': return 'T-Shirt'
+        if str(subcategory).lower() == 'sets': return 'Clothing Set'
+        return 'Apparel'
+    if category == 'shoe':
+        if re.search(r'low[- ]?top', t): return 'Low-Top Sneakers'
+        if re.search(r'runner|running', t): return 'Running Sneakers'
+        if re.search(r'sandal', t): return 'Sandals'
+        if re.search(r'boot', t): return 'Boots'
+        return 'Sneakers'
+    if category == 'bags':
+        if re.search(r'crossbody|shoulder', t): return 'Crossbody Bag'
+        if re.search(r'backpack', t): return 'Backpack'
+        if re.search(r'wallet|card holder', t): return 'Wallet'
+        return 'Everyday Bag'
+    if category == 'ACC':
+        if re.search(r'cap|hat', t): return 'Cap'
+        if re.search(r'belt', t): return 'Belt'
+        if re.search(r'wallet|card holder', t): return 'Card Holder'
+        if re.search(r'glasses|eyewear', t): return 'Eyewear'
+        return 'Accessories'
+    if category == 'watches': return 'Watch'
+    if category == 'fragrance': return 'Fragrance'
+    return 'Product'
+
+
+def menswear_editorial_title(title: str, category: str, subcategory: str, source_text: str) -> str:
+    """Create a short menswear editorial title only for generic or weak display titles."""
+    lower = title.lower()
+    weak = lower.startswith(('everyday ', 'daily essential', 'high-quality ', 'high quality ', 'fashion ')) or re.fullmatch(r'(?:apparel|pants|shoes?|product|item|accessories?|\d{4}(?:-\d{4})?)', lower)
+    if not weak:
+        return title
+    product_type = menswear_product_type(category, subcategory, f'{title} {source_text}')
+    source = source_text.lower()
+    if re.search(r'football|soccer|club|jersey|arsenal|barcelona|manchester', source):
+        style = 'Retro'
+    elif re.search(r'graphic|logo|print|letter', source):
+        style = 'Streetwear'
+    elif re.search(r'vintage|washed|distressed|heritage', source):
+        style = 'Vintage'
+    elif re.search(r'oversized|loose|relaxed|wide[- ]?leg', source):
+        style = 'Relaxed Fit'
+    elif re.search(r'minimal|plain|solid|clean', source):
+        style = 'Minimalist'
+    elif category in {'bags', 'ACC', 'watches', 'fragrance'}:
+        style = 'Everyday'
+    elif category == 'shoe':
+        style = 'Classic'
+    else:
+        style = 'Essential'
+    feature = ''
+    if re.search(r'zip[- ]?up|full[- ]?zip', source): feature = ' Zip-Up'
+    elif re.search(r'oversized', source): feature = ' Oversized'
+    elif re.search(r'graphic|logo|print', source): feature = ' Graphic'
+    candidate = f'{style}{feature} {product_type}'.replace('  ', ' ').strip()
+    candidate = re.sub(r'\bEveryday\s+Everyday\b', 'Everyday', candidate, flags=re.I)
+    return candidate
 
 
 def conservative_category_title(category: str, subcategory: str, fallback: str) -> str:
@@ -225,7 +303,7 @@ def optimize_display_title(info: dict, category: str, subcategory: str, fallback
         fallback_label = conservative_category_title(category, subcategory, fallback)
         return finalize_display_title(fallback_label, category, subcategory)
     if not identifier_like:
-        return finalize_display_title(title or fallback, category, subcategory)
+        return finalize_display_title(menswear_editorial_title(title or fallback, category, subcategory, source_text), category, subcategory)
 
     code_match = re.search(r'\b(?:\d+[-_])?([A-Z]{1,5})[-_]\d+\b', title, re.I)
     code = code_match.group(1).upper() if code_match else ''
@@ -678,7 +756,9 @@ def main() -> None:
             if str(final_category).strip().lower() == 'accessories':
                 final_category = 'ACC'
             title_override = AI_TITLE_OVERRIDES.get(pid)
-            display_title = finalize_display_title(title_override, final_category, override.get('subCategory') or inferred_subcategory) if title_override else optimize_display_title(info, final_category, override.get('subCategory') or inferred_subcategory, f'Kakobuy Product {pid}')
+            resolved_subcategory = override.get('subCategory') or inferred_subcategory
+            display_title = finalize_display_title(title_override, final_category, resolved_subcategory) if title_override else optimize_display_title(info, final_category, resolved_subcategory, f'Kakobuy Product {pid}')
+            display_title = finalize_display_title(menswear_editorial_title(display_title, final_category, resolved_subcategory, f"{info.get('title', '')} {info.get('title_original', '')} {display_title}"), final_category, resolved_subcategory)
             grouped.append({
                 'id': f'kb-{pid}-{price.replace(".", "-")}',
                 'sourceProductId': pid,
