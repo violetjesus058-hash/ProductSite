@@ -7,11 +7,11 @@ compatibility_date = "2026-08-20"
 [[d1_databases]]
 binding = "DB"
 database_name = "productsite-db"
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_id = "af5d0b54-6dcc-4014-ac7c-2364ca32cb63"
 
 [vars]
 # Replace with the final Cloudflare Pages origin before deployment.
-ALLOWED_ORIGIN = "https://REPLACE_WITH_PAGES_DOMAIN"
+ALLOWED_ORIGIN = "https://productsite-8wf.pages.dev"
 
 # Never commit ADMIN_API_KEY. Set it with:
 # wrangler secret put ADMIN_API_KEY

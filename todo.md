@@ -774,3 +774,8 @@
 - [x] 增加后台申请列表、回复和状态管理页面。
 - [x] 在未绑定 Worker 时提供清晰的连接状态和后续配置提示。
 - [x] 增加用户申请编号查询页面，展示处理状态和管理员回复。
+
+## Cloudflare 部署错误修复（2026-08-20）
+- [ ] 将 Cloudflare D1 真实 database_id 写入 `cloudflare-worker/wrangler.toml`。
+- [ ] 将正确 Pages 来源写入 `ALLOWED_ORIGIN` 配置占位并同步 GitHub。
+- [ ] 重新触发 Cloudflare Worker 部署并确认 D1 绑定成功。
