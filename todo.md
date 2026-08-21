@@ -976,3 +976,7 @@
 - [x] 检查手机端 REQUEST A PRODUCT、DISCORD FEEDBACK 和设置图标的 JSX 与布局关系。
 - [x] 将两个入口放回左侧菜单栏延续位置，移除手机端设置/滑杆图标。
 - [x] 验证手机端菜单、顶部品牌、搜索框和两列商品墙不再错位，并保存检查点。
+
+- [x] 将手机端左侧 `REQUEST A PRODUCT` 缩写为 `REQUEST`，将 `DISCORD FEEDBACK` 缩写为 `DISCORD`。
+- [x] 保留完整 aria-label/title 和原有点击、外链功能，验证缩写后菜单不再多行换行。
+- [x] 运行移动端截图、测试和构建，并保存检查点。
