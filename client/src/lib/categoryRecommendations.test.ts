@@ -30,6 +30,16 @@ describe("buildCategoryRecommendationPool", () => {
     expect(new Set(pool.map((item) => item.id)).size).toBe(pool.length);
   });
 
+  it("deduplicates SKU rows that share one source product", () => {
+    const duplicateSourceCatalog = [
+      { id: "sku-a", sourceProductId: "source-1", category: "pants", images: ["a.jpg"] },
+      { id: "sku-b", sourceProductId: "source-1", category: "pants", images: ["b.jpg"] },
+      { id: "sku-c", sourceProductId: "source-2", category: "pants", images: ["c.jpg"] },
+    ];
+    const pool = buildCategoryRecommendationPool("pants", duplicateSourceCatalog as never);
+    expect(pool.map((item) => item.id)).toEqual(["sku-a", "sku-c"]);
+  });
+
   it("raises products matching a favorite item's subcategory", () => {
     const behaviorCatalog = [
       { id: "favorite", category: "pants", subCategory: "cargo", images: ["favorite.jpg"], brand: "Unbranded", tags: ["utility"] },

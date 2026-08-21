@@ -22,9 +22,13 @@ export function rankBehavioralRecommendations(
   now = Date.now(),
   dislikedIds: ReadonlySet<string> = new Set(),
 ): CatalogProduct[] {
+  const uniquePool = pool.filter((product, index, items) => {
+    const identity = product.sourceProductId || product.id;
+    return items.findIndex((candidate) => (candidate.sourceProductId || candidate.id) === identity) === index;
+  });
   const engagedById = new Map(engagement.map((entry) => [entry.id, entry]));
   const interests = catalog.filter((product) => favoriteIds.has(product.id) || engagedById.has(product.id));
-  if (interests.length === 0) return pool.filter((product) => !dislikedIds.has(product.id));
+  if (interests.length === 0) return uniquePool.filter((product) => !dislikedIds.has(product.id));
   const score = (candidate: CatalogProduct, index: number) => {
     let total = 0;
     for (const interest of interests) {
@@ -41,7 +45,7 @@ export function rankBehavioralRecommendations(
     }
     return total - index * 0.0001;
   };
-  return pool.filter((product) => !dislikedIds.has(product.id)).map((product, index) => ({ product, score: score(product, index) })).sort((a, b) => b.score - a.score).map(({ product }) => product);
+  return uniquePool.filter((product) => !dislikedIds.has(product.id)).map((product, index) => ({ product, score: score(product, index) })).sort((a, b) => b.score - a.score).map(({ product }) => product);
 }
 
 export function buildCategoryRecommendationPool(
@@ -53,8 +57,9 @@ export function buildCategoryRecommendationPool(
   const pool: CatalogProduct[] = [];
   const add = (items: readonly CatalogProduct[]) => {
     items.forEach((product) => {
-      if (excludedIds.has(product.id) || seen.has(product.id) || product.images.length === 0) return;
-      seen.add(product.id);
+      const identity = product.sourceProductId || product.id;
+      if (excludedIds.has(product.id) || seen.has(identity) || product.images.length === 0) return;
+      seen.add(identity);
       pool.push(product);
     });
   };
