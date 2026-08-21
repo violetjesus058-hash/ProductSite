@@ -647,3 +647,27 @@ a { color:inherit; text-decoration:none; }
   .catalog-main { width:calc(100% - 104px); max-width:calc(100vw - 104px); margin-left:104px; }
   .catalog-header { margin-left:-10px; margin-right:-10px; padding-left:9px; }
 }
+
+/* Mobile alignment pass: center the search field between brand/status columns and standardize the left rail rhythm. */
+@media (max-width:760px) {
+  .catalog-header { display:grid; grid-template-columns:125px minmax(0,1fr) auto; align-items:center; gap:8px; height:96px; padding:0 8px; }
+  .mobile-brand { width:125px; min-width:125px; justify-content:center; }
+  .mobile-brand-wordmark { width:125px; margin:0 auto; }
+  .search-wrap { align-self:center; justify-self:center; width:100%; max-width:190px; min-width:0; }
+  .header-actions { justify-self:end; align-items:center; }
+  .live-status { align-self:center; }
+  .mobile-icon-rail { align-items:center; text-align:center; }
+  .mobile-icon-rail > button:not(.mobile-rail-request-link) { width:58px; min-width:58px; height:30px; margin-inline:auto; justify-items:center; text-align:center; }
+  .mobile-icon-rail > button:not(.mobile-rail-request-link) span { display:block; width:100%; text-align:center; font-size:8px; letter-spacing:.02em; }
+  .mobile-icon-rail .mobile-rail-divider { width:78px; margin-inline:auto; }
+  .mobile-rail-request-link, .mobile-rail-discord-link { justify-content:center; width:78px; margin-inline:auto; padding-inline:0; text-align:center; font-size:7px; letter-spacing:.02em; }
+}
+
+@media (max-width:760px) {
+  .catalog-header { grid-template-columns:100px minmax(110px,1fr) 48px; gap:8px; }
+  .mobile-brand { width:100px; min-width:100px; }
+  .mobile-brand-wordmark { width:100px; }
+  .search-wrap { min-width:110px; max-width:none; }
+  .header-actions { width:48px; min-width:48px; }
+  .live-status { max-width:48px; font-size:6px; letter-spacing:0; }
+}
