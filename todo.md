@@ -933,6 +933,11 @@
 - [x] 更新网站标题、描述、社交元数据和品牌可访问文本为 RIVORA。
 - [ ] 等待生成资产完成后验证商标/icon 显示，并保存品牌检查点。
 
-- [ ] 检查 RIVORA 品牌版本的 Git 分支、远程地址和未提交变更。
-- [ ] 将 RIVORA 商标/icon 接入版本推送到 GitHub ProductSite main。
-- [ ] 核对 GitHub main 最新提交并说明 Cloudflare 自动部署状态。
+- [x] 检查 RIVORA 品牌版本的 Git 分支、远程地址和未提交变更。
+- [x] 将 RIVORA 商标/icon 接入版本推送到 GitHub ProductSite main。
+- [x] 核对 GitHub main 最新提交并说明 Cloudflare 自动部署状态。
+
+- [x] 检查 RIVORA wordmark 与 icon 资源在预览和生产路径下的实际响应。
+- [x] 移除不稳定的异步 wordmark 引用，替换为稳定可部署的本地品牌资产，并保留 RIVORA 识别。
+- [x] 验证桌面侧栏、移动头部、详情页和 favicon 不再显示替代文本或破图。
+- [ ] 保存 RIVORA 品牌资源修复检查点。
