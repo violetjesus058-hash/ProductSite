@@ -65,7 +65,9 @@ const MAX_ANALYTICS_BODY_BYTES = 80_000;
 
 function corsHeaders(request: Request, env: Env): Headers {
   const origin = request.headers.get("Origin") || "";
-  const allowed = env.ALLOWED_ORIGIN && env.ALLOWED_ORIGIN !== "*" ? env.ALLOWED_ORIGIN : origin || "*";
+  const isProductSitePagesOrigin = /^https:\/\/[a-z0-9-]+\.productsite-8wf\.pages\.dev$/i.test(origin);
+  const configuredOrigin = env.ALLOWED_ORIGIN && env.ALLOWED_ORIGIN !== "*" ? env.ALLOWED_ORIGIN : "";
+  const allowed = configuredOrigin && (origin === configuredOrigin || isProductSitePagesOrigin) ? origin : configuredOrigin || (isProductSitePagesOrigin ? origin : origin || "*");
   const headers = new Headers(jsonHeaders);
   headers.set("access-control-allow-origin", allowed);
   headers.set("access-control-allow-headers", "content-type, x-admin-api-key");

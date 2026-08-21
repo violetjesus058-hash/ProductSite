@@ -743,3 +743,9 @@ a { color:inherit; text-decoration:none; }
   .analytics-grid { grid-template-columns: 1fr; }
   .analytics-section { padding: 14px; }
 }
+
+.analytics-key-field { position: relative; display: flex; align-items: center; }
+.analytics-key-field input { width: 100%; padding-right: 40px; }
+.analytics-key-toggle { position: absolute; right: 4px; display: inline-flex; align-items: center; justify-content: center; width: 31px; height: 30px; border: 0; background: transparent; color: #6f6b64; cursor: pointer; }
+.analytics-key-toggle:hover { color: #181715; }
+.analytics-key-toggle:focus-visible { outline: 2px solid #ef6356; outline-offset: 1px; }

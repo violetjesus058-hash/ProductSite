@@ -1074,3 +1074,10 @@
 - [ ] 检查自有分析面板版本的 Git 分支、远程地址和未提交变更。
 - [ ] 将自有埋点与 /admin/analytics 版本推送到 GitHub ProductSite main。
 - [ ] 核对 Cloudflare Pages 构建完成后线上 /admin/analytics 页面可访问。
+
+- [ ] 为 /admin/analytics 的 Worker admin key 输入框增加显示/隐藏按钮。
+- [ ] 排查 Failed to fetch 的 Worker URL、CORS、ADMIN_API_KEY 和线上 Worker 版本。
+- [ ] 验证密钥控件与真实汇总接口请求，并保存检查点。
+
+- [ ] 将分析面板密钥显示/隐藏、Worker CORS 和错误提示修复推送到 GitHub ProductSite main。
+- [ ] 重新部署 Worker 与 Pages，并验证新 ADMIN_API_KEY 可以加载 D1 汇总数据。
