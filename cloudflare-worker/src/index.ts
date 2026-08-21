@@ -307,16 +307,27 @@ async function getAnalyticsSummary(request: Request, env: Env) {
   const requestedDays = Number(url.searchParams.get("days") || 30);
   const days = Number.isInteger(requestedDays) ? Math.min(90, Math.max(1, requestedDays)) : 30;
   const since = new Date(Date.now() - days * 86_400_000).toISOString();
-  const [totals, events, products, platforms, categories, daily, recent] = await Promise.all([
-    env.DB.prepare("SELECT COUNT(*) AS total_events, COUNT(DISTINCT anonymous_id) AS unique_visitors, COUNT(DISTINCT session_id) AS unique_sessions FROM analytics_events WHERE occurred_at >= ?").bind(since).first(),
+  const [totals, events, products, platforms, categories, daily, sources, devices, languages, paths, searches, conversions, recent] = await Promise.all([
+    env.DB.prepare("SELECT COUNT(*) AS total_events, COUNT(DISTINCT anonymous_id) AS unique_visitors, COUNT(DISTINCT session_id) AS unique_sessions, COUNT(DISTINCT CASE WHEN event_name = 'product_detail_view' THEN anonymous_id END) AS detail_visitors, COUNT(DISTINCT CASE WHEN event_name IN ('affiliate_click','outbound_click') THEN anonymous_id END) AS click_visitors FROM analytics_events WHERE occurred_at >= ?").bind(since).first(),
     env.DB.prepare("SELECT event_name AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? GROUP BY event_name ORDER BY count DESC LIMIT 30").bind(since).all(),
     env.DB.prepare("SELECT product_id AS id, MAX(source_product_id) AS source_product_id, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND product_id IS NOT NULL GROUP BY product_id ORDER BY count DESC LIMIT 30").bind(since).all(),
     env.DB.prepare("SELECT platform AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND platform IS NOT NULL GROUP BY platform ORDER BY count DESC LIMIT 30").bind(since).all(),
     env.DB.prepare("SELECT category AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND category IS NOT NULL GROUP BY category ORDER BY count DESC LIMIT 30").bind(since).all(),
     env.DB.prepare("SELECT substr(occurred_at, 1, 10) AS date, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? GROUP BY date ORDER BY date ASC").bind(since).all(),
-    env.DB.prepare("SELECT id, event_name, occurred_at, path, product_id, category, platform, device, utm_source, utm_campaign FROM analytics_events ORDER BY id DESC LIMIT 100").all<AnalyticsRow>(),
+    env.DB.prepare("SELECT COALESCE(NULLIF(utm_source, ''), 'direct') AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? GROUP BY name ORDER BY count DESC LIMIT 30").bind(since).all(),
+    env.DB.prepare("SELECT COALESCE(NULLIF(device, ''), 'unknown') AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? GROUP BY name ORDER BY count DESC LIMIT 20").bind(since).all(),
+    env.DB.prepare("SELECT COALESCE(NULLIF(language, ''), 'unknown') AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? GROUP BY name ORDER BY count DESC LIMIT 20").bind(since).all(),
+    env.DB.prepare("SELECT COALESCE(NULLIF(path, ''), '/') AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? GROUP BY name ORDER BY count DESC LIMIT 30").bind(since).all(),
+    env.DB.prepare("SELECT query AS name, COUNT(*) AS count, SUM(CASE WHEN event_name = 'search_no_result' THEN 1 ELSE 0 END) AS no_result_count FROM analytics_events WHERE occurred_at >= ? AND query IS NOT NULL AND query != '' GROUP BY query ORDER BY count DESC LIMIT 30").bind(since).all(),
+    env.DB.prepare("SELECT event_name AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND event_name IN ('product_detail_view','favorite_add','dislike','affiliate_click','outbound_click','request_product_submit','discord_feedback_click') GROUP BY event_name ORDER BY count DESC").bind(since).all(),
+    env.DB.prepare("SELECT id, event_name, occurred_at, path, product_id, category, platform, device, language, utm_source, utm_campaign, query, list_type, position FROM analytics_events ORDER BY id DESC LIMIT 150").all<AnalyticsRow>(),
   ]);
-  return response(request, env, { days, totals: totals || { total_events: 0, unique_visitors: 0, unique_sessions: 0 }, events: events.results || [], products: products.results || [], platforms: platforms.results || [], categories: categories.results || [], daily: daily.results || [], recent: recent.results || [] });
+  return response(request, env, {
+    days,
+    totals: totals || { total_events: 0, unique_visitors: 0, unique_sessions: 0, detail_visitors: 0, click_visitors: 0 },
+    events: events.results || [], products: products.results || [], platforms: platforms.results || [], categories: categories.results || [], daily: daily.results || [],
+    sources: sources.results || [], devices: devices.results || [], languages: languages.results || [], paths: paths.results || [], searches: searches.results || [], conversions: conversions.results || [], recent: recent.results || [],
+  });
 }
 
 async function createRequest(request: Request, env: Env) {
