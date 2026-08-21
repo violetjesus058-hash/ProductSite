@@ -1024,6 +1024,6 @@
 - [x] 放大手机端顶部左侧 RIVORA 图标，保持图标不挤压搜索框。
 - [x] 验证放大后的图标与双行状态 header 垂直居中、390px 无溢出，并保存检查点。
 
-- [ ] 检查手机端图标放大版本的 Git 分支、远程地址和未提交变更。
-- [ ] 将手机端 RIVORA 图标放大版本推送到 GitHub ProductSite main。
-- [ ] 核对 GitHub main 最新提交并说明 Cloudflare 自动部署状态。
+- [x] 检查手机端图标放大版本的 Git 分支、远程地址和未提交变更。
+- [x] 将手机端 RIVORA 图标放大版本推送到 GitHub ProductSite main。
+- [x] 核对 GitHub main 最新提交并说明 Cloudflare 自动部署状态。
