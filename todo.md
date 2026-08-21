@@ -960,6 +960,10 @@
 - [x] 将首页、详情页和 HTML favicon 的品牌引用改为仓库相对路径。
 - [x] 验证构建产物包含品牌静态文件，并保存检查点。
 
-- [ ] 检查仓库静态品牌文件版本的 Git 状态、分支和远程地址。
-- [ ] 将 client/public/branding 静态品牌文件版本推送到 GitHub ProductSite main。
-- [ ] 核对 GitHub main 最新提交并说明 Cloudflare 自动部署状态。
+- [x] 检查仓库静态品牌文件版本的 Git 状态、分支和远程地址。
+- [x] 将 client/public/branding 静态品牌文件版本推送到 GitHub ProductSite main。
+- [x] 核对 GitHub main 最新提交并说明 Cloudflare 自动部署状态。
+
+- [x] 放大移动端顶部 RIVORA 商标 icon 与文字，提升小屏可读性。
+- [x] 调整移动端头部高度和搜索区域，确保 390px 宽度不横向溢出。
+- [x] 验证移动端与桌面端响应式显示，并保存商标尺寸检查点。
