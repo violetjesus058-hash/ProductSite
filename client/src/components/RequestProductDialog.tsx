@@ -1,6 +1,7 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { MessageCircle, X } from "lucide-react";
 import { isCloudflareWorkerConfigured, submitProductRequest, type ProductRequestInput } from "@/lib/cloudflareRequests";
+import { trackEvent } from "@/lib/analytics";
 
 const initialForm: ProductRequestInput = { name: "", contact: "", productUrl: "", imageUrl: "", description: "", notes: "", website: "" };
 const maxLengths = { name: 80, contact: 160, productUrl: 500, imageUrl: 500, description: 2000, notes: 1000 } as const;
@@ -17,6 +18,7 @@ function isSafeUrl(value: string) {
 
 export default function RequestProductDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [form, setForm] = useState(initialForm);
+  useEffect(() => { if (open) trackEvent("request_product_open"); }, [open]);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState("");
   const [requestCode, setRequestCode] = useState("");
@@ -28,15 +30,17 @@ export default function RequestProductDialog({ open, onClose }: { open: boolean;
     setMessage("");
     setRequestCode("");
     const cleanForm = Object.fromEntries(Object.entries(form).map(([field, value]) => [field, value.trim()])) as ProductRequestInput;
-    if (!cleanForm.name || !cleanForm.description) { setMessage("Please enter your name and a product description."); return; }
-    if (!isSafeUrl(cleanForm.productUrl) || !isSafeUrl(cleanForm.imageUrl)) { setMessage("Please use a valid HTTP or HTTPS link."); return; }
+    if (!cleanForm.name || !cleanForm.description) { trackEvent("request_product_validation_error", { reason: "missing_required_fields" }); setMessage("Please enter your name and a product description."); return; }
+    if (!isSafeUrl(cleanForm.productUrl) || !isSafeUrl(cleanForm.imageUrl)) { trackEvent("request_product_validation_error", { reason: "unsafe_url" }); setMessage("Please use a valid HTTP or HTTPS link."); return; }
     setSubmitting(true);
     try {
       const result = await submitProductRequest(cleanForm);
+      trackEvent("request_product_submit", { status: "success", has_product_url: Boolean(cleanForm.productUrl), has_image_url: Boolean(cleanForm.imageUrl) });
       setRequestCode(result.requestCode);
       setMessage("Your request has been received. We will review it shortly.");
       setForm(initialForm);
     } catch (error) {
+      trackEvent("request_product_submit", { status: "error" });
       setMessage(error instanceof Error ? error.message : "The request could not be submitted. Please try again later.");
     } finally {
       setSubmitting(false);
@@ -58,7 +62,7 @@ export default function RequestProductDialog({ open, onClose }: { open: boolean;
         <input className="request-honeypot" tabIndex={-1} autoComplete="off" aria-hidden="true" value={form.website} onChange={(event) => update("website", event.target.value)} />
         <p className="request-privacy-note">For abuse prevention, Cloudflare records limited request metadata such as an approximate IP, country, and device type. These details are visible only to catalog administrators and are not shown on the public status page.</p>
         {message && <div className={`request-message ${requestCode ? "is-success" : "is-error"}`}>{message}{requestCode && <strong>Request ID: {requestCode}</strong>}</div>}
-        <div className="request-form-actions"><button type="submit" className="request-submit" disabled={submitting || !isCloudflareWorkerConfigured()}>{submitting ? "Submitting…" : "Submit request"}</button><a className="request-discord" href="https://discord.gg/jtc399kUQV" target="_blank" rel="noreferrer"><MessageCircle size={15} /> Discord feedback</a></div><a className="request-status-link" href="/requests/status">Already have a request ID? Check status</a>
+        <div className="request-form-actions"><button type="submit" className="request-submit" disabled={submitting || !isCloudflareWorkerConfigured()}>{submitting ? "Submitting…" : "Submit request"}</button><a className="request-discord" href="https://discord.gg/jtc399kUQV" target="_blank" rel="noreferrer" onClick={() => trackEvent("outbound_click", { destination: "Discord", location: "request_dialog" })}><MessageCircle size={15} /> Discord feedback</a></div><a className="request-status-link" href="/requests/status">Already have a request ID? Check status</a>
       </form>
     </section>
   </div>;

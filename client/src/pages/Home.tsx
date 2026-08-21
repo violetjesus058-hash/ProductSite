@@ -8,6 +8,7 @@ import { formatVisitTime, readDislikes, readEngagement, readFavorites, readHisto
 import RequestProductDialog from "@/components/RequestProductDialog";
 import SafeProductImage from "@/components/SafeProductImage";
 import { buildCategoryRecommendationPool, rankBehavioralRecommendations } from "@/lib/categoryRecommendations";
+import { initializeAnalytics, trackEvent, trackOnce } from "@/lib/analytics";
 
 // Editorial Pinboard audit view: compact evidence-first cards, restrained motion, and sequential category handoff after a category is fully reviewed.
 
@@ -132,6 +133,7 @@ export default function Home() {
   const [openPanel, setOpenPanel] = useState<"favorites" | "history" | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [requestProductOpen, setRequestProductOpen] = useState(false);
+  const hoverTimers = useRef<Record<string, number>>({});
   
   // Audit Mode State
   const [seenIds, setSeenIds] = useState<string[]>(() => {
@@ -146,6 +148,7 @@ export default function Home() {
   const reviewKey = (product: (typeof products)[number]) => product.sourceProductId || product.id;
   const isReviewed = (product: (typeof products)[number]) => seenIds.includes(reviewKey(product));
   const changeAuditCategory = (nextCategory: string) => {
+    trackEvent("category_view", { category: nextCategory, previous_category: category });
     if (nextCategory !== category) window.sessionStorage.removeItem(CATALOG_RETURN_KEY);
     setCategory(nextCategory);
     setBrand("all");
@@ -159,6 +162,7 @@ export default function Home() {
   const [fontSizeLevel, setFontSizeLevel] = useState(() => Number(localSetting("material-catalog:font-size", "0")));
   const [letterSpacingLevel, setLetterSpacingLevel] = useState(() => Number(localSetting("material-catalog:letter-spacing", "0")));
   
+  useEffect(() => { initializeAnalytics(); }, []);
   useEffect(() => { saveFavorites(favorites); }, [favorites]);
   const toggleProductDislike = (id: string) => setDislikes(toggleDislike(id, !dislikes.includes(id)));
 
@@ -216,9 +220,23 @@ export default function Home() {
     return result;
   }, [brand, category, isAiAuditView, query, sort, seenIds, shuffleSeed]);
 
+  useEffect(() => {
+    const term = query.trim();
+    if (!term) return;
+    const timer = window.setTimeout(() => {
+      trackEvent("search", { search_term: term.slice(0, 120), result_count: filteredProducts.length, category, brand });
+      if (filteredProducts.length === 0) trackEvent("search_no_result", { search_term: term.slice(0, 120), category, brand });
+    }, 500);
+    return () => window.clearTimeout(timer);
+  }, [query, filteredProducts.length, category, brand]);
+
   // Normal browsing shows the complete filtered catalog. AI Audit View intentionally keeps a compact review batch.
   const visible = isAiAuditView ? filteredProducts.slice(0, pageSize) : filteredProducts;
   const visibleSourceCount = new Set(visible.map(reviewKey)).size;
+  useEffect(() => {
+    trackOnce("product_list_view", `${category}:${brand}:${query.trim()}:${sort}`, { category, brand, query: query.trim() || null, sort, result_count: filteredProducts.length });
+    visible.slice(0, 40).forEach((product, index) => trackOnce("product_impression", `${isAiAuditView ? "audit" : "catalog"}:${category}:${brand}:${query.trim()}:${product.id}`, { ...analyticsProductFor(product), position: index + 1, list_type: isAiAuditView ? "audit" : "catalog" }));
+  }, [category, brand, query, sort, filteredProducts.length, visible, isAiAuditView]);
 
   const categoryRecommendationPool = useMemo(() => {
     const excluded = new Set([...visible.map((product) => product.id), ...dislikes]);
@@ -340,7 +358,17 @@ export default function Home() {
 
 
   const saveReturnContext = () => { window.sessionStorage.setItem(CATALOG_RETURN_KEY, JSON.stringify({ category, brand, query, sort, scrollY: window.scrollY } satisfies CatalogReturnContext)); };
-  const openProduct = (id: string) => { saveReturnContext(); navigate(`/product/${id}`); };
+  const analyticsProductFor = (product: (typeof products)[number]) => ({ product_id: product.id, product_name: cleanTitle(product.catalogName || product.name).slice(0, 120), category: product.category, price: product.price, currency: product.currency });
+  const analyticsProduct = (id: string) => {
+    const product = products.find((item) => item.id === id);
+    return product ? analyticsProductFor(product) : {};
+  };
+  const openProduct = (id: string) => { trackEvent("product_click", { ...analyticsProduct(id), source: "catalog", category, position: filteredProducts.findIndex((item) => item.id === id) + 1 }); saveReturnContext(); navigate(`/product/${id}`); };
+  const beginProductPreview = (id: string) => {
+    window.clearTimeout(hoverTimers.current[id]);
+    hoverTimers.current[id] = window.setTimeout(() => trackOnce("product_preview", id, { ...analyticsProduct(id), preview_type: "image", source: "catalog" }), 800);
+  };
+  const endProductPreview = (id: string) => window.clearTimeout(hoverTimers.current[id]);
   const toggleFavorite = (id: string) => setFavorites((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
   const clearFavorites = () => setFavorites([]);
   const toggleCategoryErrorFlag = (product: (typeof products)[number]) => {
@@ -393,12 +421,12 @@ export default function Home() {
             <button onClick={resetAuditProgress} className="text-[10px] uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">Reset Progress</button>
           )}
           {Object.keys(categoryErrorFlags).length > 0 && <span className="category-flag-count">Flagged {Object.keys(categoryErrorFlags).length}</span>}
-          <label className="sort-select">Sort <select value={sort} onChange={(e) => setSort(e.target.value)}><option value="random">{isAiAuditView ? "Random Audit" : "Random"}</option><option value="curated">Curated</option><option value="price-low">Price: Low to High</option><option value="price-high">Price: High to Low</option></select><ChevronDown size={14} /></label>
+          <label className="sort-select">Sort <select value={sort} onChange={(e) => { const nextSort = e.target.value; setSort(nextSort); trackEvent("sort_use", { sort: nextSort, category, brand, query: query.trim() || null }); }}><option value="random">{isAiAuditView ? "Random Audit" : "Random"}</option><option value="curated">Curated</option><option value="price-low">Price: Low to High</option><option value="price-high">Price: High to Low</option></select><ChevronDown size={14} /></label>
         </div>
       </div>
 
       {visible.length > 0 ? <>
-        <section className={isAiAuditView ? "grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2" : "masonry-grid"} aria-label="Product list">
+        <section className={isAiAuditView ? "grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2" : "masonry-grid"} aria-label="Product list" onMouseLeave={() => Object.keys(hoverTimers.current).forEach(endProductPreview)}>
           {visible.map((product, index) => { 
             const image = product.images[0]; 
             const isFav = favorites.includes(product.id); 
@@ -409,7 +437,7 @@ export default function Home() {
             
             if (isAiAuditView) {
               return (
-                <article key={product.id} className={`audit-card bg-white border border-black/5 p-1 flex flex-col gap-1 cursor-pointer hover:border-black/20 ${categoryErrorFlags[product.id] ? "is-category-flagged" : ""}`} onClick={() => openProduct(product.id)}>
+                <article key={product.id} className={`audit-card bg-white border border-black/5 p-1 flex flex-col gap-1 cursor-pointer hover:border-black/20 ${categoryErrorFlags[product.id] ? "is-category-flagged" : ""}`} onClick={() => openProduct(product.id)} onMouseEnter={() => beginProductPreview(product.id)} onMouseLeave={() => endProductPreview(product.id)}>
                   <div className="aspect-square overflow-hidden bg-gray-50 relative">
                     <SafeProductImage sources={product.images} alt={title} className="w-full h-full object-cover" />
                     <button className={`dislike-button ${isDisliked ? "is-disliked" : ""}`} onClick={(event) => { event.stopPropagation(); toggleProductDislike(product.id); }} aria-label={isDisliked ? "Remove dislike" : "Not interested in this product"} title={isDisliked ? "Remove dislike" : "Not interested"}><ThumbsDown size={11} /></button><button className={`category-flag-button ${categoryErrorFlags[product.id] ? "is-flagged" : ""}`} onClick={(event) => { event.stopPropagation(); toggleCategoryErrorFlag(product); }} aria-label={categoryErrorFlags[product.id] ? "Unmark category error" : "Mark category error"} title={categoryErrorFlags[product.id] ? "Unmark category error" : "Mark category error"}><Flag size={11} /></button>
@@ -422,7 +450,7 @@ export default function Home() {
               );
             }
             
-            return <Fragment key={product.id}><article className={`product-card card-${index % 7} ${categoryErrorFlags[product.id] ? "is-category-flagged" : ""}`} onClick={() => openProduct(product.id)}><div className="product-image-wrap"><SafeProductImage sources={product.images} alt={title} loading={index < 8 ? "eager" : "lazy"} /><div className="image-wash" />{demoBadge(product.price) && <span className={`demo-product-badge ${demoBadge(product.price) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price)}</span>}{product.reviewStatus === "suspected" && <span className="suspected-review-badge" aria-label="Suspected category mismatch">SUSPECTED</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}<button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "Remove from saved items" : "Save product"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><button className={`dislike-button ${isDisliked ? "is-disliked" : ""}`} onClick={(event) => { event.stopPropagation(); toggleProductDislike(product.id); }} aria-label={isDisliked ? "Remove dislike" : "Not interested in this product"} title={isDisliked ? "Remove dislike" : "Not interested"}><ThumbsDown size={13} /></button><button className={`category-flag-button ${categoryErrorFlags[product.id] ? "is-flagged" : ""}`} onClick={(event) => { event.stopPropagation(); toggleCategoryErrorFlag(product); }} aria-label={categoryErrorFlags[product.id] ? "Unmark category error" : "Mark category error"} title={categoryErrorFlags[product.id] ? "Unmark category error" : "Mark category error"}><Flag size={13} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={10} /></span></div><div className="product-info">{displayBrand && <div className="product-brand">{displayBrand}</div>}{cardTitle && <h3 className="product-name">{cardTitle}</h3>}<div className="product-price">{money(product.price, "USD")} <span className="product-currency">USD</span></div></div></article></Fragment>; 
+            return <Fragment key={product.id}><article className={`product-card card-${index % 7} ${categoryErrorFlags[product.id] ? "is-category-flagged" : ""}`} onClick={() => openProduct(product.id)} onMouseEnter={() => beginProductPreview(product.id)} onMouseLeave={() => endProductPreview(product.id)}><div className="product-image-wrap"><SafeProductImage sources={product.images} alt={title} loading={index < 8 ? "eager" : "lazy"} /><div className="image-wash" />{demoBadge(product.price) && <span className={`demo-product-badge ${demoBadge(product.price) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price)}</span>}{product.reviewStatus === "suspected" && <span className="suspected-review-badge" aria-label="Suspected category mismatch">SUSPECTED</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}<button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "Remove from saved items" : "Save product"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><button className={`dislike-button ${isDisliked ? "is-disliked" : ""}`} onClick={(event) => { event.stopPropagation(); toggleProductDislike(product.id); }} aria-label={isDisliked ? "Remove dislike" : "Not interested in this product"} title={isDisliked ? "Remove dislike" : "Not interested"}><ThumbsDown size={13} /></button><button className={`category-flag-button ${categoryErrorFlags[product.id] ? "is-flagged" : ""}`} onClick={(event) => { event.stopPropagation(); toggleCategoryErrorFlag(product); }} aria-label={categoryErrorFlags[product.id] ? "Unmark category error" : "Mark category error"} title={categoryErrorFlags[product.id] ? "Unmark category error" : "Mark category error"}><Flag size={13} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={10} /></span></div><div className="product-info">{displayBrand && <div className="product-brand">{displayBrand}</div>}{cardTitle && <h3 className="product-name">{cardTitle}</h3>}<div className="product-price">{money(product.price, "USD")} <span className="product-currency">USD</span></div></div></article></Fragment>; 
           })}
         </section>
         
