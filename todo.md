@@ -1070,3 +1070,7 @@
 - [x] 编写接口与面板测试，验证事件字段边界、匿名配置和响应式展示。
 
 - [ ] 在 Cloudflare D1 的 productsite-db 执行 migrations/003_analytics_events.sql，并重新部署 Worker 后验证真实事件入库。
+
+- [ ] 检查自有分析面板版本的 Git 分支、远程地址和未提交变更。
+- [ ] 将自有埋点与 /admin/analytics 版本推送到 GitHub ProductSite main。
+- [ ] 核对 Cloudflare Pages 构建完成后线上 /admin/analytics 页面可访问。
