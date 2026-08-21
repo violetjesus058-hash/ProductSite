@@ -32,6 +32,36 @@ const jsonHeaders = { "content-type": "application/json; charset=UTF-8" };
 const submissionWindows = new Map<string, number[]>();
 const MAX_REQUEST_BYTES = 12_000;
 const MAX_SUBMISSIONS_PER_MINUTE = 5;
+const analyticsWindows = new Map<string, number[]>();
+const MAX_ANALYTICS_EVENTS_PER_MINUTE = 120;
+const MAX_ANALYTICS_BATCH = 40;
+const MAX_ANALYTICS_BODY_BYTES = 80_000;
+
+ type AnalyticsInput = Record<string, unknown>;
+ type AnalyticsRow = {
+  id: number;
+  event_name: string;
+  anonymous_id: string | null;
+  session_id: string | null;
+  occurred_at: string;
+  path: string | null;
+  referrer: string | null;
+  utm_source: string | null;
+  utm_medium: string | null;
+  utm_campaign: string | null;
+  device: string | null;
+  language: string | null;
+  product_id: string | null;
+  source_product_id: string | null;
+  category: string | null;
+  brand: string | null;
+  platform: string | null;
+  query: string | null;
+  list_type: string | null;
+  position: number | null;
+  properties_json: string | null;
+  created_at: string;
+ };
 
 function corsHeaders(request: Request, env: Env): Headers {
   const origin = request.headers.get("Origin") || "";
@@ -50,7 +80,7 @@ function response(request: Request, env: Env, body: unknown, status = 200) {
 
 function normalizeText(value: unknown, maxLength: number) {
   return typeof value === "string"
-    ? value.replace(/[\\u0000-\\u0008\\u000B\\u000C\\u000E-\\u001F\\u007F]/g, "").trim().slice(0, maxLength)
+    ? value.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "").trim().slice(0, maxLength)
     : "";
 }
 
@@ -183,6 +213,110 @@ function isAdmin(request: Request, env: Env) {
   return Boolean(env.ADMIN_API_KEY && key && key === env.ADMIN_API_KEY);
 }
 
+function analyticsRateLimited(request: Request) {
+  const now = Date.now();
+  const key = rawClientIp(request);
+  const recent = (analyticsWindows.get(key) || []).filter((time) => now - time < 60_000);
+  if (recent.length + 1 > MAX_ANALYTICS_EVENTS_PER_MINUTE) {
+    analyticsWindows.set(key, recent);
+    return true;
+  }
+  recent.push(now);
+  analyticsWindows.set(key, recent);
+  return false;
+}
+
+function analyticsText(value: unknown, maxLength: number) {
+  return normalizeText(value, maxLength) || null;
+}
+
+export function analyticsEventName(value: unknown) {
+  const name = normalizeText(value, 64);
+  return /^[a-z][a-z0-9_]{1,63}$/.test(name) ? name : null;
+}
+
+export function analyticsOccurredAt(value: unknown) {
+  if (typeof value === "string") {
+    const timestamp = Date.parse(value);
+    if (Number.isFinite(timestamp)) return new Date(timestamp).toISOString();
+  }
+  return new Date().toISOString();
+}
+
+export function analyticsRowInput(input: AnalyticsInput) {
+  const eventName = analyticsEventName(input.event_name ?? input.eventName);
+  if (!eventName) return { error: "Invalid event name." } as const;
+  const properties = input.properties && typeof input.properties === "object" ? input.properties : {};
+  let propertiesJson = "{}";
+  try { propertiesJson = JSON.stringify(properties).slice(0, 2_000); } catch { propertiesJson = "{}"; }
+  const rawPosition = Number(input.position);
+  return {
+    value: {
+      eventName,
+      anonymousId: analyticsText(input.anonymous_id ?? input.anonymousId, 100),
+      sessionId: analyticsText(input.session_id ?? input.sessionId, 100),
+      occurredAt: analyticsOccurredAt(input.occurred_at ?? input.occurredAt),
+      path: analyticsText(input.path, 300),
+      referrer: analyticsText(input.referrer, 300),
+      utmSource: analyticsText(input.utm_source ?? input.utmSource, 120),
+      utmMedium: analyticsText(input.utm_medium ?? input.utmMedium, 120),
+      utmCampaign: analyticsText(input.utm_campaign ?? input.utmCampaign, 160),
+      device: analyticsText(input.device, 40),
+      language: analyticsText(input.language, 40),
+      productId: analyticsText(input.product_id ?? input.productId, 120),
+      sourceProductId: analyticsText(input.source_product_id ?? input.sourceProductId, 120),
+      category: analyticsText(input.category, 100),
+      brand: analyticsText(input.brand, 120),
+      platform: analyticsText(input.platform, 80),
+      query: analyticsText(input.query, 160),
+      listType: analyticsText(input.list_type ?? input.listType, 80),
+      position: Number.isInteger(rawPosition) && rawPosition > 0 && rawPosition <= 10_000 ? rawPosition : null,
+      propertiesJson,
+    },
+  } as const;
+}
+
+async function ingestAnalytics(request: Request, env: Env) {
+  const declaredLength = Number(request.headers.get("Content-Length") || 0);
+  if (declaredLength > MAX_ANALYTICS_BODY_BYTES) return response(request, env, { error: "Analytics payload is too large." }, 413);
+  if (!request.headers.get("Content-Type")?.toLowerCase().startsWith("application/json")) return response(request, env, { error: "Unsupported request format." }, 415);
+  if (analyticsRateLimited(request)) return response(request, env, { error: "Too many analytics events." }, 429);
+  const rawBody = await request.text();
+  if (new TextEncoder().encode(rawBody).byteLength > MAX_ANALYTICS_BODY_BYTES) return response(request, env, { error: "Analytics payload is too large." }, 413);
+  let payload: unknown;
+  try { payload = JSON.parse(rawBody || "null"); } catch { return response(request, env, { error: "Invalid analytics payload." }, 400); }
+  const inputs = Array.isArray(payload) ? payload : (payload && typeof payload === "object" && Array.isArray((payload as Record<string, unknown>).events) ? (payload as Record<string, unknown>).events : [payload]);
+  if (inputs.length < 1 || inputs.length > MAX_ANALYTICS_BATCH || inputs.some((item) => !item || typeof item !== "object")) return response(request, env, { error: "Invalid analytics batch." }, 400);
+  const rows = inputs.map((item) => analyticsRowInput(item as AnalyticsInput));
+  const invalid = rows.find((row) => "error" in row);
+  if (invalid && "error" in invalid) return response(request, env, { error: invalid.error }, 400);
+  const statements = rows.map((row) => {
+    const value = row.value;
+    return env.DB.prepare(`INSERT INTO analytics_events (event_name, anonymous_id, session_id, occurred_at, path, referrer, utm_source, utm_medium, utm_campaign, device, language, product_id, source_product_id, category, brand, platform, query, list_type, position, properties_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+      .bind(value.eventName, value.anonymousId, value.sessionId, value.occurredAt, value.path, value.referrer, value.utmSource, value.utmMedium, value.utmCampaign, value.device, value.language, value.productId, value.sourceProductId, value.category, value.brand, value.platform, value.query, value.listType, value.position, value.propertiesJson);
+  });
+  await env.DB.batch(statements);
+  return response(request, env, { accepted: statements.length }, 202);
+}
+
+async function getAnalyticsSummary(request: Request, env: Env) {
+  if (!isAdmin(request, env)) return response(request, env, { error: "没有后台访问权限。" }, 401);
+  const url = new URL(request.url);
+  const requestedDays = Number(url.searchParams.get("days") || 30);
+  const days = Number.isInteger(requestedDays) ? Math.min(90, Math.max(1, requestedDays)) : 30;
+  const since = new Date(Date.now() - days * 86_400_000).toISOString();
+  const [totals, events, products, platforms, categories, daily, recent] = await Promise.all([
+    env.DB.prepare("SELECT COUNT(*) AS total_events, COUNT(DISTINCT anonymous_id) AS unique_visitors, COUNT(DISTINCT session_id) AS unique_sessions FROM analytics_events WHERE occurred_at >= ?").bind(since).first(),
+    env.DB.prepare("SELECT event_name AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? GROUP BY event_name ORDER BY count DESC LIMIT 30").bind(since).all(),
+    env.DB.prepare("SELECT product_id AS id, MAX(source_product_id) AS source_product_id, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND product_id IS NOT NULL GROUP BY product_id ORDER BY count DESC LIMIT 30").bind(since).all(),
+    env.DB.prepare("SELECT platform AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND platform IS NOT NULL GROUP BY platform ORDER BY count DESC LIMIT 30").bind(since).all(),
+    env.DB.prepare("SELECT category AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND category IS NOT NULL GROUP BY category ORDER BY count DESC LIMIT 30").bind(since).all(),
+    env.DB.prepare("SELECT substr(occurred_at, 1, 10) AS date, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? GROUP BY date ORDER BY date ASC").bind(since).all(),
+    env.DB.prepare("SELECT id, event_name, occurred_at, path, product_id, category, platform, device, utm_source, utm_campaign FROM analytics_events ORDER BY id DESC LIMIT 100").all<AnalyticsRow>(),
+  ]);
+  return response(request, env, { days, totals: totals || { total_events: 0, unique_visitors: 0, unique_sessions: 0 }, events: events.results || [], products: products.results || [], platforms: platforms.results || [], categories: categories.results || [], daily: daily.results || [], recent: recent.results || [] });
+}
+
 async function createRequest(request: Request, env: Env) {
   const declaredLength = Number(request.headers.get("Content-Length") || 0);
   if (declaredLength > MAX_REQUEST_BYTES) return response(request, env, { error: "The request is too large." }, 413);
@@ -245,9 +379,11 @@ export default {
     const url = new URL(request.url);
     try {
       if (request.method === "POST" && url.pathname === "/api/requests") return await createRequest(request, env);
+      if (request.method === "POST" && url.pathname === "/api/analytics/events") return await ingestAnalytics(request, env);
       const publicMatch = url.pathname.match(/^\/api\/requests\/([^/]+)$/);
       if (request.method === "GET" && publicMatch) return await getPublicRequest(request, env, decodeURIComponent(publicMatch[1]));
       if (request.method === "GET" && url.pathname === "/api/admin/requests") return await listAdminRequests(request, env);
+      if (request.method === "GET" && url.pathname === "/api/admin/analytics/summary") return await getAnalyticsSummary(request, env);
       const adminMatch = url.pathname.match(/^\/api\/admin\/requests\/(\d+)$/);
       if (request.method === "PATCH" && adminMatch) return await updateAdminRequest(request, env, adminMatch[1]);
       return response(request, env, { error: "Not found" }, 404);

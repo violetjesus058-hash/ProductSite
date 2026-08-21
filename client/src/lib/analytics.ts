@@ -53,6 +53,8 @@ function captureAttribution() {
   if (Object.keys(next).length > 0) window.sessionStorage.setItem(ATTRIBUTION_KEY, JSON.stringify(next));
 }
 
+const workerUrl = String(import.meta.env.VITE_CLOUDFLARE_WORKER_URL || "").replace(/\/$/, "");
+
 function contextProperties(): AnalyticsProperties {
   if (typeof window === "undefined") return {};
   captureAttribution();
@@ -71,10 +73,42 @@ function contextProperties(): AnalyticsProperties {
 
 export function trackEvent(eventName: string, properties: AnalyticsProperties = {}) {
   if (typeof window === "undefined") return;
+  const context = contextProperties();
+  const payload = { ...context, ...properties };
   try {
-    window.umami?.track(eventName, { ...contextProperties(), ...properties });
+    window.umami?.track(eventName, payload);
   } catch {
     // Analytics must never interrupt catalog browsing.
+  }
+  if (workerUrl) {
+    const ownEvent = {
+      event_name: eventName,
+      anonymous_id: payload.anonymous_id,
+      session_id: payload.session_id,
+      occurred_at: new Date().toISOString(),
+      path: payload.page_path,
+      referrer: document.referrer || null,
+      utm_source: payload.utm_source,
+      utm_medium: payload.utm_medium,
+      utm_campaign: payload.utm_campaign,
+      device: payload.device,
+      language: payload.language,
+      product_id: payload.product_id,
+      source_product_id: payload.source_product_id,
+      category: payload.category,
+      brand: payload.brand,
+      platform: payload.platform,
+      query: payload.query,
+      list_type: payload.list_type,
+      position: payload.position,
+      properties: Object.fromEntries(Object.entries(properties).slice(0, 24)),
+    };
+    void fetch(`${workerUrl}/api/analytics/events`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ events: [ownEvent] }),
+      keepalive: true,
+    }).catch(() => undefined);
   }
 }
 

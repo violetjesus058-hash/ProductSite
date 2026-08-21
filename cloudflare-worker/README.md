@@ -32,3 +32,22 @@
 已有 `product_requests` 表的数据库需要先在 Cloudflare D1 控制台执行 `migrations/002_request_metadata.sql` 中的 8 条 `ALTER TABLE` 语句。执行成功后，再从 GitHub 重新部署 Worker。新提交的申请才会开始记录这些字段，旧申请的元数据会显示为“—”，不会伪造历史数据。
 
 管理员页面会显示用户完整表单资料、时间、脱敏 IP、国家/地区、设备、浏览器、操作系统和 User-Agent 摘要。IP 仅用于后台排查和统计，建议定期清理或按隐私政策保留。
+
+## ProductSite 自有埋点面板
+
+埋点事件现在可以镜像写入本项目自己的 D1 数据库。迁移前请在 Cloudflare D1 控制台执行 `migrations/003_analytics_events.sql`，或使用 Wrangler 在远程数据库执行：
+
+```bash
+wrangler d1 execute productsite-db --remote --file=migrations/003_analytics_events.sql
+```
+
+然后重新部署 Worker，并确认 Cloudflare Pages 的 `VITE_CLOUDFLARE_WORKER_URL` 指向该 Worker 地址。商品站会异步向 `POST /api/analytics/events` 发送匿名事件；如果 Worker 尚未配置，页面仍可继续使用现有 Umami，不会阻塞浏览。
+
+管理员面板地址为 `/admin/analytics`。打开后输入 Worker Secret 中已有的 `ADMIN_API_KEY`，数据通过 `GET /api/admin/analytics/summary?days=30` 查询。该接口只返回汇总、最近事件和匿名行为字段，不返回原始 IP、姓名或邮箱。事件接口限制批量大小、请求体大小、事件名格式和每个来源的请求频率。
+
+| 方法 | 路径 | 权限 | 作用 |
+|---|---|---|---|
+| POST | `/api/analytics/events` | 公开、限流 | 接收匿名事件并写入 D1 |
+| GET | `/api/admin/analytics/summary?days=30` | `x-admin-api-key` | 查询访问、事件、商品、平台、品类和来源汇总 |
+
+如果直接打开分析面板但尚未执行 D1 迁移，面板会返回数据库表不存在错误；先执行迁移，再重新部署 Worker 即可。建议只把分析面板地址和管理员密钥提供给内部管理员，不要公开分享密钥。

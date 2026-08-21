@@ -8,6 +8,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import ProductDetail from "./pages/ProductDetail";
 import AdminRequests from "./pages/AdminRequests";
+import AdminAnalytics from "./pages/AdminAnalytics";
 import RequestStatus from "./pages/RequestStatus";
 import NotFound from "./pages/NotFound";
 
@@ -37,6 +38,7 @@ export default function App() {
             <Route path="/" component={Home} />
             <Route path="/product/:id" component={ProductDetail} />
             <Route path="/admin/requests" component={AdminRequests} />
+            <Route path="/admin/analytics" component={AdminAnalytics} />
             <Route path="/requests/status" component={RequestStatus} />
             <Route path="/404" component={NotFound} />
             <Route component={NotFound} />
