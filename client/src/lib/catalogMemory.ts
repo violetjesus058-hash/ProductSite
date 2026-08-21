@@ -6,6 +6,7 @@ export type EngagementEntry = { id: string; seconds: number; lastViewedAt: numbe
 const FAVORITES_KEY = "material-catalog:favorites";
 const HISTORY_KEY = "material-catalog:history";
 const ENGAGEMENT_KEY = "material-catalog:engagement:v1";
+const DISLIKES_KEY = "material-catalog:dislikes:v1";
 
 function readJson<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback;
@@ -20,6 +21,15 @@ function readJson<T>(key: string, fallback: T): T {
 export function readFavorites() { return readJson<string[]>(FAVORITES_KEY, []); }
 export function saveFavorites(ids: string[]) {
   if (typeof window !== "undefined") window.localStorage.setItem(FAVORITES_KEY, JSON.stringify(ids));
+}
+export function readDislikes() { return readJson<string[]>(DISLIKES_KEY, []); }
+export function saveDislikes(ids: string[]) {
+  if (typeof window !== "undefined") window.localStorage.setItem(DISLIKES_KEY, JSON.stringify(ids));
+}
+export function toggleDislike(id: string, disliked: boolean) {
+  const next = disliked ? Array.from(new Set([...readDislikes(), id])) : readDislikes().filter((item) => item !== id);
+  saveDislikes(next);
+  return next;
 }
 export function readHistory() { return readJson<HistoryEntry[]>(HISTORY_KEY, []); }
 export function saveHistory(entries: HistoryEntry[]) {

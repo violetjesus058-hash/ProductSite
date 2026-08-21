@@ -591,3 +591,10 @@ a { color:inherit; text-decoration:none; }
 
 .request-honeypot { position:absolute !important; left:-10000px !important; width:1px !important; height:1px !important; opacity:0 !important; pointer-events:none !important; }
 .request-privacy-note { margin:0; color:#aaa69e; font-size:10px; line-height:1.55; }
+
+/* Stable inline RIVORA mark and local preference controls. */
+.mobile-brand-icon { flex:0 0 25px; width:25px; height:25px; object-fit:contain; }
+.dislike-button { position:absolute; left:46px; bottom:12px; z-index:3; display:grid; place-items:center; width:28px; height:28px; border:0; border-radius:50%; background:rgba(255,254,250,.86); color:var(--ink-soft); transition:transform .18s, color .18s, background .18s; }
+.dislike-button:hover, .dislike-button.is-disliked { color:#8b6257; background:#f0e4dc; transform:scale(1.08); }
+.audit-card .dislike-button { left:5px; bottom:5px; width:22px; height:22px; }
+.masonry-grid .category-flag-button { left:80px; }

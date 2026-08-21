@@ -20,10 +20,11 @@ export function rankBehavioralRecommendations(
   favoriteIds: ReadonlySet<string> = new Set(),
   engagement: readonly RecommendationEngagement[] = [],
   now = Date.now(),
+  dislikedIds: ReadonlySet<string> = new Set(),
 ): CatalogProduct[] {
   const engagedById = new Map(engagement.map((entry) => [entry.id, entry]));
   const interests = catalog.filter((product) => favoriteIds.has(product.id) || engagedById.has(product.id));
-  if (interests.length === 0) return [...pool];
+  if (interests.length === 0) return pool.filter((product) => !dislikedIds.has(product.id));
   const score = (candidate: CatalogProduct, index: number) => {
     let total = 0;
     for (const interest of interests) {
@@ -40,7 +41,7 @@ export function rankBehavioralRecommendations(
     }
     return total - index * 0.0001;
   };
-  return pool.map((product, index) => ({ product, score: score(product, index) })).sort((a, b) => b.score - a.score).map(({ product }) => product);
+  return pool.filter((product) => !dislikedIds.has(product.id)).map((product, index) => ({ product, score: score(product, index) })).sort((a, b) => b.score - a.score).map(({ product }) => product);
 }
 
 export function buildCategoryRecommendationPool(

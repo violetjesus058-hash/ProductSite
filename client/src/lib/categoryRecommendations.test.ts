@@ -40,3 +40,9 @@ describe("buildCategoryRecommendationPool", () => {
     expect(ranked.map((item) => item.id)).toEqual(["matched", "ordinary"]);
   });
 });
+
+  it("filters disliked products even when there is no behavioral interest", () => {
+    const ranked = rankBehavioralRecommendations(catalog as never, catalog as never, new Set(), [], Date.now(), new Set(["pants-1", "shoe-1"]));
+    expect(ranked.map((item) => item.id)).not.toContain("pants-1");
+    expect(ranked.map((item) => item.id)).not.toContain("shoe-1");
+  });
