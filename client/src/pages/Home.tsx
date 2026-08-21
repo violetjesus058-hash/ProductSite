@@ -463,12 +463,36 @@ export default function Home() {
             <RefreshCw size={16} className="opacity-50 group-hover:rotate-180 transition-transform duration-500" />
           </button>
         </div>}
-      </> : <div className="empty-state">
-        <div className="empty-icon">✦</div>
-        <h3>No products found</h3>
-        <p>All products in this category have been reviewed or match no results.</p>
-        <button onClick={resetFilters}>Clear all filters</button>
-      </div>}
+      </> : <>
+        <div className="empty-state">
+          <div className="empty-icon">✦</div>
+          <h3>No products found</h3>
+          <p>All products in this category have been reviewed or match no results.</p>
+          <button onClick={resetFilters}>Clear all filters</button>
+        </div>
+        {!isAiAuditView && categoryRecommendationPool.length > 0 && <section className="category-recommendation empty-result-recommendation" aria-labelledby="empty-recommendation-title">
+          <div className="category-recommendation-head">
+            <div>
+              <span className="recommendation-kicker">KEEP EXPLORING <i>/ 04</i></span>
+              <h2 id="empty-recommendation-title">Recommended for you</h2>
+              <p>No exact matches here, so we selected nearby pieces from the catalog for continued browsing.</p>
+            </div>
+            <span className="category-recommendation-aside">ALTERNATE EDIT</span>
+          </div>
+          <div className="category-recommendation-waterfall">
+            {Array.from({ length: categoryRecommendationCount }, (_, index) => {
+              const product = categoryRecommendationPool[index % categoryRecommendationPool.length];
+              const title = englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`);
+              const displayBrand = product.brand && product.brand.toLowerCase() !== "unbranded" ? englishValue(product.brand, "") : "";
+              return <article key={`${product.id}-empty-recommendation-${index}`} className={`category-recommendation-card recommendation-size-${index % 7}`} onClick={() => openProduct(product.id)}>
+                <div className="category-recommendation-image"><SafeProductImage sources={product.images} alt={title} loading="lazy" /><span className="category-recommendation-open"><ArrowUpRight size={12} /></span></div>
+                <div className="category-recommendation-meta">{displayBrand && <span className="category-recommendation-brand">{displayBrand}</span>}<strong>{title}</strong><span>{money(product.price, "USD")}</span></div>
+              </article>;
+            })}
+          </div>
+          <div ref={categoryRecommendationSentinel} className="category-recommendation-sentinel" aria-hidden="true" />
+        </section>}
+      </>}
     </main>
     {settingsOpen && <div className="settings-overlay" onClick={() => setSettingsOpen(false)}><div className="settings-modal" onClick={(e) => e.stopPropagation()}><div className="settings-head"><strong>DISPLAY SETTINGS</strong><button onClick={() => setSettingsOpen(false)} aria-label="Close settings"><X size={18} /></button></div><div className="settings-body"><div className="settings-section"><label>PAGE STYLE</label><div className="style-grid">{["default", "white", "gray", "black", "green"].map((s) => <button key={s} className={`style-opt is-${s} ${pageStyle === s ? "is-active" : ""}`} onClick={() => setPageStyle(s)} aria-label={`Switch to ${s} style`} />)}</div></div><div className="settings-section"><label>FONT SIZE</label><input type="range" min="0" max="2" step="1" value={fontSizeLevel} onChange={(e) => setFontSizeLevel(Number(e.target.value))} /></div><div className="settings-section"><label>LETTER SPACING</label><input type="range" min="0" max="2" step="1" value={letterSpacingLevel} onChange={(e) => setLetterSpacingLevel(Number(e.target.value))} /></div></div></div></div>}
     <RequestProductDialog open={requestProductOpen} onClose={() => setRequestProductOpen(false)} />
