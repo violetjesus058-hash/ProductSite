@@ -137,16 +137,16 @@ export default function ProductDetail() {
     if (!product) return;
     const title = englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`);
     const category = englishCategoryLabels[product.category] || product.category.toUpperCase();
-    const description = `${title} — a ${category.toLowerCase()} catalog record on Material Catalog. Review options, price, and availability before ordering.`;
+    const description = `${title} — a ${category.toLowerCase()} catalog record on RIVORA. Review options, price, and availability before ordering.`;
     const canonicalUrl = `${window.location.origin}/product/${product.id}`;
     const imageUrl = new URL(product.images?.[0] || "/og-cover.svg", window.location.origin).href;
     document.documentElement.lang = "en";
-    document.title = `${title} — Material Catalog`;
+    document.title = `${title} — RIVORA`;
     setCanonical(canonicalUrl);
     setMeta("name", "description", description);
     setMeta("property", "og:locale", "en_US");
     setMeta("property", "og:type", "website");
-    setMeta("property", "og:site_name", "Material Catalog");
+    setMeta("property", "og:site_name", "RIVORA");
     setMeta("property", "og:title", title);
     setMeta("property", "og:description", description);
     setMeta("property", "og:url", canonicalUrl);
@@ -163,8 +163,8 @@ export default function ProductDetail() {
   }, [product]);
   const toggleLiked = () => { if (!product) return; const nextLiked = !liked; setLiked(nextLiked); const current = readFavorites(); saveFavorites(nextLiked ? Array.from(new Set([...current, product.id])) : current.filter((item) => item !== product.id)); };
   const shareUrl = typeof window !== "undefined" ? window.location.href : `/product/${product?.id || ""}`;
-  const shareTitle = product ? englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`) : "Material Catalog product";
-  const shareText = `Take a look at ${shareTitle} on Material Catalog.`;
+  const shareTitle = product ? englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`) : "RIVORA product";
+  const shareText = `Take a look at ${shareTitle} on RIVORA.`;
   const shareLinks = [
     { name: "WhatsApp", href: `https://wa.me/?text=${encodeURIComponent(`${shareText} ${shareUrl}`)}` },
     { name: "Facebook", href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}` },
@@ -182,7 +182,7 @@ export default function ProductDetail() {
   if (!product) return <div className="not-found-page"><span>CATALOG / 404</span><h1>Product record not found.</h1><Link href="/">Back to catalog</Link></div>;
 
   return <div className="detail-shell">
-    <header className="detail-header"><Link href="/" className="back-link"><ArrowLeft size={16} /> Back to catalog</Link><div className="detail-wordmark"><img src="/catalog-mark.webp" alt="" /> MATERIAL / CATALOG</div><div className="detail-header-actions"><div className="share-control"><button className="detail-share-button" onClick={() => setShareOpen((open) => !open)} aria-expanded={shareOpen} aria-haspopup="menu"><Share2 size={17} /> <span>Share</span></button>{shareOpen && <div className="share-menu" role="menu"><div className="share-menu-title">SHARE THIS PRODUCT</div><button className="share-copy" onClick={copyProductLink}><span>{linkCopied ? "Link copied" : "Copy product link"}</span><Share2 size={14} /></button>{shareLinks.map((item) => <a key={item.name} href={item.href} target="_blank" rel="noreferrer" role="menuitem" onClick={() => setShareOpen(false)}>{item.name}<ArrowUpRight size={13} /></a>)}{typeof navigator !== "undefined" && "share" in navigator && <button className="share-native" onClick={() => { navigator.share?.({ title: shareTitle, text: shareText, url: shareUrl }); setShareOpen(false); }}>More sharing options<ArrowUpRight size={13} /></button>}</div>}</div><button className={`detail-share ${liked ? "is-liked" : ""}`} onClick={toggleLiked} aria-label={liked ? "Remove from saved items" : "Save product"}><Heart size={18} fill={liked ? "currentColor" : "none"} /></button></div></header>
+    <header className="detail-header"><Link href="/" className="back-link"><ArrowLeft size={16} /> Back to catalog</Link><div className="detail-wordmark"><img src="/manus-storage/rivora-icon_83e7e4fe.png" alt="RIVORA" /> RIVORA</div><div className="detail-header-actions"><div className="share-control"><button className="detail-share-button" onClick={() => setShareOpen((open) => !open)} aria-expanded={shareOpen} aria-haspopup="menu"><Share2 size={17} /> <span>Share</span></button>{shareOpen && <div className="share-menu" role="menu"><div className="share-menu-title">SHARE THIS PRODUCT</div><button className="share-copy" onClick={copyProductLink}><span>{linkCopied ? "Link copied" : "Copy product link"}</span><Share2 size={14} /></button>{shareLinks.map((item) => <a key={item.name} href={item.href} target="_blank" rel="noreferrer" role="menuitem" onClick={() => setShareOpen(false)}>{item.name}<ArrowUpRight size={13} /></a>)}{typeof navigator !== "undefined" && "share" in navigator && <button className="share-native" onClick={() => { navigator.share?.({ title: shareTitle, text: shareText, url: shareUrl }); setShareOpen(false); }}>More sharing options<ArrowUpRight size={13} /></button>}</div>}</div><button className={`detail-share ${liked ? "is-liked" : ""}`} onClick={toggleLiked} aria-label={liked ? "Remove from saved items" : "Save product"}><Heart size={18} fill={liked ? "currentColor" : "none"} /></button></div></header>
     <main className="detail-content">
       <section className="detail-gallery"><div className="gallery-main"><SafeProductImage sources={gallery} alt={englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`)} loading="eager" /><span className="gallery-index">{String(selectedImage + 1).padStart(2, "0")} / {String(gallery.length).padStart(2, "0")}</span><button className="gallery-prev" onClick={() => setSelectedImage((selectedImage - 1 + gallery.length) % gallery.length)} aria-label="Previous image"><ChevronLeft size={18} /></button><button className="gallery-next" onClick={() => setSelectedImage((selectedImage + 1) % gallery.length)} aria-label="Next image"><ChevronRight size={18} /></button></div><div className="thumb-strip">{gallery.slice(0, 8).map((image, index) => <button key={`${image}-${index}`} className={selectedImage === index ? "is-selected" : ""} onClick={() => setSelectedImage(index)}><SafeProductImage sources={gallery.slice(index)} alt={`${englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`)} ${index + 1}`} /></button>)}</div></section>
       <section className="detail-dossier"><div className="dossier-eyebrow">FROM THE CATALOG <span>/{englishCategoryLabels[product.category] || product.category.toUpperCase()}</span></div><div className="dossier-heading"><h1>{englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`)}</h1><span className="dossier-id">#{product.id}</span></div><div className="dossier-price"><strong>{money(product.price, product.currency)}</strong>{product.referencePrice && product.referencePrice > product.price && <del>{money(product.referencePrice, product.currency)}</del>}<span>{product.currency}</span></div><div className="dossier-status"><span className="status-dot" /> {englishValue(product.stock || "Availability pending", "Availability pending")}<span className="status-sep">·</span> {englishValue(product.shop || "Store", "Store")}</div>
