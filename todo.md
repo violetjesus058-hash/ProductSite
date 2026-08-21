@@ -932,3 +932,7 @@
 - [x] 将 RIVORA 横向商标用于桌面侧栏，将简化 RIVORA icon 用于移动端、详情页和 favicon。
 - [x] 更新网站标题、描述、社交元数据和品牌可访问文本为 RIVORA。
 - [ ] 等待生成资产完成后验证商标/icon 显示，并保存品牌检查点。
+
+- [ ] 检查 RIVORA 品牌版本的 Git 分支、远程地址和未提交变更。
+- [ ] 将 RIVORA 商标/icon 接入版本推送到 GitHub ProductSite main。
+- [ ] 核对 GitHub main 最新提交并说明 Cloudflare 自动部署状态。
