@@ -174,7 +174,7 @@ a { color:inherit; text-decoration:none; }
   .category-recommendation-head h2 { font-size:34px; }
   .category-recommendation-head p { max-width:210px; font-size:10px; }
   .category-recommendation-aside { padding-top:7px; font-size:8px; writing-mode:vertical-rl; }
-  .category-recommendation-waterfall { columns:2 minmax(0,1fr); column-gap:10px; }
+  .category-recommendation-waterfall { columns:none; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:start; gap:15px 10px; }
   .category-recommendation-card { margin-bottom:15px; }
   .category-recommendation-meta { padding-top:7px; font-size:10px; }
   .category-recommendation-brand { font-size:8px; }
@@ -671,3 +671,9 @@ a { color:inherit; text-decoration:none; }
 /* Empty-result recovery: keep a browsable editorial recommendation edit below the no-results message on every viewport. */
 .empty-result-recommendation { margin-top:26px; }
 .empty-result-recommendation .category-recommendation-head { border-top:0; }
+
+/* Empty-result recommendations use a deliberate two-column edit on both desktop and mobile. */
+.empty-result-recommendation .category-recommendation-waterfall { columns:2 minmax(280px,1fr); column-gap:18px; }
+@media (max-width:760px) {
+  .empty-result-recommendation .category-recommendation-waterfall { columns:none; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:15px 10px; }
+}
