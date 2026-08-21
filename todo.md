@@ -993,6 +993,6 @@
 - [x] 增大并加粗手机端分类、收藏、REQUEST 和 DISCORD 文案，保持统一层级。
 - [x] 验证移动端侧栏、搜索区和两列商品墙无横向溢出，并保存检查点。
 
-- [ ] 检查手机端侧栏优化版本的 Git 分支、远程地址和未提交变更。
-- [ ] 将手机端侧栏收窄、字体放大加粗版本推送到 GitHub ProductSite main。
-- [ ] 核对 GitHub main 最新提交并说明 Cloudflare 自动部署状态。
+- [x] 检查手机端侧栏优化版本的 Git 分支、远程地址和未提交变更。
+- [x] 将手机端侧栏收窄、字体放大加粗版本推送到 GitHub ProductSite main。
+- [x] 核对 GitHub main 最新提交并说明 Cloudflare 自动部署状态。
