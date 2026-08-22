@@ -749,3 +749,19 @@ a { color:inherit; text-decoration:none; }
 .analytics-key-toggle { position: absolute; right: 4px; display: inline-flex; align-items: center; justify-content: center; width: 31px; height: 30px; border: 0; background: transparent; color: #6f6b64; cursor: pointer; }
 .analytics-key-toggle:hover { color: #181715; }
 .analytics-key-toggle:focus-visible { outline: 2px solid #ef6356; outline-offset: 1px; }
+
+/* Promotion link builder */
+.link-builder-gate { max-width:560px; margin:0 auto; display:grid; gap:12px; padding:26px; }
+.link-builder-gate > svg { color:var(--coral); }
+.link-builder-gate h2 { margin:0; font-size:20px; }
+.link-builder-gate label, .link-builder-form label { display:grid; gap:7px; color:#777168; font-size:10px; font-weight:700; letter-spacing:.08em; }
+.link-builder-gate input, .link-builder-form input, .link-builder-form select { min-height:40px; width:100%; border:1px solid rgba(24,23,21,.18); background:#fffdf6; padding:0 11px; color:#181715; font:inherit; font-size:12px; letter-spacing:normal; }
+.link-builder-gate button, .link-builder-result button { display:inline-flex; align-items:center; justify-content:center; gap:7px; min-height:40px; border:0; background:#181715; color:#fffdf6; padding:0 16px; font-size:11px; font-weight:700; cursor:pointer; }
+.link-builder-layout { display:grid; grid-template-columns:minmax(0,1fr) minmax(320px,.9fr); gap:14px; align-items:start; }
+.link-builder-form { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:15px; padding:4px 0; }
+.link-builder-form label span { color:#aaa69e; font-size:9px; font-weight:500; letter-spacing:normal; line-height:1.4; }
+.link-builder-result { position:sticky; top:18px; }
+.link-builder-output { display:grid; gap:12px; }
+.link-builder-output code { display:block; overflow-wrap:anywhere; padding:14px; border:1px solid rgba(24,23,21,.12); background:#f4f1e8; color:#49443d; font:11px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace; }
+.link-builder-output a { display:inline-flex; align-items:center; gap:6px; color:var(--coral); font-size:11px; }
+@media (max-width:760px) { .analytics-header { padding:28px 17px 22px; } .analytics-main { padding:0 17px 45px; } .link-builder-layout { grid-template-columns:1fr; } .link-builder-form { grid-template-columns:1fr; } .link-builder-result { position:static; } .link-builder-gate { padding:20px; } }
