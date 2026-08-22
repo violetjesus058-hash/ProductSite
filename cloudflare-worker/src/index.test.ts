@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { adminRow, analyticsEventName, analyticsOccurredAt, analyticsRowInput, detectBrowser, detectDevice, detectOperatingSystem, makeRequestCode, maskIp, normalizeProductImportRow, publicRow, validUrl } from "./index";
+import { adminRow, analyticsEventName, analyticsOccurredAt, analyticsRowInput, detectBrowser, detectDevice, detectOperatingSystem, extractWeidianId, generateAffiliateLinks, makeRequestCode, maskIp, normalizeProductImportRow, publicRow, validUrl } from "./index";
 
 describe("Cloudflare product request helpers", () => {
   it("creates a stable request code shape", () => {
@@ -42,6 +42,14 @@ describe("Cloudflare product request helpers", () => {
     expect(publicRow(row).adminReply).toBe("We are reviewing this product.");
     expect(adminRow(row).requestCode).toBe(row.request_code);
     expect(publicRow(row).requestCode).toBe(row.request_code);
+  });
+
+  it("extracts a Weidian ID and generates missing affiliate links while preserving existing links", () => {
+    const id = "7576530885";
+    expect(extractWeidianId(`https://fansbuy.com/item-micro-${id}.html?promotionCode=x`)).toBe(id);
+    expect(extractWeidianId(`https://weidian.com/item.html?itemID=${id}`)).toBe(id);
+    const result = generateAffiliateLinks(`https://kakobuy.com/product/weidian/${id}`, { Kakobuy: "https://kakobuy.com/product/weidian/old" });
+    expect(result.id).toBe(id); expect(result.links.Kakobuy).toContain("old"); expect(result.links.Fansbuy).toContain(id); expect(result.links.Litbuy).toContain(id);
   });
 
   it("validates and normalizes CSV product rows without accepting unsafe links", () => {
