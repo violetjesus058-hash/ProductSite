@@ -765,3 +765,4 @@ a { color:inherit; text-decoration:none; }
 .link-builder-output code { display:block; overflow-wrap:anywhere; padding:14px; border:1px solid rgba(24,23,21,.12); background:#f4f1e8; color:#49443d; font:11px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace; }
 .link-builder-output a { display:inline-flex; align-items:center; gap:6px; color:var(--coral); font-size:11px; }
 @media (max-width:760px) { .analytics-header { padding:28px 17px 22px; } .analytics-main { padding:0 17px 45px; } .link-builder-layout { grid-template-columns:1fr; } .link-builder-form { grid-template-columns:1fr; } .link-builder-result { position:static; } .link-builder-gate { padding:20px; } }
+.link-builder-error { color:#a63d34; font-size:10px; font-style:normal; font-weight:600; letter-spacing:normal; }
