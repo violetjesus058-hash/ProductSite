@@ -1,6 +1,5 @@
 // Editorial Pinboard reminder: the homepage is a browsable catalog wall, not a centered storefront; images lead, copy follows.
 import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { useAuth } from "@/_core/hooks/useAuth";
 import { useLocation } from "wouter";
 import { ArrowUpRight, Bell, ChevronDown, Flag, Heart, History as HistoryIcon, Home as HomeIcon, MessageCircle, Search, Settings2, X, RefreshCw, CheckCircle2, ThumbsDown } from "lucide-react";
 import { products, categoryLabels, categoryOrder } from "@/data/products";
@@ -104,13 +103,6 @@ function readAuditSession(): AuditSession | null {
 }
 
 export default function Home() {
-  // The useAuth hook provides authentication state.
-  // To implement login/logout, call logout(), or start login from an event
-  // handler: onClick={() => startLogin()} (imported from "@/const"). Never call
-  // startLogin() during render (no href={startLogin()}) — it mints a one-time
-  // nonce cookie and must run only at the moment of navigation.
-  let { user, loading, error, isAuthenticated, logout } = useAuth();
-
   const [, navigate] = useLocation();
   const [auditSession] = useState<AuditSession | null>(() => readAuditSession());
   const secondPassRequested = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("audit") === "accessories-second-pass";
