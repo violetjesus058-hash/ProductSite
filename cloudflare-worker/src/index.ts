@@ -320,7 +320,7 @@ async function getAnalyticsSummary(request: Request, env: Env) {
     env.DB.prepare("SELECT COALESCE(NULLIF(path, ''), '/') AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? GROUP BY name ORDER BY count DESC LIMIT 30").bind(since).all(),
     env.DB.prepare("SELECT query AS name, COUNT(*) AS count, SUM(CASE WHEN event_name = 'search_no_result' THEN 1 ELSE 0 END) AS no_result_count FROM analytics_events WHERE occurred_at >= ? AND query IS NOT NULL AND query != '' GROUP BY query ORDER BY count DESC LIMIT 30").bind(since).all(),
     env.DB.prepare("SELECT event_name AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND event_name IN ('product_detail_view','favorite_add','dislike','affiliate_click','outbound_click','request_product_submit','discord_feedback_click') GROUP BY event_name ORDER BY count DESC").bind(since).all(),
-    env.DB.prepare("SELECT id, event_name, occurred_at, path, product_id, category, platform, device, language, utm_source, utm_campaign, query, list_type, position FROM analytics_events ORDER BY id DESC LIMIT 150").all<AnalyticsRow>(),
+    env.DB.prepare("SELECT id, event_name, occurred_at, path, product_id, category, platform, device, language, utm_source, utm_campaign, query, list_type, position FROM analytics_events WHERE occurred_at >= ? ORDER BY id DESC LIMIT 150").bind(since).all<AnalyticsRow>(),
   ]);
   return response(request, env, {
     days,
