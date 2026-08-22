@@ -5,6 +5,8 @@ import { Link } from "wouter";
 type Row = { name?: string | null; id?: string | null; count: number; no_result_count?: number };
 type Summary = {
   days: number;
+  range: string;
+  periodLabel: string;
   totals: { total_events: number; unique_visitors: number; unique_sessions: number; detail_visitors?: number; click_visitors?: number };
   events: Row[]; products: Row[]; platforms: Row[]; categories: Row[]; daily: Array<{ date?: string; name?: string; count: number }>;
   sources: Row[]; devices: Row[]; languages: Row[]; paths: Row[]; searches: Row[]; conversions: Row[];
@@ -27,6 +29,7 @@ export default function AdminAnalytics() {
   const [key, setKey] = useState(() => localStorage.getItem(KEY_NAME) || "");
   const [showKey, setShowKey] = useState(false);
   const [days, setDays] = useState("30");
+  const periodLabels: Record<string, string> = { today: "今天", yesterday: "昨天", "7": "最近 7 天", "30": "最近 30 天" };
   const [summary, setSummary] = useState<Summary | null>(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -35,7 +38,7 @@ export default function AdminAnalytics() {
     if (!key.trim()) { setMessage("请输入 Worker 管理员密钥。"); return; }
     setLoading(true); setMessage(""); localStorage.setItem(KEY_NAME, key.trim());
     try {
-      const response = await fetch(`${workerUrl}/api/admin/analytics/summary?days=${days}`, { headers: { "x-admin-api-key": key.trim() } });
+      const response = await fetch(`${workerUrl}/api/admin/analytics/summary?range=${encodeURIComponent(days)}`, { headers: { "x-admin-api-key": key.trim() } });
       const payload = await response.json().catch(() => ({}));
       if (!response.ok) {
         if (response.status === 401) throw new Error("管理员密钥不正确，请确认 Worker 中的 ADMIN_API_KEY 已更新。");
@@ -51,9 +54,9 @@ export default function AdminAnalytics() {
   const peak = useMemo(() => Math.max(1, ...(summary?.daily || []).map((row) => Number(row.count || 0))), [summary]);
   const clickRate = summary ? ((Number(summary.totals.click_visitors || 0) / Math.max(1, Number(summary.totals.detail_visitors || 0))) * 100).toFixed(1) : "0.0";
   return <div className="analytics-page"><header className="analytics-header"><Link href="/" className="admin-back"><ArrowLeft size={15} /> 返回商品目录</Link><div><span className="request-eyebrow">PRODUCTSITE 私有分析</span><h1>用户行为与商品表现</h1><p>匿名第一方事件数据，存储于 Cloudflare Worker 与 D1；不显示姓名、邮箱或原始 IP。</p></div></header><main className="analytics-main">
-    <section className="analytics-control"><label>管理员密钥<div className="analytics-key-field"><input type={showKey ? "text" : "password"} value={key} onChange={(event) => setKey(event.target.value)} placeholder="输入 ADMIN_API_KEY" autoComplete="off" /><button type="button" className="analytics-key-toggle" onClick={() => setShowKey((visible) => !visible)} aria-label={showKey ? "隐藏管理员密钥" : "显示管理员密钥"} title={showKey ? "隐藏密钥" : "显示密钥"}>{showKey ? <EyeOff size={15} /> : <Eye size={15} />}</button></div></label><label>统计周期<select value={days} onChange={(event) => setDays(event.target.value)}><option value="7">最近 7 天</option><option value="30">最近 30 天</option><option value="90">最近 90 天</option></select></label><button onClick={() => void load()} disabled={loading}><RefreshCw size={14} className={loading ? "analytics-spin" : ""} /> {loading ? "加载中…" : "刷新数据"}</button></section>
+    <section className="analytics-control"><label>管理员密钥<div className="analytics-key-field"><input type={showKey ? "text" : "password"} value={key} onChange={(event) => setKey(event.target.value)} placeholder="输入 ADMIN_API_KEY" autoComplete="off" /><button type="button" className="analytics-key-toggle" onClick={() => setShowKey((visible) => !visible)} aria-label={showKey ? "隐藏管理员密钥" : "显示管理员密钥"} title={showKey ? "隐藏密钥" : "显示密钥"}>{showKey ? <EyeOff size={15} /> : <Eye size={15} />}</button></div></label><label>统计周期<select value={days} onChange={(event) => setDays(event.target.value)}><option value="today">今天</option><option value="yesterday">昨天</option><option value="7">最近 7 天</option><option value="30">最近 30 天</option></select></label><button onClick={() => void load()} disabled={loading}><RefreshCw size={14} className={loading ? "analytics-spin" : ""} /> {loading ? "加载中…" : "刷新数据"}</button></section>
     {message && <p className="analytics-message">{message}</p>}
-    {summary && <><section className="analytics-kpis"><div><span>事件总量</span><strong>{number(summary.totals.total_events)}</strong><small>最近 {summary.days} 天</small></div><div><span>匿名访客</span><strong>{number(summary.totals.unique_visitors)}</strong><small>去重 anonymous ID</small></div><div><span>访问会话</span><strong>{number(summary.totals.unique_sessions)}</strong><small>去重 session ID</small></div><div><span>详情到外链点击率</span><strong>{clickRate}%</strong><small>{number(summary.totals.click_visitors)} 位点击访客 / {number(summary.totals.detail_visitors)} 位详情访客</small></div></section>
+    {summary && <><section className="analytics-kpis"><div><span>事件总量</span><strong>{number(summary.totals.total_events)}</strong><small>{summary.periodLabel || periodLabels[summary.range] || `最近 ${summary.days} 天`}</small></div><div><span>匿名访客</span><strong>{number(summary.totals.unique_visitors)}</strong><small>去重 anonymous ID</small></div><div><span>访问会话</span><strong>{number(summary.totals.unique_sessions)}</strong><small>去重 session ID</small></div><div><span>详情到外链点击率</span><strong>{clickRate}%</strong><small>{number(summary.totals.click_visitors)} 位点击访客 / {number(summary.totals.detail_visitors)} 位详情访客</small></div></section>
       <section className="analytics-section analytics-daily"><div className="analytics-section-title"><h2>每日事件趋势</h2><span><BarChart3 size={14} /> 按天统计</span></div><div className="analytics-daily-chart">{summary.daily.length ? summary.daily.map((row) => <div className="analytics-day" key={String(row.date || row.name)}><div className="analytics-day-bar" style={{ height: `${Math.max(4, (Number(row.count || 0) / peak) * 100)}%` }} title={`${row.date || row.name}: ${number(row.count)}`} /><small>{String(row.date || row.name || "").slice(5)}</small></div>) : <p className="analytics-muted">当前周期暂无趋势数据。</p>}</div></section>
       <div className="analytics-grid"><Ranking title="行为事件" rows={summary.events} /><Ranking title="热门商品" rows={summary.products} labelKey="id" /><Ranking title="平台入口" rows={summary.platforms} /><Ranking title="商品分类" rows={summary.categories} /><Ranking title="来源渠道" rows={summary.sources} /><Ranking title="访问设备" rows={summary.devices} /><Ranking title="语言环境" rows={summary.languages} /><Ranking title="访问页面" rows={summary.paths} /></div>
       <section className="analytics-section"><div className="analytics-section-title"><h2>关键行为与转化</h2><span>真实事件计数</span></div><div className="analytics-conversion-grid">{summary.conversions.length ? summary.conversions.map((row) => <div key={row.name}><span>{label(row.name)}</span><strong>{number(row.count)}</strong></div>) : <p className="analytics-muted">暂无转化事件。</p>}</div></section>
