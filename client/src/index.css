@@ -791,3 +791,27 @@ a { color:inherit; text-decoration:none; }
 .admin-import-button-row { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:8px; }
 .admin-import-button.is-secondary { border-color:var(--line); background:transparent; color:var(--ink); }
 @media (max-width:760px) { .admin-import-button-row { width:100%; flex-direction:column; } .admin-import-button-row .admin-import-button { width:100%; } }
+
+/* Mobile saved-products view: a dedicated two-column selection wall with recommendations below. */
+.mobile-favorites-view { display:none; }
+@media (max-width:760px) {
+  .mobile-favorites-view { display:block; padding:18px 0 36px; }
+  .mobile-favorites-head, .mobile-favorites-recommendation-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding:0 0 16px; border-bottom:1px solid var(--line); }
+  .mobile-favorites-head h2, .mobile-favorites-recommendation-head h2 { margin:5px 0 4px; font:400 28px/1 'DM Serif Display',Georgia,serif; }
+  .mobile-favorites-head p, .mobile-favorites-recommendation-head p { margin:0; color:var(--ink-soft); font-size:10px; line-height:1.5; }
+  .mobile-favorites-actions { display:flex; align-items:center; gap:8px; }
+  .mobile-favorites-close { display:grid; place-items:center; width:30px; height:30px; border:1px solid var(--line); color:var(--ink-soft); }
+  .mobile-favorites-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px 10px; padding:18px 0 28px; }
+  .mobile-favorite-card { min-width:0; cursor:pointer; }
+  .mobile-favorite-image { position:relative; aspect-ratio:4/5; overflow:hidden; background:var(--paper-deep); border-radius:10px; }
+  .mobile-favorite-image img { display:block; width:100%; height:100%; object-fit:cover; }
+  .mobile-favorite-image .favorite-button, .mobile-favorite-image .dislike-button { bottom:8px; }
+  .mobile-favorite-image .favorite-button { left:8px; width:27px; height:27px; }
+  .mobile-favorite-image .dislike-button { left:42px; width:27px; height:27px; }
+  .mobile-favorite-card h3 { margin:8px 0 0; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size:11px; line-height:1.3; }
+  .mobile-favorite-card .product-price { margin-top:5px; font-size:11px; }
+  .mobile-favorites-empty { padding:26px 14px; border-bottom:1px solid var(--line); color:var(--ink-soft); font-size:11px; line-height:1.6; text-align:center; }
+  .mobile-favorites-recommendation { padding-top:6px; }
+  .mobile-favorites-recommendation-head { padding-top:12px; }
+  .mobile-favorites-grid.is-recommendation { padding-top:16px; }
+}
