@@ -273,7 +273,7 @@ a { color:inherit; text-decoration:none; }
 .header-record-button { position:relative; gap:3px; min-width:28px; }
 .header-record-button span { min-width:13px; color:var(--coral); font-size:9px; font-weight:800; line-height:1; }
 .header-record-button.is-active { color:var(--coral); }
-.record-popover { position:absolute; top:34px; right:-8px; z-index:40; width:292px; padding:10px; border:1px solid rgba(28,25,21,.14); background:rgba(250,248,242,.97); box-shadow:0 16px 42px rgba(37,29,18,.16); backdrop-filter:blur(18px); animation:record-popover-in .18s var(--ease-out, cubic-bezier(.23,1,.32,1)); transform-origin:top right; }
+.record-popover { position:absolute; top:34px; right:-8px; z-index:40; width:292px; max-height:min(70vh, 560px); overflow-y:auto; overscroll-behavior:contain; scrollbar-width:thin; padding:10px; border:1px solid rgba(28,25,21,.14); background:rgba(250,248,242,.97); box-shadow:0 16px 42px rgba(37,29,18,.16); backdrop-filter:blur(18px); animation:record-popover-in .18s var(--ease-out, cubic-bezier(.23,1,.32,1)); transform-origin:top right; }
 .record-popover-head { display:flex; align-items:center; justify-content:space-between; padding:4px 4px 9px; border-bottom:1px solid var(--line); color:var(--ink-soft); font-size:9px; letter-spacing:.14em; }
 .record-popover-actions { display:flex; align-items:center; gap:9px; }
 .record-popover-head button { display:grid; place-items:center; color:var(--ink-soft); }
@@ -289,7 +289,7 @@ a { color:inherit; text-decoration:none; }
 .record-empty { margin:18px 5px 14px; color:var(--ink-soft); font-size:10px; line-height:1.5; }
 @keyframes record-popover-in { from { opacity:0; transform:translateY(-5px) scale(.97); } to { opacity:1; transform:translateY(0) scale(1); } }
 @media (max-width:760px) { .request-dialog-backdrop { padding:12px; } .request-dialog { padding:20px; max-height:calc(100vh - 24px); } .request-dialog h2 { font-size:26px; } .request-form-actions { align-items:stretch; flex-direction:column; } .request-submit, .request-discord { width:100%; } .header-actions { gap:7px; }
- .header-record-button span { display:none; } .record-popover { position:fixed; top:68px; right:12px; width:min(292px, calc(100vw - 24px)); } .live-status { max-width:118px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; } }
+ .header-record-button span { display:none; } .record-popover { position:fixed; top:68px; right:12px; width:min(292px, calc(100vw - 24px)); max-height:calc(100dvh - 84px); overflow-y:auto; -webkit-overflow-scrolling:touch; } .live-status { max-width:118px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; } }
 @media (prefers-reduced-motion: reduce) { .record-popover, .record-row { animation:none; transition:none; } }
 
 /* Editorial Pinboard reminder: mobile keeps the catalog tactile and editorial—content stays visible first, controls unfold only when requested. */
