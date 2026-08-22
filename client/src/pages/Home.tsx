@@ -349,12 +349,12 @@ export default function Home() {
   const resetFilters = () => { setCategory("all"); setBrand("all"); setQuery(""); };
 
   return <div className={`catalog-shell catalog-style-${pageStyle} type-size-${fontSizeLevel} tracking-level-${letterSpacingLevel}`}>
-    <nav className="mobile-icon-rail" aria-label="Mobile categories"><button className={category === "all" ? "is-active" : ""} onClick={() => changeAuditCategory("all")} aria-label="All products"><HomeIcon size={17} /><span>ALL</span></button>{navItems.slice(1).map((item) => <button key={item.id} className={category === item.id ? "is-active" : ""} onClick={() => changeAuditCategory(item.id)} aria-label={item.label}><span>{item.id === "ACC" ? "ACC" : item.label.slice(0, 5)}</span></button>)}<button className={openPanel === "favorites" ? "is-active" : ""} aria-label="Saved items" aria-pressed={openPanel === "favorites"} onClick={() => setOpenPanel((current) => current === "favorites" ? null : "favorites")}><Heart size={17} fill={favoriteProducts.length ? "currentColor" : "none"} /></button><span className="mobile-rail-divider" /><button className="mobile-rail-request-link" onClick={() => setRequestProductOpen(true)} aria-label="Request a product" title="Request a product">REQUEST</button><a className="mobile-rail-discord-link" href="https://discord.gg/jtc399kUQV" target="_blank" rel="noreferrer" aria-label="Discord feedback" title="Discord feedback">DISCORD</a></nav>
+    <nav className="mobile-icon-rail" aria-label="Mobile categories"><button className={!openPanel && category === "all" ? "is-active" : ""} onClick={() => { if (!openPanel) changeAuditCategory("all"); }} aria-label="All products" aria-disabled={Boolean(openPanel)}><HomeIcon size={17} /><span>ALL</span></button>{navItems.slice(1).map((item) => <button key={item.id} className={!openPanel && category === item.id ? "is-active" : ""} onClick={() => { if (!openPanel) changeAuditCategory(item.id); }} aria-label={item.label} aria-disabled={Boolean(openPanel)}><span>{item.id === "ACC" ? "ACC" : item.label.slice(0, 5)}</span></button>)}<button className={openPanel === "favorites" ? "is-active" : ""} aria-label="Saved items" aria-pressed={openPanel === "favorites"} onClick={() => setOpenPanel((current) => current === "favorites" ? null : "favorites")}><Heart size={17} fill={favoriteProducts.length ? "currentColor" : "none"} /></button><span className="mobile-rail-divider" /><button className="mobile-rail-request-link" onClick={() => setRequestProductOpen(true)} aria-label="Request a product" title="Request a product">REQUEST</button><a className="mobile-rail-discord-link" href="https://discord.gg/jtc399kUQV" target="_blank" rel="noreferrer" aria-label="Discord feedback" title="Discord feedback">DISCORD</a></nav>
     <aside className="catalog-rail">
       <button className="brand-lockup" onClick={resetFilters} aria-label="Back to ALL PRODUCTS"><img src="/branding/rivora-wordmark.png" alt="RIVORA Apparel & Lifestyle" className="brand-wordmark" /></button>
       <div className="rail-rule" /><div className="rail-kicker">BROWSE BY</div>
       <nav className="category-nav" aria-label="Product categories">
-        {navItems.map((item) => <button key={item.id} className={`category-link ${category === item.id ? "is-active" : ""}`} onClick={() => changeAuditCategory(item.id)}><span>{item.label}</span></button>)}
+        {navItems.map((item) => <button key={item.id} className={`category-link ${!openPanel && category === item.id ? "is-active" : ""}`} onClick={() => { if (!openPanel) changeAuditCategory(item.id); }} aria-disabled={Boolean(openPanel)}><span>{item.label}</span></button>)}
       </nav>
       <div className="rail-request-area"><button className="rail-request-link" onClick={() => setRequestProductOpen(true)}><span>REQUEST A PRODUCT</span><MessageCircle size={14} /></button><a className="rail-discord-link" href="https://discord.gg/jtc399kUQV" target="_blank" rel="noreferrer"><span>DISCORD FEEDBACK</span><ArrowUpRight size={12} /></a></div>
       <div className="rail-footer"><span>CATALOG / 01</span><span>2026</span></div>
@@ -366,7 +366,7 @@ export default function Home() {
       <div className="catalog-toolbar">
         <div className="result-label">
           <span className="coral-dot" /> 
-          {brand !== "all" ? englishValue(brand, "SELECTED BRAND") : category === "all" ? "ALL PRODUCTS" : englishCategoryLabels[category] || category.toUpperCase()}
+          {openPanel === "favorites" ? "SAVED PRODUCTS" : brand !== "all" ? englishValue(brand, "SELECTED BRAND") : category === "all" ? "ALL PRODUCTS" : englishCategoryLabels[category] || category.toUpperCase()}
         </div>
         <div className="flex items-center gap-4">
           {isAiAuditView && <button
