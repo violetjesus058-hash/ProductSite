@@ -830,3 +830,10 @@ a { color:inherit; text-decoration:none; }
   .analytics-pagination-toolbar button { flex: 1 1 42%; }
   .analytics-pagination-toolbar .analytics-page-jump { flex: 1 1 100%; }
 }
+
+.analytics-card-period { max-width: 118px; min-height: 28px; border: 1px solid rgba(24,23,21,.16); background: #fffdf6; color: #756e64; padding: 0 5px; font-size: 9px; font-weight: 700; letter-spacing: normal; text-transform: none; }
+@media (max-width: 700px) {
+  .analytics-section-title { align-items: flex-start; }
+  .analytics-section-title > span { text-align: right; }
+  .analytics-card-period { max-width: 102px; }
+}

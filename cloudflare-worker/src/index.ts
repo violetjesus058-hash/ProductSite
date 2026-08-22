@@ -310,37 +310,53 @@ function beijingDayStartUtc(dayOffset = 0) {
   return new Date(beijingDate.getTime() - 8 * 60 * 60 * 1000).toISOString();
 }
 
+function beijingDateStartUtc(date: string) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return null;
+  const parsed = new Date(`${date}T00:00:00+08:00`);
+  return Number.isNaN(parsed.getTime()) ? null : parsed.toISOString();
+}
+
+function beijingWeekStartUtc() {
+  const beijingNow = new Date(Date.now() + 8 * 60 * 60 * 1000);
+  const day = beijingNow.getUTCDay() || 7;
+  return beijingDayStartUtc(day - 1);
+}
+
 async function getAnalyticsSummary(request: Request, env: Env) {
   if (!isAdmin(request, env)) return response(request, env, { error: "没有后台访问权限。" }, 401);
   const url = new URL(request.url);
   const requestedRange = url.searchParams.get("range") || "30";
-  const range = ["today", "yesterday", "7", "30"].includes(requestedRange) ? requestedRange : "30";
-  const days = range === "today" || range === "yesterday" ? 1 : Number(range);
+  const validRanges = ["today", "yesterday", "week", "7", "14", "month", "30", "all", "custom"];
+  const range = validRanges.includes(requestedRange) ? requestedRange : "30";
+  const days = ["today", "yesterday", "week", "month", "all", "custom"].includes(range) ? 1 : Number(range);
   const requestedPage = Number(url.searchParams.get("page") || "1");
   const requestedPageSize = Number(url.searchParams.get("pageSize") || "50");
   const page = Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1;
   const pageSize = [10, 50, 100, 500].includes(requestedPageSize) ? requestedPageSize : 50;
   const offset = (page - 1) * pageSize;
-  const periodLabel = range === "today" ? "今天" : range === "yesterday" ? "昨天" : `最近 ${days} 天`;
-  const since = range === "today" ? beijingDayStartUtc(0) : range === "yesterday" ? beijingDayStartUtc(1) : beijingDayStartUtc(days - 1);
+  const customStart = beijingDateStartUtc(url.searchParams.get("startDate") || "");
+  const customEnd = beijingDateStartUtc(url.searchParams.get("endDate") || "");
+  const since = range === "today" ? beijingDayStartUtc(0) : range === "yesterday" ? beijingDayStartUtc(1) : range === "week" ? beijingWeekStartUtc() : range === "month" ? (() => { const now = new Date(Date.now() + 8 * 60 * 60 * 1000); return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, -8)).toISOString(); })() : range === "all" ? "1970-01-01T00:00:00.000Z" : range === "custom" && customStart ? customStart : beijingDayStartUtc(days - 1);
+  const until = range === "yesterday" ? beijingDayStartUtc(0) : range === "custom" && customEnd ? new Date(new Date(customEnd).getTime() + 24 * 60 * 60 * 1000).toISOString() : new Date().toISOString();
+  const periodLabel = range === "today" ? "今天" : range === "yesterday" ? "昨天" : range === "week" ? "本周（周一至今）" : range === "14" ? "过去 14 天" : range === "month" ? "本月" : range === "all" ? "所有时间" : range === "custom" ? `${url.searchParams.get("startDate") || ""} 至 ${url.searchParams.get("endDate") || ""}` : `过去 ${days} 天`;
   const [totals, events, products, platforms, categories, daily, sources, sourceUsers, media, campaigns, devices, languages, paths, searches, conversions, recentTotal, recent] = await Promise.all([
-    env.DB.prepare("SELECT COUNT(*) AS total_events, COUNT(DISTINCT anonymous_id) AS unique_visitors, COUNT(DISTINCT session_id) AS unique_sessions, COUNT(DISTINCT CASE WHEN event_name = 'product_detail_view' THEN anonymous_id END) AS detail_visitors, COUNT(DISTINCT CASE WHEN event_name IN ('affiliate_click','outbound_click') THEN anonymous_id END) AS click_visitors FROM analytics_events WHERE occurred_at >= ?").bind(since).first(),
-    env.DB.prepare("SELECT event_name AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? GROUP BY event_name ORDER BY count DESC LIMIT 30").bind(since).all(),
-    env.DB.prepare("SELECT product_id AS id, MAX(source_product_id) AS source_product_id, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND product_id IS NOT NULL GROUP BY product_id ORDER BY count DESC LIMIT 30").bind(since).all(),
-    env.DB.prepare("SELECT platform AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND platform IS NOT NULL GROUP BY platform ORDER BY count DESC LIMIT 30").bind(since).all(),
-    env.DB.prepare("SELECT category AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND category IS NOT NULL GROUP BY category ORDER BY count DESC LIMIT 30").bind(since).all(),
-    env.DB.prepare("SELECT date(occurred_at, '+8 hours') AS date, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? GROUP BY date ORDER BY date ASC").bind(since).all(),
-    env.DB.prepare("SELECT COALESCE(NULLIF(utm_source, ''), 'direct') AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? GROUP BY name ORDER BY count DESC LIMIT 30").bind(since).all(),
-    env.DB.prepare("SELECT COALESCE(NULLIF(utm_source, ''), 'direct') AS name, COUNT(DISTINCT COALESCE(NULLIF(anonymous_id, ''), NULLIF(session_id, ''))) AS user_count FROM analytics_events WHERE occurred_at >= ? GROUP BY name ORDER BY user_count DESC LIMIT 30").bind(since).all(),
-    env.DB.prepare("SELECT COALESCE(NULLIF(utm_medium, ''), 'none') AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? GROUP BY name ORDER BY count DESC LIMIT 30").bind(since).all(),
-    env.DB.prepare("SELECT COALESCE(NULLIF(utm_campaign, ''), 'none') AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? GROUP BY name ORDER BY count DESC LIMIT 30").bind(since).all(),
-    env.DB.prepare("SELECT COALESCE(NULLIF(device, ''), 'unknown') AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? GROUP BY name ORDER BY count DESC LIMIT 20").bind(since).all(),
-    env.DB.prepare("SELECT COALESCE(NULLIF(language, ''), 'unknown') AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? GROUP BY name ORDER BY count DESC LIMIT 20").bind(since).all(),
-    env.DB.prepare("SELECT COALESCE(NULLIF(path, ''), '/') AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? GROUP BY name ORDER BY count DESC LIMIT 30").bind(since).all(),
-    env.DB.prepare("SELECT query AS name, COUNT(*) AS count, SUM(CASE WHEN event_name = 'search_no_result' THEN 1 ELSE 0 END) AS no_result_count FROM analytics_events WHERE occurred_at >= ? AND query IS NOT NULL AND query != '' GROUP BY query ORDER BY count DESC LIMIT 30").bind(since).all(),
-    env.DB.prepare("SELECT event_name AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND event_name IN ('product_detail_view','favorite_add','dislike','affiliate_click','outbound_click','request_product_submit','discord_feedback_click') GROUP BY event_name ORDER BY count DESC").bind(since).all(),
-    env.DB.prepare("SELECT COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ?").bind(since).first(),
-    env.DB.prepare("SELECT id, event_name, occurred_at, path, product_id, category, platform, device, language, utm_source, utm_campaign, query, list_type, position FROM analytics_events WHERE occurred_at >= ? ORDER BY id DESC LIMIT ? OFFSET ?").bind(since, pageSize, offset).all<AnalyticsRow>(),
+    env.DB.prepare("SELECT COUNT(*) AS total_events, COUNT(DISTINCT anonymous_id) AS unique_visitors, COUNT(DISTINCT session_id) AS unique_sessions, COUNT(DISTINCT CASE WHEN event_name = 'product_detail_view' THEN anonymous_id END) AS detail_visitors, COUNT(DISTINCT CASE WHEN event_name IN ('affiliate_click','outbound_click') THEN anonymous_id END) AS click_visitors FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ?").bind(since, until).first(),
+    env.DB.prepare("SELECT event_name AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? GROUP BY event_name ORDER BY count DESC LIMIT 30").bind(since, until).all(),
+    env.DB.prepare("SELECT product_id AS id, MAX(source_product_id) AS source_product_id, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND product_id IS NOT NULL GROUP BY product_id ORDER BY count DESC LIMIT 30").bind(since, until).all(),
+    env.DB.prepare("SELECT platform AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND platform IS NOT NULL GROUP BY platform ORDER BY count DESC LIMIT 30").bind(since, until).all(),
+    env.DB.prepare("SELECT category AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND category IS NOT NULL GROUP BY category ORDER BY count DESC LIMIT 30").bind(since, until).all(),
+    env.DB.prepare("SELECT date(occurred_at, '+8 hours') AS date, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? GROUP BY date ORDER BY date ASC").bind(since, until).all(),
+    env.DB.prepare("SELECT COALESCE(NULLIF(utm_source, ''), 'direct') AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? GROUP BY name ORDER BY count DESC LIMIT 30").bind(since, until).all(),
+    env.DB.prepare("SELECT COALESCE(NULLIF(utm_source, ''), 'direct') AS name, COUNT(DISTINCT COALESCE(NULLIF(anonymous_id, ''), NULLIF(session_id, ''))) AS user_count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? GROUP BY name ORDER BY user_count DESC LIMIT 30").bind(since, until).all(),
+    env.DB.prepare("SELECT COALESCE(NULLIF(utm_medium, ''), 'none') AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? GROUP BY name ORDER BY count DESC LIMIT 30").bind(since, until).all(),
+    env.DB.prepare("SELECT COALESCE(NULLIF(utm_campaign, ''), 'none') AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? GROUP BY name ORDER BY count DESC LIMIT 30").bind(since, until).all(),
+    env.DB.prepare("SELECT COALESCE(NULLIF(device, ''), 'unknown') AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? GROUP BY name ORDER BY count DESC LIMIT 20").bind(since, until).all(),
+    env.DB.prepare("SELECT COALESCE(NULLIF(language, ''), 'unknown') AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? GROUP BY name ORDER BY count DESC LIMIT 20").bind(since, until).all(),
+    env.DB.prepare("SELECT COALESCE(NULLIF(path, ''), '/') AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? GROUP BY name ORDER BY count DESC LIMIT 30").bind(since, until).all(),
+    env.DB.prepare("SELECT query AS name, COUNT(*) AS count, SUM(CASE WHEN event_name = 'search_no_result' THEN 1 ELSE 0 END) AS no_result_count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND query IS NOT NULL AND query != '' GROUP BY query ORDER BY count DESC LIMIT 30").bind(since, until).all(),
+    env.DB.prepare("SELECT event_name AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND event_name IN ('product_detail_view','favorite_add','dislike','affiliate_click','outbound_click','request_product_submit','discord_feedback_click') GROUP BY event_name ORDER BY count DESC").bind(since, until).all(),
+    env.DB.prepare("SELECT COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ?").bind(since, until).first(),
+    env.DB.prepare("SELECT id, event_name, occurred_at, path, product_id, category, platform, device, language, utm_source, utm_campaign, query, list_type, position FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? ORDER BY id DESC LIMIT ? OFFSET ?").bind(since, until, pageSize, offset).all<AnalyticsRow>(),
   ]);
   return response(request, env, {
     days, range, periodLabel, page, pageSize, recentTotal: Number((recentTotal as { count?: number } | null)?.count || 0),
