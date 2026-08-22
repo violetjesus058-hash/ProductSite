@@ -815,3 +815,18 @@ a { color:inherit; text-decoration:none; }
   .mobile-favorites-recommendation-head { padding-top:12px; }
   .mobile-favorites-grid.is-recommendation { padding-top:16px; }
 }
+
+.analytics-pagination-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: -4px 0 16px; color: #756e64; font-size: 11px; }
+.analytics-pagination-toolbar label { display: inline-flex; align-items: center; gap: 7px; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.analytics-pagination-toolbar select, .analytics-page-jump input { min-height: 32px; border: 1px solid rgba(24,23,21,.18); background: #fffdf6; color: #181715; padding: 0 8px; font: inherit; letter-spacing: normal; text-transform: none; }
+.analytics-pagination-toolbar button { min-height: 32px; border: 1px solid rgba(24,23,21,.18); background: #fffdf6; color: #181715; padding: 0 11px; font-size: 11px; cursor: pointer; }
+.analytics-pagination-toolbar button:disabled { opacity: .45; cursor: not-allowed; }
+.analytics-page-jump input { width: 58px; text-align: center; }
+@media (max-width: 700px) {
+  .analytics-pagination-toolbar { align-items: stretch; gap: 8px; }
+  .analytics-pagination-toolbar > span { display: flex; align-items: center; width: 100%; }
+  .analytics-pagination-toolbar label { flex: 1 1 100%; justify-content: space-between; }
+  .analytics-pagination-toolbar select { flex: 1; }
+  .analytics-pagination-toolbar button { flex: 1 1 42%; }
+  .analytics-pagination-toolbar .analytics-page-jump { flex: 1 1 100%; }
+}
