@@ -1,9 +1,10 @@
 // Editorial Pinboard reminder: the homepage is a browsable catalog wall, not a centered storefront; images lead, copy follows.
-import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Fragment, startTransition, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { ArrowUpRight, Bell, ChevronDown, Heart, History as HistoryIcon, Home as HomeIcon, MessageCircle, Search, Settings2, X, RefreshCw, CheckCircle2, ThumbsDown } from "lucide-react";
 import { products, categoryLabels, categoryOrder } from "@/data/products";
 import { formatVisitTime, readDislikes, readEngagement, readFavorites, readHistory, saveFavorites, toggleDislike, type HistoryEntry, type EngagementEntry } from "@/lib/catalogMemory";
+import { shouldAllowAction } from "@/lib/mobileActionGuard";
 import RequestProductDialog from "@/components/RequestProductDialog";
 import SafeProductImage from "@/components/SafeProductImage";
 import { buildCategoryRecommendationPool, rankBehavioralRecommendations } from "@/lib/categoryRecommendations";
@@ -113,6 +114,15 @@ export default function Home() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [requestProductOpen, setRequestProductOpen] = useState(false);
   const hoverTimers = useRef<Record<string, number>>({});
+  const mobileActionLocks = useRef<Record<string, number>>({});
+  const allowMobileAction = (key: string, interval = 220) => {
+    if (typeof window === "undefined" || window.innerWidth > 760) return true;
+    const now = performance.now();
+    const lastActionAt = mobileActionLocks.current[key];
+    if (!shouldAllowAction(lastActionAt, now, interval)) return false;
+    mobileActionLocks.current[key] = now;
+    return true;
+  };
   
   // Audit Mode State
   const [seenIds, setSeenIds] = useState<string[]>(() => {
@@ -127,10 +137,13 @@ export default function Home() {
   const reviewKey = (product: (typeof products)[number]) => product.sourceProductId || product.id;
   const isReviewed = (product: (typeof products)[number]) => seenIds.includes(reviewKey(product));
   const changeAuditCategory = (nextCategory: string) => {
+    if (nextCategory === category || !allowMobileAction("category", 260)) return;
     trackEvent("category_view", { category: nextCategory, previous_category: category });
     if (nextCategory !== category) window.sessionStorage.removeItem(CATALOG_RETURN_KEY);
-    setCategory(nextCategory);
-    setBrand("all");
+    startTransition(() => {
+      setCategory(nextCategory);
+      setBrand("all");
+    });
     if (isAiAuditView && nextCategory !== "all") {
       window.localStorage.setItem("audit:last-category", nextCategory);
       window.localStorage.setItem("audit:audit-mode", "1");
@@ -143,7 +156,7 @@ export default function Home() {
   
   useEffect(() => { initializeAnalytics(); }, []);
   useEffect(() => { saveFavorites(favorites); }, [favorites]);
-  const toggleProductDislike = (id: string) => setDislikes(toggleDislike(id, !dislikes.includes(id)));
+  const toggleProductDislike = (id: string) => { if (!allowMobileAction(`dislike:${id}`, 180)) return; setDislikes((current) => toggleDislike(id, !current.includes(id))); };
 
   useEffect(() => {
     const refreshEngagement = () => setEngagement(readEngagement());
@@ -341,7 +354,7 @@ export default function Home() {
     hoverTimers.current[id] = window.setTimeout(() => trackOnce("product_preview", id, { ...analyticsProduct(id), preview_type: "image", source: "catalog" }), 800);
   };
   const endProductPreview = (id: string) => window.clearTimeout(hoverTimers.current[id]);
-  const toggleFavorite = (id: string) => setFavorites((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
+  const toggleFavorite = (id: string) => { if (!allowMobileAction(`favorite:${id}`, 180)) return; setFavorites((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]); };
   const clearFavorites = () => setFavorites([]);
   const favoriteProducts = favorites.map((id) => products.find((item) => item.id === id)).filter(Boolean) as typeof products;
   const favoriteRecommendations = categoryRecommendationPool.filter((product) => !favorites.includes(product.id)).slice(0, Math.max(24, categoryRecommendationCount));
