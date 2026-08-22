@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { analyticsEventName, analyticsOccurredAt, analyticsRowInput, detectBrowser, detectDevice, detectOperatingSystem, makeRequestCode, maskIp, validUrl } from "./index";
+import { adminRow, analyticsEventName, analyticsOccurredAt, analyticsRowInput, detectBrowser, detectDevice, detectOperatingSystem, makeRequestCode, maskIp, publicRow, validUrl } from "./index";
 
 describe("Cloudflare product request helpers", () => {
   it("creates a stable request code shape", () => {
@@ -34,6 +34,14 @@ describe("Cloudflare product request helpers", () => {
       expect(row.value.position).toBe(4);
       expect(row.value.propertiesJson).toContain("Kakobuy");
     }
+  });
+
+  it("preserves administrator replies for both admin and public response shapes", () => {
+    const row = { id: 7, request_code: "REQ-20260820-ABC123", name: "Alex", contact: "alex@example.com", product_url: null, image_url: null, description: "A jacket", notes: null, status: "Reviewing", admin_reply: "We are reviewing this product.", ip_address: null, country: null, region: null, city: null, device_type: "Desktop", browser: "Chrome", operating_system: "Windows", user_agent: null, created_at: "2026-08-20 10:00:00", updated_at: "2026-08-20 11:00:00" };
+    expect(adminRow(row).adminReply).toBe("We are reviewing this product.");
+    expect(publicRow(row).adminReply).toBe("We are reviewing this product.");
+    expect(adminRow(row).requestCode).toBe(row.request_code);
+    expect(publicRow(row).requestCode).toBe(row.request_code);
   });
 
   it("detects common visitor metadata from User-Agent", () => {

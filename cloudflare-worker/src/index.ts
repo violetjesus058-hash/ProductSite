@@ -171,7 +171,7 @@ function requestMetadata(request: Request) {
   };
 }
 
-function publicRow(row: RequestRow) {
+export function publicRow(row: RequestRow) {
   return {
     requestCode: row.request_code,
     name: row.name,
@@ -185,7 +185,7 @@ function publicRow(row: RequestRow) {
   };
 }
 
-function adminRow(row: RequestRow) {
+export function adminRow(row: RequestRow) {
   return {
     id: row.id,
     requestCode: row.request_code,
