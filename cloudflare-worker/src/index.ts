@@ -36,6 +36,9 @@ const analyticsWindows = new Map<string, number[]>();
 const MAX_ANALYTICS_EVENTS_PER_MINUTE = 120;
 const MAX_ANALYTICS_BATCH = 40;
 const MAX_ANALYTICS_BODY_BYTES = 80_000;
+const MAX_PRODUCT_IMPORT_ROWS = 5_000;
+const MAX_PRODUCT_IMPORT_BODY_BYTES = 3_000_000;
+const productTemplateHeaders = ["id", "sourceProductId", "name", "catalogName", "category", "subCategory", "brand", "price", "referencePrice", "currency", "description", "sizes", "colors", "stock", "shop", "shopUrl", "url", "images", "tags", "collectedAt", "reviewStatus", "reviewNote", "platformLinks"];
 
  type AnalyticsInput = Record<string, unknown>;
  type AnalyticsRow = {
@@ -340,6 +343,34 @@ async function getAnalyticsSummary(request: Request, env: Env) {
   });
 }
 
+function csvEscape(value: unknown) { const text = typeof value === "string" ? value : value == null ? "" : String(value); return /[",\n\r]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text; }
+function productTemplateResponse(request: Request, env: Env) { return new Response(`${productTemplateHeaders.join(",")}\n`, { status: 200, headers: { ...Object.fromEntries(corsHeaders(request, env)), "content-type": "text/csv; charset=UTF-8", "content-disposition": 'attachment; filename="productsite-product-template.csv"' } }); }
+export function normalizeProductImportRow(input: unknown) {
+  if (!input || typeof input !== "object") return { error: "每一行必须是对象。" } as const;
+  const row = input as Record<string, unknown>;
+  const id = normalizeText(row.id, 120); const name = normalizeText(row.name, 240); const category = normalizeText(row.category, 80); const price = Number(row.price);
+  if (!id || !name || !category || !Number.isFinite(price) || price < 0) return { error: "id、name、category 和非负 price 为必填字段。" } as const;
+  const arrayValue = (value: unknown) => Array.isArray(value) ? value.map((item) => normalizeText(item, 300)).filter(Boolean).slice(0, 100) : normalizeText(value, 4000).split(/[|;]/).map((item) => item.trim()).filter(Boolean).slice(0, 100);
+  const objectValue = (value: unknown) => { if (!value) return {}; if (typeof value === "object") return value; try { const parsed = JSON.parse(String(value)); return parsed && typeof parsed === "object" ? parsed : {}; } catch { return {}; } };
+  const payload = { id, sourceProductId: normalizeText(row.sourceProductId, 120), name, catalogName: normalizeText(row.catalogName, 240) || name, category, subCategory: normalizeText(row.subCategory, 120), brand: normalizeText(row.brand, 120), price, referencePrice: row.referencePrice === "" || row.referencePrice == null ? null : Number(row.referencePrice), currency: normalizeText(row.currency, 12) || "USD", description: normalizeText(row.description, 2000), sizes: arrayValue(row.sizes), colors: arrayValue(row.colors), stock: normalizeText(row.stock, 80), shop: normalizeText(row.shop, 160), shopUrl: normalizeText(row.shopUrl, 500), url: normalizeText(row.url, 1000), images: arrayValue(row.images), tags: arrayValue(row.tags), collectedAt: normalizeText(row.collectedAt, 80) || new Date().toISOString(), reviewStatus: normalizeText(row.reviewStatus, 20) || "unreviewed", reviewNote: normalizeText(row.reviewNote, 500), platformLinks: objectValue(row.platformLinks) };
+  if (!validUrl(payload.shopUrl) || !validUrl(payload.url) || payload.images.some((image) => !validUrl(image))) return { error: "商品链接、店铺链接和图片链接必须是 HTTP/HTTPS。" } as const;
+  return { value: payload } as const;
+}
+async function adminProductImport(request: Request, env: Env) {
+  if (!isAdmin(request, env)) return response(request, env, { error: "没有后台访问权限。" }, 401);
+  const rawBody = await request.text(); if (new TextEncoder().encode(rawBody).byteLength > MAX_PRODUCT_IMPORT_BODY_BYTES) return response(request, env, { error: "上传文件过大。" }, 413);
+  let body: unknown; try { body = JSON.parse(rawBody); } catch { return response(request, env, { error: "上传数据格式不正确。" }, 400); }
+  const rows = body && typeof body === "object" && Array.isArray((body as Record<string, unknown>).rows) ? (body as Record<string, unknown>).rows : [];
+  if (!rows.length || rows.length > MAX_PRODUCT_IMPORT_ROWS) return response(request, env, { error: `每次必须上传 1-${MAX_PRODUCT_IMPORT_ROWS} 行。` }, 400);
+  const normalized = rows.map(normalizeProductImportRow); const invalid = normalized.map((item, index) => "error" in item ? { row: index + 2, error: item.error } : null).filter(Boolean);
+  const valid = normalized.filter((item): item is { value: Record<string, unknown> } => "value" in item).map((item) => item.value);
+  const commit = Boolean((body as Record<string, unknown>).commit);
+  if (invalid.length || !commit) return response(request, env, { preview: true, total: rows.length, valid: valid.length, invalid, sample: valid.slice(0, 20) });
+  const statements = valid.map((item) => env.DB.prepare("INSERT INTO product_overrides (product_id, source_product_id, payload_json, updated_at) VALUES (?, ?, ?, CURRENT_TIMESTAMP) ON CONFLICT(product_id) DO UPDATE SET source_product_id=excluded.source_product_id, payload_json=excluded.payload_json, updated_at=CURRENT_TIMESTAMP").bind(item.id, item.sourceProductId || null, JSON.stringify(item)));
+  await env.DB.batch(statements); return response(request, env, { success: true, imported: statements.length }, 201);
+}
+async function getProductOverrides(request: Request, env: Env) { const rows = await env.DB.prepare("SELECT payload_json FROM product_overrides ORDER BY product_id").all<{ payload_json: string }>(); const items = (rows.results || []).flatMap((row) => { try { const value = JSON.parse(row.payload_json); return value && typeof value === "object" ? [value] : []; } catch { return []; } }); return response(request, env, { items }); }
+
 async function createRequest(request: Request, env: Env) {
   const declaredLength = Number(request.headers.get("Content-Length") || 0);
   if (declaredLength > MAX_REQUEST_BYTES) return response(request, env, { error: "The request is too large." }, 413);
@@ -403,6 +434,9 @@ export default {
     try {
       if (request.method === "POST" && url.pathname === "/api/requests") return await createRequest(request, env);
       if (request.method === "POST" && url.pathname === "/api/analytics/events") return await ingestAnalytics(request, env);
+      if (request.method === "GET" && url.pathname === "/api/admin/products/template") return productTemplateResponse(request, env);
+      if (request.method === "POST" && url.pathname === "/api/admin/products/import") return await adminProductImport(request, env);
+      if (request.method === "GET" && url.pathname === "/api/products/overrides") return await getProductOverrides(request, env);
       const publicMatch = url.pathname.match(/^\/api\/requests\/([^/]+)$/);
       if (request.method === "GET" && publicMatch) return await getPublicRequest(request, env, decodeURIComponent(publicMatch[1]));
       if (request.method === "GET" && url.pathname === "/api/admin/requests") return await listAdminRequests(request, env);

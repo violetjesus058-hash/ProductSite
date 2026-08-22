@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { adminRow, analyticsEventName, analyticsOccurredAt, analyticsRowInput, detectBrowser, detectDevice, detectOperatingSystem, makeRequestCode, maskIp, publicRow, validUrl } from "./index";
+import { adminRow, analyticsEventName, analyticsOccurredAt, analyticsRowInput, detectBrowser, detectDevice, detectOperatingSystem, makeRequestCode, maskIp, normalizeProductImportRow, publicRow, validUrl } from "./index";
 
 describe("Cloudflare product request helpers", () => {
   it("creates a stable request code shape", () => {
@@ -42,6 +42,14 @@ describe("Cloudflare product request helpers", () => {
     expect(publicRow(row).adminReply).toBe("We are reviewing this product.");
     expect(adminRow(row).requestCode).toBe(row.request_code);
     expect(publicRow(row).requestCode).toBe(row.request_code);
+  });
+
+  it("validates and normalizes CSV product rows without accepting unsafe links", () => {
+    const normalized = normalizeProductImportRow({ id: "new-1", name: "Everyday Jacket", category: "clothing", price: "29.5", sizes: "S|M|L", images: "https://cdn.example.com/jacket.webp", url: "https://kakobuy.com/item/1" });
+    expect(normalized).toHaveProperty("value");
+    if ("value" in normalized) { expect(normalized.value.price).toBe(29.5); expect(normalized.value.sizes).toEqual(["S", "M", "L"]); }
+    expect(normalizeProductImportRow({ id: "bad", name: "Bad", category: "shoe", price: 1, images: "javascript:alert(1)" })).toHaveProperty("error");
+    expect(normalizeProductImportRow({ id: "missing", name: "", category: "shoe", price: 1 })).toHaveProperty("error");
   });
 
   it("detects common visitor metadata from User-Agent", () => {

@@ -774,3 +774,30 @@ a { color:inherit; text-decoration:none; }
 .request-process li b { color:var(--ink); font-size:10px; }
 .request-process li span { color:var(--ink-soft); }
 @media (max-width:760px) { .request-process { margin:13px 0 15px; padding:11px 12px; } .request-process ol { grid-template-columns:1fr; gap:8px; } .request-process li { min-height:18px; align-content:center; } }
+.admin-import-page { min-height:100vh; padding:32px 34px 70px; background:var(--paper); color:var(--ink); }
+.admin-import-header { display:flex; align-items:flex-start; gap:30px; max-width:980px; margin:0 auto 28px; }
+.admin-import-header h1 { margin:7px 0 8px; font:400 42px/1 'DM Serif Display',Georgia,serif; }
+.admin-import-header p,.admin-import-card p { color:var(--ink-soft); font-size:12px; line-height:1.6; }
+.admin-import-card { max-width:980px; margin:0 auto; padding:24px; border:1px solid var(--line); background:rgba(255,254,250,.72); }
+.admin-import-tools,.admin-import-auth { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:18px 0; border-bottom:1px solid var(--line); }
+.admin-import-tools h2,.admin-import-preview h2 { margin:0 0 5px; font-size:13px; }
+.admin-import-tools p { margin:0; }
+.admin-import-button,.admin-import-confirm { display:inline-flex; align-items:center; justify-content:center; gap:7px; min-height:39px; padding:0 14px; border:1px solid var(--ink); background:var(--ink); color:#fff; font-size:10px; font-weight:800; cursor:pointer; }
+.admin-import-button:disabled,.admin-import-confirm:disabled { cursor:not-allowed; opacity:.5; }
+.admin-import-auth { justify-content:flex-start; }
+.admin-import-auth label { display:grid; flex:1; max-width:420px; gap:6px; color:var(--ink-soft); font-size:10px; font-weight:700; }
+.admin-import-auth input { width:100%; border:1px solid var(--line); background:rgba(255,255,255,.45); padding:10px; color:var(--ink); font:inherit; font-size:12px; }
+.admin-import-message { margin:18px 0 0; padding:11px 12px; background:rgba(201,88,70,.08); color:#8d3c2e; }
+.admin-import-message.is-success { background:rgba(64,132,88,.1); color:#29603d; }
+.admin-import-preview { margin-top:22px; }
+.admin-import-preview h2 { display:flex; justify-content:space-between; gap:12px; }
+.admin-import-preview h2 span { color:#aaa69e; font-size:10px; font-weight:400; }
+.admin-import-table { overflow:auto; border:1px solid var(--line); }
+.admin-import-table table { width:100%; min-width:650px; border-collapse:collapse; font-size:10px; }
+.admin-import-table th,.admin-import-table td { max-width:180px; padding:9px 10px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.admin-import-table th { color:var(--ink-soft); font-size:9px; letter-spacing:.05em; }
+.admin-import-errors { margin-top:12px; padding:10px 12px; background:rgba(201,88,70,.08); color:#8d3c2e; font-size:11px; line-height:1.5; }
+.admin-import-errors p { margin:3px 0; color:inherit; }
+.admin-import-confirm { margin-top:14px; }
+.admin-import-note { margin:20px 0 0; padding-top:15px; border-top:1px solid var(--line); font-size:10px !important; }
+@media (max-width:760px) { .admin-import-page { padding:20px 12px 45px; } .admin-import-header { flex-direction:column; gap:18px; margin-bottom:18px; } .admin-import-header h1 { font-size:34px; } .admin-import-card { padding:18px; } .admin-import-tools,.admin-import-auth { align-items:stretch; flex-direction:column; } .admin-import-button,.admin-import-confirm { width:100%; } .admin-import-auth label { max-width:none; width:100%; } }
