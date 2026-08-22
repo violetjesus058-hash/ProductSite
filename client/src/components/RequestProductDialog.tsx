@@ -51,6 +51,7 @@ export default function RequestProductDialog({ open, onClose }: { open: boolean;
     <section className="request-dialog" role="dialog" aria-modal="true" aria-labelledby="request-product-title">
       <div className="request-dialog-head"><div><span className="request-eyebrow">CATALOG REQUEST</span><h2 id="request-product-title">Request a Product</h2></div><button className="request-close" onClick={onClose} aria-label="Close request form"><X size={18} /></button></div>
       <p className="request-intro">Tell us which product you would like to see in the catalog. We review the product details and links before adding anything.</p>
+      <div className="request-process" aria-label="How the request process works"><strong>How it works</strong><ol><li><b>Submit</b><span>Share the product details and any useful links.</span></li><li><b>We review</b><span>Our team checks your request and updates its status.</span></li><li><b>Check your reply</b><span>Save your Request ID and use “Check status” to see our reply.</span></li></ol></div>
       {!isCloudflareWorkerConfigured() && <div className="request-config-note">This preview is not connected to the request service yet. Submissions will be saved after the Cloudflare Worker is configured.</div>}
       <form onSubmit={submit} className="request-form" noValidate>
         <label>Name or nickname<input required maxLength={maxLengths.name} value={form.name} onChange={(event) => update("name", event.target.value)} placeholder="e.g. Alex" autoComplete="name" /></label>
