@@ -15,6 +15,11 @@ import { initializeAnalytics, trackEvent, trackOnce } from "@/lib/analytics";
 function englishValue(value: string, fallback: string) { return /[\u4e00-\u9fff]/.test(value) ? fallback : value; }
 function localSetting(key: string, fallback: string) { if (typeof window === "undefined") return fallback; return window.localStorage.getItem(key) || fallback; }
 function cleanTitle(value: string) { return value.replace(/📏.*$/, "").replace(/pls add whatsapp.*$/i, "").replace(/whatsapp[:：]?\s*\d+/gi, "").replace(/\s+/g, " ").trim(); }
+function styleLabelFor(product: (typeof products)[number]) {
+  const source = product.sizes.find((value) => /[;:|]/.test(value));
+  const style = source?.split(/[;:|]/)[0].trim();
+  return style ? `Style ${style}` : "";
+}
 function isSizeOnlyCardTitle(value: string) {
   const normalized = value.replace(/^[*#\s]+/, "").replace(/[：:]+$/, "").trim();
   const sizeToken = "(?:XXS|XS|S|M|L|XL|XXL|XXXL|4XL)";
@@ -421,12 +426,12 @@ export default function Home() {
                       {product.sourceProductId}
                     </div>
                   </div>
-                  {cardTitle && <div className="text-[9px] leading-tight truncate opacity-70">{cardTitle}</div>}
+                  {cardTitle && <div className="text-[9px] leading-tight truncate opacity-70">{cardTitle}</div>}{styleLabelFor(product) && <div className="text-[8px] leading-tight truncate opacity-45">{styleLabelFor(product)}</div>}
                 </article>
               );
             }
             
-            return <Fragment key={product.id}><article className={`product-card card-${index % 7}`} onClick={() => openProduct(product.id)} onMouseEnter={() => beginProductPreview(product.id)} onMouseLeave={() => endProductPreview(product.id)}><div className="product-image-wrap"><SafeProductImage sources={product.images} alt={title} loading={index < 8 ? "eager" : "lazy"} /><div className="image-wash" />{demoBadge(product.price) && <span className={`demo-product-badge ${demoBadge(product.price) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price)}</span>}{product.reviewStatus === "suspected" && <span className="suspected-review-badge" aria-label="Suspected category mismatch">SUSPECTED</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}<button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "Remove from saved items" : "Save product"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><button className={`dislike-button ${isDisliked ? "is-disliked" : ""}`} onClick={(event) => { event.stopPropagation(); toggleProductDislike(product.id); }} aria-label={isDisliked ? "Remove dislike" : "Not interested in this product"} title={isDisliked ? "Remove dislike" : "Not interested"}><ThumbsDown size={13} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={10} /></span></div><div className="product-info">{displayBrand && <div className="product-brand">{displayBrand}</div>}{cardTitle && <h3 className="product-name">{cardTitle}</h3>}<div className="product-price">{money(product.price, "USD")} <span className="product-currency">USD</span></div></div></article></Fragment>; 
+            return <Fragment key={product.id}><article className={`product-card card-${index % 7}`} onClick={() => openProduct(product.id)} onMouseEnter={() => beginProductPreview(product.id)} onMouseLeave={() => endProductPreview(product.id)}><div className="product-image-wrap"><SafeProductImage sources={product.images} alt={title} loading={index < 8 ? "eager" : "lazy"} /><div className="image-wash" />{demoBadge(product.price) && <span className={`demo-product-badge ${demoBadge(product.price) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price)}</span>}{product.reviewStatus === "suspected" && <span className="suspected-review-badge" aria-label="Suspected category mismatch">SUSPECTED</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}<button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "Remove from saved items" : "Save product"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><button className={`dislike-button ${isDisliked ? "is-disliked" : ""}`} onClick={(event) => { event.stopPropagation(); toggleProductDislike(product.id); }} aria-label={isDisliked ? "Remove dislike" : "Not interested in this product"} title={isDisliked ? "Remove dislike" : "Not interested"}><ThumbsDown size={13} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={10} /></span></div><div className="product-info">{displayBrand && <div className="product-brand">{displayBrand}</div>}{styleLabelFor(product) && <div className="product-style-label">{styleLabelFor(product)}</div>}{cardTitle && <h3 className="product-name">{cardTitle}</h3>}<div className="product-price">{money(product.price, "USD")} <span className="product-currency">USD</span></div></div></article></Fragment>; 
           })}
         </section>
         

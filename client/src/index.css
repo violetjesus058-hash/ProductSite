@@ -854,3 +854,27 @@ a { color:inherit; text-decoration:none; }
   .analytics-section-title > span { text-align: right; }
   .analytics-card-period { max-width: 102px; }
 }
+
+/* Source-product style variants: each captured Style remains a distinct catalog card while related options stay connected on detail pages. */
+.product-style-label { margin-bottom: 5px; color: var(--coral); font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.dossier-style-label { margin-top: 8px; color: var(--coral); font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.related-styles { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
+.related-styles-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+.related-styles-head > div { min-width: 0; }
+.related-styles-head span { display: block; color: var(--ink); font-size: 10px; font-weight: 800; letter-spacing: .12em; }
+.related-styles-head p { margin: 5px 0 0; color: var(--ink-soft); font-size: 11px; line-height: 1.45; }
+.related-styles-head > small { flex: 0 0 auto; color: var(--ink-soft); font-size: 10px; white-space: nowrap; }
+.related-style-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.related-style-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 7px 10px; align-items: center; min-width: 0; border: 1px solid var(--line); padding: 11px 12px; color: var(--ink); background: rgba(255,255,255,.25); text-decoration: none; transition: border-color .2s ease, background .2s ease, transform .2s ease; }
+.related-style-card > div { display: grid; gap: 4px; min-width: 0; }
+.related-style-card strong { overflow: hidden; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+.related-style-card > div span { color: var(--ink-soft); font-size: 11px; }
+.related-style-card > small { grid-column: 1 / 2; color: var(--ink-soft); font-size: 8px; font-weight: 800; letter-spacing: .1em; }
+.related-style-card > svg { grid-column: 2; grid-row: 1 / span 2; }
+.related-style-card:hover { border-color: var(--coral); background: rgba(201,88,70,.06); transform: translateY(-1px); }
+.related-style-card.is-current { border-color: var(--coral); background: rgba(201,88,70,.1); }
+.related-styles-note { margin: 12px 0 0; color: var(--ink-soft); font-size: 10px; line-height: 1.55; }
+@media (max-width:760px) {
+  .related-style-grid { grid-template-columns: 1fr; }
+  .related-style-card { padding: 10px; }
+}
