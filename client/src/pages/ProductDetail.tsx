@@ -11,6 +11,10 @@ import { initializeAnalytics, trackEvent } from "@/lib/analytics";
 
 const englishCategoryLabels: Record<string, string> = { clothing: "CLOTHING", shoe: "SHOES", pants: "PANTS", bags: "BAGS", fragrance: "FRAGRANCE", ACC: "ACCESSORIES", watches: "WATCHES" };
 type PlatformSource = { name: string; url: string; primary?: boolean };
+const hiddenPlatformNames = new Set(["acbuy", "allchinabuy", "mulebuy"]);
+function isHiddenPlatformSource(name: string) {
+  return hiddenPlatformNames.has(name.toLowerCase().replace(/[^a-z0-9]/g, ""));
+}
 function platformSourcesFor(product: (typeof products)[number]): PlatformSource[] {
   const sourceId = product.sourceProductId || product.id;
   const isKakobuy = /kakobuy\.com/i.test(product.url || "");
@@ -24,7 +28,7 @@ function platformSourcesFor(product: (typeof products)[number]): PlatformSource[
     if (url && !sources.some((source) => source.name === name)) sources.push({ name, url });
   }
   if (!isKakobuy && product.url && !sources.some((source) => source.name === "Fansbuy")) sources.unshift({ name: "Fansbuy", url: product.url, primary: true });
-  return sources;
+  return sources.filter((source) => !isHiddenPlatformSource(source.name));
 }
 function primarySourceFor(product: (typeof products)[number]) { return platformSourcesFor(product).find((source) => source.primary) || platformSourcesFor(product)[0]; }
 
