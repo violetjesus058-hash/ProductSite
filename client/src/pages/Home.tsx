@@ -214,8 +214,8 @@ export default function Home() {
     const term = query.trim();
     if (!term) return;
     const timer = window.setTimeout(() => {
-      trackEvent("search", { search_term: term.slice(0, 120), result_count: filteredProducts.length, category, brand });
-      if (filteredProducts.length === 0) trackEvent("search_no_result", { search_term: term.slice(0, 120), category, brand });
+      trackEvent("search", { query: term.slice(0, 120), result_count: filteredProducts.length, category, brand });
+      if (filteredProducts.length === 0) trackEvent("search_no_result", { query: term.slice(0, 120), result_count: 0, category, brand });
     }, 500);
     return () => window.clearTimeout(timer);
   }, [query, filteredProducts.length, category, brand]);
