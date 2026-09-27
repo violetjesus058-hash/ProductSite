@@ -14,7 +14,7 @@ import { initializeAnalytics, trackEvent, trackOnce } from "@/lib/analytics";
 
 function englishValue(value: string, fallback: string) { return /[\u4e00-\u9fff]/.test(value) ? fallback : value; }
 function localSetting(key: string, fallback: string) { if (typeof window === "undefined") return fallback; return window.localStorage.getItem(key) || fallback; }
-function cleanTitle(value: string) { return value.replace(/📏.*$/, "").replace(/pls add whatsapp.*$/i, "").replace(/whatsapp[:：]?\s*\d+/gi, "").replace(/\s+/g, " ").trim(); }
+function cleanTitle(value: string) { return value.replace(/📏.*$/, "").replace(/pls add whatsapp.*$/i, "").replace(/whatsapp[:：]?\s*\d+/gi, "").replace(/\s+/g, " ").replace(/\b(\w+)(\s+\1\b)+/gi, "$1").trim(); }
 function styleLabelFor(product: (typeof products)[number]) {
   const source = product.sizes.find((value) => /[;:|]/.test(value));
   const style = source?.split(/[;:|]/)[0].trim();
