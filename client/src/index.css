@@ -94,7 +94,7 @@ a { color:inherit; text-decoration:none; }
 .product-card:hover .view-stamp { opacity:1; transform:translateY(0); }
 .product-meta { padding:10px 2px 0; }
 .product-brand { min-height:12px; color:var(--ink-soft); font-size:10px; letter-spacing:.04em; text-transform:uppercase; }
-.product-name { margin-top:6px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size:12px; font-weight:700; }
+.product-name { margin-top:6px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; color:var(--ink); font-size:12px; font-weight:700; }
 .product-price { margin-top:9px; color:var(--ink); font-size:12px; font-weight:700; }
 /* Product card image system: one consistent portrait frame, no auto-height gray tail, while detail galleries keep their original aspect ratios. */
 .product-card .product-image-wrap { aspect-ratio:4 / 5; min-height:0 !important; background:var(--paper-deep); }
@@ -863,7 +863,6 @@ a { color:inherit; text-decoration:none; }
 }
 
 /* Source-product style variants: each captured Style remains a distinct catalog card while related options stay connected on detail pages. */
-.product-style-label { margin-bottom: 5px; color: var(--coral); font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
 .dossier-style-label { margin-top: 8px; color: var(--coral); font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
 .related-styles { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
 .related-styles-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
