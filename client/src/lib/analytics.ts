@@ -130,4 +130,5 @@ export function initializeAnalytics() {
   if (typeof window === "undefined") return;
   captureAttribution();
   trackOnce("session_start", "session", { referrer: document.referrer ? "external_or_previous" : "direct" });
+  trackOnce("page_view", window.location.pathname, { page_type: window.location.pathname.startsWith("/product/") ? "product_detail" : "catalog" });
 }

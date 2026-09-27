@@ -107,7 +107,7 @@ export default function Home() {
   const [category, setCategory] = useState(() => (secondPassRequested ? "ACC" : returnContext?.category || (auditResumeRequested ? auditSession?.category || "all" : "all")));
   const [brand, setBrand] = useState(() => returnContext?.brand || auditSession?.brand || "all");
   const [query, setQuery] = useState(() => returnContext?.query || auditSession?.query || "");
-  const [sort, setSort] = useState(() => returnContext?.sort || auditSession?.sort || "random"); // Keep the audit shuffle stable across reloads
+  const [sort, setSort] = useState(() => returnContext?.sort || auditSession?.sort || "curated"); // Show stronger products first for normal browsing; preserve audit sessions.
     const [favorites, setFavorites] = useState<string[]>(() => readFavorites());
   const [history, setHistory] = useState<HistoryEntry[]>(() => readHistory());
   const [engagement, setEngagement] = useState<EngagementEntry[]>(() => readEngagement());
@@ -160,6 +160,19 @@ export default function Home() {
   const [letterSpacingLevel, setLetterSpacingLevel] = useState(() => Number(localSetting("material-catalog:letter-spacing", "0")));
   
   useEffect(() => { initializeAnalytics(); }, []);
+  useEffect(() => {
+    const milestones = [25, 50, 75, 100];
+    const reportScrollDepth = () => {
+      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      const depth = Math.min(100, Math.round((window.scrollY / maxScroll) * 100));
+      milestones.filter((milestone) => depth >= milestone).forEach((milestone) => {
+        trackOnce("scroll_depth", `${window.location.pathname}:${milestone}`, { depth: milestone, page_type: "catalog" });
+      });
+    };
+    reportScrollDepth();
+    window.addEventListener("scroll", reportScrollDepth, { passive: true });
+    return () => window.removeEventListener("scroll", reportScrollDepth);
+  }, []);
   useEffect(() => { saveFavorites(favorites); }, [favorites]);
   const toggleProductDislike = (id: string) => { if (!allowMobileAction(`dislike:${id}`, 180)) return; setDislikes((current) => toggleDislike(id, !current.includes(id))); };
 
@@ -205,7 +218,14 @@ export default function Home() {
     } else if (sort === "price-high") {
       result.sort((a, b) => b.price - a.price);
     } else {
-      result.sort((a, b) => a.id.localeCompare(b.id));
+      result.sort((a, b) => {
+        const curatedScore = (product: (typeof products)[number]) =>
+          (isCuratedCategory(product) ? 4 : 0) +
+          (product.images.length >= 2 ? 2 : 0) +
+          (product.reviewStatus === "reviewed" ? 2 : 0) +
+          (product.catalogName && !/catalog item|essential apparel|essential jacket|essential jeans/i.test(product.catalogName) ? 1 : 0);
+        return curatedScore(b) - curatedScore(a) || a.id.localeCompare(b.id);
+      });
     }
     return result;
   }, [brand, category, isAiAuditView, query, sort, seenIds, shuffleSeed]);
@@ -431,7 +451,7 @@ export default function Home() {
               );
             }
             
-            return <Fragment key={product.id}><article className={`product-card card-${index % 7}`} onClick={() => openProduct(product.id)} onMouseEnter={() => beginProductPreview(product.id)} onMouseLeave={() => endProductPreview(product.id)}><div className="product-image-wrap"><SafeProductImage sources={product.images} alt={title} loading={index < 8 ? "eager" : "lazy"} /><div className="image-wash" />{demoBadge(product.price) && <span className={`demo-product-badge ${demoBadge(product.price) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price)}</span>}{product.reviewStatus === "suspected" && <span className="suspected-review-badge" aria-label="Suspected category mismatch">SUSPECTED</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}<button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "Remove from saved items" : "Save product"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><button className={`dislike-button ${isDisliked ? "is-disliked" : ""}`} onClick={(event) => { event.stopPropagation(); toggleProductDislike(product.id); }} aria-label={isDisliked ? "Remove dislike" : "Not interested in this product"} title={isDisliked ? "Remove dislike" : "Not interested"}><ThumbsDown size={13} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={10} /></span></div><div className="product-info">{displayBrand && <div className="product-brand">{displayBrand}</div>}{cardTitle && <h3 className="product-name">{cardTitle}</h3>}<div className="product-price">{money(product.price, "USD")} <span className="product-currency">USD</span></div></div></article></Fragment>; 
+            return <Fragment key={product.id}><article className={`product-card card-${index % 7}`} onClick={() => openProduct(product.id)} onMouseEnter={() => beginProductPreview(product.id)} onMouseLeave={() => endProductPreview(product.id)}><div className="product-image-wrap"><SafeProductImage sources={product.images} alt={title} loading={index < 8 ? "eager" : "lazy"} /><div className="image-wash" />{demoBadge(product.price) && <span className={`demo-product-badge ${demoBadge(product.price) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price)}</span>}{product.reviewStatus === "suspected" && <span className="suspected-review-badge" aria-label="Suspected category mismatch">SUSPECTED</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}<button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "Remove from saved items" : "Save product"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><button className={`dislike-button ${isDisliked ? "is-disliked" : ""}`} onClick={(event) => { event.stopPropagation(); toggleProductDislike(product.id); }} aria-label={isDisliked ? "Remove dislike" : "Not interested in this product"} title={isDisliked ? "Remove dislike" : "Not interested"}><ThumbsDown size={13} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={10} /></span><span className="mobile-view-details">VIEW DETAILS <ArrowUpRight size={11} /></span></div><div className="product-info">{displayBrand && <div className="product-brand">{displayBrand}</div>}{cardTitle && <h3 className="product-name">{cardTitle}</h3>}<div className="product-price">{money(product.price, "USD")} <span className="product-currency">USD</span></div></div></article></Fragment>; 
           })}
         </section>
         
