@@ -5,6 +5,7 @@ import re
 from collections import defaultdict
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
+from urllib.parse import quote
 
 from openpyxl import load_workbook
 from PIL import Image, ImageFilter, ImageStat
@@ -32,12 +33,21 @@ def canon(url: object) -> str:
 def platform_links_for(source_id: str) -> dict[str, str]:
     """Build additional agent-platform URLs from the existing Weidian ID only."""
     weidian_url = f'https://weidian.com/item.html?itemID={source_id}'
+    source_url = f'https://shop1784277725.v.weidian.com/item.html?itemID={source_id}'
+    encoded_source_url = quote(source_url, safe='')
     return {
         'Litbuy': f'https://litbuy.com/product/weidian/{source_id}?inviteCode=XXGYH4Z80',
         'GTbuy': f'https://gtbuy.com/product/weidian/{source_id}?inviteCode=XO78PVRZW',
         'Oopbuy': f'https://oopbuy.com/product/weidian/{source_id}?inviteCode=Y5DH4UF2W',
         'Hipobuy': f'https://hipobuy.com/product/weidian/{source_id}?inviteCode=P6PP29VX7',
         'Fansbuy': f'https://fansbuy.com/item-micro-{source_id}.html?promotionCode=R0dfTU9DRzA2VTk',
+        'RizzitGO': f'https://rizzitgo.com/detail-page/?goodsId={source_id}&source=3',
+        'ZentBuy': f'https://zentbuy.com/product/weidian/{source_id}?linkSearch=true',
+        'LoloBuy': f'https://www.lolobuy.com/productDetail/1791445181801101?url={source_url}',
+        'PikoBuy': f'https://www.pikobuy.com/product/detail?productPlatform=WEIDIAN&productUrl={encoded_source_url}',
+        'BoonBuy': f'https://boonbuy.com/product/weidian/{source_id}',
+        'LoongBuy': f'https://loongbuy.com/product-details?url={source_url}',
+        'Hubbuy': f'https://hubbuy.com/product/2/{source_id}',
         'LoveGoBuy': f'https://www.lovegobuy.com/product?shop_type=weidian&id={source_id}&invite_code=U577HX',
         'Hoobuy': f'https://hoobuy.com/product/2/{source_id}?inviteCode=K8l2grxX',
         'UsFans': f'https://www.usfans.com/product/3/{source_id}?ref=BCSLQC',
