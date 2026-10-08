@@ -6,7 +6,15 @@ const dataPath = path.join(root, "client/src/data/products.ts");
 const publicDir = path.join(root, "client/public");
 const siteUrl = "https://productsite-8wf.pages.dev";
 const source = fs.readFileSync(dataPath, "utf8");
-const ids = [...source.matchAll(/\"id\"\s*:\s*\"([^\"]+)\"/g)].map((match) => match[1]);
+let ids = [...source.matchAll(/\"id\"\s*:\s*\"([^\"]+)\"/g)].map((match) => match[1]);
+if (ids.length === 0 && source.includes("JSON.parse(")) {
+  const open = source.indexOf("JSON.parse(") + "JSON.parse(".length;
+  const close = source.indexOf(") as Product[]", open);
+  if (close > open) {
+    const serialized = JSON.parse(source.slice(open, close));
+    ids = JSON.parse(serialized).map((product) => product.id).filter(Boolean);
+  }
+}
 const uniqueIds = [...new Set(ids)];
 const urls = [
   { loc: `${siteUrl}/`, changefreq: "daily", priority: "1.0" },

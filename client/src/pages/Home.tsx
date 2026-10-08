@@ -3,6 +3,7 @@ import { Fragment, startTransition, useEffect, useLayoutEffect, useMemo, useRef,
 import { useLocation } from "wouter";
 import { ArrowUpRight, Bell, ChevronDown, Heart, History as HistoryIcon, Home as HomeIcon, MessageCircle, Search, Settings2, X, RefreshCw, CheckCircle2, ThumbsDown } from "lucide-react";
 import { products, categoryLabels, categoryOrder } from "@/data/products";
+import { styleImages } from "@/data/style-images";
 import { formatVisitTime, readDislikes, readEngagement, readFavorites, readHistory, saveFavorites, toggleDislike, type HistoryEntry, type EngagementEntry } from "@/lib/catalogMemory";
 import { shouldAllowAction } from "@/lib/mobileActionGuard";
 import RequestProductDialog from "@/components/RequestProductDialog";
@@ -16,6 +17,7 @@ function englishValue(value: string, fallback: string) { return /[\u4e00-\u9fff]
 function localSetting(key: string, fallback: string) { if (typeof window === "undefined") return fallback; return window.localStorage.getItem(key) || fallback; }
 function cleanTitle(value: string) { return value.replace(/📏.*$/, "").replace(/pls add whatsapp.*$/i, "").replace(/whatsapp[:：]?\s*\d+/gi, "").replace(/\s+/g, " ").replace(/\b(\w+)(\s+\1\b)+/gi, "$1").trim(); }
 function styleLabelFor(product: (typeof products)[number]) {
+  if (product.styleLabel) return `Style ${product.styleLabel}`;
   const source = product.sizes.find((value) => /[;:|]/.test(value));
   const style = source?.split(/[;:|]/)[0].trim();
   return style ? `Style ${style}` : "";
@@ -429,7 +431,8 @@ export default function Home() {
       {visible.length > 0 ? <>
         <section className={isAiAuditView ? "grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2" : "masonry-grid"} aria-label="Product list" onMouseLeave={() => Object.keys(hoverTimers.current).forEach(endProductPreview)}>
           {visible.map((product, index) => { 
-            const image = product.images[0]; 
+            const styleImage = product.sourceProductId && product.styleKey ? styleImages[product.sourceProductId]?.[product.styleKey.toLowerCase()] : "";
+            const image = styleImage || product.images[0];
             const isFav = favorites.includes(product.id); 
             const isDisliked = dislikes.includes(product.id);
             const title = englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`); 

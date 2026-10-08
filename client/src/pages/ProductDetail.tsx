@@ -58,11 +58,13 @@ function englishValue(value: string, fallback: string) { return /[\u4e00-\u9fff]
 function isApparelProduct(product: (typeof products)[number]) { return product.category === "clothing" || product.category === "pants"; }
 function optionHeadingFor(product: (typeof products)[number]) { return isApparelProduct(product) ? "Size" : "Size / Option"; }
 function styleLabelFor(product: (typeof products)[number]) {
+  if (product.styleLabel) return `Style ${product.styleLabel}`;
   const source = product.sizes.find((value) => /[;:|]/.test(value));
   const style = source?.split(/[;:|]/)[0].trim();
   return style ? `Style ${style}` : "";
 }
 function styleKeyFor(product: (typeof products)[number]) {
+  if (product.styleKey) return product.styleKey.toLowerCase();
   const source = product.sizes.find((value) => /[;:|]/.test(value));
   return source?.split(/[;:|]/)[0].trim().toLowerCase() || "";
 }
