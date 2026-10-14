@@ -3,7 +3,7 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "wouter";
 import { ArrowLeft, ArrowUpRight, Check, ChevronLeft, ChevronRight, Heart, Info, Share2, ShoppingBag } from "lucide-react";
-import { products } from "@/data/products";
+import { products } from "@/data/catalogProducts";
 import { styleImages } from "@/data/style-images";
 import { readEngagement, readFavorites, recordDwellTime, rememberVisit, saveFavorites } from "@/lib/catalogMemory";
 import SafeProductImage from "@/components/SafeProductImage";

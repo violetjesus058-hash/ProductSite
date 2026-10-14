@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { ArrowLeft, CheckCircle2, Download, FileUp, RefreshCw } from "lucide-react";
 import { Link } from "wouter";
-import { products } from "@/data/products";
+import { products } from "@/data/catalogProducts";
 
 const workerUrl = String(import.meta.env.VITE_CLOUDFLARE_WORKER_URL || "").replace(/\/$/, "");
 const headers = ["id", "sourceProductId", "name", "catalogName", "category", "subCategory", "brand", "price", "referencePrice", "currency", "description", "sizes", "colors", "stock", "shop", "shopUrl", "url", "images", "tags", "collectedAt", "reviewStatus", "reviewNote", "platformLinks"];

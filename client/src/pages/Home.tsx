@@ -2,7 +2,7 @@
 import { Fragment, startTransition, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { ArrowUpRight, Bell, ChevronDown, Heart, History as HistoryIcon, Home as HomeIcon, MessageCircle, Search, Settings2, X, RefreshCw, CheckCircle2, ThumbsDown } from "lucide-react";
-import { products, categoryLabels, categoryOrder } from "@/data/products";
+import { products, categoryLabels, categoryOrder } from "@/data/catalogProducts";
 import { styleImages } from "@/data/style-images";
 import { formatVisitTime, readDislikes, readEngagement, readFavorites, readHistory, saveFavorites, toggleDislike, type HistoryEntry, type EngagementEntry } from "@/lib/catalogMemory";
 import { shouldAllowAction } from "@/lib/mobileActionGuard";

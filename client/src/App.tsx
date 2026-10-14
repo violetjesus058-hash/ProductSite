@@ -1,28 +1,32 @@
 // Editorial Pinboard reminder: fixed catalog rail, editorial typography, ink-on-paper palette, coral interaction signal.
-import { useEffect, useState } from "react";
-import { Route, Switch } from "wouter";
+import { lazy, Suspense, useEffect, useState } from "react";
+import { Route, Switch, useLocation } from "wouter";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
-import { products } from "./data/products";
-import ProductDetail from "./pages/ProductDetail";
-import AdminRequests from "./pages/AdminRequests";
-import AdminAnalytics from "./pages/AdminAnalytics";
-import PromotionLinkBuilder from "./pages/PromotionLinkBuilder";
-import AdminProductImport from "./pages/AdminProductImport";
-import RequestStatus from "./pages/RequestStatus";
-import NotFound from "./pages/NotFound";
+const Home = lazy(() => import("./pages/Home"));
+const ProductDetail = lazy(() => import("./pages/ProductDetail"));
+const AdminRequests = lazy(() => import("./pages/AdminRequests"));
+const AdminAnalytics = lazy(() => import("./pages/AdminAnalytics"));
+const PromotionLinkBuilder = lazy(() => import("./pages/PromotionLinkBuilder"));
+const AdminProductImport = lazy(() => import("./pages/AdminProductImport"));
+const RequestStatus = lazy(() => import("./pages/RequestStatus"));
+const SpreadsheetCatalog = lazy(() => import("./pages/SpreadsheetCatalog"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 export default function App() {
+  const [location] = useLocation();
   const [, setCatalogVersion] = useState(0);
   useEffect(() => {
+    if (location === "/spreadsheet") return;
+    if (!(location === "/" || location.startsWith("/product/") || location.startsWith("/admin/products/import"))) return;
     const workerUrl = String(import.meta.env.VITE_CLOUDFLARE_WORKER_URL || "").replace(/\/$/, "");
     if (!workerUrl) return;
-    fetch(`${workerUrl}/api/products/overrides`).then((response) => response.ok ? response.json() : null).then((payload) => {
+    fetch(`${workerUrl}/api/products/overrides`).then((response) => response.ok ? response.json() : null).then(async (payload) => {
       const overrides: Array<Record<string, unknown> & { id?: string }> = Array.isArray(payload?.items) ? payload.items : [];
       if (!overrides.length) return;
+      const { products } = await import("./data/catalogProducts");
       const byId = new Map(overrides.map((item: { id?: unknown }) => [String(item.id || ""), item]));
       const merged = products.map((product) => { const override = byId.get(product.id); return override ? { ...product, ...override } as typeof product : product; });
       const existingIds = new Set(products.map((product) => product.id));
@@ -30,7 +34,7 @@ export default function App() {
       products.splice(0, products.length, ...merged, ...additions);
       setCatalogVersion((value) => value + 1);
     }).catch(() => undefined);
-  }, []);
+  }, [location]);
   useEffect(() => {
     const preventImageDrag = (event: DragEvent) => {
       const target = event.target as HTMLElement | null;
@@ -52,17 +56,20 @@ export default function App() {
       <ThemeProvider defaultTheme="light">
         <TooltipProvider>
           <Toaster />
-          <Switch>
-            <Route path="/" component={Home} />
-            <Route path="/product/:id" component={ProductDetail} />
-            <Route path="/admin/requests" component={AdminRequests} />
-            <Route path="/admin/analytics" component={AdminAnalytics} />
-            <Route path="/admin/promotion-links" component={PromotionLinkBuilder} />
-            <Route path="/admin/products/import" component={AdminProductImport} />
-            <Route path="/requests/status" component={RequestStatus} />
-            <Route path="/404" component={NotFound} />
-            <Route component={NotFound} />
-          </Switch>
+          <Suspense fallback={<div className="route-loading" role="status">Loading…</div>}>
+            <Switch>
+              <Route path="/" component={Home} />
+              <Route path="/spreadsheet" component={SpreadsheetCatalog} />
+              <Route path="/product/:id" component={ProductDetail} />
+              <Route path="/admin/requests" component={AdminRequests} />
+              <Route path="/admin/analytics" component={AdminAnalytics} />
+              <Route path="/admin/promotion-links" component={PromotionLinkBuilder} />
+              <Route path="/admin/products/import" component={AdminProductImport} />
+              <Route path="/requests/status" component={RequestStatus} />
+              <Route path="/404" component={NotFound} />
+              <Route component={NotFound} />
+            </Switch>
+          </Suspense>
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
