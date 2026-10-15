@@ -375,7 +375,35 @@ async function getAnalyticsSummary(request: Request, env: Env) {
 function csvEscape(value: unknown) { const text = typeof value === "string" ? value : value == null ? "" : String(value); return /[",\n\r]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text; }
 function productTemplateResponse(request: Request, env: Env) { return new Response(`${productTemplateHeaders.join(",")}\n`, { status: 200, headers: { ...Object.fromEntries(corsHeaders(request, env)), "content-type": "text/csv; charset=UTF-8", "content-disposition": 'attachment; filename="productsite-product-template.csv"' } }); }
 const affiliateTemplates: Record<string, (id: string) => string> = {
-  Litbuy: (id) => `https://litbuy.com/product/weidian/${id}?inviteCode=XXGYH4Z80`, GTBuy: (id) => `https://gtbuy.com/product/weidian/${id}?inviteCode=XO78PVRZW`, Oopbuy: (id) => `https://oopbuy.com/product/weidian/${id}?inviteCode=Y5DH4UF2W`, Hipobuy: (id) => `https://hipobuy.com/product/weidian/${id}?inviteCode=P6PP29VX7`, Fansbuy: (id) => `https://fansbuy.com/item-micro-${id}.html?promotionCode=R0dfTU9DRzA2VTk`, LoveGoBuy: (id) => `https://www.lovegobuy.com/product?shop_type=weidian&id=${id}&invite_code=U577HX`, Hoobuy: (id) => `https://hoobuy.com/product/2/${id}?inviteCode=K8l2grxX`, UsFans: (id) => `https://www.usfans.com/product/3/${id}?ref=BCSLQC`, AllChinaBuy: (id) => `https://www.allchinabuy.com/en/page/buy/?nTag=Home-search&from=search-input&_search=url&position=&url=https%3A%2F%2Fweidian.com%2Fitem.html%3FitemID%3D${id}&partnercode=EEa5go`, Mulebuy: (id) => `https://mulebuy.com/product/?shop_type=weidian&id=${id}&ref=200209428`, AcBuy: (id) => `https://www.acbuy.com/product?id=${id}&source=WD&u=3FLN4S`, Joyagoo: (id) => `https://joyagoo.com/product?platform=WEIDIAN&id=${id}&ref=300950678`, OrientDig: (id) => `https://orientdig.com/product/?shop_type=weidian&id=${id}&ref=100245718`, Sugargoo: (id) => `https://www.sugargoo.com/products?productLink=${encodeURIComponent(`https://weidian.com/item.html?itemID=${id}`)}&memberId=3229305473717352480`, BBDBuyEU: (id) => `https://www.bbdbuyeu.com/goods/WEIDIAN/${id}?inviteCode=j4zwj7`, VigorBuy: (id) => `https://vigorbuy.com/product/2/${id}?inviteCode=jkNlpqAP`, Fishgoo: (id) => `https://www.fishgoo.com/#/product?productLink=${encodeURIComponent(`https://weidian.com/item.html?itemID=${id}`)}&memberId=TG2665ux5KieI`,
+  Litbuy: (id) => `https://litbuy.com/product/weidian/${id}?inviteCode=XXGYH4Z80`,
+  GTBuy: (id) => `https://gtbuy.com/product/weidian/${id}?inviteCode=XO78PVRZW`,
+  Oopbuy: (id) => `https://oopbuy.com/product/weidian/${id}?inviteCode=Y5DH4UF2W`,
+  Hipobuy: (id) => `https://hipobuy.com/product/weidian/${id}?inviteCode=P6PP29VX7`,
+  Fansbuy: (id) => `https://fansbuy.com/item-micro-${id}.html?promotionCode=R0dfTU9DRzA2VTk`,
+  LoveGoBuy: (id) => `https://www.lovegobuy.com/product?shop_type=weidian&id=${id}&invite_code=U577HX`,
+  Hoobuy: (id) => `https://hoobuy.com/product/2/${id}?inviteCode=K8l2grxX`,
+  UsFans: (id) => `https://www.usfans.com/product/3/${id}?ref=BCSLQC`,
+  AllChinaBuy: (id) => `https://www.allchinabuy.com/en/page/buy/?nTag=Home-search&from=search-input&_search=url&position=&url=${encodeURIComponent(`https://weidian.com/item.html?itemID=${id}`)}&partnercode=EEa5go`,
+  Mulebuy: (id) => `https://mulebuy.com/product/?shop_type=weidian&id=${id}&ref=200209428`,
+  AcBuy: (id) => `https://www.acbuy.com/product?id=${id}&source=WD&u=3FLN4S`,
+  Joyagoo: (id) => `https://joyagoo.com/product?id=${id}&platform=WEIDIAN&productUrl=&productPwd=`,
+  EastMallBuy: (id) => `https://eastmallbuy.com/web/#/item/index?tp=1688&tid=&searchlang=en&url=${encodeURIComponent(`https://shop1784277725.v.weidian.com/item.html?itemID=${id}`)}&inviter=valeriyachentsov`,
+  Okeyhaul: (id) => `https://www.okeyhaul.com/mall/detail?sourceUrl=true&spuid=${id}`,
+  PonyBuy: (id) => `https://www.ponybuy.com/products/3/${id}`,
+  HubbuyCN: (id) => `https://www.hubbuy.com/product/2/${id}`,
+  CSSBuy: (id) => `https://www.cssbuy.com/shop/goodsDetail?type=weidian&id=${id}`,
+  AnovaBuy: (id) => `https://anovabuy.com/product/${id}?from=search&ecom=3`,
+  MyCNBox: (id) => `https://mycnbox.com/goodsDetail?mallType=weidian&itemId=${id}&sourcePage=SEARCH`,
+  iTaoBuy: (id) => `https://www.itaobuy.com/product-detail?url=${encodeURIComponent(`https://shop1784277725.v.weidian.com/item.html?itemID=${id}`)}`,
+  Didpop: (id) => `https://www.didpop.com/en/page/buy/?nTag=Home-search&from=search-input&url=${encodeURIComponent(`https://shop1784277725.v.weidian.com/item.html?itemID=${id}`)}`,
+  BBDBuy: (id) => `https://www.bbdbuy.com/goods/WEIDIAN/${id}?from=search`,
+  CnShopper: (id) => `https://cnshopper.com/product/weidian/${id}`,
+  ESGOBuy: (id) => `https://www.esgobuy.com/productDetail?url=${encodeURIComponent(`https://shop1784277725.v.weidian.com/item.html?itemID=${id}`)}`,
+  OrientDig: (id) => `https://orientdig.com/product/?shop_type=weidian&id=${id}&ref=100245718`,
+  Sugargoo: (id) => `https://www.sugargoo.com/products?productLink=${encodeURIComponent(`https://weidian.com/item.html?itemID=${id}`)}&memberId=3229305473717352480`,
+  BBDBuyEU: (id) => `https://www.bbdbuyeu.com/goods/WEIDIAN/${id}?inviteCode=j4zwj7`,
+  VigorBuy: (id) => `https://vigorbuy.com/product/2/${id}?inviteCode=jkNlpqAP`,
+  Fishgoo: (id) => `https://www.fishgoo.com/#/product?productLink=${encodeURIComponent(`https://weidian.com/item.html?itemID=${id}`)}&memberId=TG2665ux5KieI`,
 };
 export function extractWeidianId(value: string) {
   if (!validUrl(value)) return "";

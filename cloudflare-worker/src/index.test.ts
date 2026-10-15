@@ -52,6 +52,22 @@ describe("Cloudflare product request helpers", () => {
     expect(result.id).toBe(id); expect(result.links.Kakobuy).toContain("old"); expect(result.links.Fansbuy).toContain(id); expect(result.links.Litbuy).toContain(id);
   });
 
+  it("generates the supplied Weidian templates for the newly listed platforms", () => {
+    const id = "7543342819";
+    const links = generateAffiliateLinks(`https://shop1784277725.v.weidian.com/item.html?itemID=${id}`).links;
+    expect(links.Joyagoo).toBe(`https://joyagoo.com/product?id=${id}&platform=WEIDIAN&productUrl=&productPwd=`);
+    expect(links.Okeyhaul).toBe(`https://www.okeyhaul.com/mall/detail?sourceUrl=true&spuid=${id}`);
+    expect(links.PonyBuy).toBe(`https://www.ponybuy.com/products/3/${id}`);
+    expect(links.HubbuyCN).toBe(`https://www.hubbuy.com/product/2/${id}`);
+    expect(links.CSSBuy).toBe(`https://www.cssbuy.com/shop/goodsDetail?type=weidian&id=${id}`);
+    expect(links.AnovaBuy).toBe(`https://anovabuy.com/product/${id}?from=search&ecom=3`);
+    expect(links.MyCNBox).toBe(`https://mycnbox.com/goodsDetail?mallType=weidian&itemId=${id}&sourcePage=SEARCH`);
+    expect(links.BBDBuy).toBe(`https://www.bbdbuy.com/goods/WEIDIAN/${id}?from=search`);
+    expect(links.CnShopper).toBe(`https://cnshopper.com/product/weidian/${id}`);
+    expect(links.Hagobuy).toBeUndefined();
+    expect(links.UUFans).toBeUndefined();
+  });
+
   it("validates and normalizes CSV product rows without accepting unsafe links", () => {
     const normalized = normalizeProductImportRow({ id: "new-1", name: "Everyday Jacket", category: "clothing", price: "29.5", sizes: "S|M|L", images: "https://cdn.example.com/jacket.webp", url: "https://kakobuy.com/item/1" });
     expect(normalized).toHaveProperty("value");
