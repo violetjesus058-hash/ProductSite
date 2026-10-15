@@ -125,11 +125,6 @@ function saveLocalPreference(key: string, value: string) {
 }
 
 function menuPermissionCopy(menuName: string) {
-  let language = "en";
-  try { language = (navigator.languages?.[0] || navigator.language || "en").toLowerCase(); }
-  catch { /* Use English when the browser language is unavailable. */ }
-  if (/^zh-(tw|hk|mo|hant)/i.test(language)) return { title: "沒有權限", message: `目前目錄沒有「${menuName}」選單的操作權限。`, dismissLabel: "關閉權限提示" };
-  if (language.startsWith("zh")) return { title: "无权限", message: `当前目录没有“${menuName}”菜单的操作权限。`, dismissLabel: "关闭权限提示" };
   return { title: "No permission", message: `You don't have permission to use the “${menuName}” menu in this catalog.`, dismissLabel: "Dismiss permission notice" };
 }
 
@@ -209,6 +204,7 @@ function ImageThumb({ item }: { item: CatalogPageRow }) {
 
 export default function SpreadsheetCatalog() {
   const [, setLocation] = useLocation();
+  useEffect(() => { document.documentElement.lang = "en"; }, []);
   const [view, setView] = useState<ViewState>(readViewState);
   const [shuffleSeed] = useState(() => {
     const seed = new Uint32Array(1);
@@ -619,10 +615,10 @@ export default function SpreadsheetCatalog() {
 
   return <main className="spreadsheet-shell" data-theme={catalogTheme}>
     <header className="spreadsheet-header">
-      <Link href="/" className="spreadsheet-brand" aria-label="RIVORA 商品站"><img src="/branding/rivora-icon.png" alt="" /><span>RIVORA</span></Link>
+      <Link href="/" className="spreadsheet-brand" aria-label="RIVORA product catalog"><img src="/branding/rivora-icon.png" alt="" /><span>RIVORA</span></Link>
       <div className="spreadsheet-document-name"><strong>RIVORA Product Catalog</strong><small>Interactive catalog</small></div>
-      <nav aria-label="主导航"><a href="https://productsite-8wf.pages.dev/">商品站</a><a href="https://productsite-8wf.pages.dev/spreadsheet" aria-current="page">表格</a></nav>
-      <a href="https://productsite-8wf.pages.dev/" className="spreadsheet-back"><ArrowLeft size={15} /> 商品站</a>
+      <nav aria-label="Main navigation"><a href="https://productsite-8wf.pages.dev/">Product Catalog</a><a href="https://productsite-8wf.pages.dev/spreadsheet" aria-current="page">Catalog Table</a></nav>
+      <a href="https://productsite-8wf.pages.dev/" className="spreadsheet-back"><ArrowLeft size={15} /> Product Catalog</a>
       <div className="spreadsheet-share-control share-control">
         <button className="spreadsheet-share-button detail-share-button" type="button" onClick={() => setShareOpen((open) => !open)} aria-label="Share this catalog" aria-haspopup="menu" aria-expanded={shareOpen} aria-controls="spreadsheet-share-menu" title="Share this catalog"><Share2 size={16} aria-hidden="true" /><span>Share</span></button>
         {shareOpen && <div className="spreadsheet-share-menu share-menu" id="spreadsheet-share-menu" role="menu" aria-label="Share this catalog"><div className="share-menu-title">SHARE THIS CATALOG</div><button className="share-copy" type="button" role="menuitem" onClick={() => { void copyCatalogLink(); }}><span>{linkCopied ? "Link copied" : "Copy catalog link"}</span>{linkCopied ? <Check size={14} /> : <Copy size={14} />}</button>{shareLinks.map((item) => <a key={item.name} href={item.href} target={item.name === "Email" ? undefined : "_blank"} rel={item.name === "Email" ? undefined : "noopener noreferrer"} role="menuitem" onClick={() => setShareOpen(false)}>{item.name}<ExternalLink size={13} aria-hidden="true" /></a>)}{typeof navigator !== "undefined" && "share" in navigator && <button className="share-native" type="button" role="menuitem" onClick={() => { void shareCatalog(); }}>More sharing options<Share2 size={13} aria-hidden="true" /></button>}</div>}

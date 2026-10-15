@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { getSiteLanguage } from "./lib/siteLanguage";
 const Home = lazy(() => import("./pages/Home"));
 const ProductDetail = lazy(() => import("./pages/ProductDetail"));
 const AdminRequests = lazy(() => import("./pages/AdminRequests"));
@@ -18,6 +19,7 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 export default function App() {
   const [location] = useLocation();
   const [, setCatalogVersion] = useState(0);
+  useEffect(() => { document.documentElement.lang = location === "/spreadsheet" ? "en" : getSiteLanguage() === "zh" ? "zh-CN" : "en"; }, [location]);
   useEffect(() => {
     if (location === "/spreadsheet") return;
     if (!(location === "/" || location.startsWith("/product/") || location.startsWith("/admin/products/import"))) return;
