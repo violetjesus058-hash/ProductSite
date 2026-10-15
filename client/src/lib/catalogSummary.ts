@@ -1,4 +1,4 @@
-import { curatedPriority, isLongSleeve, LONG_SLEEVE_CATEGORY } from "./catalogOrdering.mjs";
+import { isLongSleeve, LONG_SLEEVE_CATEGORY } from "./catalogOrdering.mjs";
 export type CatalogSummary = {
   id: string;
   sourceProductId: string;
@@ -17,9 +17,57 @@ export type CatalogSummary = {
   hasStyleImage: boolean;
   priceCheckedAt: string;
 };
-export type CatalogSort = "curated" | "price-low" | "price-high" | "name" | "recent";
-export type CatalogQuery = { category?: string; platform?: string; sort?: CatalogSort };
+export type CatalogSort = "random" | "price-low" | "price-high" | "name" | "recent";
+export type CatalogQuery = { category?: string; platform?: string; sort?: CatalogSort; seed?: number | string };
+
 function normalized(value: string | undefined) { return (value || "").normalize("NFKC").trim().toLocaleLowerCase(); }
+
+function seededRandom(seed: number | string) {
+  let state = 2166136261;
+  for (const character of String(seed)) state = Math.imul(state ^ character.charCodeAt(0), 16777619);
+  return () => {
+    state += 0x6D2B79F5;
+    let value = state;
+    value = Math.imul(value ^ (value >>> 15), value | 1);
+    value ^= value + Math.imul(value ^ (value >>> 7), value | 61);
+    return ((value ^ (value >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function shuffle<T>(items: T[], random: () => number) {
+  const result = [...items];
+  for (let index = result.length - 1; index > 0; index -= 1) {
+    const target = Math.floor(random() * (index + 1));
+    [result[index], result[target]] = [result[target], result[index]];
+  }
+  return result;
+}
+
+/** Randomize products per visit and interleave styles so one product does not occupy adjacent rows. */
+export function randomizeCatalogItems(items: CatalogSummary[], seed: number | string): CatalogSummary[] {
+  const random = seededRandom(seed);
+  const grouped = new Map<string, CatalogSummary[]>();
+  for (const item of items) {
+    const key = item.sourceProductId || item.id;
+    const group = grouped.get(key) || [];
+    group.push(item);
+    grouped.set(key, group);
+  }
+
+  const groups = shuffle([...grouped.entries()].map(([key, group]) => ({ key, items: shuffle(group, random), offset: 0 })), random);
+  const result: CatalogSummary[] = [];
+  let previousGroup = "";
+  while (result.length < items.length) {
+    let candidates = groups.filter((group) => group.offset < group.items.length && group.key !== previousGroup);
+    if (!candidates.length) candidates = groups.filter((group) => group.offset < group.items.length);
+    const selected = candidates[Math.floor(random() * candidates.length)];
+    result.push(selected.items[selected.offset]);
+    selected.offset += 1;
+    previousGroup = selected.key;
+  }
+  return result;
+}
+
 export function filterCatalogItems(items: CatalogSummary[], query: CatalogQuery): CatalogSummary[] {
   const category = normalized(query.category);
   const platform = normalized(query.platform);
@@ -28,14 +76,15 @@ export function filterCatalogItems(items: CatalogSummary[], query: CatalogQuery)
     if (platform && !item.platformKeys.some((key) => normalized(key) === platform)) return false;
     return true;
   });
-  switch (query.sort || "curated") {
+  switch (query.sort || "random") {
     case "price-low": return filtered.sort((a, b) => a.price - b.price || a.id.localeCompare(b.id));
     case "price-high": return filtered.sort((a, b) => b.price - a.price || a.id.localeCompare(b.id));
     case "name": return filtered.sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
     case "recent": return filtered.sort((a, b) => (b.priceCheckedAt || "").localeCompare(a.priceCheckedAt || "") || a.id.localeCompare(b.id));
-    default: return filtered.sort((a, b) => curatedPriority(a) - curatedPriority(b));
+    default: return randomizeCatalogItems(filtered, query.seed ?? 0);
   }
 }
+
 export function paginateCatalogItems<T>(items: T[], page: number, pageSize: number) {
   const safePageSize = Math.max(1, Math.floor(pageSize));
   const totalPages = Math.max(1, Math.ceil(items.length / safePageSize));

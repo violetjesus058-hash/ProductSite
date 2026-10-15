@@ -136,13 +136,13 @@ function menuPermissionCopy(menuName: string) {
 function readViewState(): ViewState {
   const params = new URLSearchParams(window.location.search);
   const sortValue = params.get("sort");
-  const allowedSorts: CatalogSort[] = ["curated", "price-low", "price-high", "name", "recent"];
+  const allowedSorts: CatalogSort[] = ["random", "price-low", "price-high", "name", "recent"];
   const parsedPage = Number(params.get("page") || "1");
   const requestedPlatform = normalizePlatformName(params.get("platform") || "");
   return {
     category: params.get("category") || "",
     platform: requestedPlatform === "all" || requestedPlatform === "allplatforms" ? "" : requestedPlatform,
-    sort: allowedSorts.includes(sortValue as CatalogSort) ? sortValue as CatalogSort : "curated",
+    sort: allowedSorts.includes(sortValue as CatalogSort) ? sortValue as CatalogSort : "random",
     page: Number.isFinite(parsedPage) ? Math.max(1, Math.floor(parsedPage)) : 1,
   };
 }
@@ -210,6 +210,14 @@ function ImageThumb({ item }: { item: CatalogPageRow }) {
 export default function SpreadsheetCatalog() {
   const [, setLocation] = useLocation();
   const [view, setView] = useState<ViewState>(readViewState);
+  const [shuffleSeed] = useState(() => {
+    const seed = new Uint32Array(1);
+    if (typeof window !== "undefined" && window.crypto?.getRandomValues) {
+      window.crypto.getRandomValues(seed);
+      return seed[0];
+    }
+    return Math.floor(Math.random() * 0x1_0000_0000);
+  });
   const [catalogTheme, setCatalogTheme] = useState<"light" | "dark">(() => readLocalPreference(THEME_STORAGE_KEY) === "dark" ? "dark" : "light");
   const [entryChooserOpen, setEntryChooserOpen] = useState(() =>
     ENTRY_CHOOSER_ENABLED && (isEntryChooserPreviewForced() || !readLocalPreference(ENTRY_CHOICE_KEY))
@@ -292,7 +300,7 @@ export default function SpreadsheetCatalog() {
     for (const key of ["q", "category", "platform", "sort", "page"]) params.delete(key);
     if (view.category) params.set("category", view.category);
     if (view.platform) params.set("platform", view.platform);
-    if (view.sort !== "curated") params.set("sort", view.sort);
+    if (view.sort !== "random") params.set("sort", view.sort);
     if (view.page > 1) params.set("page", String(view.page));
     window.history.replaceState(window.history.state, "", `${url.pathname}?${params.toString()}`);
   }, [view]);
@@ -368,8 +376,6 @@ export default function SpreadsheetCatalog() {
     setView((current) => current.platform === view.platform ? { ...current, platform: "", page: 1 } : current);
   }, [catalogMeta, view.platform]);
 
-  const isUnfilteredCurated = !view.category && !view.platform && view.sort === "curated";
-
   useEffect(() => {
     if (!catalogMeta || !overridesReady || !runtimeCatalogReady) return;
     const controller = new AbortController();
@@ -380,25 +386,12 @@ export default function SpreadsheetCatalog() {
     setError("");
     const load = async () => {
       try {
-        if (runtimeCatalogIndex) {
-          const filtered = filterCatalogItems(runtimeCatalogIndex, { category: view.category, platform: view.platform, sort: view.sort });
-          const result = paginateCatalogItems(filtered, view.page, pageSize);
-          if (result.page !== view.page) setView((old) => ({ ...old, page: result.page }));
-          if (requestNumber.current === currentRequest) setPayload({ ...result, totalPages: result.totalPages });
-        } else if (isUnfilteredCurated) {
-          const maxPage = Math.max(1, Math.ceil(catalogMeta.total / pageSize));
-          const requestedPage = Math.min(view.page, maxPage);
-          if (requestedPage !== view.page) setView((old) => ({ ...old, page: requestedPage }));
-          const data = await fetchJson<PagePayload>(`${basePath}/pages-${pageSize}/${requestedPage}.json`, controller.signal);
-          if (requestNumber.current === currentRequest) setPayload(data);
-        } else {
-          const index = await loadCatalogIndex();
-          if (controller.signal.aborted || requestNumber.current !== currentRequest) return;
-          const filtered = filterCatalogItems(index, { category: view.category, platform: view.platform, sort: view.sort });
-          const result = paginateCatalogItems(filtered, view.page, pageSize);
-          if (result.page !== view.page) setView((old) => ({ ...old, page: result.page }));
-          setPayload({ ...result, totalPages: result.totalPages });
-        }
+        const index = runtimeCatalogIndex || await loadCatalogIndex();
+        if (controller.signal.aborted || requestNumber.current !== currentRequest) return;
+        const filtered = filterCatalogItems(index, { category: view.category, platform: view.platform, sort: view.sort, seed: shuffleSeed });
+        const result = paginateCatalogItems(filtered, view.page, pageSize);
+        if (result.page !== view.page) setView((old) => ({ ...old, page: result.page }));
+        if (requestNumber.current === currentRequest) setPayload({ ...result, totalPages: result.totalPages });
       } catch (reason) {
         if (controller.signal.aborted || requestNumber.current !== currentRequest) return;
         setError(reason instanceof Error ? reason.message : "Catalog data is temporarily unavailable.");
@@ -420,7 +413,7 @@ export default function SpreadsheetCatalog() {
     };
     void load();
     return () => controller.abort();
-  }, [catalogMeta, overridesReady, runtimeCatalogReady, runtimeCatalogIndex, pageSize, view.page, view.category, view.platform, view.sort, isUnfilteredCurated]);
+  }, [catalogMeta, overridesReady, runtimeCatalogReady, runtimeCatalogIndex, pageSize, view.page, view.category, view.platform, view.sort, shuffleSeed]);
 
   useEffect(() => {
     if (!imagePreviewItem) return;
@@ -474,7 +467,7 @@ export default function SpreadsheetCatalog() {
 
   function clearFilters() {
     cancelQuickCategoryIntent();
-    setView((old) => ({ ...old, category: "", platform: "", sort: "curated", page: 1 }));
+    setView((old) => ({ ...old, category: "", platform: "", sort: "random", page: 1 }));
   }
 
   function setCategory(category: string) {
@@ -652,8 +645,8 @@ export default function SpreadsheetCatalog() {
         <label className="spreadsheet-select spreadsheet-sort">
           <ArrowDownWideNarrow className="spreadsheet-control-icon" size={21} strokeWidth={1.9} aria-hidden="true" />
           <span className="spreadsheet-select-label">Sort</span>
-          <span className="spreadsheet-select-value">{{ curated: "Curated", "price-low": "Price: Low to High", "price-high": "Price: High to Low", name: "Name", recent: "Recently checked" }[view.sort]}</span>
-          <select aria-label="Sort" value={view.sort} onChange={(event) => setSort(event.target.value as CatalogSort)}><option value="curated">Curated</option><option value="price-low">Price: Low to High</option><option value="price-high">Price: High to Low</option><option value="name">Name</option><option value="recent">Recently checked</option></select>
+          <span className="spreadsheet-select-value">{{ random: "Random", "price-low": "Price: Low to High", "price-high": "Price: High to Low", name: "Name", recent: "Recently checked" }[view.sort]}</span>
+          <select aria-label="Sort" value={view.sort} onChange={(event) => setSort(event.target.value as CatalogSort)}><option value="random">Random</option><option value="price-low">Price: Low to High</option><option value="price-high">Price: High to Low</option><option value="name">Name</option><option value="recent">Recently checked</option></select>
           <ChevronDown className="spreadsheet-select-chevron" size={16} aria-hidden="true" />
         </label>
       </div>
@@ -668,7 +661,7 @@ export default function SpreadsheetCatalog() {
         })}</div>
       </div>
 
-      <div className="spreadsheet-results" aria-live="polite" aria-busy={loading}><span className="spreadsheet-results-status">{loading && <span className="spreadsheet-loader spreadsheet-results-loader" aria-hidden="true" />}{loading ? quickCategoryBusy && pendingQuickCategory && view.category === pendingQuickCategory ? `Loading ${quickCategoryOptions.find((item) => item.key === pendingQuickCategory)?.label}…` : "Loading catalog…" : countLabel}</span>{(view.category || view.platform || view.sort !== "curated") && <button type="button" onClick={clearFilters}>Clear filters</button>}</div>
+      <div className="spreadsheet-results" aria-live="polite" aria-busy={loading}><span className="spreadsheet-results-status">{loading && <span className="spreadsheet-loader spreadsheet-results-loader" aria-hidden="true" />}{loading ? quickCategoryBusy && pendingQuickCategory && view.category === pendingQuickCategory ? `Loading ${quickCategoryOptions.find((item) => item.key === pendingQuickCategory)?.label}…` : "Loading catalog…" : countLabel}</span>{(view.category || view.platform || view.sort !== "random") && <button type="button" onClick={clearFilters}>Clear filters</button>}</div>
 
       {error ? <section className="spreadsheet-state" role="alert"><h2>Catalog data is temporarily unavailable.</h2><p>{error}</p><button type="button" onClick={() => { catalogIndexPromise = null; setError(""); setPayload(null); setMeta(null); window.location.reload(); }}>Retry</button></section>
         : loading && rows.length === 0 ? <div className="spreadsheet-state" role="status"><span className="spreadsheet-loader" /> Loading catalog…</div>
