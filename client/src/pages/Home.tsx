@@ -2,7 +2,7 @@
 import { Fragment, startTransition, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { ArrowUpRight, Bell, ChevronDown, Heart, History as HistoryIcon, Home as HomeIcon, MessageCircle, Search, Settings2, X, RefreshCw, CheckCircle2, ThumbsDown } from "lucide-react";
-import { products, categoryLabels, categoryOrder, useCatalogVersion } from "@/data/catalogProducts";
+import { products, categoryLabels, categoryOrder, loadNextCatalogPage, useCatalogVersion } from "@/data/catalogProducts";
 import { styleImages } from "@/data/style-images";
 import { formatVisitTime, readDislikes, readEngagement, readFavorites, readHistory, saveFavorites, toggleDislike, type HistoryEntry, type EngagementEntry } from "@/lib/catalogMemory";
 import { shouldAllowAction } from "@/lib/mobileActionGuard";
@@ -111,9 +111,7 @@ export default function Home() {
   const [history, setHistory] = useState<HistoryEntry[]>(() => readHistory());
   const [engagement, setEngagement] = useState<EngagementEntry[]>(() => readEngagement());
   const [dislikes, setDislikes] = useState<string[]>(() => readDislikes());
-  const [categoryRecommendationCount, setCategoryRecommendationCount] = useState(24);
-  const categoryRecommendationSentinel = useRef<HTMLDivElement | null>(null);
-  const categoryRecommendationBusy = useRef(false);
+  const categoryRecommendationCount = 24;
   const [openPanel, setOpenPanel] = useState<"favorites" | "history" | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [requestProductOpen, setRequestProductOpen] = useState(false);
@@ -252,33 +250,11 @@ export default function Home() {
     const pool = buildCategoryRecommendationPool(category, products, excluded);
     return rankBehavioralRecommendations(pool, products, new Set(favorites), engagement, Date.now(), new Set(dislikes));
   }, [category, catalogVersion, visible, favorites, engagement, dislikes]);
-
-  useEffect(() => {
-    setCategoryRecommendationCount(24);
-    categoryRecommendationBusy.current = false;
-  }, [category, brand, query, sort]);
-
-  useEffect(() => {
-    if (isAiAuditView || categoryRecommendationPool.length === 0) return;
-    const appendRecommendations = () => {
-      if (categoryRecommendationBusy.current) return;
-      categoryRecommendationBusy.current = true;
-      setCategoryRecommendationCount((count) => count + 24);
-      window.requestAnimationFrame(() => { categoryRecommendationBusy.current = false; });
-    };
-    const node = categoryRecommendationSentinel.current;
-    const observer = node ? new IntersectionObserver((entries) => {
-      if (entries[0]?.isIntersecting) appendRecommendations();
-    }, { rootMargin: "1200px 0px" }) : null;
-    if (node) observer?.observe(node);
-    const onScroll = () => {
-      const distanceToBottom = document.documentElement.scrollHeight - (window.scrollY + window.innerHeight);
-      if (distanceToBottom < 1200) appendRecommendations();
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => { observer?.disconnect(); window.removeEventListener("scroll", onScroll); };
-  }, [categoryRecommendationPool.length, isAiAuditView, categoryRecommendationCount]);
+  const remainingCatalogProducts = Math.max(0, catalogSnapshot.total - catalogSnapshot.loaded);
+  const canLoadMoreCatalog = !isAiAuditView && catalogSnapshot.total > 0;
+  const handleLoadMoreCatalog = () => {
+    if (!catalogSnapshot.isLoading) void loadNextCatalogPage();
+  };
 
   // Persist the complete audit cursor. The shuffle seed is the batch cursor: after data regeneration,
   // the same seed plus the same seen source IDs recreates the unfinished batch instead of restarting Clothing.
@@ -381,7 +357,7 @@ export default function Home() {
   const toggleFavorite = (id: string) => { if (!allowMobileAction(`favorite:${id}`, 180)) return; setFavorites((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]); };
   const clearFavorites = () => setFavorites([]);
   const favoriteProducts = favorites.map((id) => products.find((item) => item.id === id)).filter(Boolean) as typeof products;
-  const favoriteRecommendations = categoryRecommendationPool.filter((product) => !favorites.includes(product.id)).slice(0, Math.max(24, categoryRecommendationCount));
+  const favoriteRecommendations = categoryRecommendationPool.filter((product) => !favorites.includes(product.id)).slice(0, categoryRecommendationCount);
   const historyProducts = history.map((entry) => ({ entry, product: products.find((item) => item.id === entry.id) })).filter((item) => item.product) as { entry: HistoryEntry; product: (typeof products)[number] }[];
   const resetFilters = () => { setCategory("all"); setBrand("all"); setQuery(""); };
 
@@ -454,7 +430,14 @@ export default function Home() {
             return <Fragment key={product.id}><article className={`product-card card-${index % 7}`} onClick={() => openProduct(product.id)} onMouseEnter={() => beginProductPreview(product.id)} onMouseLeave={() => endProductPreview(product.id)}><div className="product-image-wrap"><SafeProductImage sources={product.images} alt={title} loading={index < 8 ? "eager" : "lazy"} /><div className="image-wash" />{demoBadge(product.price, averageCatalogPrice) && <span className={`demo-product-badge ${demoBadge(product.price, averageCatalogPrice) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price, averageCatalogPrice)}</span>}{product.reviewStatus === "suspected" && <span className="suspected-review-badge" aria-label="Suspected category mismatch">SUSPECTED</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}<button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "Remove from saved items" : "Save product"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><button className={`dislike-button ${isDisliked ? "is-disliked" : ""}`} onClick={(event) => { event.stopPropagation(); toggleProductDislike(product.id); }} aria-label={isDisliked ? "Remove dislike" : "Not interested in this product"} title={isDisliked ? "Remove dislike" : "Not interested"}><ThumbsDown size={13} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={10} /></span><span className="mobile-view-details">VIEW DETAILS <ArrowUpRight size={11} /></span></div><div className="product-info">{displayBrand && <div className="product-brand">{displayBrand}</div>}{cardTitle && <h3 className="product-name">{cardTitle}</h3>}<div className="product-price">{money(product.price, "USD")} <span className="product-currency">USD</span></div></div></article></Fragment>;
           })}
         </section>
-        
+
+        {canLoadMoreCatalog && <div className="catalog-load-more" aria-live="polite">
+          <button type="button" onClick={handleLoadMoreCatalog} disabled={catalogSnapshot.isLoading || remainingCatalogProducts === 0}>
+            {catalogSnapshot.isLoading ? "LOADING PRODUCTS..." : catalogSnapshot.error ? "RETRY LOADING" : remainingCatalogProducts === 0 ? "ALL PRODUCTS LOADED" : "LOAD MORE PRODUCTS"}
+          </button>
+          <span>{catalogSnapshot.error ? catalogSnapshot.error : remainingCatalogProducts > 0 ? `${remainingCatalogProducts.toLocaleString()} products remaining` : "ALL PRODUCTS LOADED"}</span>
+        </div>}
+
         {!isAiAuditView && categoryRecommendationPool.length > 0 && <section className="category-recommendation" aria-labelledby="category-recommendation-title">
           <div id="category-recommendation" className="category-recommendation-head">
             <div>
@@ -475,7 +458,6 @@ export default function Home() {
               </article>;
             })}
           </div>
-          <div ref={categoryRecommendationSentinel} className="category-recommendation-sentinel" aria-hidden="true" />
         </section>}
 
         {isAiAuditView && <div className="audit-controls py-20 flex flex-col items-center justify-center border-t border-black/5 mt-20">
@@ -519,7 +501,6 @@ export default function Home() {
               </article>;
             })}
           </div>
-          <div ref={categoryRecommendationSentinel} className="category-recommendation-sentinel" aria-hidden="true" />
         </section>}
       </>}
     </main>

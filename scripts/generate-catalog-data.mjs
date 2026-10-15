@@ -219,6 +219,24 @@ async function writeProductChunks(products) {
   return { count: chunks.length, largestChunkBytes };
 }
 
+async function writeCatalogPages(products, pageSize = 60) {
+  const directory = path.join(outputRoot, `pages-${pageSize}`);
+  await fs.rm(directory, { recursive: true, force: true });
+  await fs.mkdir(directory, { recursive: true });
+  const totalPages = Math.max(1, Math.ceil(products.length / pageSize));
+  for (let page = 1; page <= totalPages; page += 1) {
+    const start = (page - 1) * pageSize;
+    await jsonWrite(path.join(directory, `${page}.json`), {
+      page,
+      pageSize,
+      total: products.length,
+      totalPages,
+      items: products.slice(start, start + pageSize),
+    });
+  }
+  return totalPages;
+}
+
 async function main() {
   const [{ platformSourcesFor, primarySourceFor }, { isLongSleeve }] = await Promise.all([
     import(pathToFileURL(path.join(root, "client/src/lib/platformSources.mjs")).href),
@@ -335,6 +353,7 @@ async function main() {
   }
 
   const orderedProducts = interleaveProducts(products);
+  await writeCatalogPages(orderedProducts, 60);
   const productChunkStats = await writeProductChunks(orderedProducts);
   const fileCount = (await fs.readdir(previewDir)).length;
   console.log(`Generated ${products.length.toLocaleString()} product records, ${fileCount.toLocaleString()} purchase previews, ${productChunkStats.count} product chunks (largest ${productChunkStats.largestChunkBytes.toLocaleString()} bytes), catalog index, metadata, and paginated pages.`);
