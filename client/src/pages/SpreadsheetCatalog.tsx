@@ -631,9 +631,9 @@ export default function SpreadsheetCatalog() {
           <select aria-label="Category" value={view.category} onChange={(event) => setCategory(event.target.value)}><option value="">All categories</option>{categoryOptions.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}</select>
           <ChevronDown className="spreadsheet-select-chevron" size={16} aria-hidden="true" />
         </label>
-        <label className="spreadsheet-select spreadsheet-control-platform">
+        <label className={`spreadsheet-select spreadsheet-control-platform ${view.platform ? "has-selection" : "is-priority"}`}>
           <Store className="spreadsheet-control-icon" size={21} strokeWidth={1.9} aria-hidden="true" />
-          <span className="spreadsheet-select-label">Platform</span>
+          <span className="spreadsheet-select-label"><span>Platform</span>{!view.platform && <b>CHOOSE</b>}</span>
           <span className="spreadsheet-select-value">{platforms.find((item) => item.key === view.platform)?.label || "All platforms"}</span>
           <select aria-label="Platform" value={view.platform} onChange={(event) => setPlatform(event.target.value)}><option value="">All platforms</option>{platforms.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}</select>
           <ChevronDown className="spreadsheet-select-chevron" size={16} aria-hidden="true" />
@@ -646,6 +646,7 @@ export default function SpreadsheetCatalog() {
           <ChevronDown className="spreadsheet-select-chevron" size={16} aria-hidden="true" />
         </label>
       </div>
+      <div className="spreadsheet-platform-callout" role="note"><Store size={16} aria-hidden="true" /><span><strong>Choose a platform</strong><small>Filter the table by buying source to compare available sellers and prices.</small></span><b>{view.platform ? "FILTER ACTIVE" : "RECOMMENDED"}</b></div>
 
       <div className="spreadsheet-column-labels" aria-hidden="true">{["A", "B", "C", "D", "E", "F", "G", "H"].map((column) => <span key={column}>{column}</span>)}</div>
       <div className="spreadsheet-quick-categories" role="group" aria-label="Quick category filters" aria-busy={quickCategoryBusy}>
