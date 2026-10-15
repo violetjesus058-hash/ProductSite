@@ -5,8 +5,9 @@ import "./spreadsheet.css";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { initializeAnalytics, trackEvent, trackOnce } from "@/lib/analytics";
 import { filterCatalogItems, paginateCatalogItems, type CatalogSummary, type CatalogSort } from "@/lib/catalogSummary";
-import { LONG_SLEEVE_CATEGORY } from "@/lib/catalogOrdering.mjs";
+import { isLongSleeve, LONG_SLEEVE_CATEGORY } from "@/lib/catalogOrdering.mjs";
 import { normalizePlatformName, platformIconFor, type PlatformSource } from "@/lib/platformSources.mjs";
+import { mergeCatalogOverrides, mergePreviewOverrides, type CatalogPreviewGroup, type CatalogProductOverride } from "@/lib/catalogOverrides";
 
 type CatalogMeta = {
   total: number;
@@ -22,7 +23,7 @@ type ViewState = { category: string; platform: string; sort: CatalogSort; page: 
 type QuickCategoryIntent = { category: string; token: number };
 type MenuPermissionNotice = { title: string; message: string; dismissLabel: string; left: number; top: number; width: number };
 type PreviewStyle = { id: string; styleKey: string; styleLabel: string; image: string; price: number; currency: string };
-type ProductPreviewGroup = { sourceProductId: string; name: string; platforms: PlatformSource[]; styles: PreviewStyle[] };
+type ProductPreviewGroup = CatalogPreviewGroup;
 type ImagePreviewItem = Pick<CatalogPageRow, "name" | "styleLabel" | "thumbnail">;
 type InlinePurchaseCardProps = {
   item: CatalogPageRow;
@@ -162,6 +163,22 @@ function loadCatalogIndex(): Promise<CatalogSummary[]> {
   return catalogIndexPromise;
 }
 
+async function loadWorkerProductOverrides(signal?: AbortSignal): Promise<CatalogProductOverride[]> {
+  const workerUrl = String(import.meta.env.VITE_CLOUDFLARE_WORKER_URL || "").replace(/\/$/, "");
+  if (!workerUrl) return [];
+  const response = await fetch(`${workerUrl}/api/products/overrides`, {
+    signal,
+    cache: "no-store",
+    headers: { accept: "application/json" },
+  });
+  if (!response.ok) throw new Error(`Live product sync failed (${response.status}).`);
+  const payload = await response.json() as { items?: unknown };
+  if (!Array.isArray(payload.items)) return [];
+  return payload.items.filter((item): item is CatalogProductOverride =>
+    !!item && typeof item === "object" && !Array.isArray(item) && typeof (item as CatalogProductOverride).id === "string",
+  );
+}
+
 function loadPreviewGroup(sourceProductId: string): Promise<ProductPreviewGroup> {
   const cached = previewGroupPromises.get(sourceProductId);
   if (cached) return cached;
@@ -201,6 +218,10 @@ export default function SpreadsheetCatalog() {
   const [linkCopied, setLinkCopied] = useState(false);
   const [menuNotice, setMenuNotice] = useState<MenuPermissionNotice | null>(null);
   const [meta, setMeta] = useState<CatalogMeta | null>(null);
+  const [productOverrides, setProductOverrides] = useState<CatalogProductOverride[]>([]);
+  const [overridesReady, setOverridesReady] = useState(false);
+  const [runtimeCatalogIndex, setRuntimeCatalogIndex] = useState<CatalogSummary[] | null>(null);
+  const [runtimeCatalogReady, setRuntimeCatalogReady] = useState(false);
   const [pageSize, setPageSize] = useState(50);
   const [payload, setPayload] = useState<PagePayload | null>(null);
   const [loading, setLoading] = useState(true);
@@ -285,13 +306,59 @@ export default function SpreadsheetCatalog() {
         setError(reason instanceof Error ? reason.message : "Catalog data is temporarily unavailable.");
         setLoading(false);
       });
+    void loadWorkerProductOverrides(controller.signal)
+      .then((items) => { if (!controller.signal.aborted) setProductOverrides(items); })
+      .catch(() => { if (!controller.signal.aborted) setProductOverrides([]); })
+      .finally(() => { if (!controller.signal.aborted) setOverridesReady(true); });
     return () => controller.abort();
   }, []);
 
   useEffect(() => {
-    if (!meta || !view.platform) return;
+    if (!meta || !overridesReady) return;
+    if (!productOverrides.length) {
+      setRuntimeCatalogIndex(null);
+      setRuntimeCatalogReady(true);
+      return;
+    }
+    let active = true;
+    setRuntimeCatalogReady(false);
+    void loadCatalogIndex()
+      .then((rows) => { if (active) setRuntimeCatalogIndex(mergeCatalogOverrides(rows, productOverrides)); })
+      .catch((reason: unknown) => {
+        if (active) {
+          console.warn("Live product updates could not be applied to the spreadsheet catalog.", reason);
+          setRuntimeCatalogIndex(null);
+        }
+      })
+      .finally(() => { if (active) setRuntimeCatalogReady(true); });
+    return () => { active = false; };
+  }, [meta, overridesReady, productOverrides]);
+
+  const catalogMeta = useMemo<CatalogMeta | null>(() => {
+    if (!meta || !runtimeCatalogIndex) return meta;
+    const labels = new Map(meta.categories.map((category) => [category.key, category.label]));
+    const knownLabels: Record<string, string> = { clothing: "Clothing", shoe: "Shoes", pants: "Pants", bags: "Bags", fragrance: "Fragrance", watches: "Watches", ACC: "Accessories" };
+    const categories = [...new Set(runtimeCatalogIndex.map((item) => item.category).filter(Boolean))].map((key) => ({ key, label: labels.get(key) || knownLabels[key] || key }));
+    const platformNames = [...new Set(runtimeCatalogIndex.flatMap((item) => item.platformKeys || []))].sort((a, b) => a.localeCompare(b));
+    const quickCategories = quickCategoryOptions.map((definition) => {
+      const match = runtimeCatalogIndex.find((item) => definition.key === LONG_SLEEVE_CATEGORY
+        ? isLongSleeve(item)
+        : item.category === definition.key);
+      return { key: definition.key, label: definition.label, thumbnail: match?.thumbnail || meta.quickCategories?.find((item) => item.key === definition.key)?.thumbnail || placeholder };
+    });
+    return {
+      ...meta,
+      total: runtimeCatalogIndex.length,
+      categories,
+      quickCategories,
+      platforms: platformNames.map((key) => ({ key, label: key })),
+    };
+  }, [meta, runtimeCatalogIndex]);
+
+  useEffect(() => {
+    if (!catalogMeta || !view.platform) return;
     const requestedPlatform = normalizePlatformName(view.platform);
-    const matchedPlatform = meta.platforms.find((platform) =>
+    const matchedPlatform = catalogMeta.platforms.find((platform) =>
       normalizePlatformName(platform.key) === requestedPlatform || normalizePlatformName(platform.label) === requestedPlatform,
     );
     if (matchedPlatform) {
@@ -299,12 +366,12 @@ export default function SpreadsheetCatalog() {
       return;
     }
     setView((current) => current.platform === view.platform ? { ...current, platform: "", page: 1 } : current);
-  }, [meta, view.platform]);
+  }, [catalogMeta, view.platform]);
 
   const isUnfilteredCurated = !view.category && !view.platform && view.sort === "curated";
 
   useEffect(() => {
-    if (!meta) return;
+    if (!catalogMeta || !overridesReady || !runtimeCatalogReady) return;
     const controller = new AbortController();
     const currentRequest = ++requestNumber.current;
     const quickIntentForRequest = quickCategoryIntentRef.current;
@@ -313,8 +380,13 @@ export default function SpreadsheetCatalog() {
     setError("");
     const load = async () => {
       try {
-        if (isUnfilteredCurated) {
-          const maxPage = Math.max(1, Math.ceil(meta.total / pageSize));
+        if (runtimeCatalogIndex) {
+          const filtered = filterCatalogItems(runtimeCatalogIndex, { category: view.category, platform: view.platform, sort: view.sort });
+          const result = paginateCatalogItems(filtered, view.page, pageSize);
+          if (result.page !== view.page) setView((old) => ({ ...old, page: result.page }));
+          if (requestNumber.current === currentRequest) setPayload({ ...result, totalPages: result.totalPages });
+        } else if (isUnfilteredCurated) {
+          const maxPage = Math.max(1, Math.ceil(catalogMeta.total / pageSize));
           const requestedPage = Math.min(view.page, maxPage);
           if (requestedPage !== view.page) setView((old) => ({ ...old, page: requestedPage }));
           const data = await fetchJson<PagePayload>(`${basePath}/pages-${pageSize}/${requestedPage}.json`, controller.signal);
@@ -348,7 +420,7 @@ export default function SpreadsheetCatalog() {
     };
     void load();
     return () => controller.abort();
-  }, [meta, pageSize, view.page, view.category, view.platform, view.sort, isUnfilteredCurated]);
+  }, [catalogMeta, overridesReady, runtimeCatalogReady, runtimeCatalogIndex, pageSize, view.page, view.category, view.platform, view.sort, isUnfilteredCurated]);
 
   useEffect(() => {
     if (!imagePreviewItem) return;
@@ -364,14 +436,14 @@ export default function SpreadsheetCatalog() {
     };
   }, [imagePreviewItem]);
 
-  const categories = meta?.categories || [];
+  const categories = catalogMeta?.categories || [];
   const quickCategories = quickCategoryOptions.map((item) => ({
     ...item,
-    thumbnail: meta?.quickCategories?.find((category) => category.key === item.key)?.thumbnail || placeholder,
+    thumbnail: catalogMeta?.quickCategories?.find((category) => category.key === item.key)?.thumbnail || placeholder,
   }));
   const categoryOptions = [...categories, { key: LONG_SLEEVE_CATEGORY, label: "Long sleeve" }];
   const selectedCategoryLabel = view.category === LONG_SLEEVE_CATEGORY ? "Long sleeve" : categories.find((item) => item.key === view.category)?.label || "All categories";
-  const platforms = meta?.platforms || [];
+  const platforms = catalogMeta?.platforms || [];
   const selectedPlatformLabel = platforms.find((item) => item.key === view.platform)?.label;
   const rows = payload?.items || [];
   function primaryPlatformLabelFor(item: CatalogPageRow) {
@@ -446,7 +518,10 @@ export default function SpreadsheetCatalog() {
     const currentRequest = ++previewRequestRef.current;
     setPreviewLoadingSourceId(item.sourceProductId);
     setPreviewErrorSourceId(null);
-    void loadPreviewGroup(item.sourceProductId).then((group) => {
+    const matchingOverrides = productOverrides.filter((override) => String(override.sourceProductId || override.id || "") === item.sourceProductId);
+    void loadPreviewGroup(item.sourceProductId).catch(() => null).then((baseGroup) => {
+      const group = mergePreviewOverrides(baseGroup, item.sourceProductId, matchingOverrides);
+      if (!group) throw new Error("Purchase preview is unavailable.");
       setPreviewGroups((current) => ({ ...current, [item.sourceProductId]: group }));
       if (previewRequestRef.current === currentRequest) setPreviewLoadingSourceId(null);
     }).catch(() => {
@@ -505,7 +580,7 @@ export default function SpreadsheetCatalog() {
     if (!loading && payload?.total === 0) trackEvent("table_empty_result", { category: view.category, platform: view.platform, page_type: "table_catalog" });
   }, [loading, payload?.total, view.category, view.platform]);
 
-  const pageCount = payload?.totalPages || (meta ? Math.max(1, Math.ceil(meta.total / pageSize)) : 1);
+  const pageCount = payload?.totalPages || (catalogMeta ? Math.max(1, Math.ceil(catalogMeta.total / pageSize)) : 1);
   const shareUrl = window.location.href;
   const shareTitle = "RIVORA Style Directory";
   const shareText = "Browse styles, prices, and buying platforms in the RIVORA catalog.";
