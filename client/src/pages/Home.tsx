@@ -222,14 +222,9 @@ export default function Home() {
     } else if (sort === "price-high") {
       result.sort((a, b) => b.price - a.price);
     } else {
-      result.sort((a, b) => {
-        const curatedScore = (product: (typeof products)[number]) =>
-          (isCuratedCategory(product) ? 4 : 0) +
-          (product.images.length >= 2 ? 2 : 0) +
-          (product.reviewStatus === "reviewed" ? 2 : 0) +
-          (product.catalogName && !/catalog item|essential apparel|essential jacket|essential jeans/i.test(product.catalogName) ? 1 : 0);
-        return curatedScore(b) - curatedScore(a) || a.id.localeCompare(b.id);
-      });
+      // The generated catalog order is already curated and interleaved. Keep it
+      // stable so background batches append below the current list instead of
+      // moving newly loaded products above the user's reading position.
     }
     return result;
   }, [brand, category, catalogVersion, isAiAuditView, query, sort, seenIds, shuffleSeed]);

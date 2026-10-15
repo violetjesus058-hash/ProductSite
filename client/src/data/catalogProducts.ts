@@ -79,17 +79,13 @@ async function loadChunk(name: string) {
 }
 
 async function loadRemainingChunks(chunks: string[]) {
-  // Keep background work gentle so catalog parsing does not monopolize the main thread.
-  const concurrency = 2;
-  let cursor = 0;
-  const worker = async () => {
-    while (cursor < chunks.length) {
-      const name = chunks[cursor++];
-      await loadChunk(name);
-      await new Promise<void>((resolve) => setTimeout(resolve, 0));
-    }
-  };
-  await Promise.all(Array.from({ length: Math.min(concurrency, chunks.length) }, worker));
+  // Load in manifest order. Each completed batch is appended after the previous
+  // batch, so the catalog never inserts newly arrived products above the user's
+  // current position.
+  for (const name of chunks) {
+    await loadChunk(name);
+    await new Promise<void>((resolve) => setTimeout(resolve, 0));
+  }
   updateSnapshot({ isLoading: false });
 }
 

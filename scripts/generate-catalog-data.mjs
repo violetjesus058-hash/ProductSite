@@ -121,6 +121,71 @@ function curatedPriority(product, isLongSleeve) {
   return 3;
 }
 
+function stableHash(value) {
+  let hash = 2166136261;
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
+function stableShuffle(items, seed) {
+  return [...items].sort((a, b) => stableHash(`${seed}:${a.key}`) - stableHash(`${seed}:${b.key}`));
+}
+
+/**
+ * Interleave categories and source-product groups so styles from one product
+ * are not rendered as a consecutive block. The fixed hash keeps the order
+ * stable between builds while still giving the catalog a mixed, editorial feel.
+ */
+function interleaveProducts(products) {
+  const byCategory = new Map();
+  for (const product of products) {
+    const category = String(product.category || "other");
+    if (!byCategory.has(category)) byCategory.set(category, new Map());
+    const groups = byCategory.get(category);
+    const sourceId = String(product.sourceProductId || product.id || "");
+    if (!groups.has(sourceId)) groups.set(sourceId, []);
+    groups.get(sourceId).push(product);
+  }
+
+  const categories = stableShuffle(
+    [...byCategory.entries()].map(([key, groups]) => ({ key, groups })),
+    "categories",
+  );
+  const states = categories.map(({ key, groups }) => ({
+    key,
+    groups: stableShuffle(
+      [...groups.entries()].map(([groupKey, items]) => ({ key: groupKey, items: stableShuffle(items.map((item) => ({ key: String(item.id), item })), `${key}:styles`).map(({ item }) => item) })),
+      `${key}:products`,
+    ),
+    groupIndex: 0,
+  }));
+  const output = [];
+  let remaining = states.length;
+
+  while (remaining > 0) {
+    remaining = 0;
+    for (const state of states) {
+      let selected;
+      for (let offset = 0; offset < state.groups.length; offset += 1) {
+        const index = (state.groupIndex + offset) % state.groups.length;
+        if (state.groups[index].items.length > 0) {
+          selected = state.groups[index];
+          state.groupIndex = (index + 1) % state.groups.length;
+          break;
+        }
+      }
+      if (selected) {
+        output.push(selected.items.shift());
+        remaining += 1;
+      }
+    }
+  }
+  return output;
+}
+
 async function writeProductChunks(products) {
   await fs.rm(productChunksDir, { recursive: true, force: true });
   await fs.mkdir(productChunksDir, { recursive: true });
@@ -269,7 +334,8 @@ async function main() {
     }
   }
 
-  const productChunkStats = await writeProductChunks(products);
+  const orderedProducts = interleaveProducts(products);
+  const productChunkStats = await writeProductChunks(orderedProducts);
   const fileCount = (await fs.readdir(previewDir)).length;
   console.log(`Generated ${products.length.toLocaleString()} product records, ${fileCount.toLocaleString()} purchase previews, ${productChunkStats.count} product chunks (largest ${productChunkStats.largestChunkBytes.toLocaleString()} bytes), catalog index, metadata, and paginated pages.`);
 }
