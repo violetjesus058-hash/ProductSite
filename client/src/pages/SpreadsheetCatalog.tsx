@@ -744,14 +744,14 @@ export default function SpreadsheetCatalog() {
         <DialogDescription className="catalog-entry-description">Select a catalog experience. We’ll remember your choice in this browser.</DialogDescription>
         <div className="catalog-entry-options" role="group" aria-label="Choose a catalog experience">
           <button className="catalog-entry-card" type="button" onClick={() => chooseEntry("product-site")}>
-            <img className="catalog-entry-preview" src={`${entryPreviewBase}/product-gallery.webp`} alt="Preview of the RIVORA product gallery with category navigation and product cards" />
+            <img className="catalog-entry-preview" src={`${entryPreviewBase}/product-gallery.svg`} alt="Preview of the RIVORA product gallery with category navigation and product cards" />
             <span className="catalog-entry-card-icon"><LayoutGrid size={22} aria-hidden="true" /></span>
             <strong>Product-site style</strong>
             <span className="catalog-entry-card-description">Browse product imagery and open full product details.</span>
             <span className="catalog-entry-action">Explore gallery <ArrowRight size={15} aria-hidden="true" /></span>
           </button>
           <button className="catalog-entry-card is-current" type="button" onClick={() => chooseEntry("spreadsheet")}>
-            <img className="catalog-entry-preview" src={`${entryPreviewBase}/spreadsheet-table.webp`} alt="Preview of the RIVORA spreadsheet catalog with category tiles and comparison rows" />
+            <img className="catalog-entry-preview" src={`${entryPreviewBase}/spreadsheet-table.svg`} alt="Preview of the RIVORA spreadsheet catalog with category tiles and comparison rows" />
             <span className="catalog-entry-card-icon"><Table2 size={22} aria-hidden="true" /></span>
             <strong>Spreadsheet style</strong>
             <span className="catalog-entry-card-description">Compare styles, prices and platforms in a structured table.</span>
