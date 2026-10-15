@@ -979,7 +979,11 @@ a { color:inherit; text-decoration:none; }
 .catalog-load-more span { font-size: 10px; }
 
 /* Temporary platform service notice: guide users away from Kakobuy during the current issue. */
-.platform-service-notice { display:flex; align-items:center; gap:10px; margin:0 0 16px; padding:10px 14px; border:1px solid rgba(190,77,58,.28); border-left:3px solid #be4d3a; background:#fff7f4; color:#4d302b; font-size:11px; line-height:1.45; }
-.platform-service-notice strong { flex:0 0 auto; color:#be4d3a; font-size:10px; letter-spacing:.12em; text-transform:uppercase; }
+.platform-service-notice { display:flex; align-items:center; gap:12px; margin:0 0 16px; padding:12px 15px; border:2px solid rgba(190,77,58,.38); border-left:6px solid #be4d3a; background:#fff2ee; color:#4d302b; font-size:12px; line-height:1.5; font-weight:600; }
+.platform-service-notice strong { flex:0 0 auto; color:#be4d3a; font-size:11px; font-weight:900; letter-spacing:.12em; text-transform:uppercase; }
 .platform-service-notice span { color:#60443e; }
+.browse-mode-switch { display:flex; align-items:center; gap:3px; padding:3px; border:1px solid var(--line); border-radius:999px; background:rgba(255,254,250,.72); font-size:9px; font-weight:800; letter-spacing:.05em; white-space:nowrap; }
+.browse-mode-switch a, .browse-mode-switch span { padding:6px 9px; border-radius:999px; color:var(--ink-soft); }
+.browse-mode-switch a:hover { color:var(--ink); background:var(--paper-deep); }
+.browse-mode-switch .is-active { background:var(--ink); color:var(--white); }
 @media (max-width:760px) { .platform-service-notice { align-items:flex-start; flex-direction:column; gap:3px; margin-bottom:12px; padding:9px 11px; } }

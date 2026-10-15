@@ -29,10 +29,12 @@ export default function CatalogEntryChooser({ sourcePath, onChoose }: { sourcePa
   const choose = (choice: EntryChoice) => {
     trackEvent("catalog_entry_choice", {
       page_type: "entry_chooser",
+      choice_id: "catalog-entry-v4",
       choice,
       destination_path: choice === "product-site" ? "/" : "/spreadsheet",
       source_path: sourcePath,
       choice_source: "modal",
+      selection_persisted: true,
     });
     try { window.localStorage.setItem(ENTRY_CHOICE_KEY, choice); } catch { /* Continue if storage is unavailable. */ }
     setOpen(false);

@@ -45,6 +45,10 @@
 .spreadsheet-header nav { display: flex; align-items: center; gap: 23px; margin-left: auto; font-size: 12px; }
 .spreadsheet-header nav a, .spreadsheet-header nav span { color: var(--sheet-muted); text-decoration: none; }
 .spreadsheet-header nav [aria-current="page"] { color: var(--sheet-ink); font-weight: 700; }
+.spreadsheet-browse-mode-switch { margin-left: auto; }
+.spreadsheet-browse-mode-switch a, .spreadsheet-browse-mode-switch span { color: var(--sheet-muted); }
+.spreadsheet-browse-mode-switch a:hover { color: var(--sheet-ink); background: var(--sheet-soft); }
+.spreadsheet-browse-mode-switch .is-active { background: var(--sheet-ink); color: var(--sheet-paper); }
 .spreadsheet-back { display: none; color: var(--sheet-ink); text-decoration: none; align-items: center; gap: 6px; }
 .spreadsheet-share-control { position: relative; }
 .spreadsheet-share-button, .spreadsheet-theme-toggle {
@@ -97,6 +101,8 @@
 .spreadsheet-platform-callout small { color: var(--sheet-muted); font-size: 10px; }
 .spreadsheet-platform-callout .spreadsheet-platform-maintenance { color: var(--sheet-accent); font-weight: 600; }
 .spreadsheet-platform-callout .spreadsheet-platform-kakobuy-warning { color: var(--sheet-accent); font-weight: 700; }
+.spreadsheet-platform-outage-label { display: inline-block; margin-top: 4px; color: var(--sheet-accent); font-size: 11px; letter-spacing: .12em; }
+.spreadsheet-platform-alternative { font-weight: 700; }
 .spreadsheet-platform-callout b { margin-left: auto; padding: 4px 7px; border: 1px solid color-mix(in srgb, var(--sheet-accent) 55%, transparent); border-radius: 4px; color: var(--sheet-accent); font: 700 9px "DM Mono", monospace; letter-spacing: .06em; white-space: nowrap; }
 .spreadsheet-column-labels { display: grid; grid-template-columns: repeat(8, 1fr); height: 25px; border: 1px solid var(--sheet-line); border-bottom: 0; background: var(--sheet-soft); color: var(--sheet-muted); font: 10px "DM Mono", monospace; }
 .spreadsheet-column-labels span { display: grid; place-items: center; border-right: 1px solid var(--sheet-line); }
