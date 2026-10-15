@@ -96,6 +96,7 @@
 .spreadsheet-platform-callout strong { font-size: 12px; }
 .spreadsheet-platform-callout small { color: var(--sheet-muted); font-size: 10px; }
 .spreadsheet-platform-callout .spreadsheet-platform-maintenance { color: var(--sheet-accent); font-weight: 600; }
+.spreadsheet-platform-callout .spreadsheet-platform-kakobuy-warning { color: var(--sheet-accent); font-weight: 700; }
 .spreadsheet-platform-callout b { margin-left: auto; padding: 4px 7px; border: 1px solid color-mix(in srgb, var(--sheet-accent) 55%, transparent); border-radius: 4px; color: var(--sheet-accent); font: 700 9px "DM Mono", monospace; letter-spacing: .06em; white-space: nowrap; }
 .spreadsheet-column-labels { display: grid; grid-template-columns: repeat(8, 1fr); height: 25px; border: 1px solid var(--sheet-line); border-bottom: 0; background: var(--sheet-soft); color: var(--sheet-muted); font: 10px "DM Mono", monospace; }
 .spreadsheet-column-labels span { display: grid; place-items: center; border-right: 1px solid var(--sheet-line); }

@@ -977,3 +977,9 @@ a { color:inherit; text-decoration:none; }
 .catalog-load-more button:hover:not(:disabled) { background: var(--coral); border-color: var(--coral); }
 .catalog-load-more button:disabled { cursor: wait; opacity: .5; }
 .catalog-load-more span { font-size: 10px; }
+
+/* Temporary platform service notice: guide users away from Kakobuy during the current issue. */
+.platform-service-notice { display:flex; align-items:center; gap:10px; margin:0 0 16px; padding:10px 14px; border:1px solid rgba(190,77,58,.28); border-left:3px solid #be4d3a; background:#fff7f4; color:#4d302b; font-size:11px; line-height:1.45; }
+.platform-service-notice strong { flex:0 0 auto; color:#be4d3a; font-size:10px; letter-spacing:.12em; text-transform:uppercase; }
+.platform-service-notice span { color:#60443e; }
+@media (max-width:760px) { .platform-service-notice { align-items:flex-start; flex-direction:column; gap:3px; margin-bottom:12px; padding:9px 11px; } }
