@@ -92,10 +92,10 @@
 .spreadsheet-quick-category-label strong { font-size: 12px; }
 .spreadsheet-quick-category-label small { color: var(--sheet-muted); font-size: 10px; }
 .spreadsheet-quick-category-buttons { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
-.spreadsheet-quick-category-buttons button { position: relative; overflow: hidden; min-width: 0; min-height: 91px; padding: 0; border: 1px solid var(--sheet-line); border-radius: 7px; background: var(--sheet-soft); color: var(--sheet-ink); cursor: pointer; text-align: left; }
+.spreadsheet-quick-category-buttons button { position: relative; overflow: hidden; min-width: 0; min-height: 146px; padding: 0; border: 1px solid var(--sheet-line); border-radius: 7px; background: var(--sheet-soft); color: var(--sheet-ink); cursor: pointer; text-align: left; }
 .spreadsheet-quick-category-buttons button:hover, .spreadsheet-quick-category-buttons button.is-active { border-color: var(--sheet-accent); box-shadow: 0 0 0 1px var(--sheet-accent); }
-.spreadsheet-quick-category-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .74; transition: transform .25s ease; }
-.spreadsheet-quick-category-buttons button:hover .spreadsheet-quick-category-image { transform: scale(1.04); }
+.spreadsheet-quick-category-image { position: absolute; inset: 0 0 34px; width: 100%; height: calc(100% - 34px); padding: 4px; background: var(--sheet-paper); object-fit: contain; object-position: center; }
+.spreadsheet-quick-category-buttons button:hover .spreadsheet-quick-category-image { filter: brightness(1.04); }
 .spreadsheet-quick-category-button-label { position: absolute; inset: auto 0 0; display: flex; justify-content: space-between; align-items: center; gap: 4px; min-height: 34px; padding: 6px 8px; background: linear-gradient(transparent, #101714d9); color: white; }
 .spreadsheet-quick-category-button-label strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 10px; }
 .spreadsheet-quick-category-button-label svg { flex: 0 0 auto; }
@@ -111,13 +111,13 @@
 .spreadsheet-state button { padding: 8px 14px; border: 1px solid var(--sheet-line); border-radius: 6px; background: var(--sheet-paper); color: var(--sheet-ink); cursor: pointer; }
 .spreadsheet-directory-layout { min-width: 0; }
 .spreadsheet-table-wrap { overflow: auto; border: 1px solid var(--sheet-line); background: var(--sheet-paper); }
-.spreadsheet-table { width: 100%; min-width: 950px; border-collapse: collapse; text-align: left; }
+.spreadsheet-table { width: 100%; min-width: 1100px; border-collapse: collapse; text-align: left; }
 .spreadsheet-table th { height: 42px; padding: 0 12px; border-bottom: 1px solid var(--sheet-line); background: var(--sheet-soft); color: var(--sheet-muted); font: 10px "DM Mono", monospace; letter-spacing: .04em; text-transform: uppercase; }
-.spreadsheet-table td { height: 82px; padding: 8px 12px; border-bottom: 1px solid var(--sheet-line); color: var(--sheet-ink); font-size: 11px; }
+.spreadsheet-table td { height: 210px; padding: 8px 12px; border-bottom: 1px solid var(--sheet-line); color: var(--sheet-ink); font-size: 11px; }
 .spreadsheet-table tbody tr:hover td { background: color-mix(in srgb, var(--sheet-soft) 52%, transparent); }
-.spreadsheet-image-cell { width: 88px; }
-.spreadsheet-thumb-button { display: block; width: 64px; height: 64px; padding: 0; overflow: hidden; border: 1px solid var(--sheet-line); border-radius: 5px; background: var(--sheet-soft); cursor: zoom-in; }
-.spreadsheet-thumb { width: 100%; height: 100%; display: block; object-fit: cover; }
+.spreadsheet-image-cell { width: 216px; }
+.spreadsheet-thumb-button { display: block; width: 192px; height: 192px; padding: 0; overflow: hidden; border: 1px solid var(--sheet-line); border-radius: 5px; background: var(--sheet-soft); cursor: zoom-in; }
+.spreadsheet-thumb { width: 100%; height: 100%; display: block; object-fit: contain; }
 .spreadsheet-product-cell { max-width: 270px; }
 .spreadsheet-product-cell a, .spreadsheet-mobile-info a { display: flex; flex-direction: column; gap: 3px; color: var(--sheet-ink); text-decoration: none; }
 .spreadsheet-product-cell a:hover strong, .spreadsheet-mobile-info a:hover strong { color: var(--sheet-accent); }
@@ -187,8 +187,8 @@
   .spreadsheet-header nav { gap: 12px; }
   .spreadsheet-content { width: min(100% - 32px, 760px); padding-top: 32px; }
   .spreadsheet-quick-category-buttons { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .spreadsheet-quick-category-buttons button { min-height: 84px; }
-  .spreadsheet-table { min-width: 850px; }
+  .spreadsheet-quick-category-buttons button { min-height: 132px; }
+  .spreadsheet-table { min-width: 1100px; }
 }
 @media (max-width: 640px) {
   .spreadsheet-header { min-height: 58px; gap: 10px; padding-inline: 14px; }
@@ -214,7 +214,7 @@
   .spreadsheet-quick-categories { padding: 13px 11px; }
   .spreadsheet-quick-category-label { flex-direction: column; gap: 2px; }
   .spreadsheet-quick-category-buttons { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-  .spreadsheet-quick-category-buttons button { min-height: 78px; }
+  .spreadsheet-quick-category-buttons button { min-height: 112px; }
   .spreadsheet-results { min-height: 43px; }
   .spreadsheet-table-wrap { display: none; }
   .spreadsheet-mobile-list { display: flex; flex-direction: column; gap: 8px; }
