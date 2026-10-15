@@ -91,9 +91,9 @@ function InlinePurchaseCard({ item, group, selectedPlatform, selectedStyleId, sh
 const basePath = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/catalog-data`;
 const placeholder = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/catalog-detail-stilllife.webp`;
 const entryPreviewBase = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/entry-previews`;
-const ENTRY_CHOICE_KEY = "rivora-spreadsheet-entry-choice-v1";
+const ENTRY_CHOICE_KEY = "rivora-spreadsheet-entry-choice-v2";
 // Show the saved entry chooser to first-time visitors; keep their choice in this browser.
-const ENTRY_CHOOSER_ENABLED = false;
+const ENTRY_CHOOSER_ENABLED = true;
 const THEME_STORAGE_KEY = "rivora-spreadsheet-theme-v1";
 const QUICK_CATEGORY_COOLDOWN_MS = 450;
 const QUICK_CATEGORY_SETTLE_MS = 450;
@@ -268,6 +268,13 @@ export default function SpreadsheetCatalog() {
   }
 
   function chooseEntry(choice: "product-site" | "spreadsheet") {
+    trackEvent("catalog_entry_choice", {
+      page_type: "entry_chooser",
+      choice,
+      destination_path: choice === "product-site" ? "/" : "/spreadsheet",
+      source_path: window.location.pathname,
+      choice_source: "modal",
+    });
     saveLocalPreference(ENTRY_CHOICE_KEY, choice);
     setEntryChooserOpen(false);
     if (choice === "product-site") setLocation("/");
@@ -275,6 +282,7 @@ export default function SpreadsheetCatalog() {
 
   useEffect(() => {
     initializeAnalytics();
+    if (entryChooserOpen) trackOnce("catalog_entry_chooser_view", "entry-chooser-v2", { page_type: "entry_chooser", available_entries: "product-site,spreadsheet", source_path: window.location.pathname });
     trackOnce("table_page_view", "spreadsheet", { page_type: "table_catalog" });
     const media = window.matchMedia("(max-width: 767px)");
     const update = () => setPageSize(media.matches ? 20 : 50);
