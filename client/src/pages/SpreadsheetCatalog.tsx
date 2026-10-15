@@ -492,7 +492,10 @@ export default function SpreadsheetCatalog() {
   function setPlatform(platform: string) {
     cancelQuickCategoryIntent();
     updateView({ platform, page: 1 });
-    if (platform) trackEvent("table_filter_use", { platform, page_type: "table_catalog" });
+    if (platform) {
+      trackEvent("table_filter_use", { platform, page_type: "table_catalog", filter_type: "platform", previous_platform: view.platform || "all", page_number: view.page, sort: view.sort });
+      trackEvent("spreadsheet_platform_select", { page_type: "spreadsheet", platform, previous_platform: view.platform || "all", page_number: view.page, category: view.category || "all", sort: view.sort, selection_mode: "explicit_filter" });
+    }
   }
 
   function setSort(sort: CatalogSort) {
@@ -516,6 +519,19 @@ export default function SpreadsheetCatalog() {
       const group = mergePreviewOverrides(baseGroup, item.sourceProductId, matchingOverrides);
       if (!group) throw new Error("Purchase preview is unavailable.");
       setPreviewGroups((current) => ({ ...current, [item.sourceProductId]: group }));
+      const automaticallySelected = view.platform
+        ? group.platforms.find((platform) => normalizePlatformName(platform.name) === normalizePlatformName(view.platform))
+        : group.platforms.find((platform) => platform.primary) || group.platforms[0];
+      if (automaticallySelected) trackOnce("spreadsheet_platform_auto_select", `${item.id}:${view.platform || "default"}`, {
+        page_type: "spreadsheet",
+        product_id: item.id,
+        source_product_id: item.sourceProductId,
+        platform: automaticallySelected.name,
+        selection_mode: view.platform ? "filter_selected" : "default_primary",
+        page_number: view.page,
+        category: item.category,
+        platform_count: group.platforms.length,
+      });
       if (previewRequestRef.current === currentRequest) setPreviewLoadingSourceId(null);
     }).catch(() => {
       if (previewRequestRef.current === currentRequest) {
@@ -549,7 +565,7 @@ export default function SpreadsheetCatalog() {
   }, [view.category, view.platform, view.sort, view.page]);
 
   function trackInlinePlatformClick(platform: PlatformSource, item: CatalogPageRow, style: PreviewStyle) {
-    trackEvent("affiliate_click", { product_id: style.id, product_name: item.name.slice(0, 120), category: item.category, price: style.price, currency: style.currency, platform: platform.name, destination: platform.name, location: "table_inline_purchase" });
+    trackEvent("affiliate_click", { page_type: "spreadsheet", surface: "spreadsheet_inline", product_id: style.id, source_product_id: item.sourceProductId, product_name: item.name.slice(0, 120), category: item.category, price: style.price, currency: style.currency, platform: platform.name, destination: platform.name, location: "table_inline_purchase", selection_mode: view.platform ? "filtered_platform" : platform.primary ? "default_primary" : "fallback_first", page_number: view.page });
   }
 
   function renderInlinePurchaseCard(item: CatalogPageRow) {
