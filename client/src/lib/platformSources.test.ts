@@ -36,6 +36,12 @@ describe("sampled shopping platform sources", () => {
     expect(normalizePlatformName("Hubbuy")).toBe("hubbuycn");
     expect(platformIconFor("Joyagoo")).toBe("/platform-icons/JoyaGoo.png");
     expect(platformIconFor("HubbuyCN")).toBe("/platform-icons/Hubbuycn.png");
-    expect(platformIconFor("Okeyhaul")).toBe("");
+    expect(platformIconFor("AnovaBuy")).toBe("/platform-icons/AnovaBuy.png");
+    expect(platformIconFor("Didpop")).toBe("/platform-icons/Didpop.png");
+    expect(platformIconFor("ESGOBuy")).toBe("/platform-icons/ESGOBuy.png");
+    expect(platformIconFor("Okeyhaul")).toBe("/platform-icons/Okeyhaul.png");
+    expect(platformIconFor("MyCNBox")).toBe("/platform-icons/MyCNBox.png");
+    expect(platformIconFor("UUFans")).toBe("/platform-icons/UUFans.png");
+    expect(platformIconFor("Hagobuy")).toBe("");
   });
 });

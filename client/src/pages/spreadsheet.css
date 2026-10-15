@@ -153,7 +153,8 @@
 .spreadsheet-inline-platform { display: flex; justify-content: space-between; align-items: center; gap: 8px; min-height: 42px; padding: 7px 9px; border: 1px solid var(--sheet-line); border-radius: 6px; background: var(--sheet-paper); color: var(--sheet-ink); text-decoration: none; }
 .spreadsheet-inline-platform:hover, .spreadsheet-inline-platform.is-primary { border-color: var(--sheet-accent); }
 .spreadsheet-inline-platform-identity { min-width: 0; display: flex; align-items: center; gap: 8px; }
-.spreadsheet-inline-platform-identity img, .spreadsheet-inline-platform-identity i { width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; object-fit: contain; background: var(--sheet-soft); font-style: normal; font-size: 10px; }
+.spreadsheet-inline-platform-identity img { width: 22px; height: 22px; display: block; border-radius: 4px; object-fit: contain; background: var(--sheet-soft); }
+.spreadsheet-inline-platform-identity i { width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; background: var(--sheet-soft); font-style: normal; font-size: 10px; }
 .spreadsheet-inline-platform-identity strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 10px; }
 .spreadsheet-inline-more { display: flex; align-items: center; gap: 6px; margin-top: 10px; padding: 5px 0; border: 0; background: transparent; color: var(--sheet-accent); cursor: pointer; font-size: 11px; }
 .spreadsheet-inline-state { display: flex; align-items: center; gap: 10px; padding: 16px; color: var(--sheet-muted); }
