@@ -4,22 +4,22 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/compone
 import { trackEvent, trackOnce } from "@/lib/analytics";
 import "../pages/spreadsheet.css";
 
-const ENTRY_CHOICE_KEY = "rivora-spreadsheet-entry-choice-v3";
+const ENTRY_CHOICE_KEY = "rivora-entry-choice-v4";
 const entryPreviewBase = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/entry-previews`;
 
 type EntryChoice = "product-site" | "spreadsheet";
 
-function readChoice(sourcePath: string) {
-  try { return typeof window === "undefined" ? null : window.localStorage.getItem(`${ENTRY_CHOICE_KEY}:${sourcePath}`); }
+function readChoice() {
+  try { return typeof window === "undefined" ? null : window.localStorage.getItem(ENTRY_CHOICE_KEY); }
   catch { return null; }
 }
 
 export default function CatalogEntryChooser({ sourcePath, onChoose }: { sourcePath: string; onChoose: (choice: EntryChoice) => void }) {
-  const [open, setOpen] = useState(() => !readChoice(sourcePath));
+  const [open, setOpen] = useState(() => !readChoice());
   if (!open) return null;
 
   if (typeof window !== "undefined") {
-    trackOnce("catalog_entry_chooser_view", `entry-chooser-v3:${sourcePath}`, {
+    trackOnce("catalog_entry_chooser_view", `entry-chooser-v4:${sourcePath}`, {
       page_type: "entry_chooser",
       available_entries: "product-site,spreadsheet",
       source_path: sourcePath,
@@ -34,7 +34,7 @@ export default function CatalogEntryChooser({ sourcePath, onChoose }: { sourcePa
       source_path: sourcePath,
       choice_source: "modal",
     });
-    try { window.localStorage.setItem(`${ENTRY_CHOICE_KEY}:${sourcePath}`, choice); } catch { /* Continue if storage is unavailable. */ }
+    try { window.localStorage.setItem(ENTRY_CHOICE_KEY, choice); } catch { /* Continue if storage is unavailable. */ }
     setOpen(false);
     onChoose(choice);
   };
