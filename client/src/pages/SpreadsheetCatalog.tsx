@@ -2,7 +2,7 @@ import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { ArrowDownWideNarrow, ArrowLeft, ArrowRight, Check, ChevronDown, Copy, ExternalLink, LayoutGrid, Moon, Share2, Store, Sun, Table2, X } from "lucide-react";
 import "./spreadsheet.css";
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import CatalogEntryChooser from "@/components/CatalogEntryChooser";
 import { initializeAnalytics, trackEvent, trackOnce } from "@/lib/analytics";
 import { filterCatalogItems, paginateCatalogItems, type CatalogSummary, type CatalogSort } from "@/lib/catalogSummary";
 import { isLongSleeve, LONG_SLEEVE_CATEGORY } from "@/lib/catalogOrdering.mjs";
@@ -91,9 +91,6 @@ function InlinePurchaseCard({ item, group, selectedPlatform, selectedStyleId, sh
 const basePath = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/catalog-data`;
 const placeholder = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/catalog-detail-stilllife.webp`;
 const entryPreviewBase = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/entry-previews`;
-const ENTRY_CHOICE_KEY = "rivora-spreadsheet-entry-choice-v2";
-// Show the saved entry chooser to first-time visitors; keep their choice in this browser.
-const ENTRY_CHOOSER_ENABLED = true;
 const THEME_STORAGE_KEY = "rivora-spreadsheet-theme-v1";
 const QUICK_CATEGORY_COOLDOWN_MS = 450;
 const QUICK_CATEGORY_SETTLE_MS = 450;
@@ -113,10 +110,6 @@ const previewGroupPromises = new Map<string, Promise<ProductPreviewGroup>>();
 function readLocalPreference(key: string) {
   try { return typeof window === "undefined" ? null : window.localStorage.getItem(key); }
   catch { return null; }
-}
-
-function isEntryChooserPreviewForced() {
-  return typeof window !== "undefined" && new URLSearchParams(window.location.search).get("entryPreview") === "1";
 }
 
 function saveLocalPreference(key: string, value: string) {
@@ -215,9 +208,6 @@ export default function SpreadsheetCatalog() {
     return Math.floor(Math.random() * 0x1_0000_0000);
   });
   const [catalogTheme, setCatalogTheme] = useState<"light" | "dark">(() => readLocalPreference(THEME_STORAGE_KEY) === "dark" ? "dark" : "light");
-  const [entryChooserOpen, setEntryChooserOpen] = useState(() =>
-    ENTRY_CHOOSER_ENABLED && (isEntryChooserPreviewForced() || !readLocalPreference(ENTRY_CHOICE_KEY))
-  );
   const [shareOpen, setShareOpen] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
   const [menuNotice, setMenuNotice] = useState<MenuPermissionNotice | null>(null);
@@ -267,22 +257,8 @@ export default function SpreadsheetCatalog() {
     }, 4500);
   }
 
-  function chooseEntry(choice: "product-site" | "spreadsheet") {
-    trackEvent("catalog_entry_choice", {
-      page_type: "entry_chooser",
-      choice,
-      destination_path: choice === "product-site" ? "/" : "/spreadsheet",
-      source_path: window.location.pathname,
-      choice_source: "modal",
-    });
-    saveLocalPreference(ENTRY_CHOICE_KEY, choice);
-    setEntryChooserOpen(false);
-    if (choice === "product-site") setLocation("/");
-  }
-
   useEffect(() => {
     initializeAnalytics();
-    if (entryChooserOpen) trackOnce("catalog_entry_chooser_view", "entry-chooser-v2", { page_type: "entry_chooser", available_entries: "product-site,spreadsheet", source_path: window.location.pathname });
     trackOnce("table_page_view", "spreadsheet", { page_type: "table_catalog" });
     const media = window.matchMedia("(max-width: 767px)");
     const update = () => setPageSize(media.matches ? 20 : 50);
@@ -737,29 +713,6 @@ export default function SpreadsheetCatalog() {
       </section>
     </div>}
 
-    <Dialog open={entryChooserOpen}>
-      <DialogContent className={`catalog-entry-dialog${catalogTheme === "dark" ? " is-dark" : ""}`} showCloseButton={false} onEscapeKeyDown={(event) => event.preventDefault()} onPointerDownOutside={(event) => event.preventDefault()}>
-        <p className="catalog-entry-kicker">RIVORA · PRODUCT CATALOG</p>
-        <DialogTitle className="catalog-entry-title">Choose how you want to browse</DialogTitle>
-        <DialogDescription className="catalog-entry-description">Select a catalog experience. We’ll remember your choice in this browser.</DialogDescription>
-        <div className="catalog-entry-options" role="group" aria-label="Choose a catalog experience">
-          <button className="catalog-entry-card" type="button" onClick={() => chooseEntry("product-site")}>
-            <img className="catalog-entry-preview" src={`${entryPreviewBase}/product-gallery.svg`} alt="Preview of the RIVORA product gallery with category navigation and product cards" />
-            <span className="catalog-entry-card-icon"><LayoutGrid size={22} aria-hidden="true" /></span>
-            <strong>Product-site style</strong>
-            <span className="catalog-entry-card-description">Browse product imagery and open full product details.</span>
-            <span className="catalog-entry-action">Explore gallery <ArrowRight size={15} aria-hidden="true" /></span>
-          </button>
-          <button className="catalog-entry-card is-current" type="button" onClick={() => chooseEntry("spreadsheet")}>
-            <img className="catalog-entry-preview" src={`${entryPreviewBase}/spreadsheet-table.svg`} alt="Preview of the RIVORA spreadsheet catalog with category tiles and comparison rows" />
-            <span className="catalog-entry-card-icon"><Table2 size={22} aria-hidden="true" /></span>
-            <strong>Spreadsheet style</strong>
-            <span className="catalog-entry-card-description">Compare styles, prices and platforms in a structured table.</span>
-            <span className="catalog-entry-action">Continue with table <ArrowRight size={15} aria-hidden="true" /></span>
-          </button>
-        </div>
-        <p className="catalog-entry-note">You can still switch between the gallery and table from the page navigation.</p>
-      </DialogContent>
-    </Dialog>
+    <CatalogEntryChooser sourcePath="/spreadsheet" onChoose={(choice) => { if (choice === "product-site") setLocation("/"); }} />
   </main>;
 }
