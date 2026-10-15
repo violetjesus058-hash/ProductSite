@@ -2,7 +2,7 @@
 import { Fragment, startTransition, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { ArrowUpRight, Bell, ChevronDown, Heart, History as HistoryIcon, Home as HomeIcon, MessageCircle, Search, Settings2, X, RefreshCw, CheckCircle2, ThumbsDown } from "lucide-react";
-import { products, categoryLabels, categoryOrder } from "@/data/catalogProducts";
+import { products, categoryLabels, categoryOrder, useCatalogVersion } from "@/data/catalogProducts";
 import { styleImages } from "@/data/style-images";
 import { formatVisitTime, readDislikes, readEngagement, readFavorites, readHistory, saveFavorites, toggleDislike, type HistoryEntry, type EngagementEntry } from "@/lib/catalogMemory";
 import { shouldAllowAction } from "@/lib/mobileActionGuard";
@@ -34,13 +34,8 @@ const CATALOG_RETURN_KEY = "catalog:return-context:v1";
 type CatalogReturnContext = { category: string; brand: string; query: string; sort: string; scrollY: number };
 function readCatalogReturnContext(): CatalogReturnContext | null { if (typeof window === "undefined") return null; try { const raw = window.sessionStorage.getItem(CATALOG_RETURN_KEY); if (!raw) return null; const parsed = JSON.parse(raw) as Partial<CatalogReturnContext>; if (!parsed || typeof parsed !== "object" || typeof parsed.category !== "string" || typeof parsed.brand !== "string" || typeof parsed.query !== "string" || typeof parsed.sort !== "string" || typeof parsed.scrollY !== "number") return null; return parsed as CatalogReturnContext; } catch { return null; } }
 const englishCategoryLabels: Record<string, string> = { all: "ALL PRODUCTS", clothing: "CLOTHING", shoe: "SHOES", pants: "PANTS", bags: "BAGS", fragrance: "FRAGRANCE", ACC: "ACCESSORIES", watches: "WATCHES" };
-const navItems = [
-  { id: "all", label: englishCategoryLabels.all, count: products.length },
-  ...categoryOrder.slice(1).map((id) => ({ id, label: englishCategoryLabels[id] || id.toUpperCase(), count: products.filter((p) => p.category === id).length })),
-];
 function money(value: number, currency = "USD") { return new Intl.NumberFormat("en-US", { style: "currency", currency, maximumFractionDigits: 2 }).format(value); }
-const averageCatalogPrice = products.reduce((sum, product) => sum + product.price, 0) / Math.max(products.length, 1);
-function demoBadge(price: number) {
+function demoBadge(price: number, averageCatalogPrice: number) {
   if (price <= averageCatalogPrice * 0.65 || price >= averageCatalogPrice * 1.6) return "NEW";
   if (price >= averageCatalogPrice * 0.85 && price <= averageCatalogPrice * 1.15) return "200+ SOLD";
   return "";
@@ -100,6 +95,8 @@ function readAuditSession(): AuditSession | null {
 
 export default function Home() {
   const [, navigate] = useLocation();
+  const catalogSnapshot = useCatalogVersion();
+  const catalogVersion = catalogSnapshot.loaded;
   const [auditSession] = useState<AuditSession | null>(() => readAuditSession());
   const secondPassRequested = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("audit") === "accessories-second-pass";
   const auditResumeRequested = secondPassRequested || (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("audit") === "1");
@@ -189,13 +186,18 @@ export default function Home() {
   useEffect(() => { window.localStorage.setItem("material-catalog:letter-spacing", String(letterSpacingLevel)); }, [letterSpacingLevel]);
 
   const [demoViewers] = useState(() => Math.floor(Math.random() * 151) + 150);
+  const navItems = useMemo(() => [
+    { id: "all", label: englishCategoryLabels.all, count: products.length },
+    ...categoryOrder.slice(1).map((id) => ({ id, label: englishCategoryLabels[id] || id.toUpperCase(), count: products.filter((p) => p.category === id).length })),
+  ], [catalogVersion]);
+  const averageCatalogPrice = useMemo(() => products.reduce((sum, product) => sum + product.price, 0) / Math.max(products.length, 1), [catalogVersion]);
   
   const brandItems = useMemo(() => {
     const scoped = category === "all" ? products : products.filter((product) => product.category === category);
     const counts = new Map<string, number>();
     scoped.forEach((product) => { if (product.brand) counts.set(product.brand, (counts.get(product.brand) || 0) + 1); });
     return [{ id: "all", label: "ALL BRANDS", count: scoped.length }, ...Array.from(counts.entries()).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 14).map(([id, count]) => ({ id, label: id, count }))];
-  }, [category]);
+  }, [category, catalogVersion]);
 
   const filteredProducts = useMemo(() => {
     const term = query.trim().toLowerCase();
@@ -230,7 +232,7 @@ export default function Home() {
       });
     }
     return result;
-  }, [brand, category, isAiAuditView, query, sort, seenIds, shuffleSeed]);
+  }, [brand, category, catalogVersion, isAiAuditView, query, sort, seenIds, shuffleSeed]);
 
   useEffect(() => {
     const term = query.trim();
@@ -254,7 +256,7 @@ export default function Home() {
     const excluded = new Set([...visible.map((product) => product.id), ...dislikes]);
     const pool = buildCategoryRecommendationPool(category, products, excluded);
     return rankBehavioralRecommendations(pool, products, new Set(favorites), engagement, Date.now(), new Set(dislikes));
-  }, [category, visible, favorites, engagement, dislikes]);
+  }, [category, catalogVersion, visible, favorites, engagement, dislikes]);
 
   useEffect(() => {
     setCategoryRecommendationCount(24);
@@ -309,7 +311,7 @@ export default function Home() {
       const isNotSeen = !isReviewed(p);
       return matchesCategory && isNotSeen;
     }).reduce((keys, product) => keys.add(reviewKey(product)), new Set<string>()).size;
-  }, [category, seenIds]);
+  }, [category, catalogVersion, seenIds]);
 
   // Once a category has no unseen records, move the audit view to the next category with remaining records.
   useEffect(() => {
@@ -454,7 +456,7 @@ export default function Home() {
               );
             }
             
-            return <Fragment key={product.id}><article className={`product-card card-${index % 7}`} onClick={() => openProduct(product.id)} onMouseEnter={() => beginProductPreview(product.id)} onMouseLeave={() => endProductPreview(product.id)}><div className="product-image-wrap"><SafeProductImage sources={product.images} alt={title} loading={index < 8 ? "eager" : "lazy"} /><div className="image-wash" />{demoBadge(product.price) && <span className={`demo-product-badge ${demoBadge(product.price) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price)}</span>}{product.reviewStatus === "suspected" && <span className="suspected-review-badge" aria-label="Suspected category mismatch">SUSPECTED</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}<button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "Remove from saved items" : "Save product"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><button className={`dislike-button ${isDisliked ? "is-disliked" : ""}`} onClick={(event) => { event.stopPropagation(); toggleProductDislike(product.id); }} aria-label={isDisliked ? "Remove dislike" : "Not interested in this product"} title={isDisliked ? "Remove dislike" : "Not interested"}><ThumbsDown size={13} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={10} /></span><span className="mobile-view-details">VIEW DETAILS <ArrowUpRight size={11} /></span></div><div className="product-info">{displayBrand && <div className="product-brand">{displayBrand}</div>}{cardTitle && <h3 className="product-name">{cardTitle}</h3>}<div className="product-price">{money(product.price, "USD")} <span className="product-currency">USD</span></div></div></article></Fragment>; 
+            return <Fragment key={product.id}><article className={`product-card card-${index % 7}`} onClick={() => openProduct(product.id)} onMouseEnter={() => beginProductPreview(product.id)} onMouseLeave={() => endProductPreview(product.id)}><div className="product-image-wrap"><SafeProductImage sources={product.images} alt={title} loading={index < 8 ? "eager" : "lazy"} /><div className="image-wash" />{demoBadge(product.price, averageCatalogPrice) && <span className={`demo-product-badge ${demoBadge(product.price, averageCatalogPrice) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price, averageCatalogPrice)}</span>}{product.reviewStatus === "suspected" && <span className="suspected-review-badge" aria-label="Suspected category mismatch">SUSPECTED</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}<button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "Remove from saved items" : "Save product"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><button className={`dislike-button ${isDisliked ? "is-disliked" : ""}`} onClick={(event) => { event.stopPropagation(); toggleProductDislike(product.id); }} aria-label={isDisliked ? "Remove dislike" : "Not interested in this product"} title={isDisliked ? "Remove dislike" : "Not interested"}><ThumbsDown size={13} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={10} /></span><span className="mobile-view-details">VIEW DETAILS <ArrowUpRight size={11} /></span></div><div className="product-info">{displayBrand && <div className="product-brand">{displayBrand}</div>}{cardTitle && <h3 className="product-name">{cardTitle}</h3>}<div className="product-price">{money(product.price, "USD")} <span className="product-currency">USD</span></div></div></article></Fragment>;
           })}
         </section>
         

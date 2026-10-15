@@ -3,7 +3,7 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "wouter";
 import { ArrowLeft, ArrowUpRight, Check, ChevronLeft, ChevronRight, Heart, Info, Share2, ShoppingBag } from "lucide-react";
-import { products } from "@/data/catalogProducts";
+import { products, useCatalogVersion } from "@/data/catalogProducts";
 import { styleImages } from "@/data/style-images";
 import { readEngagement, readFavorites, recordDwellTime, rememberVisit, saveFavorites } from "@/lib/catalogMemory";
 import SafeProductImage from "@/components/SafeProductImage";
@@ -102,13 +102,15 @@ function ZoomableDetailImage({ image, alt, label }: { image: string; alt: string
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
+  const catalogSnapshot = useCatalogVersion();
+  const catalogVersion = catalogSnapshot.loaded;
   const product = products.find((item) => item.id === id);
   const platformSources = product ? platformSourcesFor(product) : [];
   const hasPlatformSources = platformSources.length > 1;
   const relatedStyles = useMemo(() => {
     if (!product?.sourceProductId) return product ? [product] : [];
     return products.filter((item) => item.sourceProductId === product.sourceProductId).sort((a, b) => a.price - b.price || a.id.localeCompare(b.id));
-  }, [product]);
+  }, [catalogVersion, product]);
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
@@ -150,7 +152,7 @@ export default function ProductDetail() {
     for (let index = 0; index < 60; index += 1) buckets.forEach((bucket) => { if (bucket.length > 0) add(bucket[index % bucket.length]); });
     allCandidates.forEach(add);
     return rankBehavioralRecommendations(result, products, new Set(readFavorites()), readEngagement());
-  }, [product, liked]);
+  }, [catalogVersion, product, liked]);
   useEffect(() => { initializeAnalytics(); }, []);
   useEffect(() => {
     if (!product) return;

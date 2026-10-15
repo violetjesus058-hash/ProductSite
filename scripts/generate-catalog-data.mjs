@@ -10,7 +10,9 @@ const outputRoot = path.join(root, "client/public/catalog-data");
 const productChunksDir = path.join(outputRoot, "products");
 const previewDir = path.join(outputRoot, "previews");
 const pageSizes = [20, 50];
-const maxProductChunkBytes = 8 * 1024 * 1024;
+// Keep the first catalog batch small enough for a fast initial route, then let the
+// browser load the remaining batches in the background.
+const maxProductChunkBytes = 1 * 1024 * 1024;
 const placeholder = "/catalog-detail-stilllife.webp";
 const categoryLabels = {
   clothing: "Clothing",
