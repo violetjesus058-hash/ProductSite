@@ -646,7 +646,7 @@ export default function SpreadsheetCatalog() {
           <ChevronDown className="spreadsheet-select-chevron" size={16} aria-hidden="true" />
         </label>
       </div>
-      <div className="spreadsheet-platform-callout" role="note"><Store size={16} aria-hidden="true" /><span><strong>Choose a platform</strong><small>Filter the table by buying source to compare available sellers and prices.</small></span><b>{view.platform ? "FILTER ACTIVE" : "RECOMMENDED"}</b></div>
+      <div className="spreadsheet-platform-callout" role="note"><Store size={16} aria-hidden="true" /><span><strong>Choose a platform</strong><small>Filter the table by buying source to compare available sellers and prices.</small><small className="spreadsheet-platform-maintenance">Some platforms, including AcBuy and Multbuy, are currently unavailable while under maintenance. Please choose Kakobuy, Oopbuy, or another available platform below.</small></span><b>{view.platform ? "FILTER ACTIVE" : "RECOMMENDED"}</b></div>
 
       <div className="spreadsheet-column-labels" aria-hidden="true">{["A", "B", "C", "D", "E", "F", "G", "H"].map((column) => <span key={column}>{column}</span>)}</div>
       <div className="spreadsheet-quick-categories" role="group" aria-label="Quick category filters" aria-busy={quickCategoryBusy}>
