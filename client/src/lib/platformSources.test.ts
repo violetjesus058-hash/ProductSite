@@ -8,6 +8,8 @@ describe("sampled shopping platform sources", () => {
   it("builds the supplied direct-link rules with the Weidian item ID", () => {
     const sources = platformSourcesFor({ sourceProductId: sampleId });
     const byName = new Map(sources.map((source) => [source.name, source.url]));
+    expect(sources[0]).toMatchObject({ name: "Oopbuy", primary: true, url: `https://oopbuy.com/product/weidian/${sampleId}?inviteCode=Y5DH4UF2W` });
+    expect(sources.find((source) => source.name === "Kakobuy")).toMatchObject({ disabled: true, disabledReason: "Temporarily unavailable" });
     expect(byName.get("Joyagoo")).toBe(`https://joyagoo.com/product?id=${sampleId}&platform=WEIDIAN&productUrl=&productPwd=`);
     expect(byName.get("EastMallBuy")).toContain(`url=${encodeURIComponent(sourceUrl)}`);
     expect(byName.get("EastMallBuy")).toContain("inviter=valeriyachentsov");

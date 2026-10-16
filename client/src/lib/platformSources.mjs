@@ -68,7 +68,8 @@ export function platformSourcesFor(product) {
   const encodedSourceUrl = encodeURIComponent(sourceUrl);
   const kakobuyUrl = isKakobuy ? product.url : `https://www.kakobuy.com/item/details?url=${encodedWeidianUrl}&affcode=vxxss`;
   const sources = [
-    { name: "Kakobuy", url: kakobuyUrl },
+    { name: "Oopbuy", url: `https://oopbuy.com/product/weidian/${encodedId}?inviteCode=Y5DH4UF2W`, primary: true },
+    { name: "Kakobuy", url: kakobuyUrl, disabled: true, disabledReason: "Temporarily unavailable" },
     { name: "Superbuy", url: `https://www.superbuy.com/en/page/buy/?nTag=Home-search&from=search-input&url=${encodedWeidianUrl}&partnercode=E6miyW` },
     { name: "RizzitGO", url: `https://rizzitgo.com/detail-page/?goodsId=${encodedId}&source=3` },
     { name: "ZentBuy", url: `https://zentbuy.com/product/weidian/${encodedId}?linkSearch=true` },

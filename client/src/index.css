@@ -430,6 +430,9 @@ a { color:inherit; text-decoration:none; }
 .platform-source-arrow small { color:inherit; font-size:8px; letter-spacing:.04em; white-space:nowrap; }
 .platform-source.is-primary { border-color:var(--coral); background:#fff7f4; color:var(--coral); }
 .platform-source.is-primary .platform-source-arrow { color:var(--coral); }
+.platform-source.is-disabled { cursor:not-allowed; border-color:#d8c2bd; background:#f4eeeb; color:#8b7772; opacity:.88; }
+.platform-source.is-disabled strong { font-weight:900; }
+.platform-source.is-disabled .platform-source-arrow { color:#be4d3a; font-weight:800; }
 @media (max-width:760px) { .platform-source-list { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:5px; } .platform-source { min-height:48px; padding:7px 8px; gap:6px; } .platform-source-identity { gap:6px; } .platform-source-identity img, .platform-source-fallback { width:22px; height:22px; flex-basis:22px; border-radius:6px; } .platform-source strong { font-size:10px; } .platform-source-arrow small { display:none; } }
 
 /* Each detail image gets its own selection-and-purchase dossier before recommendations. */
@@ -491,6 +494,8 @@ a { color:inherit; text-decoration:none; }
 .module-platform-link:hover { transform:translateY(-1px); border-color:var(--ink-soft); color:var(--ink); }
 .module-platform-identity { display:flex; min-width:0; align-items:center; gap:6px; overflow:hidden; }
 .module-platform-identity img, .module-platform-identity .platform-source-fallback { width:20px; height:20px; flex:0 0 20px; border-radius:5px; object-fit:contain; background:#fff; }
+.module-platform-link.is-disabled { cursor:not-allowed; border-color:#d8c2bd; background:#f4eeeb; color:#8b7772; }
+.module-platform-link.is-disabled small { color:#be4d3a; font-size:8px; font-weight:900; letter-spacing:.06em; text-transform:uppercase; }
 .module-platform-identity img { padding:2px; border:1px solid rgba(35,34,31,.08); }
 .module-platform-identity > span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 @media (max-width:760px) { .module-platform-list { grid-template-columns:repeat(2, minmax(0, 1fr)); } .module-platform-link { padding:7px 6px; font-size:9px; } }

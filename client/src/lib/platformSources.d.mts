@@ -1,4 +1,4 @@
-export type PlatformSource = { name: string; url: string; primary?: boolean };
+export type PlatformSource = { name: string; url: string; primary?: boolean; disabled?: boolean; disabledReason?: string };
 export type PlatformProduct = {
   id?: string;
   sourceProductId?: string;
