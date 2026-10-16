@@ -40,6 +40,31 @@ type InlinePurchaseCardProps = {
   onRetry: () => void;
 };
 
+function PlatformPicker({ platforms, value, onChange }: { platforms: Array<{ key: string; label: string }>; value: string; onChange: (value: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const selected = platforms.find((item) => item.key === value);
+  const selectedIcon = selected ? platformIconFor(selected.label) : "";
+  const choose = (nextValue: string) => { onChange(nextValue); setOpen(false); };
+  return <div className={`spreadsheet-platform-picker ${open ? "is-open" : ""}`}>
+    <button type="button" className="spreadsheet-platform-picker-trigger" aria-label="Platform" aria-haspopup="listbox" aria-expanded={open} onClick={() => setOpen((current) => !current)}>
+      {selectedIcon ? <img src={selectedIcon} alt="" aria-hidden="true" /> : <Store className="spreadsheet-control-icon" size={21} strokeWidth={1.9} aria-hidden="true" />}
+      <span className="spreadsheet-select-label"><span>Platform</span>{!value && <b>CHOOSE</b>}</span>
+      <span className="spreadsheet-select-value">{selected?.label || "All platforms"}</span>
+      <ChevronDown className="spreadsheet-select-chevron" size={16} aria-hidden="true" />
+    </button>
+    {open && <div className="spreadsheet-platform-picker-menu" role="listbox" aria-label="Choose platform">
+      <button type="button" role="option" aria-selected={!value} className={!value ? "is-selected" : ""} onClick={() => choose("")}><Store size={18} aria-hidden="true" /><span>All platforms</span></button>
+      {platforms.map((item) => {
+        const icon = platformIconFor(item.label);
+        return <button key={item.key} type="button" role="option" aria-selected={item.key === value} className={item.key === value ? "is-selected" : ""} onClick={() => choose(item.key)}>
+          {icon ? <img src={icon} alt="" aria-hidden="true" /> : <span className="spreadsheet-platform-picker-fallback" aria-hidden="true">{item.label.charAt(0)}</span>}
+          <span>{item.label}</span>
+        </button>;
+      })}
+    </div>}
+  </div>;
+}
+
 function InlinePurchaseCard({ item, group, selectedPlatform, selectedStyleId, showAllPlatforms, loading, error, onStyleSelect, onTogglePlatforms, onImageOpen, onPlatformClick, onRetry }: InlinePurchaseCardProps) {
   if (!group) return <div className="spreadsheet-inline-state" role={error ? "alert" : "status"}>
     {loading ? <><span className="spreadsheet-loader" /> Loading purchase options…</> : <><span>{error || "Purchase options are unavailable."}</span><button type="button" onClick={onRetry}>Retry</button></>}
@@ -637,13 +662,9 @@ export default function SpreadsheetCatalog() {
           <select aria-label="Category" value={view.category} onChange={(event) => setCategory(event.target.value)}><option value="">All categories</option>{categoryOptions.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}</select>
           <ChevronDown className="spreadsheet-select-chevron" size={16} aria-hidden="true" />
         </label>
-        <label className={`spreadsheet-select spreadsheet-control-platform ${view.platform ? "has-selection" : "is-priority"}`}>
-          <Store className="spreadsheet-control-icon" size={21} strokeWidth={1.9} aria-hidden="true" />
-          <span className="spreadsheet-select-label"><span>Platform</span>{!view.platform && <b>CHOOSE</b>}</span>
-          <span className="spreadsheet-select-value">{platforms.find((item) => item.key === view.platform)?.label || "All platforms"}</span>
-          <select aria-label="Platform" value={view.platform} onChange={(event) => setPlatform(event.target.value)}><option value="">All platforms</option>{platforms.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}</select>
-          <ChevronDown className="spreadsheet-select-chevron" size={16} aria-hidden="true" />
-        </label>
+        <div className={`spreadsheet-select spreadsheet-control-platform ${view.platform ? "has-selection" : "is-priority"}`}>
+          <PlatformPicker platforms={platforms} value={view.platform} onChange={setPlatform} />
+        </div>
         <label className="spreadsheet-select spreadsheet-sort">
           <ArrowDownWideNarrow className="spreadsheet-control-icon" size={21} strokeWidth={1.9} aria-hidden="true" />
           <span className="spreadsheet-select-label">Sort</span>
