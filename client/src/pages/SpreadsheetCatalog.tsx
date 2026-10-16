@@ -48,9 +48,9 @@ function InlinePurchaseCard({ item, group, selectedPlatform, selectedStyleId, sh
   const selectedStyle = group.styles.find((style) => style.id === selectedStyleId) || group.styles.find((style) => style.id === item.id) || group.styles[0];
   if (!selectedStyle) return <div className="spreadsheet-inline-state" role="status">No style options available.</div>;
   const selectedPlatformSource = selectedPlatform
-    ? group.platforms.find((platform) => normalizePlatformName(platform.name) === normalizePlatformName(selectedPlatform))
+    ? group.platforms.find((platform) => normalizePlatformName(platform.name) === normalizePlatformName(selectedPlatform) && normalizePlatformName(platform.name) !== "kakobuy")
     : undefined;
-  const primary = selectedPlatformSource || group.platforms.find((platform) => platform.primary) || group.platforms[0];
+  const primary = selectedPlatformSource || group.platforms.find((platform) => platform.primary && normalizePlatformName(platform.name) !== "kakobuy") || group.platforms.find((platform) => normalizePlatformName(platform.name) !== "kakobuy") || group.platforms[0];
   const orderedPlatforms = primary ? [primary, ...group.platforms.filter((platform) => platform !== primary)] : group.platforms;
   const visiblePlatforms = showAllPlatforms ? orderedPlatforms : orderedPlatforms.slice(0, 5);
 
@@ -77,6 +77,11 @@ function InlinePurchaseCard({ item, group, selectedPlatform, selectedStyleId, sh
       <div className="spreadsheet-inline-platform-list">
         {visiblePlatforms.map((platform) => {
           const icon = platformIconFor(platform.name);
+          const unavailable = normalizePlatformName(platform.name) === "kakobuy";
+          if (unavailable) return <div key={platform.name} className="spreadsheet-inline-platform is-unavailable" aria-disabled="true" title="Kakobuy: Temporarily unavailable">
+            <span className="spreadsheet-inline-platform-identity">{icon ? <img src={icon} alt="" aria-hidden="true" loading="lazy" /> : <i aria-hidden="true">{platform.name.charAt(0).toUpperCase()}</i>}<strong>{platform.name}</strong></span>
+            <small>Unavailable</small>
+          </div>;
           return <a key={platform.name} href={platform.url} target="_blank" rel="noopener noreferrer" className={`spreadsheet-inline-platform ${platform === primary ? "is-primary" : ""}`} onClick={() => onPlatformClick(platform, group, selectedStyle)}>
             <span className="spreadsheet-inline-platform-identity">{icon ? <img src={icon} alt="" aria-hidden="true" loading="lazy" /> : <i aria-hidden="true">{platform.name.charAt(0).toUpperCase()}</i>}<strong>{platform.name}</strong></span>
             <ExternalLink size={14} aria-hidden="true" />
