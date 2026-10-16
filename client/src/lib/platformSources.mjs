@@ -13,6 +13,7 @@ const platformIconFiles = {
   eastmallbuy: "EastMallBuy.png",
   esgobuy: "ESGOBuy.png",
   fishgoo: "FishGoo.png",
+  fansbuy: "Fansbuy.png",
   gtbuy: "GTBuy.png",
   hipobuy: "Hipobuy.png",
   hoobuy: "HooBuy.png",
