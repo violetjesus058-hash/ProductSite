@@ -78,11 +78,13 @@ function InlinePurchaseCard({ item, group, selectedPlatform, selectedStyleId, sh
   const primary = selectedPlatformSource || group.platforms.find((platform) => platform.primary && normalizePlatformName(platform.name) !== "kakobuy") || group.platforms.find((platform) => normalizePlatformName(platform.name) !== "kakobuy") || group.platforms[0];
   const orderedPlatforms = primary ? [primary, ...group.platforms.filter((platform) => platform !== primary)] : group.platforms;
   const visiblePlatforms = showAllPlatforms ? orderedPlatforms : orderedPlatforms.slice(0, 5);
+  const styleImageUrl = selectedStyle.image || item.thumbnail || placeholder;
+  const refreshedStyleImageUrl = `${styleImageUrl}${styleImageUrl.includes("?") ? "&" : "?"}style=${encodeURIComponent(selectedStyle.id)}`;
 
   return <section className="spreadsheet-inline-purchase" aria-label={`Quick purchase options for ${group.name}`}>
     <div className="spreadsheet-inline-visual">
-      <button className="spreadsheet-inline-main-image" type="button" onClick={() => onImageOpen({ name: group.name, styleLabel: selectedStyle.styleLabel, thumbnail: selectedStyle.image })} aria-label={`View original image: ${group.name}${selectedStyle.styleLabel ? `, Style ${selectedStyle.styleLabel}` : ""}`}>
-        <img src={selectedStyle.image || item.thumbnail || placeholder} alt={`${group.name}${selectedStyle.styleLabel ? `, Style ${selectedStyle.styleLabel}` : ""}`} loading="lazy" decoding="async" />
+      <button className="spreadsheet-inline-main-image" type="button" onClick={() => onImageOpen({ name: group.name, styleLabel: selectedStyle.styleLabel, thumbnail: styleImageUrl })} aria-label={`View original image: ${group.name}${selectedStyle.styleLabel ? `, Style ${selectedStyle.styleLabel}` : ""}`}>
+        <img key={`${group.sourceProductId}-${selectedStyle.id}-${styleImageUrl}`} src={refreshedStyleImageUrl} alt={`${group.name}${selectedStyle.styleLabel ? `, Style ${selectedStyle.styleLabel}` : ""}`} loading="lazy" decoding="async" />
         <span>Click image to enlarge</span>
       </button>
       <div className="spreadsheet-inline-style-picker">
