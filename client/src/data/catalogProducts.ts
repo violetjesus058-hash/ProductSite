@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from "react";
 import type { Product } from "./products";
+import { isUnavailableCategory } from "@/lib/catalogAvailability.mjs";
 
 export type { Product } from "./products";
 
@@ -154,7 +155,7 @@ async function loadPage(page: number) {
     const payload = cached || await fetchCatalogPage(page);
     if (!cached) await writeCachedPage(version, page, payload);
     const knownIds = new Set(products.map((product) => product.id));
-    products.push(...payload.items.filter((product) => !knownIds.has(product.id)));
+    products.push(...payload.items.filter((product) => !isUnavailableCategory(product.category) && !knownIds.has(product.id)));
     loadedPages.add(page);
     updateSnapshot({
       total: payload.total || catalogMeta.total,
@@ -208,8 +209,7 @@ export const categoryLabels: Record<string, string> = {
   shoe: "Shoes",
   pants: "Pants",
   bags: "Bags",
-  fragrance: "Fragrance",
   ACC: "Accessories",
   watches: "Watches",
 };
-export const categoryOrder = ["all", "clothing", "pants", "shoe", "bags", "fragrance", "watches", "ACC"];
+export const categoryOrder = ["all", "clothing", "pants", "shoe", "bags", "watches", "ACC"];

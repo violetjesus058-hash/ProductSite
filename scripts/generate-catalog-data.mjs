@@ -19,11 +19,11 @@ const categoryLabels = {
   shoe: "Shoes",
   pants: "Pants",
   bags: "Bags",
-  fragrance: "Fragrance",
   watches: "Watches",
   ACC: "Accessories",
 };
-const categoryOrder = ["clothing", "pants", "shoe", "bags", "fragrance", "watches", "ACC"];
+const categoryOrder = ["clothing", "pants", "shoe", "bags", "watches", "ACC"];
+const unavailableCategoryKeys = new Set(["fragrance"]);
 
 function readJsStringLiteral(source, start) {
   while (/\s/.test(source[start] || "")) start += 1;
@@ -242,7 +242,8 @@ async function main() {
     import(pathToFileURL(path.join(root, "client/src/lib/platformSources.mjs")).href),
     import(pathToFileURL(path.join(root, "client/src/lib/catalogOrdering.mjs")).href),
   ]);
-  const [products, styleImages] = await Promise.all([loadProducts(), loadStyleImages()]);
+  const [allProducts, styleImages] = await Promise.all([loadProducts(), loadStyleImages()]);
+  const products = allProducts.filter((product) => !unavailableCategoryKeys.has(String(product.category || "").trim().toLowerCase()));
   await fs.mkdir(outputRoot, { recursive: true });
   await fs.rm(previewDir, { recursive: true, force: true });
   await fs.mkdir(previewDir, { recursive: true });
@@ -310,7 +311,6 @@ async function main() {
     { key: "clothing", label: "Clothing", matches: (product) => product.category === "clothing" },
     { key: "ACC", label: "Accessories", matches: (product) => product.category === "ACC" },
     { key: "bags", label: "Bags", matches: (product) => product.category === "bags" },
-    { key: "fragrance", label: "Fragrance", matches: (product) => product.category === "fragrance" },
     { key: "watches", label: "Watches", matches: (product) => product.category === "watches" },
   ];
   const quickCategories = quickCategoryDefs.map((definition) => {

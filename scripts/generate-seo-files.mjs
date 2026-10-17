@@ -6,6 +6,7 @@ const dataPath = path.join(root, "client/src/data/products.ts");
 const publicDir = path.join(root, "client/public");
 const siteUrl = "https://productsite-8wf.pages.dev";
 const source = fs.readFileSync(dataPath, "utf8");
+const unavailableCategories = new Set(["fragrance"]);
 let ids = [...source.matchAll(/\"id\"\s*:\s*\"([^\"]+)\"/g)].map((match) => match[1]);
 if (ids.length === 0 && source.includes("JSON.parse(")) {
   const open = source.indexOf("JSON.parse(") + "JSON.parse(".length;
@@ -13,6 +14,14 @@ if (ids.length === 0 && source.includes("JSON.parse(")) {
   if (close > open) {
     const serialized = JSON.parse(source.slice(open, close));
     ids = JSON.parse(serialized).map((product) => product.id).filter(Boolean);
+  }
+}
+if (source.includes("JSON.parse(")) {
+  const open = source.indexOf("JSON.parse(") + "JSON.parse(".length;
+  const close = source.indexOf(") as Product[]", open);
+  if (close > open) {
+    const products = JSON.parse(JSON.parse(source.slice(open, close)));
+    ids = products.filter((product) => !unavailableCategories.has(String(product.category || "").trim().toLowerCase())).map((product) => product.id).filter(Boolean);
   }
 }
 const uniqueIds = [...new Set(ids)];

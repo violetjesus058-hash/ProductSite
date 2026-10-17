@@ -11,7 +11,7 @@ import { rankBehavioralRecommendations } from "@/lib/categoryRecommendations";
 import { initializeAnalytics, trackEvent } from "@/lib/analytics";
 import { platformIconFor, platformSourcesFor, primarySourceFor, type PlatformSource } from "@/lib/platformSources.mjs";
 
-const englishCategoryLabels: Record<string, string> = { clothing: "CLOTHING", shoe: "SHOES", pants: "PANTS", bags: "BAGS", fragrance: "FRAGRANCE", ACC: "ACCESSORIES", watches: "WATCHES" };
+const englishCategoryLabels: Record<string, string> = { clothing: "CLOTHING", shoe: "SHOES", pants: "PANTS", bags: "BAGS", ACC: "ACCESSORIES", watches: "WATCHES" };
 function PlatformIdentity({ source }: { source: PlatformSource }) {
   const icon = platformIconFor(source.name);
   return icon ? <img src={icon} alt="" aria-hidden="true" loading="lazy" /> : <span className="platform-source-fallback" aria-hidden="true">{source.name.charAt(0).toUpperCase()}</span>;
@@ -198,7 +198,7 @@ export default function ProductDetail() {
     return Array.from(new Set(labels)).slice(0, 16);
   }, [product]);
 
-  if (!product) return <div className="not-found-page"><span>CATALOG / 404</span><h1>Product record not found.</h1><Link href="/">Back to catalog</Link></div>;
+  if (!product) return <div className="not-found-page"><span>CATALOG / UNAVAILABLE</span><h1>This product is temporarily unavailable.</h1><p>Some catalog categories may be unavailable while inventory is being updated. Please explore other product categories.</p><Link href="/">Back to catalog</Link></div>;
   const primarySource = primarySourceFor(product);
   if (!primarySource) return <div className="not-found-page"><span>CATALOG / 404</span><h1>Buying platforms unavailable.</h1><Link href="/">Back to catalog</Link></div>;
 

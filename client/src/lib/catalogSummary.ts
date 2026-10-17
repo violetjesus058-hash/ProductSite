@@ -1,4 +1,5 @@
 import { isLongSleeve, LONG_SLEEVE_CATEGORY } from "./catalogOrdering.mjs";
+import { isUnavailableCategory } from "./catalogAvailability.mjs";
 export type CatalogSummary = {
   id: string;
   sourceProductId: string;
@@ -72,6 +73,7 @@ export function filterCatalogItems(items: CatalogSummary[], query: CatalogQuery)
   const category = normalized(query.category);
   const platform = normalized(query.platform);
   const filtered = items.filter((item) => {
+    if (isUnavailableCategory(item.category)) return false;
     if (category === LONG_SLEEVE_CATEGORY ? !isLongSleeve(item) : category && normalized(item.category) !== category) return false;
     if (platform && !item.platformKeys.some((key) => normalized(key) === platform)) return false;
     return true;
