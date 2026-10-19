@@ -597,6 +597,13 @@ export default function SpreadsheetCatalog() {
     />;
   }
 
+  function rowDisplayItem(item: CatalogPageRow, expanded: boolean): CatalogPageRow {
+    if (!expanded) return item;
+    const selectedStyle = previewGroups[item.sourceProductId]?.styles.find((style) => style.id === selectedStyleId);
+    if (!selectedStyle) return item;
+    return { ...item, thumbnail: selectedStyle.image || item.thumbnail, styleLabel: selectedStyle.styleLabel, price: selectedStyle.price, currency: selectedStyle.currency };
+  }
+
   useEffect(() => {
     if (!loading && payload?.total === 0) trackEvent("table_empty_result", { category: view.category, platform: view.platform, page_type: "table_catalog" });
   }, [loading, payload?.total, view.category, view.platform]);
@@ -701,13 +708,14 @@ export default function SpreadsheetCatalog() {
                   <thead><tr><th scope="col">Image</th><th scope="col">Product</th><th scope="col">Style</th><th scope="col">Sizes</th><th scope="col">Price</th><th scope="col">Category</th><th scope="col">Platform</th><th scope="col"><span className="sr-only">Action</span></th></tr></thead>
                   <tbody>{rows.map((item) => {
                     const expanded = expandedItemId === item.id;
+                    const displayItem = rowDisplayItem(item, expanded);
                     return <Fragment key={item.id}>
                       <tr>
-                        <td className="spreadsheet-image-cell"><button className="spreadsheet-thumb-button" type="button" onClick={() => setImagePreviewItem(item)} aria-label={`View original image: ${item.name}`}><ImageThumb item={item} /></button></td>
+                        <td className="spreadsheet-image-cell"><button className="spreadsheet-thumb-button" type="button" onClick={() => setImagePreviewItem(displayItem)} aria-label={`View original image: ${displayItem.name}${displayItem.styleLabel ? `, Style ${displayItem.styleLabel}` : ""}`}><ImageThumb item={displayItem} /></button></td>
                         <td className="spreadsheet-product-cell"><button type="button" className="spreadsheet-product-trigger" onClick={() => toggleInlinePreview(item)} aria-label={`${expanded ? "Hide" : "View"} purchase options for ${item.name}`} aria-expanded={expanded} aria-controls={`desktop-inline-preview-${item.id}`}><strong title={item.name}>{item.name}</strong><small>{item.sourceProductId}</small></button></td>
-                        <td>{item.styleLabel ? <span className="spreadsheet-style-tag">Style {item.styleLabel}</span> : <span className="spreadsheet-muted">—</span>}</td>
+                        <td>{displayItem.styleLabel ? <span className="spreadsheet-style-tag">Style {displayItem.styleLabel}</span> : <span className="spreadsheet-muted">—</span>}</td>
                         <td>{item.sizeCount ? `${item.sizeCount} sizes` : <span className="spreadsheet-muted">Options not listed</span>}</td>
-                        <td className="spreadsheet-price">{formatMoney(item.price, item.currency)}</td>
+                        <td className="spreadsheet-price">{formatMoney(displayItem.price, displayItem.currency)}</td>
                         <td><span className="spreadsheet-category">{categories.find((entry) => entry.key === item.category)?.label || item.category}</span></td>
                         <td><span className="spreadsheet-platform">{primaryPlatformLabelFor(item)}</span><small className="spreadsheet-platform-count">{item.platformCount} platforms</small></td>
                         <td><button className="spreadsheet-view" type="button" onClick={() => toggleInlinePreview(item)} aria-label={`${expanded ? "Hide" : "Preview purchase options for"} ${item.name}`} aria-expanded={expanded} aria-controls={`desktop-inline-preview-${item.id}`} aria-pressed={expanded}>{expanded ? "Hide" : "View"} {expanded ? <ChevronDown size={14} className="is-expanded" /> : <ArrowRight size={14} />}</button></td>
@@ -720,9 +728,10 @@ export default function SpreadsheetCatalog() {
 
               <div className="spreadsheet-mobile-list">{rows.map((item) => {
                 const expanded = expandedItemId === item.id;
+                const displayItem = rowDisplayItem(item, expanded);
                 return <article className="spreadsheet-mobile-row" key={item.id}>
-                  <button className="spreadsheet-mobile-image spreadsheet-thumb-button" type="button" onClick={() => setImagePreviewItem(item)} aria-label={`View original image: ${item.name}`}><ImageThumb item={item} /></button>
-                  <div className="spreadsheet-mobile-info"><button type="button" className="spreadsheet-product-trigger" onClick={() => toggleInlinePreview(item)} aria-label={`${expanded ? "Hide" : "View"} purchase options for ${item.name}`} aria-expanded={expanded} aria-controls={`mobile-inline-preview-${item.id}`}><strong>{item.name}</strong></button><span>{item.styleLabel ? `Style ${item.styleLabel}` : "Style not specified"} · {categories.find((entry) => entry.key === item.category)?.label || item.category}</span><span>{item.sizeCount ? `${item.sizeCount} sizes` : "Options not listed"} · {view.platform ? `${primaryPlatformLabelFor(item)} · ` : ""}{item.platformCount} platforms</span><strong className="spreadsheet-mobile-price">{formatMoney(item.price, item.currency)}</strong></div>
+                  <button className="spreadsheet-mobile-image spreadsheet-thumb-button" type="button" onClick={() => setImagePreviewItem(displayItem)} aria-label={`View original image: ${displayItem.name}${displayItem.styleLabel ? `, Style ${displayItem.styleLabel}` : ""}`}><ImageThumb item={displayItem} /></button>
+                  <div className="spreadsheet-mobile-info"><button type="button" className="spreadsheet-product-trigger" onClick={() => toggleInlinePreview(item)} aria-label={`${expanded ? "Hide" : "View"} purchase options for ${item.name}`} aria-expanded={expanded} aria-controls={`mobile-inline-preview-${item.id}`}><strong>{item.name}</strong></button><span>{displayItem.styleLabel ? `Style ${displayItem.styleLabel}` : "Style not specified"} · {categories.find((entry) => entry.key === item.category)?.label || item.category}</span><span>{item.sizeCount ? `${item.sizeCount} sizes` : "Options not listed"} · {view.platform ? `${primaryPlatformLabelFor(item)} · ` : ""}{item.platformCount} platforms</span><strong className="spreadsheet-mobile-price">{formatMoney(displayItem.price, displayItem.currency)}</strong></div>
                   <button className="spreadsheet-mobile-view" type="button" onClick={() => toggleInlinePreview(item)} aria-label={`${expanded ? "Hide" : "Preview purchase options for"} ${item.name}`} aria-expanded={expanded} aria-controls={`mobile-inline-preview-${item.id}`} aria-pressed={expanded}>{expanded ? "Hide" : "View"} {expanded ? <ChevronDown size={14} className="is-expanded" /> : <ArrowRight size={14} />}</button>
                   {expanded && <div className="spreadsheet-mobile-expanded" id={`mobile-inline-preview-${item.id}`}>{renderInlinePurchaseCard(item)}</div>}
                 </article>;
