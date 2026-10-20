@@ -11835,5 +11835,19 @@ export const styleImages: Record<string, Record<string, string>> = {
     "38": "https://si.geilicdn.com/open1848188377-1848188377-4967000001910d209f310a22d234_1280_1707.jpg",
     "39": "https://si.geilicdn.com/pcitem901883166076-2b16000001914fa20bf30a210256_781_772.jpg",
     "40": "https://si.geilicdn.com/pcitem901883166076-3fd6000001914fa22cf50a239646_934_928.jpg"
+  },
+  "7574885951": {
+    "01 White": "https://si.geilicdn.com/open1801729521-1234478995-046e0000019102774e260a22d234_800_800.jpg",
+    "02 Royal blue": "https://si.geilicdn.com/open1801729521-1234478995-7a6c00000191027753640a239383_800_800.jpg",
+    "03 Black": "https://si.geilicdn.com/open1801729521-1234478995-7104000001910277586c0a8133b5_800_800.jpg",
+    "04 Gray": "https://si.geilicdn.com/open1801729521-1234478995-0472000001910277679e0a22d234_800_800.jpg",
+    "05": "https://si.geilicdn.com/pcitem901871968582-0851000001914ede5f640a23047e_800_800.jpg",
+    "06": "https://si.geilicdn.com/pcitem901871968582-0293000001914ede71440a8134f0_800_800.jpg",
+    "07": "https://si.geilicdn.com/pcitem901871968582-0c24000001914ede85210a20e7c7_800_800.jpg",
+    "08": "https://si.geilicdn.com/pcitem901943259216-35360000019643bdd4ed0a23041a_800_800.jpg",
+    "09": "https://si.geilicdn.com/pcitem901943259216-34c50000019643be0eb20a811411_800_800.jpg",
+    "10": "https://si.geilicdn.com/pcitem901943259216-38b30000019643be43550a23111a_800_800.jpg",
+    "11": "https://si.geilicdn.com/pcitem901943259216-33a50000019643be76280a230115_800_800.jpg",
+    "12": "https://si.geilicdn.com/pcitem901943259216-396d000001972fa5219a0a210139_800_800.jpg"
   }
 } as const;
