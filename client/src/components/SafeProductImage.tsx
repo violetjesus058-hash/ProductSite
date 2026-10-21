@@ -64,7 +64,7 @@ export default function SafeProductImage({ sources = [], alt, className, loading
   const desiredThumbnailSize = fixedThumbnailSize || 320;
   const desiredSource = useThumbnail ? thumbnailSource(source, desiredThumbnailSize) : source;
   const displaySrcSet = useThumbnail && !fixedThumbnailSize ? `${thumbnailSource(source, 320)} 320w, ${thumbnailSource(source, 640)} 640w` : undefined;
-  const [displaySource, setDisplaySource] = useState(source);
+  const [displaySource, setDisplaySource] = useState(desiredSource);
 
   useEffect(() => {
     setSourceIndex(0);
