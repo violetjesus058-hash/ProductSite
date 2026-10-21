@@ -80,6 +80,8 @@ export default function SafeProductImage({ sources = [], alt, className, loading
       src={displaySource}
       alt={alt}
       className={className}
+      width={600}
+      height={750}
       loading={loading}
       onLoad={() => void primeImageCache(source)}
       onError={() => {
