@@ -13,6 +13,8 @@ type SafeProductImageProps = {
   alt: string;
   className?: string;
   loading?: "eager" | "lazy";
+  responsive?: boolean;
+  sizes?: string;
 };
 
 function canCacheImages() {
@@ -44,26 +46,34 @@ async function primeImageCache(source: string) {
   }
 }
 
-export default function SafeProductImage({ sources = [], alt, className, loading = "lazy" }: SafeProductImageProps) {
+export default function SafeProductImage({ sources = [], alt, className, loading = "lazy", responsive = false, sizes }: SafeProductImageProps) {
   const normalizedSources = useMemo(() => {
     const unique = Array.from(new Set(sources.map((source) => String(source || "").trim()).filter(Boolean)));
     return unique.length ? unique : [FALLBACK_IMAGE];
   }, [sources]);
   const [sourceIndex, setSourceIndex] = useState(0);
   const [failedAll, setFailedAll] = useState(false);
+  const [thumbnailFailed, setThumbnailFailed] = useState(false);
   const source = failedAll ? FALLBACK_IMAGE : normalizedSources[sourceIndex] || FALLBACK_IMAGE;
+  const thumbnailSource = (value: string, size: 320 | 640) => value.startsWith("/product-images/") && !value.includes("/thumb-")
+    ? value.replace("/product-images/", `/product-images/thumb-${size}/`)
+    : value;
+  const useThumbnail = responsive && !thumbnailFailed && source !== FALLBACK_IMAGE;
+  const desiredSource = useThumbnail ? thumbnailSource(source, 320) : source;
+  const displaySrcSet = useThumbnail ? `${thumbnailSource(source, 320)} 320w, ${thumbnailSource(source, 640)} 640w` : undefined;
   const [displaySource, setDisplaySource] = useState(source);
 
   useEffect(() => {
     setSourceIndex(0);
     setFailedAll(false);
+    setThumbnailFailed(false);
   }, [normalizedSources]);
 
   useEffect(() => {
     let active = true;
     let objectUrl = "";
-    setDisplaySource(source);
-    void readCachedImage(source).then((cachedSource) => {
+    setDisplaySource(desiredSource);
+    void readCachedImage(desiredSource).then((cachedSource) => {
       if (!cachedSource) return;
       objectUrl = cachedSource;
       if (active) setDisplaySource(cachedSource);
@@ -73,19 +83,22 @@ export default function SafeProductImage({ sources = [], alt, className, loading
       active = false;
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
-  }, [source]);
+  }, [desiredSource]);
 
   return (
     <img
       src={displaySource}
+      srcSet={displaySrcSet}
+      sizes={responsive ? (sizes || "(max-width: 760px) 46vw, 241px") : undefined}
       alt={alt}
       className={className}
       width={600}
       height={750}
       loading={loading}
-      onLoad={() => void primeImageCache(source)}
+      onLoad={() => void primeImageCache(desiredSource)}
       onError={() => {
-        if (sourceIndex < normalizedSources.length - 1) setSourceIndex((index) => nextSafeImageSource(normalizedSources, index).index);
+        if (useThumbnail) setThumbnailFailed(true);
+        else if (sourceIndex < normalizedSources.length - 1) setSourceIndex((index) => nextSafeImageSource(normalizedSources, index).index);
         else if (source !== FALLBACK_IMAGE) setFailedAll(true);
       }}
     />
