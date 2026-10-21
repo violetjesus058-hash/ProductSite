@@ -269,6 +269,8 @@ export default function SpreadsheetCatalog() {
   const quickCategoryLastAcceptedAtRef = useRef(0);
   const quickCategoryReleaseTimerRef = useRef<number | null>(null);
   const menuNoticeTimerRef = useRef<number | null>(null);
+  const directoryLayoutRef = useRef<HTMLDivElement | null>(null);
+  const pendingPaginationScrollRef = useRef(false);
 
   useEffect(() => { saveLocalPreference(THEME_STORAGE_KEY, catalogTheme); }, [catalogTheme]);
   useEffect(() => () => { if (menuNoticeTimerRef.current !== null) window.clearTimeout(menuNoticeTimerRef.current); }, []);
@@ -518,6 +520,7 @@ export default function SpreadsheetCatalog() {
 
   function setPage(page: number) {
     cancelQuickCategoryIntent();
+    pendingPaginationScrollRef.current = true;
     updateView({ page });
     trackEvent("table_pagination_change", { page_number: page, page_type: "table_catalog" });
   }
@@ -575,6 +578,17 @@ export default function SpreadsheetCatalog() {
     setShowAllPlatforms(false);
     setPreviewLoadingSourceId(null);
   }, [view.category, view.platform, view.sort, view.page]);
+
+  useEffect(() => {
+    if (!pendingPaginationScrollRef.current || loading || !payload || payload.page !== view.page) return;
+    pendingPaginationScrollRef.current = false;
+    window.requestAnimationFrame(() => {
+      const target = directoryLayoutRef.current;
+      if (!target) return;
+      const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - 16);
+      window.scrollTo({ top, behavior: "auto" });
+    });
+  }, [loading, payload, view.page]);
 
   function trackInlinePlatformClick(platform: PlatformSource, item: CatalogPageRow, style: PreviewStyle) {
     trackEvent("affiliate_click", { page_type: "spreadsheet", surface: "spreadsheet_inline", product_id: style.id, source_product_id: item.sourceProductId, product_name: item.name.slice(0, 120), category: item.category, price: style.price, currency: style.currency, platform: platform.name, destination: platform.name, location: "table_inline_purchase", selection_mode: view.platform ? "filtered_platform" : platform.primary ? "default_primary" : "fallback_first", page_number: view.page });
@@ -701,7 +715,7 @@ export default function SpreadsheetCatalog() {
         : loading && rows.length === 0 ? <div className="spreadsheet-state" role="status"><span className="spreadsheet-loader" /> Loading catalog…</div>
           : !loading && payload?.total === 0 ? <section className="spreadsheet-state"><h2>No matching styles found.</h2><p>Try another combination or clear the filters.</p><button type="button" onClick={clearFilters}>Clear filters</button></section>
             : <>
-              <div className="spreadsheet-directory-layout">
+              <div className="spreadsheet-directory-layout" ref={directoryLayoutRef}>
               <div className="spreadsheet-directory-main">
               <div className="spreadsheet-table-wrap">
                 <table className="spreadsheet-table">
