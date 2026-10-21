@@ -15,6 +15,8 @@ type SafeProductImageProps = {
   loading?: "eager" | "lazy";
   responsive?: boolean;
   sizes?: string;
+  fixedThumbnailSize?: 320 | 640;
+  fetchPriority?: "high" | "low" | "auto";
 };
 
 function canCacheImages() {
@@ -46,7 +48,7 @@ async function primeImageCache(source: string) {
   }
 }
 
-export default function SafeProductImage({ sources = [], alt, className, loading = "lazy", responsive = false, sizes }: SafeProductImageProps) {
+export default function SafeProductImage({ sources = [], alt, className, loading = "lazy", responsive = false, sizes, fixedThumbnailSize, fetchPriority = "auto" }: SafeProductImageProps) {
   const normalizedSources = useMemo(() => {
     const unique = Array.from(new Set(sources.map((source) => String(source || "").trim()).filter(Boolean)));
     return unique.length ? unique : [FALLBACK_IMAGE];
@@ -59,8 +61,9 @@ export default function SafeProductImage({ sources = [], alt, className, loading
     ? value.replace("/product-images/", `/product-images/thumb-${size}/`)
     : value;
   const useThumbnail = responsive && !thumbnailFailed && source !== FALLBACK_IMAGE;
-  const desiredSource = useThumbnail ? thumbnailSource(source, 320) : source;
-  const displaySrcSet = useThumbnail ? `${thumbnailSource(source, 320)} 320w, ${thumbnailSource(source, 640)} 640w` : undefined;
+  const desiredThumbnailSize = fixedThumbnailSize || 320;
+  const desiredSource = useThumbnail ? thumbnailSource(source, desiredThumbnailSize) : source;
+  const displaySrcSet = useThumbnail && !fixedThumbnailSize ? `${thumbnailSource(source, 320)} 320w, ${thumbnailSource(source, 640)} 640w` : undefined;
   const [displaySource, setDisplaySource] = useState(source);
 
   useEffect(() => {
@@ -95,6 +98,8 @@ export default function SafeProductImage({ sources = [], alt, className, loading
       width={600}
       height={750}
       loading={loading}
+      fetchPriority={fetchPriority}
+      decoding="async"
       onLoad={() => void primeImageCache(desiredSource)}
       onError={() => {
         if (useThumbnail) setThumbnailFailed(true);
