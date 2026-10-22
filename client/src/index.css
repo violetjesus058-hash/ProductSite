@@ -743,6 +743,13 @@ a { color:inherit; text-decoration:none; }
 .analytics-table td { border-top: 1px solid rgba(24,23,21,.1); padding: 11px 10px; vertical-align: top; white-space: nowrap; }
 .analytics-table td strong, .analytics-table td small { display: block; }
 .analytics-table td small { max-width: 180px; overflow: hidden; color: #8d857a; font-size: 10px; text-overflow: ellipsis; }
+.analytics-platform-click-table { min-width: 860px; }
+.analytics-product-cell { display: flex; align-items: center; gap: 10px; min-width: 260px; }
+.analytics-product-cell img, .analytics-product-placeholder { width: 48px; height: 48px; flex: 0 0 48px; object-fit: cover; border: 1px solid rgba(24,23,21,.1); background: #eee8dc; }
+.analytics-product-placeholder { display: block; }
+.analytics-product-cell strong, .analytics-product-cell small { display: block; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.analytics-product-cell small { color: #8d857a; font-size: 10px; }
+
 .analytics-spin { animation: analytics-spin 1s linear infinite; }
 @keyframes analytics-spin { to { transform: rotate(360deg); } }
 @media (max-width: 700px) {

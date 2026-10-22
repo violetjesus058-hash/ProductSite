@@ -178,7 +178,7 @@ export default function ProductDetail() {
   }, [product]);
   const trackAffiliateClick = (source: PlatformSource, location: string) => {
     if (!product) return;
-    trackEvent("affiliate_click", { product_id: product.id, product_name: cleanTitle(product.catalogName || product.name).slice(0, 120), category: product.category, price: product.price, currency: product.currency, platform: source.name, destination: source.name, location });
+    trackEvent("affiliate_click", { product_id: product.id, source_product_id: product.sourceProductId || null, product_name: cleanTitle(product.catalogName || product.name).slice(0, 120), style_label: product.styleLabel || product.styleKey || null, product_image: product.images?.[0] || null, category: product.category, price: product.price, currency: product.currency, platform: source.name, destination: source.name, location });
   };
   const toggleLiked = () => { if (!product) return; const nextLiked = !liked; setLiked(nextLiked); const current = readFavorites(); saveFavorites(nextLiked ? Array.from(new Set([...current, product.id])) : current.filter((item) => item !== product.id)); };
   const shareUrl = typeof window !== "undefined" ? window.location.href : `/product/${product?.id || ""}`;

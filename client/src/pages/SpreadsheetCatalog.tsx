@@ -591,7 +591,7 @@ export default function SpreadsheetCatalog() {
   }, [loading, payload, view.page]);
 
   function trackInlinePlatformClick(platform: PlatformSource, item: CatalogPageRow, style: PreviewStyle) {
-    trackEvent("affiliate_click", { page_type: "spreadsheet", surface: "spreadsheet_inline", product_id: style.id, source_product_id: item.sourceProductId, product_name: item.name.slice(0, 120), category: item.category, price: style.price, currency: style.currency, platform: platform.name, destination: platform.name, location: "table_inline_purchase", selection_mode: view.platform ? "filtered_platform" : platform.primary ? "default_primary" : "fallback_first", page_number: view.page });
+    trackEvent("affiliate_click", { page_type: "spreadsheet", surface: "spreadsheet_inline", product_id: style.id, source_product_id: item.sourceProductId, product_name: item.name.slice(0, 120), style_label: style.styleLabel || null, product_image: style.image || item.thumbnail || null, category: item.category, price: style.price, currency: style.currency, platform: platform.name, destination: platform.name, location: "table_inline_purchase", selection_mode: view.platform ? "filtered_platform" : platform.primary ? "default_primary" : "fallback_first", page_number: view.page });
   }
 
   function renderInlinePurchaseCard(item: CatalogPageRow) {
