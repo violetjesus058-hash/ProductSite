@@ -9,6 +9,14 @@ binding = "DB"
 database_name = "productsite-db"
 database_id = "af5d0b54-6dcc-4014-ac7c-2364ca32cb63"
 
+[[kv_namespaces]]
+binding = "OVERRIDES_CACHE"
+id = "1bffec01fa2947ad96c3d708bd2c5451"
+
+[[kv_namespaces]]
+binding = "ANALYTICS_CACHE"
+id = "41979ecf02604bd9aba0733ab35e3400"
+
 [vars]
 # Replace with the final Cloudflare Pages origin before deployment.
 ALLOWED_ORIGIN = "https://productsite-8wf.pages.dev"
