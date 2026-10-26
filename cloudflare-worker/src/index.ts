@@ -2,7 +2,14 @@ export interface Env {
   DB: D1Database;
   ADMIN_API_KEY: string;
   ALLOWED_ORIGIN?: string;
+  OVERRIDES_CACHE?: KVNamespace;
+  ANALYTICS_CACHE?: KVNamespace;
 }
+
+const OVERRIDES_CACHE_KEY = "product_overrides";
+const OVERRIDES_CACHE_TTL = 600;       // 10 minutes
+const ANALYTICS_CACHE_TTL = 900;        // 15 minutes
+const ANALYTICS_CACHE_PAGE = 1;          // only cache the default page=1 result
 
 type RequestRow = {
   id: number;
@@ -349,6 +356,14 @@ async function getAnalyticsSummary(request: Request, env: Env) {
   const since = range === "today" ? beijingDayStartUtc(0) : range === "yesterday" ? beijingDayStartUtc(1) : range === "week" ? beijingWeekStartUtc() : range === "month" ? (() => { const now = new Date(Date.now() + 8 * 60 * 60 * 1000); return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, -8)).toISOString(); })() : range === "all" ? "1970-01-01T00:00:00.000Z" : range === "custom" && customStart ? customStart : beijingDayStartUtc(days - 1);
   const until = range === "yesterday" ? beijingDayStartUtc(0) : range === "custom" && customEnd ? new Date(new Date(customEnd).getTime() + 24 * 60 * 60 * 1000).toISOString() : new Date().toISOString();
   const periodLabel = range === "today" ? "今天" : range === "yesterday" ? "昨天" : range === "week" ? "本周（周一至今）" : range === "14" ? "过去 14 天" : range === "month" ? "本月" : range === "all" ? "所有时间" : range === "custom" ? `${url.searchParams.get("startDate") || ""} 至 ${url.searchParams.get("endDate") || ""}` : `过去 ${days} 天`;
+  const isDefaultPageView = page === ANALYTICS_CACHE_PAGE && pageSize === 50 && searchPage === 1 && searchPageSize === 25 && platformClickPage === 1 && platformClickPageSize === 25;
+  const analyticsCacheKey = env.ANALYTICS_CACHE && isDefaultPageView ? `analytics:summary:${range}:${since}:${until}` : null;
+  if (analyticsCacheKey) {
+    try {
+      const cached = await env.ANALYTICS_CACHE!.get(analyticsCacheKey);
+      if (cached) return response(request, env, JSON.parse(cached));
+    } catch { /* KV read error → fall through to D1 */ }
+  }
   const [totals, events, products, platforms, spreadsheetPlatforms, platformClicks, platformClickTotal, categories, daily, sources, sourceUsers, media, campaigns, devices, languages, paths, searches, searchTotal, conversions, recentTotal, recent] = await Promise.all([
     env.DB.prepare("SELECT COUNT(*) AS total_events, COUNT(DISTINCT anonymous_id) AS unique_visitors, COUNT(DISTINCT session_id) AS unique_sessions, COUNT(DISTINCT CASE WHEN event_name = 'product_detail_view' THEN anonymous_id END) AS detail_visitors, COUNT(DISTINCT CASE WHEN event_name IN ('affiliate_click','outbound_click') THEN anonymous_id END) AS click_visitors FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ?").bind(since, until).first(),
     env.DB.prepare("SELECT event_name AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? GROUP BY event_name ORDER BY count DESC LIMIT 30").bind(since, until).all(),
@@ -372,12 +387,16 @@ async function getAnalyticsSummary(request: Request, env: Env) {
     env.DB.prepare("SELECT COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ?").bind(since, until).first(),
     env.DB.prepare("SELECT id, event_name, occurred_at, path, product_id, category, platform, device, language, utm_source, utm_campaign, query, list_type, position FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? ORDER BY id DESC LIMIT ? OFFSET ?").bind(since, until, pageSize, offset).all<AnalyticsRow>(),
   ]);
-  return response(request, env, {
+  const payload = {
     days, range, periodLabel, page, pageSize, searchPage, searchPageSize, searchTotal: Number((searchTotal as { count?: number } | null)?.count || 0), platformClickPage, platformClickPageSize, platformClickTotal: Number((platformClickTotal as { count?: number } | null)?.count || 0), recentTotal: Number((recentTotal as { count?: number } | null)?.count || 0),
     totals: totals || { total_events: 0, unique_visitors: 0, unique_sessions: 0, detail_visitors: 0, click_visitors: 0 },
     events: events.results || [], products: products.results || [], platforms: platforms.results || [], spreadsheetPlatforms: spreadsheetPlatforms.results || [], platformClicks: platformClicks.results || [], categories: categories.results || [], daily: daily.results || [],
     sources: sources.results || [], sourceUsers: sourceUsers.results || [], media: media.results || [], campaigns: campaigns.results || [], devices: devices.results || [], languages: languages.results || [], paths: paths.results || [], searches: searches.results || [], conversions: conversions.results || [], recent: recent.results || [],
-  });
+  };
+  if (analyticsCacheKey) {
+    try { await env.ANALYTICS_CACHE!.put(analyticsCacheKey, JSON.stringify(payload), { expirationTtl: ANALYTICS_CACHE_TTL }); } catch { /* KV write error → ignore */ }
+  }
+  return response(request, env, payload);
 }
 
 function csvEscape(value: unknown) { const text = typeof value === "string" ? value : value == null ? "" : String(value); return /[",\n\r]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text; }
@@ -447,9 +466,27 @@ async function adminProductImport(request: Request, env: Env) {
   const commit = Boolean((body as Record<string, unknown>).commit);
   if (invalid.length || !commit) return response(request, env, { preview: true, total: rows.length, valid: valid.length, invalid, sample: valid.slice(0, 20) });
   const statements = valid.map((item) => env.DB.prepare("INSERT INTO product_overrides (product_id, source_product_id, payload_json, updated_at) VALUES (?, ?, ?, CURRENT_TIMESTAMP) ON CONFLICT(product_id) DO UPDATE SET source_product_id=excluded.source_product_id, payload_json=excluded.payload_json, updated_at=CURRENT_TIMESTAMP").bind(item.id, item.sourceProductId || null, JSON.stringify(item)));
-  await env.DB.batch(statements); return response(request, env, { success: true, imported: statements.length }, 201);
+  await env.DB.batch(statements);
+  if (env.OVERRIDES_CACHE) {
+    try { await env.OVERRIDES_CACHE.delete(OVERRIDES_CACHE_KEY); } catch { /* KV delete error → ignore */ }
+  }
+  return response(request, env, { success: true, imported: statements.length }, 201);
 }
-async function getProductOverrides(request: Request, env: Env) { const rows = await env.DB.prepare("SELECT payload_json FROM product_overrides ORDER BY product_id").all<{ payload_json: string }>(); const items = (rows.results || []).flatMap((row) => { try { const value = JSON.parse(row.payload_json); return value && typeof value === "object" ? [value] : []; } catch { return []; } }); return response(request, env, { items }); }
+async function getProductOverrides(request: Request, env: Env) {
+  if (env.OVERRIDES_CACHE) {
+    try {
+      const cached = await env.OVERRIDES_CACHE.get(OVERRIDES_CACHE_KEY);
+      if (cached) return response(request, env, JSON.parse(cached));
+    } catch { /* KV read error → fall through to D1 */ }
+  }
+  const rows = await env.DB.prepare("SELECT payload_json FROM product_overrides ORDER BY product_id").all<{ payload_json: string }>();
+  const items = (rows.results || []).flatMap((row) => { try { const value = JSON.parse(row.payload_json); return value && typeof value === "object" ? [value] : []; } catch { return []; } });
+  const payload = { items };
+  if (env.OVERRIDES_CACHE) {
+    try { await env.OVERRIDES_CACHE.put(OVERRIDES_CACHE_KEY, JSON.stringify(payload), { expirationTtl: OVERRIDES_CACHE_TTL }); } catch { /* KV write error → ignore */ }
+  }
+  return response(request, env, payload);
+}
 
 async function createRequest(request: Request, env: Env) {
   const declaredLength = Number(request.headers.get("Content-Length") || 0);
