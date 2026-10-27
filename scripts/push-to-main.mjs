@@ -74,9 +74,11 @@ function listLocalFiles() {
   }
   const flat = [];
   for (const entry of raw) expandTree(entry, flat);
-  // Deduplicate by path (directory expansion may produce duplicates with raw file entries)
+  // Normalize all paths to forward slashes + dedup
   const seen = new Set();
-  return flat.filter((e) => { if (seen.has(e.path)) return false; seen.add(e.path); return true; });
+  return flat
+    .map((e) => ({ ...e, path: e.path.replace(/\\/g, "/") }))
+    .filter((e) => { if (seen.has(e.path)) return false; seen.add(e.path); return true; });
 }
 
 async function main() {
@@ -90,7 +92,12 @@ async function main() {
   const files = listLocalFiles();
   console.log(`Local changes: ${files.length} files. Remote main at ${remoteCommitSha.slice(0, 7)}.`);
 
-  // 2. Create blobs for modified/new files
+  // 1.1. Clean up phantom backslash-path entries from previous Windows push
+  const baseTree = await gh(token, "GET", `/repos/${REPO}/git/trees/${baseTreeSha}?recursive=1`);
+  const phantomMeta = (baseTree.tree || []).filter((t) => t.path.includes("\\")).map((t) => ({ path: t.path, mode: t.mode, type: t.type, sha: null }));
+  if (phantomMeta.length) console.log(`  Found ${phantomMeta.length} phantom backslash paths to delete:`);
+
+  // 2. Create blobs for modified/new files + delete phantoms
   const blobs = [];
   for (const f of files) {
     if (f.status === "D") { blobs.push({ path: f.path, mode: "100644", type: "blob", sha: null }); continue; }
@@ -102,6 +109,10 @@ async function main() {
     const blob = await gh(token, "POST", `/repos/${REPO}/git/blobs`, { content: b64encode(content), encoding: "base64" });
     blobs.push({ path: f.path, mode: "100644", type: "blob", sha: blob.sha });
     console.log(`  BLOB ${blob.sha.slice(0, 7)}  ${f.path}`);
+  }
+  for (const p of phantomMeta) {
+    blobs.push(p);
+    console.log(`  DEL phantom  ${p.path}`);
   }
 
   // 3. Create new tree (based on remote tree + our changes)
