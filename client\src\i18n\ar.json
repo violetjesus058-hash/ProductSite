@@ -1,0 +1,21 @@
+{
+  "REQUEST": "طلب",
+  "DISCORD": "Discord",
+  "BROWSE BY": "تصفح حسب",
+  "CATALOG TABLE": "جدول الكتالوج",
+  "REQUEST A PRODUCT": "اطلب منتجًا",
+  "DISCORD FEEDBACK": "ملاحظات Discord",
+  "Demo": "تجريبي",
+  "Browsing": "تصفح",
+  "Historical visits": "الزيارات السابقة",
+  "SAVED PRODUCTS": "المنتجات المحفوظة",
+  "SELECTED BRAND": "العلامة التجارية المحددة",
+  "AI Audit View": "عرض تدقيق الذكاء الاصطناعي",
+  "Reset Progress": "إعادة تعيين التقدم",
+  "Sort": "فرز",
+  "Random Audit": "تدقيق عشوائي",
+  "Random": "عشوائي",
+  "Curated": "مختارة",
+  "Price: Low to High": "السعر: من الأقل إلى الأعلى",
+  "Price: High to Low": "السعر: من الأعلى إلى الأقل"
+}

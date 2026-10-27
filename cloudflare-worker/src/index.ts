@@ -399,6 +399,139 @@ async function getAnalyticsSummary(request: Request, env: Env) {
   return response(request, env, payload);
 }
 
+async function getAnalyticsReferrers(request: Request, env: Env, asCsv = false) {
+  if (!isAdmin(request, env)) return response(request, env, { error: "没有后台访问权限。" }, 401);
+  const url = new URL(request.url);
+  const requestedRange = url.searchParams.get("range") || "30";
+  const validRanges = ["today", "yesterday", "week", "7", "14", "month", "30", "all", "custom"];
+  const range = validRanges.includes(requestedRange) ? requestedRange : "30";
+  const days = ["today", "yesterday", "week", "month", "all", "custom"].includes(range) ? 1 : Number(range);
+  const customStart = beijingDateStartUtc(url.searchParams.get("startDate") || "");
+  const customEnd = beijingDateStartUtc(url.searchParams.get("endDate") || "");
+  const since = range === "today" ? beijingDayStartUtc(0) : range === "yesterday" ? beijingDayStartUtc(1) : range === "week" ? beijingWeekStartUtc() : range === "month" ? (() => { const now = new Date(Date.now() + 8 * 60 * 60 * 1000); return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, -8)).toISOString(); })() : range === "all" ? "1970-01-01T00:00:00.000Z" : range === "custom" && customStart ? customStart : beijingDayStartUtc(days - 1);
+  const until = range === "yesterday" ? beijingDayStartUtc(0) : range === "custom" && customEnd ? new Date(new Date(customEnd).getTime() + 24 * 60 * 60 * 1000).toISOString() : new Date().toISOString();
+  const periodLabel = range === "today" ? "今天" : range === "yesterday" ? "昨天" : range === "week" ? "本周（周一至今）" : range === "14" ? "过去 14 天" : range === "month" ? "本月" : range === "all" ? "所有时间" : range === "custom" ? `${url.searchParams.get("startDate") || ""} 至 ${url.searchParams.get("endDate") || ""}` : `过去 ${days} 天`;
+  const LIMIT_HOST = 100;
+  const LIMIT_FULL = 200;
+  const LIMIT_MATRIX = 200;
+  const [referrerAgg, matrixAgg, directAgg] = await Promise.all([
+    env.DB.prepare("SELECT referrer, COUNT(*) AS event_count, COUNT(DISTINCT anonymous_id) AS visitor_count, COUNT(DISTINCT session_id) AS session_count, MIN(occurred_at) AS first_seen, MAX(occurred_at) AS last_seen FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? GROUP BY referrer ORDER BY event_count DESC LIMIT ?").bind(since, until, LIMIT_FULL).all(),
+    env.DB.prepare("SELECT COALESCE(NULLIF(path, ''), '/') AS path, referrer, COUNT(*) AS event_count, COUNT(DISTINCT anonymous_id) AS visitor_count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND path IS NOT NULL GROUP BY path, referrer ORDER BY event_count DESC LIMIT ?").bind(since, until, LIMIT_MATRIX).all(),
+    env.DB.prepare("SELECT COALESCE(NULLIF(path, ''), '/') AS path, COUNT(*) AS event_count, COUNT(DISTINCT anonymous_id) AS visitor_count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND referrer IS NULL GROUP BY path ORDER BY event_count DESC LIMIT 100").bind(since, until).all(),
+  ]);
+  const isInternalHost = (hostname: string) => /productsite-8wf\.pages\.dev$/i.test(hostname);
+  function parseReferrer(raw: string | null | undefined) {
+    if (!raw) return { kind: "direct", host: "", full: "", fullCanonical: "" } as const;
+    try {
+      const parsed = new URL(raw);
+      const isInternal = isInternalHost(parsed.hostname);
+      const queryKeys = [...parsed.searchParams.keys()];
+      const utmOnly = queryKeys.every((key) => key.startsWith("utm_") || key === "gclid" || key === "ref");
+      const canonical = utmOnly ? `${parsed.origin}${parsed.pathname}${parsed.search}` : `${parsed.origin}${parsed.pathname}`;
+      const fixed = canonical.length > 300 ? raw.slice(0, 300) : canonical;
+      return { kind: isInternal ? "internal" : "external", host: parsed.hostname, full: raw.slice(0, 300), fullCanonical: fixed } as const;
+    } catch {
+      return { kind: "external", host: "(unparseable)", full: raw.slice(0, 300), fullCanonical: raw.slice(0, 120) } as const;
+    }
+  }
+  // Build host aggregation.
+  const hostBuckets = new Map<string, { host: string; kind: "direct" | "internal" | "external"; event_count: number; visitor_count: number; session_count: number; first_seen: string; last_seen: string }>();
+  const bumpHost = (host: string, kind: "direct" | "internal" | "external", eventCount: number, visitorCount: number, sessionCount: number, first: string, last: string) => {
+    const key = `${kind}:${host}`;
+    const existing = hostBuckets.get(key);
+    if (existing) {
+      existing.event_count += eventCount;
+      existing.visitor_count = Math.max(existing.visitor_count, visitorCount); // DISTINCT across hosts isn't additive; keep as max signal
+      existing.session_count += sessionCount;
+      if (first < existing.first_seen) existing.first_seen = first;
+      if (last > existing.last_seen) existing.last_seen = last;
+    } else {
+      hostBuckets.set(key, { host, kind, event_count: eventCount, visitor_count: visitorCount, session_count: sessionCount, first_seen: first, last_seen: last });
+    }
+  };
+  for (const row of referrerAgg.results) {
+    const parsed = parseReferrer((row as { referrer: string | null }).referrer);
+    bumpHost(parsed.host || "(direct)", parsed.kind, Number(row.event_count), Number(row.visitor_count), Number(row.session_count), String(row.first_seen), String(row.last_seen));
+  }
+  for (const row of directAgg.results) {
+    const parsed = parseReferrer(null);
+    bumpHost("(direct)", "direct", Number(row.event_count), Number(row.visitor_count), 0, String(until), String(since)); // direct rows have no referrer; first/last are period bounds
+  }
+  const hosts = [...hostBuckets.values()].sort((a, b) => b.event_count - a.event_count).slice(0, LIMIT_HOST);
+  // Build full URL aggregation.
+  const full = referrerAgg.results.map((row) => {
+    const parsed = parseReferrer((row as { referrer: string | null }).referrer);
+    return {
+      kind: parsed.kind,
+      host: parsed.host,
+      full: parsed.full,
+      full_canonical: parsed.fullCanonical,
+      event_count: Number(row.event_count),
+      visitor_count: Number(row.visitor_count),
+      session_count: Number(row.session_count),
+      first_seen: String(row.first_seen),
+      last_seen: String(row.last_seen),
+    };
+  }).sort((a, b) => b.event_count - a.event_count).slice(0, LIMIT_FULL);
+  // Build entry-path × referrer-host matrix.
+  const matrixRaw = matrixAgg.results.map((row) => {
+    const parsed = parseReferrer((row as { referrer: string | null }).referrer);
+    return { path: String((row as { path: string }).path), host: parsed.host || "(direct)", kind: parsed.kind, event_count: Number(row.event_count), visitor_count: Number(row.visitor_count) };
+  });
+  for (const row of directAgg.results) {
+    matrixRaw.push({ path: String((row as { path: string }).path), host: "(direct)", kind: "direct", event_count: Number(row.event_count), visitor_count: Number(row.visitor_count) });
+  }
+  const pathHostBuckets = new Map<string, typeof matrixRaw>();
+  for (const row of matrixRaw) {
+    const key = row.path;
+    if (!pathHostBuckets.has(key)) pathHostBuckets.set(key, []);
+    pathHostBuckets.get(key)!.push(row);
+  }
+  const matrix = [...pathHostBuckets.entries()].map(([path, rows]) => ({ path, entries: rows.sort((a, b) => b.event_count - a.event_count).slice(0, 10) })).sort((a, b) => b.entries.reduce((sum, r) => sum + r.event_count, 0) - a.entries.reduce((sum, r) => sum + r.event_count, 0)).slice(0, LIMIT_MATRIX);
+  const summaryTotal = Number(referrerAgg.results.reduce((sum, row) => sum + Number(row.event_count), 0)) + Number(directAgg.results.reduce((sum, row) => sum + Number(row.event_count), 0));
+  const externalTotal = hosts.filter((h) => h.kind === "external").reduce((sum, h) => sum + h.event_count, 0);
+  const internalTotal = hosts.filter((h) => h.kind === "internal").reduce((sum, h) => sum + h.event_count, 0);
+  const directTotal = hosts.filter((h) => h.kind === "direct").reduce((sum, h) => sum + h.event_count, 0);
+  const period = { days, range, periodLabel, since, until };
+  if (asCsv) {
+    const scope = (url.searchParams.get("scope") || "all") as "host" | "full" | "matrix" | "all";
+    const parts: string[] = [];
+    const appendHosts = () => {
+      parts.push("# 来源域名（按事件次数降序）");
+      parts.push(["kind", "host", "event_count", "visitor_count", "session_count", "first_seen", "last_seen"].join(","));
+      for (const h of hosts) parts.push([h.kind, h.host, h.event_count, h.visitor_count, h.session_count, h.first_seen, h.last_seen].map(csvEscape).join(","));
+      parts.push("");
+    };
+    const appendFull = () => {
+      parts.push("# 完整来源 URL");
+      parts.push(["kind", "host", "full_url", "canonical_url", "event_count", "visitor_count", "session_count", "first_seen", "last_seen"].join(","));
+      for (const f of full) parts.push([f.kind, f.host, f.full, f.full_canonical, f.event_count, f.visitor_count, f.session_count, f.first_seen, f.last_seen].map(csvEscape).join(","));
+      parts.push("");
+    };
+    const appendMatrix = () => {
+      parts.push("# 入口页面 × 来源域名");
+      parts.push(["entry_path", "kind", "referrer_host", "event_count", "visitor_count"].join(","));
+      for (const group of matrix) for (const entry of group.entries) parts.push([group.path, entry.kind, entry.host, entry.event_count, entry.visitor_count].map(csvEscape).join(","));
+      parts.push("");
+    };
+    parts.push(`# ProductSite Analytics Referrers Export — ${periodLabel} (${since.slice(0, 10)} to ${until.slice(0, 10)})`);
+    parts.push(`# External events: ${externalTotal}, Internal: ${internalTotal}, Direct: ${directTotal}, Total: ${summaryTotal}`);
+    parts.push("");
+    if (scope === "host" || scope === "all") appendHosts();
+    if (scope === "full" || scope === "all") appendFull();
+    if (scope === "matrix" || scope === "all") appendMatrix();
+    const filename = `productsite-referrers-${range}-${since.slice(0, 10)}.csv`;
+    return new Response(new TextEncoder().encode("\ufeff" + parts.join("\n")), {
+      status: 200,
+      headers: { ...Object.fromEntries(corsHeaders(request, env)), "content-type": "text/csv; charset=UTF-8", "content-disposition": `attachment; filename="${filename}"` },
+    });
+  }
+  return response(request, env, {
+    period,
+    totals: { external: externalTotal, internal: internalTotal, direct: directTotal, summary: summaryTotal },
+    hosts, full, matrix,
+  });
+}
 function csvEscape(value: unknown) { const text = typeof value === "string" ? value : value == null ? "" : String(value); return /[",\n\r]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text; }
 function productTemplateResponse(request: Request, env: Env) { return new Response(`${productTemplateHeaders.join(",")}\n`, { status: 200, headers: { ...Object.fromEntries(corsHeaders(request, env)), "content-type": "text/csv; charset=UTF-8", "content-disposition": 'attachment; filename="productsite-product-template.csv"' } }); }
 const affiliateTemplates: Record<string, (id: string) => string> = {
@@ -558,6 +691,8 @@ export default {
       if (request.method === "GET" && publicMatch) return await getPublicRequest(request, env, decodeURIComponent(publicMatch[1]));
       if (request.method === "GET" && url.pathname === "/api/admin/requests") return await listAdminRequests(request, env);
       if (request.method === "GET" && url.pathname === "/api/admin/analytics/summary") return await getAnalyticsSummary(request, env);
+      if (request.method === "GET" && url.pathname === "/api/admin/analytics/referrers") return await getAnalyticsReferrers(request, env, false);
+      if (request.method === "GET" && url.pathname === "/api/admin/analytics/referrers.csv") return await getAnalyticsReferrers(request, env, true);
       const adminMatch = url.pathname.match(/^\/api\/admin\/requests\/(\d+)$/);
       if (request.method === "PATCH" && adminMatch) return await updateAdminRequest(request, env, adminMatch[1]);
       return response(request, env, { error: "Not found" }, 404);

@@ -12,6 +12,7 @@ import SafeProductImage from "@/components/SafeProductImage";
 import { buildCategoryRecommendationPool, rankBehavioralRecommendations } from "@/lib/categoryRecommendations";
 import { initializeAnalytics, trackEvent, trackOnce } from "@/lib/analytics";
 import { getSiteLanguage, siteText } from "@/lib/siteLanguage";
+import { displayStyleLabel } from "@/data/style-label-map";
 
 // Editorial Pinboard audit view: compact evidence-first cards, restrained motion, and sequential category handoff after a category is fully reviewed.
 
@@ -19,10 +20,9 @@ function englishValue(value: string, fallback: string) { return /[\u4e00-\u9fff]
 function localSetting(key: string, fallback: string) { if (typeof window === "undefined") return fallback; return window.localStorage.getItem(key) || fallback; }
 function cleanTitle(value: string) { return value.replace(/📏.*$/, "").replace(/pls add whatsapp.*$/i, "").replace(/whatsapp[:：]?\s*\d+/gi, "").replace(/\s+/g, " ").replace(/\b(\w+)(\s+\1\b)+/gi, "$1").trim(); }
 function styleLabelFor(product: (typeof products)[number]) {
-  if (product.styleLabel) return `Style ${product.styleLabel}`;
-  const source = product.sizes.find((value) => /[;:|]/.test(value));
-  const style = source?.split(/[;:|]/)[0].trim();
-  return style ? `Style ${style}` : "";
+  const raw = product.styleLabel || product.sizes.find((value) => /[;:|]/.test(value))?.split(/[;:|]/)[0].trim() || "";
+  const label = displayStyleLabel(raw);
+  return label ? `Style ${label}` : "";
 }
 function styleKeyOf(product: (typeof products)[number]) {
   if (product.styleKey) return product.styleKey.toLowerCase();
@@ -46,7 +46,6 @@ const CATALOG_RETURN_KEY = "catalog:return-context:v1";
 type CatalogReturnContext = { category: string; brand: string; query: string; sort: string; scrollY: number };
 function readCatalogReturnContext(): CatalogReturnContext | null { if (typeof window === "undefined") return null; try { const raw = window.sessionStorage.getItem(CATALOG_RETURN_KEY); if (!raw) return null; const parsed = JSON.parse(raw) as Partial<CatalogReturnContext>; if (!parsed || typeof parsed !== "object" || typeof parsed.category !== "string" || typeof parsed.brand !== "string" || typeof parsed.query !== "string" || typeof parsed.sort !== "string" || typeof parsed.scrollY !== "number") return null; return parsed as CatalogReturnContext; } catch { return null; } }
 const englishCategoryLabels: Record<string, string> = { all: "ALL PRODUCTS", clothing: "CLOTHING", shoe: "SHOES", pants: "PANTS", bags: "BAGS", ACC: "ACCESSORIES", watches: "WATCHES" };
-const chineseCategoryLabels: Record<string, string> = { all: "全部商品", clothing: "服装", shoe: "鞋类", pants: "裤装", bags: "包袋", ACC: "配饰", watches: "手表" };
 function money(value: number, currency = "USD") { return new Intl.NumberFormat("en-US", { style: "currency", currency, maximumFractionDigits: 2 }).format(value); }
 function demoBadge(price: number, averageCatalogPrice: number) {
   if (price <= averageCatalogPrice * 0.65 || price >= averageCatalogPrice * 1.6) return "NEW";
@@ -110,7 +109,7 @@ export default function Home() {
   const [, navigate] = useLocation();
   const siteLanguage = getSiteLanguage();
   const tx = (english: string, chinese: string) => siteText(siteLanguage, english, chinese);
-  const categoryLabel = (id: string) => siteLanguage === "zh" ? chineseCategoryLabels[id] || id.toUpperCase() : englishCategoryLabels[id] || id.toUpperCase();
+  const categoryLabel = (id: string) => siteText(siteLanguage, englishCategoryLabels[id] || id.toUpperCase(), "");
   const catalogSnapshot = useCatalogVersion();
   const catalogVersion = catalogSnapshot.loaded;
   const [auditSession] = useState<AuditSession | null>(() => readAuditSession());
@@ -172,7 +171,7 @@ export default function Home() {
   const [fontSizeLevel, setFontSizeLevel] = useState(() => Number(localSetting("material-catalog:font-size", "0")));
   const [letterSpacingLevel, setLetterSpacingLevel] = useState(() => Number(localSetting("material-catalog:letter-spacing", "0")));
   
-  useEffect(() => { document.documentElement.lang = siteLanguage === "zh" ? "zh-CN" : "en"; }, [siteLanguage]);
+  useEffect(() => { document.documentElement.lang = siteLanguage; }, [siteLanguage]);
   useEffect(() => { initializeAnalytics(); }, []);
   useEffect(() => {
     const milestones = [25, 50, 75, 100];

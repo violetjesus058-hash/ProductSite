@@ -19,7 +19,7 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 export default function App() {
   const [location] = useLocation();
   const [, setCatalogVersion] = useState(0);
-  useEffect(() => { document.documentElement.lang = location === "/spreadsheet" ? "en" : getSiteLanguage() === "zh" ? "zh-CN" : "en"; }, [location]);
+  useEffect(() => { document.documentElement.lang = location.startsWith("/admin") ? "zh-CN" : getSiteLanguage(); }, [location]);
   useEffect(() => {
     if (location === "/spreadsheet") return;
     if (!(location === "/" || location.startsWith("/product/") || location.startsWith("/admin/products/import"))) return;

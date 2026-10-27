@@ -757,6 +757,21 @@ a { color:inherit; text-decoration:none; }
 .analytics-product-cell img, .analytics-product-placeholder { width: 48px; height: 48px; flex: 0 0 48px; object-fit: cover; border: 1px solid rgba(24,23,21,.1); background: #eee8dc; }
 .analytics-product-placeholder { display: block; }
 .analytics-product-cell strong, .analytics-product-cell small { display: block; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Referrer section */
+.analytics-export-button { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; margin-left: 10px; border: 1px solid rgba(24,23,21,.15); border-radius: 5px; background: #fff; color: #2b2a26; font-size: 11px; cursor: pointer; transition: background .15s; }
+.analytics-export-button:hover:not(:disabled) { background: #f3efe6; }
+.analytics-export-button:disabled { opacity: .45; cursor: not-allowed; }
+.analytics-tab-bar { display: flex; gap: 4px; border-bottom: 1px solid rgba(24,23,21,.1); margin-bottom: 14px; }
+.analytics-tab-bar button { padding: 7px 14px; border: 0; background: none; color: #8d857a; font-size: 12px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color .15s, border-color .15s; }
+.analytics-tab-bar button.is-active { color: #2b2a26; border-bottom-color: #ef6356; }
+.analytics-tab-bar button:hover { color: #2b2a26; }
+.analytics-kind-badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
+.analytics-kind-direct { background: #ece6da; color: #5b5348; }
+.analytics-kind-internal { background: #e8eef5; color: #2a5278; }
+.analytics-kind-external { background: #fbe6e4; color: #b43b32; }
+.analytics-matrix-chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; margin: 3px 3px 0 0; background: #faf6ee; border-radius: 5px; border: 1px solid rgba(24,23,21,.08); font-size: 11px; white-space: nowrap; }
+.analytics-matrix-chip strong { font-weight: 600; }
+.analytics-matrix-chip small { color: #8d857a; font-size: 10px; }
 .analytics-product-cell small { color: #8d857a; font-size: 10px; }
 
 .analytics-spin { animation: analytics-spin 1s linear infinite; }
