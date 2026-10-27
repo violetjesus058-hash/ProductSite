@@ -237,6 +237,34 @@ export default function Home() {
 
   // Normal browsing shows the complete filtered catalog. AI Audit View intentionally keeps a compact review batch.
   const visible = isAiAuditView ? filteredProducts.slice(0, pageSize) : filteredProducts;
+  // Style 扩展：同源商品只展开一次，每个 style 一张卡；轮询穿插保证同商品卡片不相邻；
+  // 每个源商品在当前品类视图内最多展开 MAX_STYLE_CARDS_PER_PRODUCT 张（跟随品类筛选生效）。
+  const MAX_STYLE_CARDS_PER_PRODUCT = 8;
+  const expandedCards = useMemo(() => {
+    if (isAiAuditView) return visible.map((product) => ({ product, styleKey: "", image: "" }));
+    const queues: { product: (typeof products)[number]; styleKey: string; image: string }[][] = [];
+    const seenSources = new Set<string>();
+    for (const product of visible) {
+      const sourceId = String(product.sourceProductId || product.id);
+      if (seenSources.has(sourceId)) continue;
+      seenSources.add(sourceId);
+      const styleMap = styleImages[sourceId] || {};
+      const keys = Object.keys(styleMap);
+      if (keys.length === 0) { queues.push([{ product, styleKey: "", image: "" }]); continue; }
+      queues.push(keys.slice(0, MAX_STYLE_CARDS_PER_PRODUCT).map((key) => ({ product, styleKey: key, image: styleMap[key] })));
+    }
+    const cards: { product: (typeof products)[number]; styleKey: string; image: string }[] = [];
+    let cursor = 0;
+    let guard = 0;
+    while (queues.some((queue) => queue.length > 0) && guard < 200000) {
+      const queue = queues[cursor % queues.length];
+      const card = queue.shift();
+      if (card) cards.push(card);
+      cursor += 1;
+      guard += 1;
+    }
+    return cards;
+  }, [visible, isAiAuditView]);
   const visibleSourceCount = new Set(visible.map(reviewKey)).size;
   useEffect(() => {
     trackOnce("product_list_view", `${category}:${brand}:${query.trim()}:${sort}`, { category, brand, query: query.trim() || null, sort, result_count: filteredProducts.length });
@@ -346,7 +374,7 @@ export default function Home() {
     const product = products.find((item) => item.id === id);
     return product ? analyticsProductFor(product) : {};
   };
-  const openProduct = (id: string) => { trackEvent("product_click", { ...analyticsProduct(id), source: "catalog", category, position: filteredProducts.findIndex((item) => item.id === id) + 1 }); saveReturnContext(); navigate(`/product/${id}`); };
+  const openProduct = (id: string, styleKey?: string) => { trackEvent("product_click", { ...analyticsProduct(id), source: "catalog", category, position: filteredProducts.findIndex((item) => item.id === id) + 1, ...(styleKey ? { style_key: styleKey } : {}) }); saveReturnContext(); navigate(styleKey ? `/product/${id}?style=${encodeURIComponent(styleKey)}` : `/product/${id}`); };
   const beginProductPreview = (id: string) => {
     window.clearTimeout(hoverTimers.current[id]);
     hoverTimers.current[id] = window.setTimeout(() => trackOnce("product_preview", id, { ...analyticsProduct(id), preview_type: "image", source: "catalog" }), 800);
@@ -405,8 +433,10 @@ export default function Home() {
 
       {visible.length > 0 ? <>
         <section className={isAiAuditView ? "grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2" : "masonry-grid"} aria-label="Product list" onMouseLeave={() => Object.keys(hoverTimers.current).forEach(endProductPreview)}>
-          {visible.map((product, index) => { 
-            const styleImage = styleImageFor(product);
+          {expandedCards.map((entry, index) => { 
+            const product = entry.product;
+            const cardStyleKey = entry.styleKey && entry.styleKey !== styleKeyOf(product) ? entry.styleKey : "";
+            const styleImage = entry.image || styleImageFor(product);
             const cardImages = styleImage ? [styleImage, ...product.images] : product.images;
             const isFav = favorites.includes(product.id); 
             const isDisliked = dislikes.includes(product.id);
@@ -429,7 +459,7 @@ export default function Home() {
               );
             }
             
-            return <Fragment key={product.id}><article className={`product-card card-${index % 7}`} onClick={() => openProduct(product.id)} onMouseEnter={() => beginProductPreview(product.id)} onMouseLeave={() => endProductPreview(product.id)}><div className="product-image-wrap"><SafeProductImage responsive sources={cardImages} alt={title} loading={index === 0 ? "eager" : "lazy"} fixedThumbnailSize={index === 0 ? 320 : undefined} fetchPriority={index === 0 ? "high" : "low"} /><div className="image-wash" />{demoBadge(product.price, averageCatalogPrice) && <span className={`demo-product-badge ${demoBadge(product.price, averageCatalogPrice) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price, averageCatalogPrice)}</span>}{product.reviewStatus === "suspected" && <span className="suspected-review-badge" aria-label="Suspected category mismatch">SUSPECTED</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}<button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "Remove from saved items" : "Save product"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><button className={`dislike-button ${isDisliked ? "is-disliked" : ""}`} onClick={(event) => { event.stopPropagation(); toggleProductDislike(product.id); }} aria-label={isDisliked ? "Remove dislike" : "Not interested in this product"} title={isDisliked ? "Remove dislike" : "Not interested"}><ThumbsDown size={13} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={10} /></span><span className="mobile-view-details">VIEW DETAILS <ArrowUpRight size={11} /></span></div><div className="product-info">{displayBrand && <div className="product-brand">{displayBrand}</div>}{cardTitle && <h3 className="product-name">{cardTitle}</h3>}<div className="product-price">{money(product.price, "USD")} <span className="product-currency">USD</span></div></div></article></Fragment>;
+            return <Fragment key={entry.styleKey ? `${product.id}-${entry.styleKey}` : product.id}><article className={`product-card card-${index % 7}`} onClick={() => openProduct(product.id, cardStyleKey || undefined)} onMouseEnter={() => beginProductPreview(product.id)} onMouseLeave={() => endProductPreview(product.id)}><div className="product-image-wrap"><SafeProductImage responsive sources={cardImages} alt={title} loading={index === 0 ? "eager" : "lazy"} fixedThumbnailSize={index === 0 ? 320 : undefined} fetchPriority={index === 0 ? "high" : "low"} /><div className="image-wash" />{demoBadge(product.price, averageCatalogPrice) && <span className={`demo-product-badge ${demoBadge(product.price, averageCatalogPrice) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price, averageCatalogPrice)}</span>}{product.reviewStatus === "suspected" && <span className="suspected-review-badge" aria-label="Suspected category mismatch">SUSPECTED</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}<button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "Remove from saved items" : "Save product"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><button className={`dislike-button ${isDisliked ? "is-disliked" : ""}`} onClick={(event) => { event.stopPropagation(); toggleProductDislike(product.id); }} aria-label={isDisliked ? "Remove dislike" : "Not interested in this product"} title={isDisliked ? "Remove dislike" : "Not interested"}><ThumbsDown size={13} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={10} /></span><span className="mobile-view-details">VIEW DETAILS <ArrowUpRight size={11} /></span></div><div className="product-info">{displayBrand && <div className="product-brand">{displayBrand}</div>}{cardTitle && <h3 className="product-name">{cardTitle}</h3>}<div className="product-price">{money(product.price, "USD")} <span className="product-currency">USD</span></div></div></article></Fragment>;
           })}
         </section>
 

@@ -92,6 +92,15 @@ export default function ProductDetail() {
     if (!product?.sourceProductId) return product ? [product] : [];
     return products.filter((item) => item.sourceProductId === product.sourceProductId).sort((a, b) => a.price - b.price || a.id.localeCompare(b.id));
   }, [catalogVersion, product]);
+  // ?style=<key>：来自首页 style 扩展卡片。等源商品全部 variant 加载后自动切到对应 variant。
+  const styleParam = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("style") : null;
+  useEffect(() => {
+    if (!product?.sourceProductId || !styleParam) return;
+    const wanted = styleParam.trim().toLowerCase();
+    if (!wanted) return;
+    const match = relatedStyles.find((item) => styleKeyFor(item) === wanted);
+    if (match && match.id !== product.id) navigate(`/product/${match.id}`, { replace: true });
+  }, [catalogVersion, product, relatedStyles, styleParam]);
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
