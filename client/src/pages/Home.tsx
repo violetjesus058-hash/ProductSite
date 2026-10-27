@@ -24,6 +24,16 @@ function styleLabelFor(product: (typeof products)[number]) {
   const style = source?.split(/[;:|]/)[0].trim();
   return style ? `Style ${style}` : "";
 }
+function styleKeyOf(product: (typeof products)[number]) {
+  if (product.styleKey) return product.styleKey.toLowerCase();
+  const source = product.sizes.find((value) => /[;:|]/.test(value));
+  return source?.split(/[;:|]/)[0].trim().toLowerCase() || "";
+}
+function styleImageFor(product: (typeof products)[number]) {
+  const sourceId = product.sourceProductId || product.id;
+  const key = styleKeyOf(product);
+  return (key && styleImages[sourceId]?.[key]) || "";
+}
 function isSizeOnlyCardTitle(value: string) {
   const normalized = value.replace(/^[*#\s]+/, "").replace(/[：:]+$/, "").trim();
   const sizeToken = "(?:XXS|XS|S|M|L|XL|XXL|XXXL|4XL)";
@@ -396,8 +406,8 @@ export default function Home() {
       {visible.length > 0 ? <>
         <section className={isAiAuditView ? "grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2" : "masonry-grid"} aria-label="Product list" onMouseLeave={() => Object.keys(hoverTimers.current).forEach(endProductPreview)}>
           {visible.map((product, index) => { 
-            const styleImage = product.sourceProductId && product.styleKey ? styleImages[product.sourceProductId]?.[product.styleKey.toLowerCase()] : "";
-            const image = styleImage || product.images[0];
+            const styleImage = styleImageFor(product);
+            const cardImages = styleImage ? [styleImage, ...product.images] : product.images;
             const isFav = favorites.includes(product.id); 
             const isDisliked = dislikes.includes(product.id);
             const title = englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`); 
@@ -408,7 +418,7 @@ export default function Home() {
               return (
                 <article key={product.id} className={`audit-card bg-white border border-black/5 p-1 flex flex-col gap-1 cursor-pointer hover:border-black/20`} onClick={() => openProduct(product.id)} onMouseEnter={() => beginProductPreview(product.id)} onMouseLeave={() => endProductPreview(product.id)}>
                   <div className="aspect-square overflow-hidden bg-gray-50 relative">
-                    <SafeProductImage responsive sources={product.images} alt={title} className="w-full h-full object-cover" fixedThumbnailSize={320} fetchPriority="low" />
+                    <SafeProductImage responsive sources={cardImages} alt={title} className="w-full h-full object-cover" fixedThumbnailSize={320} fetchPriority="low" />
                     <button className={`dislike-button ${isDisliked ? "is-disliked" : ""}`} onClick={(event) => { event.stopPropagation(); toggleProductDislike(product.id); }} aria-label={isDisliked ? "Remove dislike" : "Not interested in this product"} title={isDisliked ? "Remove dislike" : "Not interested"}><ThumbsDown size={11} /></button>
                     <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-[8px] text-white px-1 truncate">
                       {product.sourceProductId}
@@ -419,7 +429,7 @@ export default function Home() {
               );
             }
             
-            return <Fragment key={product.id}><article className={`product-card card-${index % 7}`} onClick={() => openProduct(product.id)} onMouseEnter={() => beginProductPreview(product.id)} onMouseLeave={() => endProductPreview(product.id)}><div className="product-image-wrap"><SafeProductImage responsive sources={product.images} alt={title} loading={index === 0 ? "eager" : "lazy"} fixedThumbnailSize={index === 0 ? 320 : undefined} fetchPriority={index === 0 ? "high" : "low"} /><div className="image-wash" />{demoBadge(product.price, averageCatalogPrice) && <span className={`demo-product-badge ${demoBadge(product.price, averageCatalogPrice) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price, averageCatalogPrice)}</span>}{product.reviewStatus === "suspected" && <span className="suspected-review-badge" aria-label="Suspected category mismatch">SUSPECTED</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}<button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "Remove from saved items" : "Save product"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><button className={`dislike-button ${isDisliked ? "is-disliked" : ""}`} onClick={(event) => { event.stopPropagation(); toggleProductDislike(product.id); }} aria-label={isDisliked ? "Remove dislike" : "Not interested in this product"} title={isDisliked ? "Remove dislike" : "Not interested"}><ThumbsDown size={13} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={10} /></span><span className="mobile-view-details">VIEW DETAILS <ArrowUpRight size={11} /></span></div><div className="product-info">{displayBrand && <div className="product-brand">{displayBrand}</div>}{cardTitle && <h3 className="product-name">{cardTitle}</h3>}<div className="product-price">{money(product.price, "USD")} <span className="product-currency">USD</span></div></div></article></Fragment>;
+            return <Fragment key={product.id}><article className={`product-card card-${index % 7}`} onClick={() => openProduct(product.id)} onMouseEnter={() => beginProductPreview(product.id)} onMouseLeave={() => endProductPreview(product.id)}><div className="product-image-wrap"><SafeProductImage responsive sources={cardImages} alt={title} loading={index === 0 ? "eager" : "lazy"} fixedThumbnailSize={index === 0 ? 320 : undefined} fetchPriority={index === 0 ? "high" : "low"} /><div className="image-wash" />{demoBadge(product.price, averageCatalogPrice) && <span className={`demo-product-badge ${demoBadge(product.price, averageCatalogPrice) === "NEW" ? "is-new" : "is-popular"}`}>{demoBadge(product.price, averageCatalogPrice)}</span>}{product.reviewStatus === "suspected" && <span className="suspected-review-badge" aria-label="Suspected category mismatch">SUSPECTED</span>}{isCuratedCategory(product) && <span className="curated-product-badge" aria-label="Curated selection">✦ CURATED</span>}<button className={`favorite-button ${isFav ? "is-favorite" : ""}`} onClick={(e) => { e.stopPropagation(); toggleFavorite(product.id); }} aria-label={isFav ? "Remove from saved items" : "Save product"}><Heart size={16} fill={isFav ? "currentColor" : "none"} /></button><button className={`dislike-button ${isDisliked ? "is-disliked" : ""}`} onClick={(event) => { event.stopPropagation(); toggleProductDislike(product.id); }} aria-label={isDisliked ? "Remove dislike" : "Not interested in this product"} title={isDisliked ? "Remove dislike" : "Not interested"}><ThumbsDown size={13} /></button><span className="view-stamp">VIEW FILE <ArrowUpRight size={10} /></span><span className="mobile-view-details">VIEW DETAILS <ArrowUpRight size={11} /></span></div><div className="product-info">{displayBrand && <div className="product-brand">{displayBrand}</div>}{cardTitle && <h3 className="product-name">{cardTitle}</h3>}<div className="product-price">{money(product.price, "USD")} <span className="product-currency">USD</span></div></div></article></Fragment>;
           })}
         </section>
 
@@ -444,8 +454,10 @@ export default function Home() {
               const product = categoryRecommendationPool[index % categoryRecommendationPool.length];
               const title = englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`);
               const displayBrand = product.brand && product.brand.toLowerCase() !== "unbranded" ? englishValue(product.brand, "") : "";
+              const styleImage = styleImageFor(product);
+              const cardImages = styleImage ? [styleImage, ...product.images] : product.images;
               return <article key={`${product.id}-category-recommendation-${index}`} className={`category-recommendation-card recommendation-size-${index % 7}`} onClick={() => openProduct(product.id)}>
-                <div className="category-recommendation-image"><SafeProductImage responsive sources={product.images} alt={title} loading="lazy" fetchPriority="low" /><span className="category-recommendation-open"><ArrowUpRight size={12} /></span></div>
+                <div className="category-recommendation-image"><SafeProductImage responsive sources={cardImages} alt={title} loading="lazy" fetchPriority="low" /><span className="category-recommendation-open"><ArrowUpRight size={12} /></span></div>
                 <div className="category-recommendation-meta">{displayBrand && <span className="category-recommendation-brand">{displayBrand}</span>}<strong>{title}</strong><span>{money(product.price, "USD")}</span></div>
               </article>;
             })}
@@ -487,8 +499,10 @@ export default function Home() {
               const product = categoryRecommendationPool[index % categoryRecommendationPool.length];
               const title = englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`);
               const displayBrand = product.brand && product.brand.toLowerCase() !== "unbranded" ? englishValue(product.brand, "") : "";
+              const styleImage = styleImageFor(product);
+              const cardImages = styleImage ? [styleImage, ...product.images] : product.images;
               return <article key={`${product.id}-empty-recommendation-${index}`} className={`category-recommendation-card recommendation-size-${index % 7}`} onClick={() => openProduct(product.id)}>
-                <div className="category-recommendation-image"><SafeProductImage responsive sources={product.images} alt={title} loading="lazy" fetchPriority="low" /><span className="category-recommendation-open"><ArrowUpRight size={12} /></span></div>
+                <div className="category-recommendation-image"><SafeProductImage responsive sources={cardImages} alt={title} loading="lazy" fetchPriority="low" /><span className="category-recommendation-open"><ArrowUpRight size={12} /></span></div>
                 <div className="category-recommendation-meta">{displayBrand && <span className="category-recommendation-brand">{displayBrand}</span>}<strong>{title}</strong><span>{money(product.price, "USD")}</span></div>
               </article>;
             })}

@@ -115,6 +115,15 @@ a { color:inherit; text-decoration:none; }
 /* Editorial Pinboard desktop rhythm: close the dossier cleanly after its facts instead of leaving a large dead zone before the detail modules. */
 .detail-content { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(370px,.9fr); gap:70px; max-width:1420px; margin:0 auto; padding:55px 58px 32px; }
 .detail-gallery { min-width:0; }.gallery-main { position:relative; overflow:hidden; background:#ebe8e0; border-radius:16px; }.gallery-main > img { display:block; width:100%; max-height:690px; object-fit:contain; aspect-ratio:1/1; }.gallery-index { position:absolute; left:18px; bottom:16px; color:var(--ink-soft); font-size:10px; letter-spacing:.14em; background:rgba(255,254,250,.8); padding:7px 10px; }.gallery-prev,.gallery-next { position:absolute; top:50%; display:grid; place-items:center; width:36px; height:36px; border-radius:50%; background:rgba(255,254,250,.82); transform:translateY(-50%); transition:background .18s; }.gallery-prev { left:16px; }.gallery-next { right:16px; }.gallery-prev:hover,.gallery-next:hover { background:white; }.thumb-strip { display:flex; gap:8px; margin-top:12px; overflow-x:auto; padding-bottom:4px; }.thumb-strip button { flex:0 0 58px; height:58px; overflow:hidden; padding:0; background:#ebe8e0; border:2px solid transparent; border-radius:6px; opacity:.62; }.thumb-strip button.is-selected { border-color:var(--coral); opacity:1; }.thumb-strip img { width:100%; height:100%; object-fit:cover; }
+.style-grid-wrap { margin-top:14px; }
+.style-grid-label { display:flex; align-items:center; gap:8px; color:var(--coral); font-size:10px; font-weight:800; letter-spacing:.14em; margin-bottom:8px; }
+.style-grid-label::before { content:""; display:inline-block; width:10px; height:1px; background:var(--coral); }
+.style-grid { display:flex; flex-wrap:wrap; gap:6px; }
+.style-chip { position:relative; width:36px; height:36px; overflow:hidden; padding:0; background:#ebe8e0; border:2px solid transparent; border-radius:6px; opacity:.55; cursor:pointer; transition:opacity .15s, border-color .15s, transform .15s; }
+.style-chip:hover { opacity:.9; transform:translateY(-1px); }
+.style-chip.is-current { border-color:var(--coral); opacity:1; box-shadow:0 0 0 2px rgba(201,88,70,.18); }
+.style-chip img { width:100%; height:100%; object-fit:cover; display:block; }
+.style-chip-number { position:absolute; right:1px; bottom:1px; padding:1px 3px; background:rgba(28,25,21,.62); color:#fff; font-size:7px; font-weight:800; letter-spacing:.04em; border-radius:2px; line-height:1; }
 .detail-dossier { padding:7px 0; }.dossier-eyebrow { display:flex; gap:12px; color:var(--coral); }.dossier-eyebrow span { color:var(--ink-soft); }.dossier-heading { display:flex; gap:20px; align-items:flex-start; justify-content:space-between; margin-top:20px; }.dossier-heading h1 { max-width:540px; margin:0; font:400 clamp(32px,4vw,58px)/1.02 'DM Serif Display',Georgia,serif; letter-spacing:-.025em; }.dossier-id { padding-top:9px; color:#aaa69e; font-size:10px; letter-spacing:.12em; }.dossier-price { display:flex; align-items:baseline; gap:12px; margin-top:23px; }.dossier-price strong { color:var(--coral); font-size:22px; }.dossier-price del { color:#aaa69e; font-size:12px; }.dossier-price span { color:var(--ink-soft); font-size:10px; letter-spacing:.15em; }.dossier-status { display:flex; align-items:center; gap:8px; margin-top:10px; color:var(--ink-soft); font-size:11px; }.status-sep { color:#bcb8b0; }.dossier-divider { height:1px; margin:19px 0; background:var(--line); }.option-group { margin:21px 0; }.option-label { display:flex; justify-content:space-between; margin-bottom:11px; font-size:11px; font-weight:800; }.option-label span { color:var(--ink-soft); font-weight:500; }.option-list { display:flex; flex-wrap:wrap; gap:7px; }.option-list button { min-width:42px; padding:8px 11px; border:1px solid var(--line); background:rgba(255,254,250,.55); color:var(--ink-soft); font-size:11px; transition:border .18s, color .18s, background .18s; }.option-list button:hover,.option-list button.is-selected { border-color:var(--coral); color:var(--coral); background:#fff7f4; }.dossier-actions { display:flex; gap:9px; margin-top:30px; }.primary-action,.secondary-action { display:flex; align-items:center; justify-content:center; gap:8px; min-height:45px; padding:0 17px; font-size:11px; font-weight:800; transition:transform .16s var(--ease-out), background .18s; }.primary-action { flex:1; background:var(--coral); color:#fffdf8; }.secondary-action { border:1px solid var(--line); }.primary-action:hover { background:#d94e41; }.primary-action:hover,.secondary-action:hover,.module-buy-button:hover { transform:translateY(-2px); }.detail-note { display:flex; gap:10px; margin-top:16px; padding:14px; background:var(--paper-deep); color:var(--ink-soft); }.detail-note svg { flex:0 0 auto; color:var(--coral); }.detail-note p { margin:0; font-size:10px; line-height:1.6; }.details-block p { margin:7px 0 0; max-height:130px; overflow:auto; color:var(--ink-soft); font-size:12px; line-height:1.7; }.detail-facts { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:16px; }.detail-facts div { padding-top:12px; border-top:1px solid var(--line); }.detail-facts span,.detail-facts strong { display:block; }.detail-facts span { color:#aaa69e; font-size:10px; margin-bottom:6px; }.detail-facts strong { font-size:11px; }.detail-footer { display:flex; justify-content:space-between; padding:17px 42px; border-top:1px solid var(--line); color:#aaa69e; font-size:9px; letter-spacing:.15em; }.not-found-page { min-height:100vh; display:grid; place-items:center; align-content:center; gap:15px; background:var(--paper); }.not-found-page span { color:var(--coral); font-size:11px; letter-spacing:.15em; }.not-found-page h1 { margin:0; font:400 42px 'DM Serif Display',serif; }.not-found-page a { padding:10px 16px; background:var(--ink); color:#fff; font-size:12px; }
 .request-dialog-backdrop { position:fixed; inset:0; z-index:80; display:grid; place-items:center; padding:20px; background:rgba(28,25,21,.32); backdrop-filter:blur(8px); }
 .request-dialog { width:min(560px, 100%); max-height:min(760px, calc(100vh - 40px)); overflow:auto; padding:26px; border:1px solid rgba(28,25,21,.14); background:var(--paper); box-shadow:0 24px 80px rgba(28,25,21,.2); }
@@ -952,6 +961,32 @@ a { color:inherit; text-decoration:none; }
   margin: 0;
   break-inside: auto;
 }
+
+/* ============================================================
+   LAYOUT B GRAY-RELEASE (e-commerce / fishgoo-style)
+   Active when visitor bucket < LAYOUT_B_PERCENT or ?layout=B.
+   Default (no data-layout) keeps the original editorial layout.
+   ============================================================ */
+[data-layout="B"] .detail-content { display:flex; flex-direction:column; gap:0; padding:32px 24px 24px; max-width:960px; margin-inline:auto; }
+[data-layout="B"] .detail-gallery { max-width:760px; margin:0 auto 28px; width:100%; }
+[data-layout="B"] .detail-gallery .gallery-main { border-radius:12px; }
+[data-layout="B"] .detail-gallery .gallery-main > img { max-height:560px; }
+[data-layout="B"] .detail-gallery .thumb-strip { margin-top:14px; }
+[data-layout="B"] .detail-dossier { padding:0; }
+[data-layout="B"] .detail-dossier .dossier-eyebrow { display:none; }
+[data-layout="B"] .detail-dossier .dossier-heading { margin-bottom:8px; }
+[data-layout="B"] .detail-dossier .dossier-heading h1 { font-size:34px; line-height:1.05; }
+[data-layout="B"] .detail-dossier .dossier-id { display:none; }
+[data-layout="B"] .detail-dossier .style-grid-wrap { margin-top:12px; }
+[data-layout="B"] .detail-dossier .option-group { margin-top:18px; }
+[data-layout="B"] .detail-dossier .platform-sources { margin-top:20px; }
+[data-layout="B"] .detail-dossier .detail-facts { grid-template-columns:1fr 1fr; }
+[data-layout="B"] .detail-dossier .dossier-actions { position:sticky; bottom:0; z-index:10; padding:14px 0 18px; margin-top:20px; background:rgba(247,245,240,.96); backdrop-filter:blur(8px); border-top:1px solid var(--line); }
+[data-layout="B"] .detail-dossier .dossier-actions .primary-action { flex:1; justify-content:center; padding:14px 20px; font-size:13px; }
+[data-layout="B"] .detail-dossier .dossier-actions .secondary-action { padding:14px 18px; }
+[data-layout="B"] .recommendation-intro { padding:26px 24px 16px; }
+[data-layout="B"] .recommendations { padding:28px 24px 48px; }
+
 @media (max-width: 1100px) {
   .masonry-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }

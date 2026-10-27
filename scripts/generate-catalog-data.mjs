@@ -354,9 +354,28 @@ async function main() {
 
   const orderedProducts = interleaveProducts(products);
   await writeCatalogPages(orderedProducts, 60);
+  // Build sourceProductId → page numbers index for runtime lazy-load of sibling variants.
+  const pageSizeForSourceIndex = 60;
+  const sourceToPages = new Map();
+  for (let page = 1; page <= Math.max(1, Math.ceil(orderedProducts.length / pageSizeForSourceIndex)); page += 1) {
+    const slice = orderedProducts.slice((page - 1) * pageSizeForSourceIndex, page * pageSizeForSourceIndex);
+    const seenInPage = new Set();
+    for (const product of slice) {
+      const sid = safeSourceId(product);
+      if (!sid) continue;
+      if (seenInPage.has(sid)) continue;
+      seenInPage.add(sid);
+      const list = sourceToPages.get(sid) || [];
+      list.push(page);
+      sourceToPages.set(sid, list);
+    }
+  }
+  const sourceIndex = {};
+  for (const [sid, pages] of sourceToPages.entries()) sourceIndex[sid] = pages;
+  await jsonWrite(path.join(outputRoot, "source-index.json"), sourceIndex);
   const productChunkStats = await writeProductChunks(orderedProducts);
   const fileCount = (await fs.readdir(previewDir)).length;
-  console.log(`Generated ${products.length.toLocaleString()} product records, ${fileCount.toLocaleString()} purchase previews, ${productChunkStats.count} product chunks (largest ${productChunkStats.largestChunkBytes.toLocaleString()} bytes), catalog index, metadata, and paginated pages.`);
+  console.log(`Generated ${products.length.toLocaleString()} product records, ${fileCount.toLocaleString()} purchase previews, ${productChunkStats.count} product chunks (largest ${productChunkStats.largestChunkBytes.toLocaleString()} bytes), ${Object.keys(sourceIndex).length.toLocaleString()} source→page mappings, catalog index, metadata, and paginated pages.`);
 }
 
 main().catch((error) => {

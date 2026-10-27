@@ -201,6 +201,24 @@ export async function loadNextCatalogPage() {
   await loadPage(Math.max(1, snapshot.page + 1));
 }
 
+let sourceIndexCache: Promise<Record<string, number[]>> | null = null;
+async function getSourceIndex() {
+  if (sourceIndexCache) return sourceIndexCache;
+  sourceIndexCache = fetch(`${CATALOG_BASE}/source-index.json`, { headers: { accept: "application/json" } })
+    .then((r) => (r.ok ? r.json() : {}))
+    .then((data) => (data && typeof data === "object" ? (data as Record<string, number[]>) : {}))
+    .catch(() => ({}));
+  return sourceIndexCache;
+}
+
+export async function ensureSourceVariantsLoaded(sourceProductId: string) {
+  if (!sourceProductId) return;
+  const index = await getSourceIndex();
+  const pages = index[sourceProductId];
+  if (!pages || !Array.isArray(pages) || pages.length <= 1) return;
+  await Promise.all(pages.map((p) => loadPage(p)));
+}
+
 export const productsReady = initializeCatalog();
 await productsReady;
 
