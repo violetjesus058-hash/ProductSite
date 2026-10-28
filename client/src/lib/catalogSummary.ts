@@ -44,9 +44,8 @@ function shuffle<T>(items: T[], random: () => number) {
   return result;
 }
 
-/** Randomize products per visit and interleave styles so one product does not occupy adjacent rows. */
-export function randomizeCatalogItems(items: CatalogSummary[], seed: number | string): CatalogSummary[] {
-  const random = seededRandom(seed);
+/** Order a set of items so one product does not occupy adjacent rows. */
+function interleaveWithinGroups(items: CatalogSummary[], random: () => number): CatalogSummary[] {
   const grouped = new Map<string, CatalogSummary[]>();
   for (const item of items) {
     const key = item.sourceProductId || item.id;
@@ -65,6 +64,34 @@ export function randomizeCatalogItems(items: CatalogSummary[], seed: number | st
     result.push(selected.items[selected.offset]);
     selected.offset += 1;
     previousGroup = selected.key;
+  }
+  return result;
+}
+
+/**
+ * Default view ordering: slice items into low/mid/high price tiers, then emit one row per tier
+ * in a seed-shuffled cycle so every screen mixes price levels. Each tier queue is group-interleaved
+ * and a product never repeats on adjacent rows.
+ */
+export function randomizeCatalogItems(items: CatalogSummary[], seed: number | string): CatalogSummary[] {
+  const random = seededRandom(seed);
+  const sorted = [...items].sort((a, b) => a.price - b.price || a.id.localeCompare(b.id));
+  const tiers: CatalogSummary[][] = [[], [], []];
+  sorted.forEach((item, index) => tiers[Math.min(2, Math.floor((index / sorted.length) * 3))].push(item));
+  const queues = tiers.map((tier) => interleaveWithinGroups(tier, random));
+
+  const result: CatalogSummary[] = [];
+  let previousProduct = "";
+  while (result.length < items.length) {
+    const order = shuffle([0, 1, 2], random).filter((tier) => queues[tier].length > 0);
+    for (const tier of order) {
+      const queue = queues[tier];
+      let index = queue.findIndex((item) => (item.sourceProductId || item.id) !== previousProduct);
+      if (index === -1) index = 0;
+      const [item] = queue.splice(index, 1);
+      result.push(item);
+      previousProduct = item.sourceProductId || item.id;
+    }
   }
   return result;
 }
