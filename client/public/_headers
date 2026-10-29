@@ -6,3 +6,9 @@
   Cross-Origin-Opener-Policy: same-origin-allow-popups
   Cross-Origin-Resource-Policy: same-origin
   Strict-Transport-Security: max-age=31536000; includeSubDomains
+
+/kakobuy-catalog.csv
+  Content-Type: text/csv; charset=utf-8
+  Content-Disposition: attachment; filename="kakobuy-catalog.csv"
+  Cache-Control: public, max-age=3600
+  Cross-Origin-Resource-Policy: cross-origin

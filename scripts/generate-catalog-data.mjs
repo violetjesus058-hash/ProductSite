@@ -273,6 +273,74 @@ async function main() {
     };
   });
 
+  const csvPath = path.join(root, "client/public/kakobuy-catalog.csv");
+  const writeCatalogCsv = async () => {
+    const header = ["category", "product_name", "style_name", "sizes", "price_usd", "agents_count", "first_agent", "product_link", "image_url", "style_id", "refreshed"];
+    const absoluteUrl = (value) => {
+      const text = String(value || "");
+      return text.startsWith("/") ? `https://productsite-8wf.pages.dev${text}` : text;
+    };
+    const escapeField = (value) => {
+      const text = String(value ?? "");
+      return /[",\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+    };
+    const records = rows.map((row, index) => {
+      const product = products[index];
+      return {
+        category: categoryLabels[row.category] || row.category,
+        product_name: row.name,
+        style_name: row.styleLabel,
+        sizes: Array.isArray(product.sizes) ? product.sizes.join(", ") : "",
+        price_usd: (Number(row.price) || 0).toFixed(2),
+        agents_count: row.platformCount,
+        first_agent: row.primaryPlatform,
+        product_link: row.sourceProductId ? `https://weidian.com/item.html?itemID=${row.sourceProductId}` : "",
+        image_url: absoluteUrl(row.thumbnail),
+        style_id: row.id,
+        refreshed: String(row.priceCheckedAt || "").slice(0, 10),
+      };
+    });
+    records.sort((left, right) => left.category.localeCompare(right.category) || left.product_name.localeCompare(right.product_name) || left.style_id.localeCompare(right.style_id));
+
+    const errors = [];
+    const expectedTotal = 14535;
+    const expectedCategories = { Clothing: 7623, Accessories: 2919, Shoes: 1852, Pants: 1594, Bags: 283, Watches: 264 };
+    if (records.length !== expectedTotal) errors.push(`行数 ${records.length}，期望 ${expectedTotal}`);
+    const seen = new Set();
+    const counts = {};
+    const badRows = [];
+    for (const record of records) {
+      if (!record.style_id || seen.has(record.style_id)) errors.push(`style_id 重复或为空：${record.style_id}`);
+      seen.add(record.style_id);
+      counts[record.category] = (counts[record.category] || 0) + 1;
+      const price = Number(record.price_usd);
+      const issues = [];
+      // sizes 与 style_name 按需求允许为空，仅校验其余必填列
+      for (const key of ["category", "product_name", "price_usd", "agents_count", "first_agent", "product_link", "image_url", "style_id", "refreshed"]) {
+        if (!record[key]) issues.push(`${key} 为空`);
+      }
+      if (!(price >= 1.07 && price <= 192.65)) issues.push(`price_usd 越界 ${record.price_usd}`);
+      if (!/^https:\/\//.test(record.product_link)) issues.push(`product_link 非 https`);
+      if (!/^https:\/\//.test(record.image_url)) issues.push(`image_url 非 https`);
+      if (issues.length) badRows.push(`${record.style_id}: ${issues.join("; ")}`);
+    }
+    for (const [label, expected] of Object.entries(expectedCategories)) {
+      if ((counts[label] || 0) !== expected) errors.push(`分类 ${label} 行数 ${counts[label] || 0}，期望 ${expected}`);
+    }
+    if (badRows.length) errors.push(`字段问题 ${badRows.length} 行，前 10 条：\n${badRows.slice(0, 10).join("\n")}`);
+    if (errors.length) throw new Error(`kakobuy-catalog.csv 校验失败：\n${errors.join("\n")}`);
+
+    const body = [header, ...records.map((record) => header.map((key) => record[key]))]
+      .map((cells) => cells.map(escapeField).join(","))
+      .join("\r\n");
+    const content = `\ufeff${body}\r\n`;
+    await fs.writeFile(csvPath, content, "utf8");
+    const sizeMb = Buffer.byteLength(content, "utf8") / 1024 / 1024;
+    if (sizeMb > 10) console.warn(`  WARN kakobuy-catalog.csv 体积 ${sizeMb.toFixed(2)}MB，超过 10MB 阈值`);
+    console.log(`  CSV ${records.length} 行, ${sizeMb.toFixed(2)}MB -> ${path.relative(root, csvPath)}`);
+    return counts;
+  };
+
   const grouped = new Map();
   for (const product of products) {
     const sourceProductId = safeSourceId(product);
@@ -328,6 +396,8 @@ async function main() {
     platforms: [...platformMap.values()].sort((a, b) => a.label.localeCompare(b.label)),
   });
   await jsonWrite(path.join(outputRoot, "catalog-index.json"), rows);
+  const csvCounts = await writeCatalogCsv();
+  console.log(`  CSV categories: ${JSON.stringify(csvCounts)}`);
 
   const priorityById = new Map(products.map((product) => [
     String(product.id), curatedPriority(product, isLongSleeve),
