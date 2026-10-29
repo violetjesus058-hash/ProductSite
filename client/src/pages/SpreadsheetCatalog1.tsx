@@ -74,9 +74,10 @@ function InlinePurchaseCard({ item, group, selectedPlatform, selectedStyleId, sh
   const selectedStyle = group.styles.find((style) => style.id === selectedStyleId) || group.styles.find((style) => style.id === item.id) || group.styles[0];
   if (!selectedStyle) return <div className="spreadsheet-inline-state" role="status">No style options available.</div>;
   const selectedPlatformSource = selectedPlatform
-    ? group.platforms.find((platform) => normalizePlatformName(platform.name) === normalizePlatformName(selectedPlatform) && normalizePlatformName(platform.name) !== "kakobuy")
+    ? group.platforms.find((platform) => normalizePlatformName(platform.name) === normalizePlatformName(selectedPlatform))
     : undefined;
-  const primary = selectedPlatformSource || group.platforms.find((platform) => platform.primary && normalizePlatformName(platform.name) !== "kakobuy") || group.platforms.find((platform) => normalizePlatformName(platform.name) !== "kakobuy") || group.platforms[0];
+  // /spreadsheet1 放开 Kakobuy，主平台仍按数据里的 primary 取（Kakobuy 不带 primary 标记）
+  const primary = selectedPlatformSource || group.platforms.find((platform) => platform.primary) || group.platforms[0];
   const orderedPlatforms = primary ? [primary, ...group.platforms.filter((platform) => platform !== primary)] : group.platforms;
   const visiblePlatforms = showAllPlatforms ? orderedPlatforms : orderedPlatforms.slice(0, 5);
   const styleImageUrl = selectedStyle.image || item.thumbnail || placeholder;
@@ -106,11 +107,6 @@ function InlinePurchaseCard({ item, group, selectedPlatform, selectedStyleId, sh
       <div className="spreadsheet-inline-platform-list">
         {visiblePlatforms.map((platform) => {
           const icon = platformIconFor(platform.name);
-          const unavailable = normalizePlatformName(platform.name) === "kakobuy";
-          if (unavailable) return <div key={platform.name} className="spreadsheet-inline-platform is-unavailable" aria-disabled="true" title="Kakobuy: Temporarily unavailable">
-            <span className="spreadsheet-inline-platform-identity">{icon ? <img src={icon} alt="" aria-hidden="true" loading="lazy" /> : <i aria-hidden="true">{platform.name.charAt(0).toUpperCase()}</i>}<strong>{platform.name}</strong></span>
-            <small>Unavailable</small>
-          </div>;
           return <a key={platform.name} href={platform.url} target="_blank" rel="noopener noreferrer" className={`spreadsheet-inline-platform ${platform === primary ? "is-primary" : ""}`} onClick={() => onPlatformClick(platform, group, selectedStyle)}>
             <span className="spreadsheet-inline-platform-identity">{icon ? <img src={icon} alt="" aria-hidden="true" loading="lazy" /> : <i aria-hidden="true">{platform.name.charAt(0).toUpperCase()}</i>}<strong>{platform.name}</strong></span>
             <ExternalLink size={14} aria-hidden="true" />
@@ -192,7 +188,7 @@ function loadPreviewGroup(sourceProductId: string): Promise<ProductPreviewGroup>
     const rows = items.filter((item) => item.sourceProductId === sourceProductId);
     if (!rows.length) throw new Error("Product not found in catalog.");
     const first = rows[0];
-    const platforms = platformSourcesFor({ id: first.id, sourceProductId, url: "https://www.kakobuy.com/item/details" })
+    const platforms = platformSourcesFor({ id: first.id, sourceProductId })
       .map((source: PlatformSource) => ({ name: source.name, url: source.url, primary: !!source.primary }));
     return {
       sourceProductId,
@@ -699,7 +695,7 @@ export default function SpreadsheetCatalog1() {
           <ChevronDown className="spreadsheet-select-chevron" size={16} aria-hidden="true" />
         </label>
       </div>
-      <div className="spreadsheet-platform-callout" role="note"><Store size={16} aria-hidden="true" /><span><strong>Choose a platform</strong><small>Filter the table by buying source to compare available sellers and prices.</small><strong className="spreadsheet-platform-outage-label">PLATFORM SERVICE ALERT</strong><small className="spreadsheet-platform-maintenance">AcBuy and Multbuy are currently unavailable while under maintenance.</small><small className="spreadsheet-platform-kakobuy-warning">Kakobuy is experiencing a temporary service issue. Please switch to another available platform to complete your purchase.</small><small className="spreadsheet-platform-alternative">Recommended alternatives: Oopbuy, Sugargoo, Superbuy, or another available platform below.</small></span><b>{view.platform ? "FILTER ACTIVE" : "RECOMMENDED"}</b></div>
+      <div className="spreadsheet-platform-callout" role="note"><Store size={16} aria-hidden="true" /><span><strong>Choose a platform</strong><small>Filter the table by buying source to compare available sellers and prices.</small><strong className="spreadsheet-platform-outage-label">PLATFORM SERVICE ALERT</strong><small className="spreadsheet-platform-maintenance">AcBuy and Multbuy are currently unavailable while under maintenance.</small><small className="spreadsheet-platform-alternative">Recommended alternatives: Oopbuy, Sugargoo, Superbuy, or another available platform below.</small></span><b>{view.platform ? "FILTER ACTIVE" : "RECOMMENDED"}</b></div>
       <div className="spreadsheet-availability-notice" role="status"><strong>Fragrance is temporarily unavailable.</strong><span>Please explore Accessories, Watches, Bags, or Clothing instead.</span><div><Link href="/spreadsheet1?view=styles&category=ACC">Accessories</Link><Link href="/spreadsheet1?view=styles&category=watches">Watches</Link><Link href="/spreadsheet1?view=styles&category=bags">Bags</Link><Link href="/spreadsheet1?view=styles&category=clothing">Clothing</Link></div></div>
 
       <div className="spreadsheet-column-labels" aria-hidden="true">{["A", "B", "C", "D", "E", "F", "G", "H"].map((column) => <span key={column}>{column}</span>)}</div>
