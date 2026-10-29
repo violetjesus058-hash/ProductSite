@@ -6,7 +6,7 @@ import CatalogEntryChooser from "@/components/CatalogEntryChooser";
 import { initializeAnalytics, trackEvent, trackOnce } from "@/lib/analytics";
 import { filterCatalogItems, paginateCatalogItems, type CatalogSummary, type CatalogSort } from "@/lib/catalogSummary";
 import { isLongSleeve, LONG_SLEEVE_CATEGORY } from "@/lib/catalogOrdering.mjs";
-import { normalizePlatformName, platformIconFor, type PlatformSource } from "@/lib/platformSources.mjs";
+import { normalizePlatformName, platformIconFor, platformSourcesFor, type PlatformSource } from "@/lib/platformSources.mjs";
 import { mergeCatalogOverrides, mergePreviewOverrides, type CatalogPreviewGroup, type CatalogProductOverride } from "@/lib/catalogOverrides";
 import { displayStyleLabel } from "@/data/style-label-map";
 
@@ -135,7 +135,6 @@ const quickCategoryOptions = [
   { key: "clothing", label: "Clothing" },
   { key: "ACC", label: "Accessories" },
   { key: "bags", label: "Bags" },
-  { key: "fragrance", label: "Fragrance" },
   { key: "watches", label: "Watches" },
 ];
 let catalogIndexPromise: Promise<CatalogSummary[]> | null = null;
@@ -188,7 +187,27 @@ function loadCatalogIndex(): Promise<CatalogSummary[]> {
 function loadPreviewGroup(sourceProductId: string): Promise<ProductPreviewGroup> {
   const cached = previewGroupPromises.get(sourceProductId);
   if (cached) return cached;
-  const request = fetchJson<ProductPreviewGroup>(`${basePath}/previews/${encodeURIComponent(sourceProductId)}.json`).catch((error) => {
+  // 该数据集由 CSV 索引直接构造，不再读取旧的 previews/*.json 文件
+  const request = loadCatalogIndex().then((items) => {
+    const rows = items.filter((item) => item.sourceProductId === sourceProductId);
+    if (!rows.length) throw new Error("Product not found in catalog.");
+    const first = rows[0];
+    const platforms = platformSourcesFor({ id: first.id, sourceProductId, url: "https://www.kakobuy.com/item/details" })
+      .map((source: PlatformSource) => ({ name: source.name, url: source.url, primary: !!source.primary }));
+    return {
+      sourceProductId,
+      name: first.name,
+      platforms,
+      styles: rows.map((row) => ({
+        id: row.id,
+        styleKey: row.styleKey,
+        styleLabel: row.styleLabel,
+        image: row.thumbnail,
+        price: row.price,
+        currency: row.currency,
+      })),
+    };
+  }).catch((error) => {
     previewGroupPromises.delete(sourceProductId);
     throw error;
   });
