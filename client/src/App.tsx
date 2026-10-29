@@ -14,6 +14,7 @@ const PromotionLinkBuilder = lazy(() => import("./pages/PromotionLinkBuilder"));
 const AdminProductImport = lazy(() => import("./pages/AdminProductImport"));
 const RequestStatus = lazy(() => import("./pages/RequestStatus"));
 const SpreadsheetCatalog = lazy(() => import("./pages/SpreadsheetCatalog"));
+const SpreadsheetCatalog1 = lazy(() => import("./pages/SpreadsheetCatalog1"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 export default function App() {
@@ -62,6 +63,7 @@ export default function App() {
             <Switch>
               <Route path="/" component={Home} />
               <Route path="/spreadsheet" component={SpreadsheetCatalog} />
+              <Route path="/spreadsheet1" component={SpreadsheetCatalog1} />
               <Route path="/product/:id" component={ProductDetail} />
               <Route path="/admin/requests" component={AdminRequests} />
               <Route path="/admin/analytics" component={AdminAnalytics} />
