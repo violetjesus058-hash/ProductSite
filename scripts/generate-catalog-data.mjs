@@ -24,6 +24,21 @@ const categoryLabels = {
 };
 const categoryOrder = ["clothing", "pants", "shoe", "bags", "watches", "ACC"];
 const unavailableCategoryKeys = new Set(["fragrance"]);
+// 需求 FR-05：14,535 与六分类计数是校验基线，数据更新时须同步修改这里与页面文案，
+// 不得通过放宽校验让构建通过。
+const EXPECTED_STYLE_ROWS = 14535;
+// agents_count 统计的是「该行可采购链接数」，与站点 34 个 agent 索引规模不是同一个量。
+// 35 是静态上限，唯一例外商品 7543342819（39 行，额外 12 个平台映射 + UUFans QC 深链）。
+// 不要改成动态推断，否则未来数据异常时会自动放宽校验。
+const EXPECTED_MAX_AGENTS = 35;
+const EXPECTED_CATEGORY_COUNTS = {
+  Clothing: 7623,
+  Accessories: 2919,
+  Shoes: 1852,
+  Pants: 1594,
+  Bags: 283,
+  Watches: 264,
+};
 
 function readJsStringLiteral(source, start) {
   while (/\s/.test(source[start] || "")) start += 1;
@@ -111,6 +126,51 @@ function styleImageFor(product, styleImages) {
 
 function jsonWrite(filePath, value) {
   return fs.writeFile(filePath, JSON.stringify(value));
+}
+
+const affiliateParamPattern = /^(affcode|aff_code|invitecode|invite_code|utm_|source_?tag|share_?id)/i;
+
+function stripAffiliateParams(value) {
+  let parsed;
+  try {
+    parsed = new URL(value);
+  } catch {
+    return "";
+  }
+  let changed = false;
+  for (const key of [...parsed.searchParams.keys()]) {
+    if (affiliateParamPattern.test(key)) {
+      parsed.searchParams.delete(key);
+      changed = true;
+    }
+  }
+  return changed ? parsed.toString() : value;
+}
+
+/**
+ * 需求 §5：product_link 必须是商品实际来源的原链，且不得带 affcode 等联盟参数。
+ * 数据源里的 url 是 Kakobuy 联盟链，真实来源编码在它的 url 参数内，
+ * 因此优先解出该参数；解不出可用链接时退回由 sourceProductId 拼出的 Weidian 原链。
+ */
+function sourceProductLink(product, sourceProductId) {
+  const raw = String(product?.url || "");
+  let embedded = "";
+  try {
+    embedded = new URL(raw).searchParams.get("url") || "";
+  } catch {
+    embedded = "";
+  }
+  if (embedded) {
+    try {
+      const decoded = decodeURIComponent(embedded);
+      const cleaned = stripAffiliateParams(decoded);
+      if (/^https:\/\//.test(cleaned)) return cleaned;
+    } catch {
+      // 解码失败时继续走 sourceProductId 兜底
+    }
+  }
+  if (sourceProductId) return `https://weidian.com/item.html?itemID=${encodeURIComponent(sourceProductId)}`;
+  return "";
 }
 
 function curatedPriority(product, isLongSleeve) {
@@ -284,17 +344,26 @@ async function main() {
       const text = String(value ?? "");
       return /[",\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
     };
+    const sizeText = (sizes) => {
+      if (!Array.isArray(sizes)) return "";
+      return sizes
+        .map((value) => String(value).trim())
+        .filter((value) => value && !/^(0|n\/a|na|none|null|-)$/i.test(value))
+        .join(", ");
+    };
     const records = rows.map((row, index) => {
       const product = products[index];
+      const priceValue = Number(product.price);
       return {
         category: categoryLabels[row.category] || row.category,
         product_name: row.name,
         style_name: row.styleLabel,
-        sizes: Array.isArray(product.sizes) ? product.sizes.join(", ") : "",
-        price_usd: (Number(row.price) || 0).toFixed(2),
+        sizes: sizeText(product.sizes),
+        // 需求 §5：缺失或非数字价格必须判失败，不得以 0.00 兜底
+        price_usd: Number.isFinite(priceValue) ? priceValue.toFixed(2) : "",
         agents_count: row.platformCount,
         first_agent: row.primaryPlatform,
-        product_link: row.sourceProductId ? `https://weidian.com/item.html?itemID=${row.sourceProductId}` : "",
+        product_link: sourceProductLink(product, row.sourceProductId),
         image_url: absoluteUrl(row.thumbnail),
         style_id: row.id,
         refreshed: String(row.priceCheckedAt || "").slice(0, 10),
@@ -303,28 +372,30 @@ async function main() {
     records.sort((left, right) => left.category.localeCompare(right.category) || left.product_name.localeCompare(right.product_name) || left.style_id.localeCompare(right.style_id));
 
     const errors = [];
-    const expectedTotal = 14535;
-    const expectedCategories = { Clothing: 7623, Accessories: 2919, Shoes: 1852, Pants: 1594, Bags: 283, Watches: 264 };
-    if (records.length !== expectedTotal) errors.push(`行数 ${records.length}，期望 ${expectedTotal}`);
+    if (records.length !== EXPECTED_STYLE_ROWS) errors.push(`行数 ${records.length}，期望 ${EXPECTED_STYLE_ROWS}`);
     const seen = new Set();
     const counts = {};
     const badRows = [];
     for (const record of records) {
-      if (!record.style_id || seen.has(record.style_id)) errors.push(`style_id 重复或为空：${record.style_id}`);
+      if (!record.style_id) errors.push("style_id 为空");
+      else if (seen.has(record.style_id)) errors.push(`style_id 重复：${record.style_id}`);
       seen.add(record.style_id);
       counts[record.category] = (counts[record.category] || 0) + 1;
-      const price = Number(record.price_usd);
       const issues = [];
       // sizes 与 style_name 按需求允许为空，仅校验其余必填列
       for (const key of ["category", "product_name", "price_usd", "agents_count", "first_agent", "product_link", "image_url", "style_id", "refreshed"]) {
-        if (!record[key]) issues.push(`${key} 为空`);
+        if (!String(record[key] ?? "").trim()) issues.push(`${key} 为空`);
       }
-      if (!(price >= 1.07 && price <= 192.65)) issues.push(`price_usd 越界 ${record.price_usd}`);
-      if (!/^https:\/\//.test(record.product_link)) issues.push(`product_link 非 https`);
-      if (!/^https:\/\//.test(record.image_url)) issues.push(`image_url 非 https`);
-      if (issues.length) badRows.push(`${record.style_id}: ${issues.join("; ")}`);
+      const price = Number(record.price_usd);
+      if (record.price_usd && !(price >= 1.07 && price <= 192.65)) issues.push(`price_usd 越界 ${record.price_usd}`);
+      const agents = Number(record.agents_count);
+      if (!Number.isInteger(agents) || agents < 1 || agents > EXPECTED_MAX_AGENTS) issues.push(`agents_count 越界 ${record.agents_count}`);
+      if (record.refreshed && !/^\d{4}-\d{2}-\d{2}$/.test(record.refreshed)) issues.push(`refreshed 非 YYYY-MM-DD：${record.refreshed}`);
+      if (record.product_link && !/^https:\/\//.test(record.product_link)) issues.push("product_link 非 https");
+      if (record.image_url && !/^https:\/\//.test(record.image_url)) issues.push("image_url 非 https");
+      if (issues.length) badRows.push(`${record.style_id || "(no style_id)"}: ${issues.join("; ")}`);
     }
-    for (const [label, expected] of Object.entries(expectedCategories)) {
+    for (const [label, expected] of Object.entries(EXPECTED_CATEGORY_COUNTS)) {
       if ((counts[label] || 0) !== expected) errors.push(`分类 ${label} 行数 ${counts[label] || 0}，期望 ${expected}`);
     }
     if (badRows.length) errors.push(`字段问题 ${badRows.length} 行，前 10 条：\n${badRows.slice(0, 10).join("\n")}`);
