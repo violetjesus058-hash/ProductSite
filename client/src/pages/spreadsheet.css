@@ -187,6 +187,8 @@
 .spreadsheet-inline-product-heading strong { font-size: 14px; }
 .spreadsheet-inline-product-heading small { color: var(--sheet-muted); }
 .spreadsheet-inline-product-heading b { color: var(--sheet-accent); font-size: 18px; white-space: nowrap; }
+.spreadsheet-inline-detail-link { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 14px; color: var(--sheet-accent); font-size: 12px; font-weight: 600; text-decoration: none; }
+.spreadsheet-inline-detail-link:hover { text-decoration: underline; }
 .spreadsheet-inline-platform-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
 .spreadsheet-inline-platform { display: flex; justify-content: space-between; align-items: center; gap: 8px; min-height: 42px; padding: 7px 9px; border: 1px solid var(--sheet-line); border-radius: 6px; background: var(--sheet-paper); color: var(--sheet-ink); text-decoration: none; }
 .spreadsheet-inline-platform:hover, .spreadsheet-inline-platform.is-primary { border-color: var(--sheet-accent); }
