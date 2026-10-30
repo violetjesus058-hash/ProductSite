@@ -452,6 +452,8 @@ export default function SpreadsheetCatalog1() {
   const selectedCategoryLabel = view.category === LONG_SLEEVE_CATEGORY ? "Long sleeve" : categories.find((item) => item.key === view.category)?.label || "All categories";
   const platforms = catalogMeta?.platforms || [];
   const selectedPlatformLabel = platforms.find((item) => item.key === view.platform)?.label;
+  // 带 platform 参数进入或在下拉框切换平台时，标题跟随切换成对应的 Spreadsheet 名称
+  const catalogHeading = selectedPlatformLabel ? `RIVORA Style Catalog - ${selectedPlatformLabel} Spreadsheet` : "RIVORA Style Catalog";
   const rows = payload?.items || [];
   function primaryPlatformLabelFor(item: CatalogPageRow) {
     const selectedPlatformKey = normalizePlatformName(view.platform);
@@ -674,7 +676,7 @@ export default function SpreadsheetCatalog1() {
 
     <section className="spreadsheet-content">
       <div className="spreadsheet-title-row">
-        <div><p className="spreadsheet-eyebrow"><Table2 size={16} /> PRODUCT CATALOG</p><h1>RIVORA Style Catalog</h1><p className="spreadsheet-subtitle">Browse product styles, compare prices and find buying platforms.</p></div>
+        <div><p className="spreadsheet-eyebrow"><Table2 size={16} /> PRODUCT CATALOG</p><h1>{catalogHeading}</h1><p className="spreadsheet-subtitle">Browse product styles, compare prices and find buying platforms.</p></div>
       </div>
 
       <div className="spreadsheet-toolbar" aria-label="Catalog filters">
