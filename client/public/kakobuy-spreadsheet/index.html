@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f5f0" />
+    <title>Kakobuy Spreadsheet: Catalog, Prices and Buying Agents</title>
+    <meta
+      name="description"
+      content="Kakobuy Spreadsheet is a free, browsable catalog of 1,148 Kakobuy and Taobao products covering 14,535 style rows in six categories, with USD display prices from $1.07 to $192.65 and coverage for 34 buying agents. Refreshed October 29, 2026."
+    />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta name="author" content="Alex Finds" />
+    <link rel="canonical" href="https://productsite-8wf.pages.dev/kakobuy-spreadsheet" />
+    <link rel="alternate" hreflang="en" href="https://productsite-8wf.pages.dev/kakobuy-spreadsheet" />
+    <link rel="icon" href="/branding/rivora-icon.png" type="image/png" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="RIVORA" />
+    <meta property="og:title" content="Kakobuy Spreadsheet: Catalog, Prices and Buying Agents" />
+    <meta
+      property="og:description"
+      content="A free, browsable catalog of 1,148 Kakobuy and Taobao products covering 14,535 style rows in six categories. USD display prices, sizes and buying-agent coverage."
+    />
+    <meta property="og:url" content="https://productsite-8wf.pages.dev/kakobuy-spreadsheet" />
+    <meta property="og:image" content="https://productsite-8wf.pages.dev/og-cover.svg" />
+    <meta property="og:image:alt" content="Kakobuy Spreadsheet catalog" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Kakobuy Spreadsheet: Catalog, Prices and Buying Agents" />
+    <meta
+      name="twitter:description"
+      content="A free, browsable catalog of 1,148 Kakobuy and Taobao products covering 14,535 style rows in six categories."
+    />
+    <meta name="twitter:image" content="https://productsite-8wf.pages.dev/og-cover.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --paper: #f7f5f0;
+        --paper-deep: #eeebe4;
+        --ink: #191919;
+        --ink-soft: #6f6c66;
+        --line: #dedbd3;
+        --coral: #e95d4f;
+        --white: #fffefa;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
+
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: "Manrope", "Noto Sans SC", system-ui, -apple-system, "Segoe UI", sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      a {
+        color: var(--ink);
+        text-decoration-color: var(--line);
+        text-underline-offset: 3px;
+      }
+
+      a:hover {
+        color: var(--coral);
+        text-decoration-color: var(--coral);
+      }
+
+      .shell {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      .topbar {
+        border-bottom: 1px solid var(--line);
+        background: var(--paper);
+      }
+
+      .topbar-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 18px 0;
+      }
+
+      .brand {
+        font-family: "DM Serif Display", Georgia, serif;
+        font-size: 22px;
+        letter-spacing: -0.02em;
+        text-decoration: none;
+      }
+
+      .brand:hover {
+        color: var(--ink);
+      }
+
+      .topbar-links {
+        display: flex;
+        gap: 18px;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: var(--ink-soft);
+      }
+
+      .topbar-links a {
+        color: var(--ink-soft);
+        text-decoration: none;
+      }
+
+      .intro {
+        padding: 64px 0 44px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .kicker {
+        margin: 0 0 18px;
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        font-weight: 800;
+        color: var(--coral);
+      }
+
+      h1 {
+        margin: 0;
+        font-family: "DM Serif Display", Georgia, serif;
+        font-weight: 400;
+        font-size: clamp(36px, 5vw, 62px);
+        line-height: 0.98;
+        letter-spacing: -0.03em;
+      }
+
+      .lede {
+        margin: 26px 0 0;
+        max-width: 68ch;
+        font-size: 19px;
+        line-height: 1.62;
+      }
+
+      .note {
+        margin: 20px 0 0;
+        max-width: 74ch;
+        font-size: 15px;
+        line-height: 1.7;
+        color: var(--ink-soft);
+      }
+
+      section.block {
+        padding: 44px 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      h2 {
+        margin: 0 0 22px;
+        font-family: "DM Serif Display", Georgia, serif;
+        font-weight: 400;
+        font-size: clamp(26px, 3vw, 36px);
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+      }
+
+      .block p {
+        max-width: 76ch;
+        margin: 0 0 16px;
+      }
+
+      .block p:last-child {
+        margin-bottom: 0;
+      }
+
+      .facts {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 0 32px;
+        margin: 0;
+      }
+
+      .facts > div {
+        padding: 14px 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .facts dt {
+        font-size: 10px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        font-weight: 800;
+        color: var(--ink-soft);
+      }
+
+      .facts dd {
+        margin: 6px 0 0;
+        font-size: 20px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+
+      .qa {
+        display: grid;
+        gap: 28px;
+      }
+
+      .qa > details,
+      .qa > div {
+        padding-top: 26px;
+        border-top: 1px solid var(--line);
+      }
+
+      .qa > div:first-child {
+        padding-top: 0;
+        border-top: 0;
+      }
+
+      h3 {
+        margin: 0 0 8px;
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: -0.01em;
+      }
+
+      .qa p {
+        margin: 0;
+        color: var(--ink-soft);
+        font-size: 15.5px;
+        line-height: 1.68;
+        max-width: 78ch;
+      }
+
+      .links {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 12px;
+      }
+
+      .links li {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 10px;
+        padding-top: 12px;
+        border-top: 1px solid var(--line);
+        font-size: 15px;
+      }
+
+      .links li span {
+        font-size: 10px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        font-weight: 800;
+        color: var(--ink-soft);
+        min-width: 120px;
+      }
+
+      .links a {
+        font-weight: 600;
+        text-decoration: underline;
+      }
+
+      .caveat {
+        margin: 22px 0 0;
+        font-size: 13px;
+        line-height: 1.7;
+        color: var(--ink-soft);
+        max-width: 76ch;
+      }
+
+      footer.site-footer {
+        padding: 34px 0 60px;
+        font-size: 13px;
+        line-height: 1.7;
+        color: var(--ink-soft);
+      }
+
+      footer.site-footer p {
+        margin: 0 0 10px;
+        max-width: 78ch;
+      }
+
+      @media (max-width: 640px) {
+        .topbar-inner {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .intro {
+          padding: 44px 0 34px;
+        }
+
+        section.block {
+          padding: 34px 0;
+        }
+
+        .facts dd {
+          font-size: 18px;
+        }
+      }
+    </style>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://productsite-8wf.pages.dev/#maintainer",
+            "name": "Alex Finds",
+            "description": "Independent maintainer of the Kakobuy Spreadsheet catalog."
+          },
+          {
+            "@type": "Dataset",
+            "@id": "https://productsite-8wf.pages.dev/kakobuy-spreadsheet#dataset",
+            "name": "Kakobuy Spreadsheet Catalog",
+            "description": "A browsable catalog of 1,148 Kakobuy and Taobao products covering 14,535 style rows in six categories, with USD display prices, sizes and buying-agent coverage.",
+            "creator": { "@id": "https://productsite-8wf.pages.dev/#maintainer" },
+            "dateModified": "2026-10-29",
+            "isAccessibleForFree": true,
+            "variableMeasured": ["price_usd", "sizes", "agents_count"],
+            "distribution": [
+              {
+                "@type": "DataDownload",
+                "contentUrl": "https://productsite-8wf.pages.dev/kakobuy-catalog.csv",
+                "encodingFormat": "text/csv"
+              }
+            ]
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://productsite-8wf.pages.dev/kakobuy-spreadsheet#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Is the Kakobuy Spreadsheet free?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. Browsing and searching the catalog are free, and no account is required. You only pay a buying agent if you decide to place an order."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is it an official Kakobuy product?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. It is an independent resource maintained by Alex Finds. It is not affiliated with, endorsed by or operated by Kakobuy, and it does not process orders, payments or shipping."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How many products and style rows does it list?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "As of October 29, 2026, it lists 1,148 products and 14,535 style rows across six categories."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Are the prices live?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. Prices are refreshed in batches. The last full price check was August 16, 2026, and the catalog was refreshed on October 29, 2026."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does the catalog show shipping cost or parcel weight?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. It does not publish shipping rates or store measured weights. Use the agent's shipping estimator or a rehearsal for an exact quote."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What is a style row?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "A style row is a single variant of a product, such as one colorway or size range. One product can have many style rows, so the catalog counts rows rather than products when it reports catalog size."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Can I download the catalog?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. A CSV export of the full catalog is available as a direct download. The CSV mirrors the catalog columns and row count and can be opened in a spreadsheet for sorting and filtering."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Who maintains the catalog?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Alex Finds maintains the catalog as an independent project and has done so since October 29, 2025. Listings that fail review or can no longer be sourced are removed rather than left as stale rows."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="shell topbar-inner">
+        <a class="brand" href="https://productsite-8wf.pages.dev/">RIVORA</a>
+        <nav class="topbar-links" aria-label="Catalog links">
+          <a href="https://productsite-8wf.pages.dev/spreadsheet?view=styles">Open catalog</a>
+          <a href="https://productsite-8wf.pages.dev/kakobuy-catalog.csv">Download CSV</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="shell">
+      <header class="intro">
+        <p class="kicker">Independent catalog &middot; Refreshed October 29, 2026</p>
+        <h1>Kakobuy Spreadsheet: Catalog, Prices and Buying Agents</h1>
+        <p class="lede">
+          Kakobuy Spreadsheet is a free, browsable catalog of 1,148 Kakobuy and Taobao products, covering 14,535 style
+          rows in six categories. Every row lists a product photo, product name, style variant, sizes, a USD display
+          price and agent coverage. Displayed prices range from $1.07 to $192.65. The catalog was refreshed on October
+          29, 2026, and last fully price-checked on August 16, 2026. It is an independent resource maintained by Alex
+          Finds and is not a store.
+        </p>
+        <p class="note">
+          The catalog is a website, not a static Google Sheet. The browsing interface carries its own RIVORA Style
+          Catalog header; RIVORA is the interface for this same catalog, not a separate collection. Readers can filter
+          by category or buying agent, sort by price and search by product name without creating an account or
+          downloading a file.
+        </p>
+      </header>
+
+      <section class="block" id="key-facts">
+        <h2>Key facts</h2>
+        <dl class="facts">
+          <div><dt>Products</dt><dd>1,148</dd></div>
+          <div><dt>Style rows</dt><dd>14,535</dd></div>
+          <div><dt>Categories</dt><dd>6</dd></div>
+          <div><dt>Buying agents</dt><dd>34</dd></div>
+          <div><dt>Displayed price range (USD)</dt><dd>$1.07&ndash;$192.65</dd></div>
+          <div><dt>Format</dt><dd>Browsable website (not a static Google Sheet)</dd></div>
+          <div><dt>Catalog refreshed</dt><dd>October 29, 2026</dd></div>
+          <div><dt>Full price check</dt><dd>August 16, 2026</dd></div>
+          <div><dt>Maintained by</dt><dd>Alex Finds, since October 29, 2025</dd></div>
+        </dl>
+      </section>
+
+      <section class="block" id="rows">
+        <h2>What each row contains</h2>
+        <p>
+          Each row represents one style variant, not one product. A row shows a reference photo from the listing, the
+          product name, the style or colorway, the available size range, a USD display price, the category, and the
+          number of platform links available for that listing. A single product can produce several rows, which is why
+          1,148 products expand to 14,535 rows.
+        </p>
+      </section>
+
+      <section class="block" id="not-included">
+        <h2>What the catalog does not include</h2>
+        <p>
+          The catalog does not process orders, payments or shipping, and it does not calculate shipping cost. It does
+          not store parcel weights, live stock levels, warehouse QC photos, ratings or seller reviews. Display photos
+          are style references from listings, not QC photos of the item a buyer will receive.
+        </p>
+      </section>
+
+      <section class="block" id="prices">
+        <h2>How prices and dates work</h2>
+        <p>
+          Prices are converted to USD for display and refreshed in batches. The date on this page is the last refresh
+          date, not a guarantee of live pricing. The last full price check was August 16, 2026. Catalog refresh dates
+          and prices can change before checkout, so confirm the final price, line restrictions and shipping cost on the
+          buying agent's own checkout page.
+        </p>
+      </section>
+
+      <section class="block" id="faq">
+        <h2>Beginner questions</h2>
+        <div class="qa">
+          <div>
+            <h3>Is the Kakobuy Spreadsheet free?</h3>
+            <p>
+              Yes. Browsing and searching the catalog are free, and no account is required. There is no paywall and no
+              download step to view the table. You only pay a buying agent if you decide to place an order for an item.
+            </p>
+          </div>
+          <div>
+            <h3>Is it an official Kakobuy product?</h3>
+            <p>
+              No. It is an independent resource maintained by Alex Finds. It is not affiliated with, endorsed by or
+              operated by Kakobuy, and it does not process orders, payments or shipping.
+            </p>
+          </div>
+          <div>
+            <h3>How many products and style rows does it list?</h3>
+            <p>
+              As of October 29, 2026, the catalog lists 1,148 products and 14,535 style rows across six categories:
+              Clothing, Accessories, Shoes, Pants, Bags and Watches. A style row is one variant of a product, such as
+              one colorway or one size range.
+            </p>
+          </div>
+          <div>
+            <h3>Are the prices live?</h3>
+            <p>
+              No. Displayed USD prices are refreshed in batches rather than in real time. The last full price check was
+              August 16, 2026, and the catalog was refreshed on October 29, 2026. Treat every price as a reference and
+              confirm it at the agent's checkout.
+            </p>
+          </div>
+          <div>
+            <h3>Does the catalog show shipping cost or parcel weight?</h3>
+            <p>
+              No. It does not publish shipping rates and does not store measured weights. Shipping depends on the line,
+              the destination and the packed weight or volume, so use the agent's shipping estimator or request a
+              rehearsal before paying for international shipping.
+            </p>
+          </div>
+          <div>
+            <h3>What is a style row?</h3>
+            <p>
+              A style row is a single variant of a product, such as one colorway or size range. One product can have
+              many style rows, so the catalog counts rows rather than products when it reports catalog size.
+            </p>
+          </div>
+          <div>
+            <h3>Can I download the catalog?</h3>
+            <p>
+              Yes. A CSV export of the full catalog is available as a direct download. The CSV mirrors the catalog
+              columns and row count and can be opened in a spreadsheet for sorting and filtering.
+            </p>
+          </div>
+          <div>
+            <h3>Who maintains the catalog?</h3>
+            <p>
+              Alex Finds maintains the catalog as an independent project and has done so since October 29, 2025.
+              Listings that fail review or can no longer be sourced are removed rather than left as stale rows.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="block" id="sources">
+        <h2>Sources and official links</h2>
+        <ul class="links">
+          <li>
+            <span>Catalog</span>
+            <a href="https://productsite-8wf.pages.dev/spreadsheet?view=styles">https://productsite-8wf.pages.dev/spreadsheet?view=styles</a>
+          </li>
+          <li>
+            <span>CSV download</span>
+            <a href="https://productsite-8wf.pages.dev/kakobuy-catalog.csv">https://productsite-8wf.pages.dev/kakobuy-catalog.csv</a>
+          </li>
+          <li>
+            <span>Kakobuy official site</span>
+            <a href="https://www.kakobuy.com/">https://www.kakobuy.com/</a>
+          </li>
+          <li>
+            <span>Shipping estimator</span>
+            <a href="https://www.kakobuy.com/tools/estimate">https://www.kakobuy.com/tools/estimate</a>
+          </li>
+        </ul>
+        <p class="caveat">
+          External links are provided for reference. Prices, stock and agent terms change; confirm current terms before
+          ordering.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell">
+        <p>
+          Kakobuy Spreadsheet is an independent catalog maintained by Alex Finds. It is not affiliated with, endorsed by
+          or operated by Kakobuy. The catalog does not process orders, payments or shipping, and it does not publish
+          shipping rates or parcel weights.
+        </p>
+        <p>Last updated October 29, 2026. Prices are display references, not live pricing.</p>
+      </div>
+    </footer>
+  </body>
+</html>
