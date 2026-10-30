@@ -174,6 +174,18 @@ export function prepareCatalogNewDatasets(csvTexts) {
   return { rows, stats };
 }
 
+// 源 CSV 由 GBK/GB18030 编码导出，直接按 UTF-8 读会把中文整段变成 U+FFFD 乱码，
+// 前端就会渲染成豆腐块。检测到替换字符时改用 GB18030 重新解码。
+function decodeCsv(buffer) {
+  const utf8 = buffer.toString("utf8");
+  if (!utf8.includes("\ufffd")) return utf8;
+  try {
+    return new TextDecoder("gb18030").decode(buffer);
+  } catch {
+    return utf8;
+  }
+}
+
 export function readCatalogNewDatasets(csvPaths) {
-  return prepareCatalogNewDatasets(csvPaths.map((csvPath) => fs.readFileSync(csvPath, "utf8")));
+  return prepareCatalogNewDatasets(csvPaths.map((csvPath) => decodeCsv(fs.readFileSync(csvPath))));
 }

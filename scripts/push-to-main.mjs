@@ -54,8 +54,9 @@ async function gh(token, method, pathname, body) {
     }
     if (resp.ok) return text ? JSON.parse(text) : null;
     lastError = new Error(`${method} ${pathname} → ${resp.status}: ${text.slice(0, 300)}`);
-    // 只有 5xx 与限流值得重试，4xx 直接抛出
-    if (resp.status < 500 && resp.status !== 429) throw lastError;
+    // 只有 5xx、限流、以及 tree 请求体积超时（422 timed out）值得重试，其余 4xx 直接抛出
+    const tooLarge = resp.status === 422 && /timed out/i.test(text);
+    if (resp.status < 500 && resp.status !== 429 && !tooLarge) throw lastError;
     await new Promise((resolve) => setTimeout(resolve, 2000 * (attempt + 1)));
   }
   throw lastError;
@@ -164,13 +165,21 @@ async function main() {
   }
 
   // 3. Create new tree (based on remote tree + our changes)
-  const tree = await gh(token, "POST", `/repos/${REPO}/git/trees`, { base_tree: baseTreeSha, tree: blobs });
-  console.log(`TREE ${tree.sha.slice(0, 7)}  (base ${baseTreeSha.slice(0, 7)})`);
+  // 单次请求条目过多时 GitHub 会 422 超时，按块增量构建树
+  const TREE_CHUNK = 250;
+  let treeSha = baseTreeSha;
+  for (let i = 0; i < blobs.length; i += TREE_CHUNK) {
+    const chunk = blobs.slice(i, i + TREE_CHUNK);
+    const tree = await gh(token, "POST", `/repos/${REPO}/git/trees`, { base_tree: treeSha, tree: chunk });
+    treeSha = tree.sha;
+    console.log(`TREE ${String(Math.min(i + TREE_CHUNK, blobs.length)).padStart(4)}/${blobs.length}  ${tree.sha.slice(0, 7)}`);
+  }
+  console.log(`TREE final ${treeSha.slice(0, 7)}  (base ${baseTreeSha.slice(0, 7)})`);
 
   // 4. Create commit + update ref
   const commit = await gh(token, "POST", `/repos/${REPO}/git/commits`, {
     message: COMMIT_MSG,
-    tree: tree.sha,
+    tree: treeSha,
     parents: [remoteCommitSha],
   });
   console.log(`COMMIT ${commit.sha.slice(0, 7)}`);
