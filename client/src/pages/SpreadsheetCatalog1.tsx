@@ -189,7 +189,7 @@ function loadPreviewGroup(sourceProductId: string): Promise<ProductPreviewGroup>
     const rows = items.filter((item) => item.sourceProductId === sourceProductId);
     if (!rows.length) throw new Error("Product not found in catalog.");
     const first = rows[0];
-    const platforms = platformSourcesFor({ id: first.id, sourceProductId })
+    const platforms = platformSourcesFor({ id: first.id, sourceProductId }, { withInviteCodes: true })
       .map((source: PlatformSource) => ({ name: source.name, url: source.url, primary: !!source.primary }));
     return {
       sourceProductId,

@@ -91,7 +91,7 @@ export default function ProductDetail1() {
 
   const platforms: PlatformSource[] = useMemo(() => {
     if (!detail) return [];
-    return platformSourcesFor({ id: detail.styles[0]?.id || detail.sourceProductId, sourceProductId: detail.sourceProductId }) as PlatformSource[];
+    return platformSourcesFor({ id: detail.styles[0]?.id || detail.sourceProductId, sourceProductId: detail.sourceProductId }, { withInviteCodes: true }) as PlatformSource[];
   }, [detail]);
 
   const visiblePlatforms = showAllPlatforms ? platforms : platforms.slice(0, 6);

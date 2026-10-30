@@ -50,6 +50,19 @@ const platformIconFiles = {
   zentbuy: "ZentBuy.png",
 };
 
+// 邀请码清单（来源：邀请码机制规则文件），只在 spreadsheet1 路径注入
+const spreadsheetInviteCodes = {
+  joyagoo: { param: "ref", code: "300950678" },
+  cssbuy: { param: "promotionCode", code: "141b285ac4016ebb" },
+  itaobuy: { param: "inviteCode", code: "FHBPH2RW" },
+  bbdbuy: { param: "inviteCode", code: "j4zwj7" },
+};
+
+function appendInviteCode(url, { param, code }) {
+  if (!url || !code || url.includes(`${param}=`)) return url;
+  return `${url}${url.includes("?") ? "&" : "?"}${param}=${code}`;
+}
+
 export function normalizePlatformName(name) {
   const normalized = String(name || "").toLowerCase().replace(/[^a-z0-9]/g, "");
   return platformAliases[normalized] || normalized;
@@ -60,7 +73,7 @@ export function platformIconFor(name) {
   return file ? `/platform-icons/${file}` : "";
 }
 
-export function platformSourcesFor(product) {
+export function platformSourcesFor(product, options = {}) {
   const sourceId = String(product.sourceProductId || product.id || "");
   const encodedId = encodeURIComponent(sourceId);
   const isKakobuy = /kakobuy\.com/i.test(product.url || "");
@@ -114,6 +127,12 @@ export function platformSourcesFor(product) {
     const fansbuy = sources.find((source) => normalizePlatformName(source.name) === "fansbuy");
     if (fansbuy) { fansbuy.url = product.url; fansbuy.primary = true; }
     else sources.unshift({ name: "Fansbuy", url: product.url, primary: true });
+  }
+  if (options.withInviteCodes) {
+    for (const source of sources) {
+      const invite = spreadsheetInviteCodes[normalizePlatformName(source.name)];
+      if (invite) source.url = appendInviteCode(source.url, invite);
+    }
   }
   return sources.filter((source) => !hiddenPlatformNames.has(normalizePlatformName(source.name)));
 }

@@ -7,5 +7,6 @@ export type PlatformProduct = {
 };
 export function normalizePlatformName(name: string): string;
 export function platformIconFor(name: string): string;
-export function platformSourcesFor(product: PlatformProduct): PlatformSource[];
+export type PlatformSourcesOptions = { withInviteCodes?: boolean };
+export function platformSourcesFor(product: PlatformProduct, options?: PlatformSourcesOptions): PlatformSource[];
 export function primarySourceFor(product: PlatformProduct): PlatformSource | undefined;
