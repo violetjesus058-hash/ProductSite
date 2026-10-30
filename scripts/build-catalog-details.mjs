@@ -4,16 +4,17 @@
 // id 对齐规则见 scripts/lib/catalog-new-dataset.mjs（以 new link 列为准）。
 import fs from "node:fs/promises";
 import path from "node:path";
-import { readCatalogNewDataset } from "./lib/catalog-new-dataset.mjs";
+import { readCatalogNewDatasets } from "./lib/catalog-new-dataset.mjs";
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1")), "..");
-const csvPath = process.argv[2] || "d:/ps/catalog-new.csv";
+// 支持多批 CSV：按命令行顺序汇总，未传时只读第一批
+const csvPaths = process.argv.slice(2).filter((value) => /\.csv$/i.test(value));
 const outputDir = path.join(root, "client/public/catalog-data-1/products");
 
 const splitList = (value, separator = "|") =>
   String(value || "").split(separator).map((entry) => entry.trim()).filter(Boolean);
 
-const { rows, stats } = readCatalogNewDataset(csvPath);
+const { rows, stats } = readCatalogNewDatasets(csvPaths.length ? csvPaths : ["d:/ps/catalog-new.csv"]);
 
 const groups = new Map();
 for (const row of rows) {
@@ -65,5 +66,5 @@ for (const [sourceProductId, groupRows] of [...groups.entries()].sort((a, b) => 
 
 console.log(
   `PRODUCTS=${groups.size} ROWS=${rows.length} TOTAL_MB=${(totalBytes / 1024 / 1024).toFixed(2)} ` +
-  `REKEYED=${stats.rekeyedProducts} DEDUPED=${stats.dedupedRows} -> ${path.relative(root, outputDir)}`,
+  `REKEYED=${stats.rekeyedProducts} DEDUPED=${stats.dedupedRows} CROSS_DUP=${stats.crossFileDuplicates} -> ${path.relative(root, outputDir)}`,
 );

@@ -121,7 +121,7 @@ async function main() {
     const fullPath = path.join(ROOT, f.path);
     if (!fs.existsSync(fullPath)) { console.warn(`  SKIP missing: ${f.path}`); continue; }
     const stat = fs.statSync(fullPath);
-    if (stat.size > 8_000_000) { console.warn(`  SKIP large (${Math.round(stat.size / 1024)}KB): ${f.path}`); continue; }
+    if (stat.size > 40_000_000) { console.warn(`  SKIP large (${Math.round(stat.size / 1024)}KB): ${f.path}`); continue; }
     const content = fs.readFileSync(fullPath);
     const blob = await gh(token, "POST", `/repos/${REPO}/git/blobs`, { content: b64encode(content), encoding: "base64" });
     blobs.push({ path: f.path, mode: "100644", type: "blob", sha: blob.sha });

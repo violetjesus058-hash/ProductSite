@@ -3,6 +3,7 @@
 // CSV 里 `url` / `sourceProductId` 可能是旧商品 id，`new link` 列才是最新链接。
 // 本模块把它的内层 Weidian itemID 作为目标 id，链式指向会一路收敛到链尾，
 // 收敛后同一链尾的多个旧商品会合并，并按款式字段去重（只保留一份）。
+// 多批 CSV 汇总时，后一批与前一批完全相同的款式行会被丢弃，同一批内的重复行保持不变。
 import fs from "node:fs";
 
 export function parseCsvRows(text) {
@@ -44,18 +45,27 @@ export function extractInnerItemId(link) {
   }
 }
 
-export function prepareCatalogNewDataset(csvText) {
+function parseRecords(csvText) {
   const table = parseCsvRows(String(csvText).replace(/^\ufeff/, ""));
   const header = table.shift().map((value) => value.trim());
-  const records = table.map((values) => {
+  return table.map((values) => {
     const record = {};
     header.forEach((key, index) => { record[key] = String(values[index] ?? "").trim(); });
     return record;
   });
+}
 
-  // 商品级 new link：同一商品的多行指向一致，取第一个非空值
+// 判重只看款式名与尺码：同一款式在不同批次抓取时价格会有几分钱汇率差，
+// 图片列表也可能多一张/少一张，都不能当成不同款式
+const styleKeyOf = (record) => [record.sourceProductId, record.styleLabel, record.sizes].join("\u0001");
+
+export function prepareCatalogNewDatasets(csvTexts) {
+  const groups = csvTexts.map(parseRecords);
+  const allRecords = groups.flat();
+
+  // 商品级 new link：同一商品的多行指向一致，取第一个非空值（跨批次按文件顺序）
   const nextIdByProduct = new Map();
-  for (const record of records) {
+  for (const record of allRecords) {
     const oldId = record.sourceProductId;
     if (!nextIdByProduct.has(oldId)) nextIdByProduct.set(oldId, "");
     if (!nextIdByProduct.get(oldId)) {
@@ -92,7 +102,7 @@ export function prepareCatalogNewDataset(csvText) {
     [...originsByTarget.entries()].filter(([, origins]) => origins.length > 1).map(([target]) => target),
   );
 
-  for (const record of records) {
+  for (const record of allRecords) {
     const target = targetIdByProduct.get(record.sourceProductId);
     if (!target) continue;
     record.sourceProductId = target;
@@ -102,30 +112,50 @@ export function prepareCatalogNewDataset(csvText) {
     if (record["new link"]) record["new link"] = record.url;
   }
 
-  // 合并后的商品内部会有一模一样的两套款式，按款式字段去重
-  const seen = new Set();
-  const rows = records.filter((record) => {
-    if (!mergedTargets.has(record.sourceProductId)) return true;
-    const key = [record.sourceProductId, record.styleLabel, record.sizes, record.images, record.price].join("\u0001");
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
+  const rows = [];
+  const seenInMerged = new Set();
+  const seenInEarlierFiles = new Set();
+  let dedupedRows = 0;
+  let crossFileDuplicates = 0;
+  for (const group of groups) {
+    const fileKeys = new Set();
+    for (const record of group) {
+      const key = styleKeyOf(record);
+      const isMerged = mergedTargets.has(record.sourceProductId);
+      if (isMerged && seenInMerged.has(key)) { dedupedRows += 1; continue; }
+      if (!fileKeys.has(key) && seenInEarlierFiles.has(key)) { crossFileDuplicates += 1; continue; }
+      rows.push(record);
+      fileKeys.add(key);
+      if (isMerged) seenInMerged.add(key);
+    }
+    for (const key of fileKeys) seenInEarlierFiles.add(key);
+  }
+
+  const categoriesByProduct = new Map();
+  for (const record of rows) {
+    if (!categoriesByProduct.has(record.sourceProductId)) categoriesByProduct.set(record.sourceProductId, new Set());
+    categoriesByProduct.get(record.sourceProductId).add(record.category);
+  }
+  const categoryConflicts = [...categoriesByProduct.entries()]
+    .filter(([, categories]) => categories.size > 1)
+    .map(([productId, categories]) => ({ productId, categories: [...categories] }));
 
   const stats = {
-    rowsIn: records.length,
+    rowsIn: allRecords.length,
     rowsOut: rows.length,
     productsIn: nextIdByProduct.size,
     productsOut: new Set(rows.map((record) => record.sourceProductId)).size,
     rekeyedProducts: targetIdByProduct.size,
     mergedTargets: [...mergedTargets],
-    dedupedRows: records.length - rows.length,
+    dedupedRows,
+    crossFileDuplicates,
+    categoryConflicts,
     emptyNewLinkProducts: [...nextIdByProduct.entries()].filter(([, nextId]) => !nextId).map(([oldId]) => oldId),
   };
 
-  return { header, rows, stats };
+  return { rows, stats };
 }
 
-export function readCatalogNewDataset(csvPath) {
-  return prepareCatalogNewDataset(fs.readFileSync(csvPath, "utf8"));
+export function readCatalogNewDatasets(csvPaths) {
+  return prepareCatalogNewDatasets(csvPaths.map((csvPath) => fs.readFileSync(csvPath, "utf8")));
 }

@@ -11,7 +11,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
-import { readCatalogNewDataset } from "./lib/catalog-new-dataset.mjs";
+import { readCatalogNewDatasets } from "./lib/catalog-new-dataset.mjs";
 
 const PLATFORM_NAMES = [
   "Oopbuy", "Kakobuy", "Superbuy", "RizzitGO", "ZentBuy", "LoloBuy", "PikoBuy",
@@ -68,16 +68,20 @@ function main() {
   const args = process.argv.slice(2);
   const flags = args.filter((a) => a.startsWith("--"));
   const positional = args.filter((a) => !a.startsWith("--"));
-  const csvPath = path.resolve(positional[0] || "D:\\ps\\catalog-new.csv");
-  const outArg = positional[1] ? path.resolve(positional[1]) : "client/public/catalog-data-1";
+  // 支持多批 CSV：所有 .csv 参数按顺序汇总，其余参数视作输出目录
+  const csvArgs = positional.filter((a) => /\.csv$/i.test(a));
+  const csvPaths = (csvArgs.length ? csvArgs : ["D:\\ps\\catalog-new.csv"]).map((value) => path.resolve(value));
+  const outArg = positional.find((a) => !/\.csv$/i.test(a)) || "client/public/catalog-data-1";
   const verifyOnly = flags.includes("--inspect");
 
-  if (!fs.existsSync(csvPath)) {
-    console.error(`CSV 不存在：${csvPath}`);
-    process.exit(1);
+  for (const csvPath of csvPaths) {
+    if (!fs.existsSync(csvPath)) {
+      console.error(`CSV 不存在：${csvPath}`);
+      process.exit(1);
+    }
   }
 
-  const { rows: records, stats } = readCatalogNewDataset(csvPath);
+  const { rows: records, stats } = readCatalogNewDatasets(csvPaths);
   const summaries = records.map(toSummary).filter((item) => item.id && item.name);
   const dropped = records.length - summaries.length;
 
@@ -88,10 +92,15 @@ function main() {
     for (const key of item.platformKeys) platformSet.add(key);
   }
 
+  console.log(`CSV 文件      : ${csvPaths.map((csvPath) => path.basename(csvPath)).join(" + ")}`);
   console.log(`CSV 行数      : ${stats.rowsIn}`);
   console.log(`id 对齐       : ${stats.rekeyedProducts} 个商品换用 new link id（${stats.productsIn} → ${stats.productsOut} 个商品）`);
   console.log(`链尾合并      : ${stats.mergedTargets.join(", ") || "无"}（去重 ${stats.dedupedRows} 行重复款式）`);
+  console.log(`跨批重复      : 丢弃 ${stats.crossFileDuplicates} 行后一批的重复款式`);
   console.log(`空 new link   : ${stats.emptyNewLinkProducts.length} 个商品保持原 id`);
+  if (stats.categoryConflicts.length) {
+    console.log(`分类冲突警告  : ${stats.categoryConflicts.map((item) => `${item.productId}(${item.categories.join("/")})`).join(", ")}`);
+  }
   console.log(`生成索引行数  : ${summaries.length}${dropped ? `（丢弃 ${dropped} 行缺 id/name）` : ""}`);
   console.log(`独立商品数    : ${new Set(summaries.map((i) => i.sourceProductId)).size}`);
   console.log(`分类分布      : ${JSON.stringify(categoryCount)}`);
