@@ -98,8 +98,9 @@ function main() {
   console.log(`链尾合并      : ${stats.mergedTargets.join(", ") || "无"}（去重 ${stats.dedupedRows} 行重复款式）`);
   console.log(`跨批重复      : 丢弃 ${stats.crossFileDuplicates} 行后一批的重复款式`);
   console.log(`空 new link   : ${stats.emptyNewLinkProducts.length} 个商品保持原 id`);
-  if (stats.categoryConflicts.length) {
-    console.log(`分类冲突警告  : ${stats.categoryConflicts.map((item) => `${item.productId}(${item.categories.join("/")})`).join(", ")}`);
+  if (stats.splitOff.length) {
+    const groups = [...new Set(stats.splitOff.map((item) => `${item.target}(保留 ${item.keptCategory}，${item.category} 的 ${item.oldId} 回退旧 id)`))];
+    console.log(`合并拆分      : ${groups.join("；")}`);
   }
   console.log(`生成索引行数  : ${summaries.length}${dropped ? `（丢弃 ${dropped} 行缺 id/name）` : ""}`);
   console.log(`独立商品数    : ${new Set(summaries.map((i) => i.sourceProductId)).size}`);

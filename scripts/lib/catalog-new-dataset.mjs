@@ -103,6 +103,7 @@ export function prepareCatalogNewDatasets(csvTexts) {
   );
 
   for (const record of allRecords) {
+    record.__oldId = record.sourceProductId;
     const target = targetIdByProduct.get(record.sourceProductId);
     if (!target) continue;
     record.sourceProductId = target;
@@ -131,14 +132,31 @@ export function prepareCatalogNewDatasets(csvTexts) {
     for (const key of fileKeys) seenInEarlierFiles.add(key);
   }
 
+  // 链式指向有时会把两件不同商品串到同一个 id 上（分类不同、款式完全不重叠）。
+  // 这类合并只保留行数最多的分类，其余分类回退到各自旧 id，避免详情页混进别的商品。
   const categoriesByProduct = new Map();
   for (const record of rows) {
-    if (!categoriesByProduct.has(record.sourceProductId)) categoriesByProduct.set(record.sourceProductId, new Set());
-    categoriesByProduct.get(record.sourceProductId).add(record.category);
+    if (!categoriesByProduct.has(record.sourceProductId)) categoriesByProduct.set(record.sourceProductId, new Map());
+    const byCategory = categoriesByProduct.get(record.sourceProductId);
+    byCategory.set(record.category, (byCategory.get(record.category) || 0) + 1);
   }
-  const categoryConflicts = [...categoriesByProduct.entries()]
-    .filter(([, categories]) => categories.size > 1)
-    .map(([productId, categories]) => ({ productId, categories: [...categories] }));
+  const splitOff = [];
+  for (const [productId, byCategory] of categoriesByProduct) {
+    if (byCategory.size < 2) continue;
+    const keepCategory = [...byCategory.entries()].sort((a, b) => b[1] - a[1])[0][0];
+    for (const record of rows) {
+      if (record.sourceProductId !== productId || record.category === keepCategory) continue;
+      const oldId = record.__oldId || productId;
+      record.sourceProductId = oldId;
+      if (/^kb-\d+/.test(record.id)) record.id = record.id.replace(/^kb-\d+/, `kb-${oldId}`);
+      record.shopUrl = weidianLink(oldId);
+      record.url = kakobuyLink(oldId);
+      if (record["new link"]) record["new link"] = record.url;
+      splitOff.push({ target: productId, keptCategory: keepCategory, oldId, category: record.category });
+    }
+  }
+
+  for (const record of rows) delete record.__oldId;
 
   const stats = {
     rowsIn: allRecords.length,
@@ -149,7 +167,7 @@ export function prepareCatalogNewDatasets(csvTexts) {
     mergedTargets: [...mergedTargets],
     dedupedRows,
     crossFileDuplicates,
-    categoryConflicts,
+    splitOff,
     emptyNewLinkProducts: [...nextIdByProduct.entries()].filter(([, nextId]) => !nextId).map(([oldId]) => oldId),
   };
 

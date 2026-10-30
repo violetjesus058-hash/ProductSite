@@ -2,6 +2,7 @@
 // Usage: node scripts/push-to-main.mjs [message]
 import fs from "node:fs";
 import path from "node:path";
+import crypto from "node:crypto";
 import { execSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
@@ -30,19 +31,39 @@ function getToken() {
 
 async function gh(token, method, pathname, body) {
   const url = `https://api.github.com${pathname}`;
-  const resp = await fetch(url, {
-    method,
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: "application/vnd.github+json",
-      "Content-Type": "application/json",
-      "X-GitHub-Api-Version": "2022-11-28",
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
-  const text = await resp.text();
-  if (!resp.ok) throw new Error(`${method} ${pathname} → ${resp.status}: ${text.slice(0, 300)}`);
-  return text ? JSON.parse(text) : null;
+  let lastError;
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    let resp;
+    let text = "";
+    try {
+      resp = await fetch(url, {
+        method,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/vnd.github+json",
+          "Content-Type": "application/json",
+          "X-GitHub-Api-Version": "2022-11-28",
+        },
+        body: body ? JSON.stringify(body) : undefined,
+      });
+      text = await resp.text();
+    } catch (error) {
+      lastError = error;
+      await new Promise((resolve) => setTimeout(resolve, 2000 * (attempt + 1)));
+      continue;
+    }
+    if (resp.ok) return text ? JSON.parse(text) : null;
+    lastError = new Error(`${method} ${pathname} → ${resp.status}: ${text.slice(0, 300)}`);
+    // 只有 5xx 与限流值得重试，4xx 直接抛出
+    if (resp.status < 500 && resp.status !== 429) throw lastError;
+    await new Promise((resolve) => setTimeout(resolve, 2000 * (attempt + 1)));
+  }
+  throw lastError;
+}
+
+// 本地计算 git blob sha，用于跳过远端已存在的同内容文件
+function localBlobSha(content) {
+  return crypto.createHash("sha1").update(`blob ${content.length}\0`).update(content).digest("hex");
 }
 
 function b64encode(content) {
@@ -115,7 +136,9 @@ async function main() {
   const deletions = [...phantomMeta, ...pruneMeta];
 
   // 2. Create blobs for modified/new files + delete phantoms
+  const remoteShas = new Map((baseTree.tree || []).map((entry) => [entry.path, entry.sha]));
   const blobs = [];
+  let reused = 0;
   for (const f of files) {
     if (f.status === "D") { blobs.push({ path: f.path, mode: "100644", type: "blob", sha: null }); continue; }
     const fullPath = path.join(ROOT, f.path);
@@ -123,10 +146,18 @@ async function main() {
     const stat = fs.statSync(fullPath);
     if (stat.size > 40_000_000) { console.warn(`  SKIP large (${Math.round(stat.size / 1024)}KB): ${f.path}`); continue; }
     const content = fs.readFileSync(fullPath);
+    // 内容与远端一致时直接复用 sha，重试推送时不必重复上传上千个文件
+    const localSha = localBlobSha(content);
+    if (remoteShas.get(f.path) === localSha) {
+      blobs.push({ path: f.path, mode: "100644", type: "blob", sha: localSha });
+      reused += 1;
+      continue;
+    }
     const blob = await gh(token, "POST", `/repos/${REPO}/git/blobs`, { content: b64encode(content), encoding: "base64" });
     blobs.push({ path: f.path, mode: "100644", type: "blob", sha: blob.sha });
     console.log(`  BLOB ${blob.sha.slice(0, 7)}  ${f.path}`);
   }
+  if (reused) console.log(`  REUSE ${reused} files (content already on remote)`);
   for (const p of deletions) {
     blobs.push(p);
     console.log(`  DEL  ${p.path}`);
