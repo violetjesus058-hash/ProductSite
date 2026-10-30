@@ -11,6 +11,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
+import { readCatalogNewDataset } from "./lib/catalog-new-dataset.mjs";
 
 const PLATFORM_NAMES = [
   "Oopbuy", "Kakobuy", "Superbuy", "RizzitGO", "ZentBuy", "LoloBuy", "PikoBuy",
@@ -28,30 +29,6 @@ const CATEGORY_MAP = {
   acc: "ACC", accessories: "ACC", accessory: "ACC",
   fragrance: "fragrance",
 };
-
-function parseCsv(text) {
-  const rows = [];
-  let row = [];
-  let cell = "";
-  let quoted = false;
-  for (let i = 0; i < text.length; i += 1) {
-    const c = text[i];
-    const n = text[i + 1];
-    if (c === '"' && quoted && n === '"') { cell += '"'; i += 1; }
-    else if (c === '"') quoted = !quoted;
-    else if (c === "," && !quoted) { row.push(cell); cell = ""; }
-    else if ((c === "\n" || c === "\r") && !quoted) {
-      if (c === "\r" && n === "\n") i += 1;
-      row.push(cell);
-      if (row.some((v) => v.trim())) rows.push(row);
-      row = []; cell = "";
-    } else cell += c;
-  }
-  if (cell || row.length) { row.push(cell); rows.push(row); }
-  const [rawHead, ...data] = rows;
-  const head = (rawHead || []).map((v) => v.trim().replace(/^\ufeff/, ""));
-  return data.map((values) => Object.fromEntries(head.map((key, i) => [key, values[i] ?? ""])));
-}
 
 function normalizeCategory(value) {
   const key = String(value || "").trim().toLowerCase();
@@ -100,7 +77,7 @@ function main() {
     process.exit(1);
   }
 
-  const records = parseCsv(fs.readFileSync(csvPath, "utf8"));
+  const { rows: records, stats } = readCatalogNewDataset(csvPath);
   const summaries = records.map(toSummary).filter((item) => item.id && item.name);
   const dropped = records.length - summaries.length;
 
@@ -111,7 +88,10 @@ function main() {
     for (const key of item.platformKeys) platformSet.add(key);
   }
 
-  console.log(`CSV 行数      : ${records.length}`);
+  console.log(`CSV 行数      : ${stats.rowsIn}`);
+  console.log(`id 对齐       : ${stats.rekeyedProducts} 个商品换用 new link id（${stats.productsIn} → ${stats.productsOut} 个商品）`);
+  console.log(`链尾合并      : ${stats.mergedTargets.join(", ") || "无"}（去重 ${stats.dedupedRows} 行重复款式）`);
+  console.log(`空 new link   : ${stats.emptyNewLinkProducts.length} 个商品保持原 id`);
   console.log(`生成索引行数  : ${summaries.length}${dropped ? `（丢弃 ${dropped} 行缺 id/name）` : ""}`);
   console.log(`独立商品数    : ${new Set(summaries.map((i) => i.sourceProductId)).size}`);
   console.log(`分类分布      : ${JSON.stringify(categoryCount)}`);

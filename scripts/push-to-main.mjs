@@ -52,7 +52,14 @@ function b64encode(content) {
 
 function expandTree(entry, list = []) {
   const full = path.join(ROOT, entry.path);
-  const stat = fs.statSync(full);
+  let stat;
+  try {
+    stat = fs.statSync(full);
+  } catch {
+    // 已删除的路径无法 stat，直接作为删除项提交
+    list.push(entry);
+    return list;
+  }
   if (stat.isDirectory()) {
     for (const child of fs.readdirSync(full)) expandTree({ status: entry.status, path: path.join(entry.path, child) }, list);
   } else {
@@ -62,7 +69,8 @@ function expandTree(entry, list = []) {
 }
 
 function listLocalFiles() {
-  const out = execSync(`"${GIT}" -C "${ROOT}" status --porcelain`, { encoding: "utf8" });
+  // --no-renames：避免 git 把重命名识别成 R，导致旧路径没被删除
+  const out = execSync(`"${GIT}" -C "${ROOT}" status --porcelain --no-renames`, { encoding: "utf8" });
   const raw = [];
   for (const line of out.split("\n").filter(Boolean)) {
     const status = line.slice(0, 2);
@@ -97,6 +105,15 @@ async function main() {
   const phantomMeta = (baseTree.tree || []).filter((t) => t.path.includes("\\")).map((t) => ({ path: t.path, mode: t.mode, type: t.type, sha: null }));
   if (phantomMeta.length) console.log(`  Found ${phantomMeta.length} phantom backslash paths to delete:`);
 
+  // 1.2. Delete dataset files that exist remotely but no longer locally (renamed product ids).
+  // Local git does not track client/public/catalog-data-1, so these never show up in `git status`.
+  const PRUNE_PREFIXES = ["client/public/catalog-data-1/products/"];
+  const pruneMeta = (baseTree.tree || [])
+    .filter((t) => t.type === "blob" && PRUNE_PREFIXES.some((prefix) => t.path.startsWith(prefix)))
+    .filter((t) => !fs.existsSync(path.join(ROOT, t.path)))
+    .map((t) => ({ path: t.path, mode: t.mode, type: "blob", sha: null }));
+  const deletions = [...phantomMeta, ...pruneMeta];
+
   // 2. Create blobs for modified/new files + delete phantoms
   const blobs = [];
   for (const f of files) {
@@ -110,9 +127,9 @@ async function main() {
     blobs.push({ path: f.path, mode: "100644", type: "blob", sha: blob.sha });
     console.log(`  BLOB ${blob.sha.slice(0, 7)}  ${f.path}`);
   }
-  for (const p of phantomMeta) {
+  for (const p of deletions) {
     blobs.push(p);
-    console.log(`  DEL phantom  ${p.path}`);
+    console.log(`  DEL  ${p.path}`);
   }
 
   // 3. Create new tree (based on remote tree + our changes)
