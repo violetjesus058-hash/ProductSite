@@ -13,10 +13,14 @@ import path from "node:path";
 import process from "node:process";
 import { readCatalogNewDatasets } from "./lib/catalog-new-dataset.mjs";
 
+// 与主站 catalog-data 的平台清单保持一致（35 个），否则 /spreadsheet1 的 platform 参数会因
+// 找不到对应 key 被前端静默重置成「All platforms」，表现为主站能筛、spreadsheet1 筛不动。
 const PLATFORM_NAMES = [
   "Oopbuy", "Kakobuy", "Superbuy", "RizzitGO", "ZentBuy", "LoloBuy", "PikoBuy",
   "BoonBuy", "LoongBuy", "HubbuyCN", "Joyagoo", "EastMallBuy", "Okeyhaul", "PonyBuy",
   "CSSBuy", "AnovaBuy", "MyCNBox", "iTaoBuy", "Didpop", "BBDBuy", "CnShopper", "ESGOBuy",
+  "Litbuy", "GTbuy", "Hipobuy", "Fansbuy", "LoveGoBuy", "Hoobuy", "UsFans", "OrientDig",
+  "Sugargoo", "BBDBuyEU", "VigorBuy", "Fishgoo", "UUFans",
 ];
 const HIDDEN_PLATFORMS = new Set(["acbuy", "allchinabuy", "mulebuy"]);
 
