@@ -27,6 +27,7 @@ if (source.includes("JSON.parse(")) {
 const uniqueIds = [...new Set(ids)];
 const urls = [
   { loc: `${siteUrl}/`, changefreq: "daily", priority: "1.0" },
+  { loc: `${siteUrl}/kakobuy-spreadsheet`, changefreq: "monthly", priority: "0.9" },
   ...uniqueIds.map((id) => ({ loc: `${siteUrl}/product/${id}`, changefreq: "weekly", priority: "0.8" })),
 ];
 const escapeXml = (value) => value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&apos;");
