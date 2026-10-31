@@ -241,16 +241,23 @@ export default function Home() {
   const MAX_STYLE_CARDS_PER_PRODUCT = 8;
   const expandedCards = useMemo(() => {
     if (isAiAuditView) return visible.map((product) => ({ product, styleKey: "", image: "" }));
+    // 新版目录里每个款式本身就是一行，直接按行展开，不再依赖静态 style-images 映射。
+    const rowsBySource = new Map<string, (typeof products)[number][]>();
+    for (const product of visible) {
+      const sourceId = String(product.sourceProductId || product.id);
+      const list = rowsBySource.get(sourceId);
+      if (list) list.push(product);
+      else rowsBySource.set(sourceId, [product]);
+    }
     const queues: { product: (typeof products)[number]; styleKey: string; image: string }[][] = [];
     const seenSources = new Set<string>();
     for (const product of visible) {
       const sourceId = String(product.sourceProductId || product.id);
       if (seenSources.has(sourceId)) continue;
       seenSources.add(sourceId);
-      const styleMap = styleImages[sourceId] || {};
-      const keys = Object.keys(styleMap);
-      if (keys.length === 0) { queues.push([{ product, styleKey: "", image: "" }]); continue; }
-      queues.push(keys.slice(0, MAX_STYLE_CARDS_PER_PRODUCT).map((key) => ({ product, styleKey: key, image: styleMap[key] })));
+      const variants = (rowsBySource.get(sourceId) || [product]).filter((item) => styleKeyOf(item));
+      if (variants.length === 0) { queues.push([{ product, styleKey: "", image: "" }]); continue; }
+      queues.push(variants.slice(0, MAX_STYLE_CARDS_PER_PRODUCT).map((item) => ({ product: item, styleKey: styleKeyOf(item), image: item.images?.[0] || "" })));
     }
     const cards: { product: (typeof products)[number]; styleKey: string; image: string }[] = [];
     let cursor = 0;

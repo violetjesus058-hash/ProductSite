@@ -128,8 +128,8 @@ async function main() {
   if (phantomMeta.length) console.log(`  Found ${phantomMeta.length} phantom backslash paths to delete:`);
 
   // 1.2. Delete dataset files that exist remotely but no longer locally (renamed product ids).
-  // Local git does not track client/public/catalog-data-1, so these never show up in `git status`.
-  const PRUNE_PREFIXES = ["client/public/catalog-data-1/products/"];
+  // These dirs are gitignored/untracked, so stale files never show up in `git status`.
+  const PRUNE_PREFIXES = ["client/public/catalog-data/", "client/public/catalog-data-1/"];
   const pruneMeta = (baseTree.tree || [])
     .filter((t) => t.type === "blob" && PRUNE_PREFIXES.some((prefix) => t.path.startsWith(prefix)))
     .filter((t) => !fs.existsSync(path.join(ROOT, t.path)))

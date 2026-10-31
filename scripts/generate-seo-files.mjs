@@ -2,28 +2,16 @@ import fs from "node:fs";
 import path from "node:path";
 
 const root = process.cwd();
-const dataPath = path.join(root, "client/src/data/products.ts");
+const indexPath = path.join(root, "client/public/catalog-data/catalog-index.json");
 const publicDir = path.join(root, "client/public");
 const siteUrl = "https://productsite-8wf.pages.dev";
-const source = fs.readFileSync(dataPath, "utf8");
 const unavailableCategories = new Set(["fragrance"]);
-let ids = [...source.matchAll(/\"id\"\s*:\s*\"([^\"]+)\"/g)].map((match) => match[1]);
-if (ids.length === 0 && source.includes("JSON.parse(")) {
-  const open = source.indexOf("JSON.parse(") + "JSON.parse(".length;
-  const close = source.indexOf(") as Product[]", open);
-  if (close > open) {
-    const serialized = JSON.parse(source.slice(open, close));
-    ids = JSON.parse(serialized).map((product) => product.id).filter(Boolean);
-  }
-}
-if (source.includes("JSON.parse(")) {
-  const open = source.indexOf("JSON.parse(") + "JSON.parse(".length;
-  const close = source.indexOf(") as Product[]", open);
-  if (close > open) {
-    const products = JSON.parse(JSON.parse(source.slice(open, close)));
-    ids = products.filter((product) => !unavailableCategories.has(String(product.category || "").trim().toLowerCase())).map((product) => product.id).filter(Boolean);
-  }
-}
+if (!fs.existsSync(indexPath)) throw new Error(`找不到 ${indexPath}，请先执行 scripts/build-catalog-full.mjs`);
+const catalog = JSON.parse(fs.readFileSync(indexPath, "utf8"));
+const ids = catalog
+  .filter((row) => !unavailableCategories.has(String(row.category || "").trim().toLowerCase()))
+  .map((row) => String(row.id || "").trim())
+  .filter(Boolean);
 const uniqueIds = [...new Set(ids)];
 const urls = [
   { loc: `${siteUrl}/`, changefreq: "daily", priority: "1.0" },

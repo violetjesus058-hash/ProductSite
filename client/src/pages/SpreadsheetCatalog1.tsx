@@ -118,7 +118,7 @@ function InlinePurchaseCard({ item, group, selectedPlatform, selectedStyleId, sh
   </section>;
 }
 
-const basePath = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/catalog-data-1`;
+const basePath = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/catalog-data`;
 const placeholder = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/catalog-detail-stilllife.webp`;
 const entryPreviewBase = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/entry-previews`;
 const THEME_STORAGE_KEY = "rivora-spreadsheet-theme-v1";
@@ -656,7 +656,7 @@ export default function SpreadsheetCatalog1() {
       <Link href="/" className="spreadsheet-brand" aria-label="RIVORA product catalog"><img src="/branding/rivora-icon.png" alt="" /><span>RIVORA</span></Link>
       <div className="spreadsheet-document-name"><strong>RIVORA Product Catalog</strong><small>Interactive catalog</small></div>
       <div className="browse-mode-switch spreadsheet-browse-mode-switch" aria-label="Switch browsing mode"><a href="/" onClick={() => trackEvent("browse_mode_switch", { from_mode: "spreadsheet", to_mode: "product-site", source: "header" })}>Gallery</a><span className="is-active">Spreadsheet</span></div>
-      <nav aria-label="Main navigation"><a href="https://productsite-8wf.pages.dev/">Product Catalog</a><a href="https://productsite-8wf.pages.dev/spreadsheet1" aria-current="page">Catalog Table</a></nav>
+      <nav aria-label="Main navigation"><a href="https://productsite-8wf.pages.dev/">Product Catalog</a><a href="https://productsite-8wf.pages.dev/spreadsheet" aria-current="page">Catalog Table</a></nav>
       <a href="https://productsite-8wf.pages.dev/" className="spreadsheet-back"><ArrowLeft size={15} /> Product Catalog</a>
       <div className="spreadsheet-share-control share-control">
         <button className="spreadsheet-share-button detail-share-button" type="button" onClick={() => setShareOpen((open) => !open)} aria-label="Share this catalog" aria-haspopup="menu" aria-expanded={shareOpen} aria-controls="spreadsheet-share-menu" title="Share this catalog"><Share2 size={16} aria-hidden="true" /><span>Share</span></button>
@@ -698,7 +698,7 @@ export default function SpreadsheetCatalog1() {
         </label>
       </div>
       <div className="spreadsheet-platform-callout" role="note"><Store size={16} aria-hidden="true" /><span><strong>Choose a platform</strong><small>Filter the table by buying source to compare available sellers and prices.</small><strong className="spreadsheet-platform-outage-label">PLATFORM SERVICE ALERT</strong><small className="spreadsheet-platform-maintenance">AcBuy and Multbuy are currently unavailable while under maintenance.</small><small className="spreadsheet-platform-alternative">Recommended alternatives: Oopbuy, Sugargoo, Superbuy, or another available platform below.</small></span><b>{view.platform ? "FILTER ACTIVE" : "RECOMMENDED"}</b></div>
-      <div className="spreadsheet-availability-notice" role="status"><strong>Fragrance is temporarily unavailable.</strong><span>Please explore Accessories, Watches, Bags, or Clothing instead.</span><div><Link href="/spreadsheet1?view=styles&category=ACC">Accessories</Link><Link href="/spreadsheet1?view=styles&category=watches">Watches</Link><Link href="/spreadsheet1?view=styles&category=bags">Bags</Link><Link href="/spreadsheet1?view=styles&category=clothing">Clothing</Link></div></div>
+      <div className="spreadsheet-availability-notice" role="status"><strong>Fragrance is temporarily unavailable.</strong><span>Please explore Accessories, Watches, Bags, or Clothing instead.</span><div><Link href="/spreadsheet?view=styles&category=ACC">Accessories</Link><Link href="/spreadsheet?view=styles&category=watches">Watches</Link><Link href="/spreadsheet?view=styles&category=bags">Bags</Link><Link href="/spreadsheet?view=styles&category=clothing">Clothing</Link></div></div>
 
       <div className="spreadsheet-column-labels" aria-hidden="true">{["A", "B", "C", "D", "E", "F", "G", "H"].map((column) => <span key={column}>{column}</span>)}</div>
       <div className="spreadsheet-quick-categories" role="group" aria-label="Quick category filters" aria-busy={quickCategoryBusy}>
@@ -768,6 +768,6 @@ export default function SpreadsheetCatalog1() {
       </section>
     </div>}
 
-    <CatalogEntryChooser sourcePath="/spreadsheet1" onChoose={(choice) => { if (choice === "product-site") setLocation("/"); }} />
+    <CatalogEntryChooser sourcePath="/spreadsheet" onChoose={(choice) => { if (choice === "product-site") setLocation("/"); }} />
   </main>;
 }

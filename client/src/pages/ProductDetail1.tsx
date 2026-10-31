@@ -32,7 +32,7 @@ type ProductDetailPayload = {
   styles: DetailStyle[];
 };
 
-const basePath = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/catalog-data-1`;
+const basePath = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/catalog-data`;
 
 function formatMoney(value: number, currency: string) {
   if (!Number.isFinite(value) || value <= 0) return "—";
@@ -103,7 +103,7 @@ export default function ProductDetail1() {
 
   return <div className="pd1-page">
     <header className="pd1-header">
-      <Link className="pd1-back" href="/spreadsheet1"><ArrowLeft size={15} aria-hidden="true" /> Back to catalog table</Link>
+      <Link className="pd1-back" href="/spreadsheet"><ArrowLeft size={15} aria-hidden="true" /> Back to catalog table</Link>
       <span className="pd1-header-meta">Style catalog · updated {detail?.refreshed || "—"}</span>
     </header>
 
@@ -112,7 +112,7 @@ export default function ProductDetail1() {
     {!loading && error && <section className="pd1-state is-error" role="alert">
       <h1>Product not available</h1>
       <p>{error}</p>
-      <Link className="pd1-state-link" href="/spreadsheet1">Return to catalog</Link>
+      <Link className="pd1-state-link" href="/spreadsheet">Return to catalog</Link>
     </section>}
 
     {!loading && !error && detail && selectedStyle && <main className="pd1-main">

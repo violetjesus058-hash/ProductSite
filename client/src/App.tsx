@@ -13,7 +13,6 @@ const AdminAnalytics = lazy(() => import("./pages/AdminAnalytics"));
 const PromotionLinkBuilder = lazy(() => import("./pages/PromotionLinkBuilder"));
 const AdminProductImport = lazy(() => import("./pages/AdminProductImport"));
 const RequestStatus = lazy(() => import("./pages/RequestStatus"));
-const SpreadsheetCatalog = lazy(() => import("./pages/SpreadsheetCatalog"));
 const SpreadsheetCatalog1 = lazy(() => import("./pages/SpreadsheetCatalog1"));
 const ProductDetail1 = lazy(() => import("./pages/ProductDetail1"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -63,7 +62,7 @@ export default function App() {
           <Suspense fallback={<div className="route-loading" role="status">Loading…</div>}>
             <Switch>
               <Route path="/" component={Home} />
-              <Route path="/spreadsheet" component={SpreadsheetCatalog} />
+              <Route path="/spreadsheet" component={SpreadsheetCatalog1} />
               <Route path="/spreadsheet1" component={SpreadsheetCatalog1} />
               <Route path="/product1/:id" component={ProductDetail1} />
               <Route path="/product/:id" component={ProductDetail} />
