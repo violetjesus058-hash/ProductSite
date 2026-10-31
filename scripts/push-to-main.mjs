@@ -177,11 +177,23 @@ async function main() {
   console.log(`TREE final ${treeSha.slice(0, 7)}  (base ${baseTreeSha.slice(0, 7)})`);
 
   // 4. Create commit + update ref
-  const commit = await gh(token, "POST", `/repos/${REPO}/git/commits`, {
-    message: COMMIT_MSG,
-    tree: treeSha,
-    parents: [remoteCommitSha],
-  });
+  // GitHub 偶尔会对刚建好的链式 tree 报「Tree SHA does not exist」，等几秒重试即可成功。
+  let commit;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    try {
+      commit = await gh(token, "POST", `/repos/${REPO}/git/commits`, {
+        message: COMMIT_MSG,
+        tree: treeSha,
+        parents: [remoteCommitSha],
+      });
+      break;
+    } catch (error) {
+      const retryable = /Tree SHA does not exist/.test(error.message);
+      if (!retryable || attempt === 2) throw error;
+      console.log(`  [commit retry ${attempt + 1}/3] ${error.message.slice(0, 120)}`);
+      await new Promise((resolve) => setTimeout(resolve, 5000 * (attempt + 1) + 5000));
+    }
+  }
   console.log(`COMMIT ${commit.sha.slice(0, 7)}`);
 
   await gh(token, "PATCH", `/repos/${REPO}/git/refs/heads/main`, { sha: commit.sha });
