@@ -141,7 +141,11 @@ async function main() {
   const blobs = [];
   let reused = 0;
   for (const f of files) {
-    if (f.status === "D") { blobs.push({ path: f.path, mode: "100644", type: "blob", sha: null }); continue; }
+    if (f.status === "D") {
+      // 远端已不存在该文件时再提交 sha:null 会触发 422 BadObjectState，跳过即可
+      if (remoteShas.has(f.path)) blobs.push({ path: f.path, mode: "100644", type: "blob", sha: null });
+      continue;
+    }
     const fullPath = path.join(ROOT, f.path);
     if (!fs.existsSync(fullPath)) { console.warn(`  SKIP missing: ${f.path}`); continue; }
     const stat = fs.statSync(fullPath);

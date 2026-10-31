@@ -122,22 +122,45 @@ function toProduct(record) {
   };
 }
 
-// 同源商品的款式行轮询穿插，避免首页第一页被同一个商品占满
-function interleaveBySource(rows) {
+const sourceKeyOf = (row) => String(row.sourceProductId || row.id || "");
+
+// 默认排序：先按商品取最低价代表款，商品层面做价格高低锯齿（最低→最高→次低→次高…），
+// 其余 style 行之后按商品顺序轮询穿插。首页卡片与表格前几页因此完全同序，
+// 且首页每个商品只出现一次。
+function curatedOrder(rows) {
   const groups = new Map();
   for (const row of rows) {
-    const key = row.sourceProductId || row.id;
+    const key = sourceKeyOf(row);
     if (!groups.has(key)) groups.set(key, []);
     groups.get(key).push(row);
   }
-  const ordered = [];
-  let remaining = groups.size;
-  while (remaining > 0) {
-    remaining = 0;
-    for (const queue of groups.values()) {
+  const products = [...groups.entries()].map(([key, group]) => {
+    const sorted = [...group].sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0) || String(a.id).localeCompare(String(b.id)));
+    return { key, representative: sorted[0], rest: sorted.slice(1) };
+  });
+  products.sort((a, b) => (Number(a.representative.price) || 0) - (Number(b.representative.price) || 0) || a.key.localeCompare(b.key));
+
+  const zigzag = [];
+  let low = 0;
+  let high = products.length - 1;
+  while (low <= high) {
+    zigzag.push(products[low]);
+    low += 1;
+    if (low <= high) {
+      zigzag.push(products[high]);
+      high -= 1;
+    }
+  }
+
+  const ordered = zigzag.map((item) => item.representative);
+  const queues = zigzag.map((item) => item.rest);
+  let pending = queues.some((queue) => queue.length > 0);
+  while (pending) {
+    pending = false;
+    for (const queue of queues) {
       const row = queue.shift();
       if (row) ordered.push(row);
-      if (queue.length) remaining += 1;
+      if (queue.length) pending = true;
     }
   }
   return ordered;
@@ -209,9 +232,12 @@ async function main() {
   applyStyleImages(allRecords);
   console.log(`CSV 行数      : ${allRecords.length}（${csvPaths.length} 批，商品 ${new Set(allRecords.map((row) => row.sourceProductId)).size} 个）`);
 
-  const summaries = allRecords.map(toSummary).filter((item) => item.id && item.name);
   const pageRows = allRecords.filter((row) => !unavailableCategories.has(normalizeCategory(row.category)));
-  const products = pageRows.map(toProduct);
+  const orderedPageRows = curatedOrder(pageRows);
+  const hiddenRows = allRecords.filter((row) => unavailableCategories.has(normalizeCategory(row.category)));
+  // 表格索引与首页分页使用同一份锯齿顺序；fragrance 行追加在末尾，前端过滤后仍与首页同序。
+  const summaries = [...orderedPageRows, ...hiddenRows].map(toSummary).filter((item) => item.id && item.name);
+  const products = orderedPageRows.map(toProduct);
 
   await fs.rm(outputRoot, { recursive: true, force: true });
   await fs.mkdir(outputRoot, { recursive: true });
@@ -219,8 +245,8 @@ async function main() {
   // 1. 表格索引
   await jsonWrite(path.join(outputRoot, "catalog-index.json"), summaries);
 
-  // 2. 首页分页
-  const ordered = interleaveBySource(products);
+  // 2. 首页分页（顺序与表格索引一致）
+  const ordered = products;
   const totalPages = Math.max(1, Math.ceil(ordered.length / PAGE_SIZE));
   const pagesDir = path.join(outputRoot, `pages-${PAGE_SIZE}`);
   await fs.mkdir(pagesDir, { recursive: true });

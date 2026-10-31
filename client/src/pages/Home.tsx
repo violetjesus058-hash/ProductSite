@@ -236,38 +236,21 @@ export default function Home() {
 
   // Normal browsing shows the complete filtered catalog. AI Audit View intentionally keeps a compact review batch.
   const visible = isAiAuditView ? filteredProducts.slice(0, pageSize) : filteredProducts;
-  // Style 扩展：同源商品只展开一次，每个 style 一张卡；轮询穿插保证同商品卡片不相邻；
-  // 每个源商品在当前品类视图内最多展开 MAX_STYLE_CARDS_PER_PRODUCT 张（跟随品类筛选生效）。
-  const MAX_STYLE_CARDS_PER_PRODUCT = 8;
+  // 同款只出一张卡：按目录锯齿顺序保留每个商品首次出现的 style 行，图/价与该行一致。
+  // 同一商品在源数据里可能有多条 listing（sourceProductId 不同但首图相同），一并按首图去重。
   const expandedCards = useMemo(() => {
     if (isAiAuditView) return visible.map((product) => ({ product, styleKey: "", image: "" }));
-    // 新版目录里每个款式本身就是一行，直接按行展开，不再依赖静态 style-images 映射。
-    const rowsBySource = new Map<string, (typeof products)[number][]>();
-    for (const product of visible) {
-      const sourceId = String(product.sourceProductId || product.id);
-      const list = rowsBySource.get(sourceId);
-      if (list) list.push(product);
-      else rowsBySource.set(sourceId, [product]);
-    }
-    const queues: { product: (typeof products)[number]; styleKey: string; image: string }[][] = [];
     const seenSources = new Set<string>();
+    const seenImages = new Set<string>();
+    const cards: { product: (typeof products)[number]; styleKey: string; image: string }[] = [];
     for (const product of visible) {
       const sourceId = String(product.sourceProductId || product.id);
+      const imageKey = String(product.images?.[0] || "").trim().toLowerCase();
       if (seenSources.has(sourceId)) continue;
+      if (imageKey && seenImages.has(imageKey)) continue;
       seenSources.add(sourceId);
-      const variants = (rowsBySource.get(sourceId) || [product]).filter((item) => styleKeyOf(item));
-      if (variants.length === 0) { queues.push([{ product, styleKey: "", image: "" }]); continue; }
-      queues.push(variants.slice(0, MAX_STYLE_CARDS_PER_PRODUCT).map((item) => ({ product: item, styleKey: styleKeyOf(item), image: item.images?.[0] || "" })));
-    }
-    const cards: { product: (typeof products)[number]; styleKey: string; image: string }[] = [];
-    let cursor = 0;
-    let guard = 0;
-    while (queues.some((queue) => queue.length > 0) && guard < 200000) {
-      const queue = queues[cursor % queues.length];
-      const card = queue.shift();
-      if (card) cards.push(card);
-      cursor += 1;
-      guard += 1;
+      if (imageKey) seenImages.add(imageKey);
+      cards.push({ product, styleKey: styleKeyOf(product), image: product.images?.[0] || "" });
     }
     return cards;
   }, [visible, isAiAuditView]);
@@ -441,9 +424,9 @@ export default function Home() {
         <section className={isAiAuditView ? "grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2" : "masonry-grid"} aria-label="Product list" onMouseLeave={() => Object.keys(hoverTimers.current).forEach(endProductPreview)}>
           {expandedCards.map((entry, index) => { 
             const product = entry.product;
-            const cardStyleKey = entry.styleKey && entry.styleKey !== styleKeyOf(product) ? entry.styleKey : "";
+            const cardStyleKey = entry.styleKey || "";
             const styleImage = entry.image || styleImageFor(product);
-            const cardImages = styleImage ? [styleImage, ...product.images] : product.images;
+            const cardImages = product.images?.length ? product.images : styleImage ? [styleImage] : [];
             const isFav = favorites.includes(product.id); 
             const isDisliked = dislikes.includes(product.id);
             const title = englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`); 

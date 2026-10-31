@@ -153,13 +153,13 @@ function menuPermissionCopy(menuName: string) {
 function readViewState(): ViewState {
   const params = new URLSearchParams(window.location.search);
   const sortValue = params.get("sort");
-  const allowedSorts: CatalogSort[] = ["random", "price-low", "price-high", "name", "recent"];
+  const allowedSorts: CatalogSort[] = ["curated", "random", "price-low", "price-high", "name", "recent"];
   const parsedPage = Number(params.get("page") || "1");
   const requestedPlatform = normalizePlatformName(params.get("platform") || "");
   return {
     category: params.get("category") || "",
     platform: requestedPlatform === "all" || requestedPlatform === "allplatforms" ? "" : requestedPlatform,
-    sort: allowedSorts.includes(sortValue as CatalogSort) ? sortValue as CatalogSort : "random",
+    sort: allowedSorts.includes(sortValue as CatalogSort) ? sortValue as CatalogSort : "curated",
     page: Number.isFinite(parsedPage) ? Math.max(1, Math.floor(parsedPage)) : 1,
   };
 }
@@ -315,7 +315,7 @@ export default function SpreadsheetCatalog1() {
     for (const key of ["q", "category", "platform", "sort", "page"]) params.delete(key);
     if (view.category) params.set("category", view.category);
     if (view.platform) params.set("platform", view.platform);
-    if (view.sort !== "random") params.set("sort", view.sort);
+    if (view.sort !== "curated") params.set("sort", view.sort);
     if (view.page > 1) params.set("page", String(view.page));
     window.history.replaceState(window.history.state, "", `${url.pathname}?${params.toString()}`);
   }, [view]);
@@ -482,7 +482,7 @@ export default function SpreadsheetCatalog1() {
 
   function clearFilters() {
     cancelQuickCategoryIntent();
-    setView((old) => ({ ...old, category: "", platform: "", sort: "random", page: 1 }));
+    setView((old) => ({ ...old, category: "", platform: "", sort: "curated", page: 1 }));
   }
 
   function setCategory(category: string) {
@@ -692,8 +692,8 @@ export default function SpreadsheetCatalog1() {
         <label className="spreadsheet-select spreadsheet-sort">
           <ArrowDownWideNarrow className="spreadsheet-control-icon" size={21} strokeWidth={1.9} aria-hidden="true" />
           <span className="spreadsheet-select-label">Sort</span>
-          <span className="spreadsheet-select-value">{{ random: "Random", "price-low": "Price: Low to High", "price-high": "Price: High to Low", name: "Name", recent: "Recently checked" }[view.sort]}</span>
-          <select aria-label="Sort" value={view.sort} onChange={(event) => setSort(event.target.value as CatalogSort)}><option value="random">Random</option><option value="price-low">Price: Low to High</option><option value="price-high">Price: High to Low</option><option value="name">Name</option><option value="recent">Recently checked</option></select>
+          <span className="spreadsheet-select-value">{{ curated: "Curated", random: "Random", "price-low": "Price: Low to High", "price-high": "Price: High to Low", name: "Name", recent: "Recently checked" }[view.sort]}</span>
+          <select aria-label="Sort" value={view.sort} onChange={(event) => setSort(event.target.value as CatalogSort)}><option value="curated">Curated</option><option value="random">Random</option><option value="price-low">Price: Low to High</option><option value="price-high">Price: High to Low</option><option value="name">Name</option><option value="recent">Recently checked</option></select>
           <ChevronDown className="spreadsheet-select-chevron" size={16} aria-hidden="true" />
         </label>
       </div>

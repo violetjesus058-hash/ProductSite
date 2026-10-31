@@ -18,7 +18,7 @@ export type CatalogSummary = {
   hasStyleImage: boolean;
   priceCheckedAt: string;
 };
-export type CatalogSort = "random" | "price-low" | "price-high" | "name" | "recent";
+export type CatalogSort = "curated" | "random" | "price-low" | "price-high" | "name" | "recent";
 export type CatalogQuery = { category?: string; platform?: string; sort?: CatalogSort; seed?: number | string };
 
 function normalized(value: string | undefined) { return (value || "").normalize("NFKC").trim().toLocaleLowerCase(); }
@@ -105,7 +105,8 @@ export function filterCatalogItems(items: CatalogSummary[], query: CatalogQuery)
     if (platform && !item.platformKeys.some((key) => normalized(key) === platform)) return false;
     return true;
   });
-  switch (query.sort || "random") {
+  switch (query.sort || "curated") {
+    case "curated": return filtered;
     case "price-low": return filtered.sort((a, b) => a.price - b.price || a.id.localeCompare(b.id));
     case "price-high": return filtered.sort((a, b) => b.price - a.price || a.id.localeCompare(b.id));
     case "name": return filtered.sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
