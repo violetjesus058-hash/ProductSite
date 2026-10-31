@@ -156,7 +156,11 @@ export function prepareCatalogNewDatasets(csvTexts) {
     }
   }
 
-  for (const record of rows) delete record.__oldId;
+  for (const record of rows) {
+    delete record.__oldId;
+    // 极少数行源数据没有款式字段，给个中性英文标签，避免前端 STYLE 区出现空白。
+    if (!String(record.styleLabel || "").trim()) record.styleLabel = "Standard";
+  }
 
   const stats = {
     rowsIn: allRecords.length,

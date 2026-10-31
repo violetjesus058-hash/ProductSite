@@ -5,6 +5,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { readCatalogNewDatasets } from "./lib/catalog-new-dataset.mjs";
+import { applyStyleImages } from "./lib/style-image-overlay.mjs";
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1")), "..");
 // 支持多批 CSV：按命令行顺序汇总，未传时只读第一批
@@ -15,6 +16,7 @@ const splitList = (value, separator = "|") =>
   String(value || "").split(separator).map((entry) => entry.trim()).filter(Boolean);
 
 const { rows, stats } = readCatalogNewDatasets(csvPaths.length ? csvPaths : ["d:/ps/catalog-new.csv"]);
+applyStyleImages(rows);
 
 const groups = new Map();
 for (const row of rows) {
