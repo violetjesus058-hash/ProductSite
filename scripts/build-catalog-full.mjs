@@ -138,22 +138,36 @@ function curatedOrder(rows) {
     const sorted = [...group].sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0) || String(a.id).localeCompare(String(b.id)));
     return { key, representative: sorted[0], rest: sorted.slice(1) };
   });
-  products.sort((a, b) => (Number(a.representative.price) || 0) - (Number(b.representative.price) || 0) || a.key.localeCompare(b.key));
+  // 同图不同 listing 视为同一商品：首图相同则只保留一条代表参与锯齿，其余整组挪到尾部轮询。
+  const canonical = new Map();
+  const duplicates = [];
+  for (const product of products) {
+    const imageKey = splitList(product.representative.images)[0].trim().toLowerCase();
+    if (!imageKey) {
+      canonical.set(`src:${product.key}`, product);
+      continue;
+    }
+    if (!canonical.has(`img:${imageKey}`)) canonical.set(`img:${imageKey}`, product);
+    else duplicates.push(product);
+  }
+  const canonicalProducts = [...canonical.values()];
+  canonicalProducts.sort((a, b) => (Number(a.representative.price) || 0) - (Number(b.representative.price) || 0) || a.key.localeCompare(b.key));
 
   const zigzag = [];
   let low = 0;
-  let high = products.length - 1;
+  let high = canonicalProducts.length - 1;
   while (low <= high) {
-    zigzag.push(products[low]);
+    zigzag.push(canonicalProducts[low]);
     low += 1;
     if (low <= high) {
-      zigzag.push(products[high]);
+      zigzag.push(canonicalProducts[high]);
       high -= 1;
     }
   }
 
   const ordered = zigzag.map((item) => item.representative);
   const queues = zigzag.map((item) => item.rest);
+  for (const duplicate of duplicates) queues.push([duplicate.representative, ...duplicate.rest]);
   let pending = queues.some((queue) => queue.length > 0);
   while (pending) {
     pending = false;
