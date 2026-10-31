@@ -103,7 +103,6 @@ function InlinePurchaseCard({ item, group, selectedPlatform, selectedStyleId, sh
     </div>
     <div className="spreadsheet-inline-commerce">
       <div className="spreadsheet-inline-product-heading"><div><span>SELECTED STYLE</span><strong>{group.name}</strong><small>{displayStyleLabel(selectedStyle.styleLabel) ? `Style ${displayStyleLabel(selectedStyle.styleLabel)}` : "Style not specified"}</small></div><b>{formatMoney(selectedStyle.price, selectedStyle.currency)}</b></div>
-      <Link href={`/product1/${group.sourceProductId}`} className="spreadsheet-inline-detail-link">View full product details <ArrowRight size={14} aria-hidden="true" /></Link>
       <div className="spreadsheet-inline-platform-heading"><span>BUYING PLATFORMS</span><small>{group.platforms.length} sources</small></div>
       <div className="spreadsheet-inline-platform-list">
         {visiblePlatforms.map((platform) => {
