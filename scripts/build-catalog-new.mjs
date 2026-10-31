@@ -68,6 +68,33 @@ function toSummary(record) {
   };
 }
 
+// 平台清单一旦和主站漂移，前端会把 URL 里的 platform 静默重置成「All platforms」，
+// 表现为同一平台在主站能筛、在 /spreadsheet1 筛不动，所以构建前先做对齐校验。
+function assertPlatformsAligned() {
+  const mainMetaFile = path.resolve("client/public/catalog-data/meta.json");
+  if (!fs.existsSync(mainMetaFile)) {
+    throw new Error(`找不到主站平台清单 ${mainMetaFile}，请在 D:\\ps\\ProductSite 目录下执行构建`);
+  }
+  const mainMeta = JSON.parse(fs.readFileSync(mainMetaFile, "utf8"));
+  const norm = (key) => String(key || "").trim().toLowerCase();
+  const mainKeys = (mainMeta.platforms || [])
+    .map((platform) => platform.key)
+    .filter((key) => !HIDDEN_PLATFORMS.has(norm(key)));
+  const mainSet = new Set(mainKeys.map(norm));
+  const localSet = new Set(PLATFORM_NAMES.map(norm));
+  const missing = mainKeys.filter((key) => !localSet.has(norm(key)));
+  const extra = PLATFORM_NAMES.filter((key) => !mainSet.has(norm(key)));
+  if (missing.length || extra.length) {
+    throw new Error([
+      "平台清单与主站不一致，已中止构建。",
+      `  主站有、本脚本缺：${missing.join(", ") || "无"}`,
+      `  本脚本有、主站缺：${extra.join(", ") || "无"}`,
+      "  请先同步 scripts/build-catalog-new.mjs 的 PLATFORM_NAMES。",
+    ].join("\n"));
+  }
+  console.log(`平台校验      : 与主站一致（${mainKeys.length} 个）`);
+}
+
 function main() {
   const args = process.argv.slice(2);
   const flags = args.filter((a) => a.startsWith("--"));
@@ -77,6 +104,8 @@ function main() {
   const csvPaths = (csvArgs.length ? csvArgs : ["D:\\ps\\catalog-new.csv"]).map((value) => path.resolve(value));
   const outArg = positional.find((a) => !/\.csv$/i.test(a)) || "client/public/catalog-data-1";
   const verifyOnly = flags.includes("--inspect");
+
+  assertPlatformsAligned();
 
   for (const csvPath of csvPaths) {
     if (!fs.existsSync(csvPath)) {
