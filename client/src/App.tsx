@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { getSiteLanguage } from "./lib/siteLanguage";
+import { capturePreferredPlatform } from "./lib/platformPreference";
 const Home = lazy(() => import("./pages/Home"));
 const ProductDetail = lazy(() => import("./pages/ProductDetail"));
 const AdminRequests = lazy(() => import("./pages/AdminRequests"));
@@ -21,6 +22,7 @@ export default function App() {
   const [location] = useLocation();
   const [, setCatalogVersion] = useState(0);
   useEffect(() => { document.documentElement.lang = location.startsWith("/admin") ? "zh-CN" : getSiteLanguage(); }, [location]);
+  useEffect(() => { capturePreferredPlatform(window.location.search); }, [location]);
   useEffect(() => {
     if (location === "/spreadsheet") return;
     if (!(location === "/" || location.startsWith("/product/") || location.startsWith("/admin/products/import"))) return;

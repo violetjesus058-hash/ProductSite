@@ -10,3 +10,4 @@ export function platformIconFor(name: string): string;
 export type PlatformSourcesOptions = { withInviteCodes?: boolean };
 export function platformSourcesFor(product: PlatformProduct, options?: PlatformSourcesOptions): PlatformSource[];
 export function primarySourceFor(product: PlatformProduct): PlatformSource | undefined;
+export function prioritizePlatform(sources: PlatformSource[], name: string): PlatformSource[];

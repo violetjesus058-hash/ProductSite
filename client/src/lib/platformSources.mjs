@@ -142,3 +142,14 @@ export function primarySourceFor(product) {
   const sources = platformSourcesFor(product);
   return sources.find((source) => source.primary) || sources[0];
 }
+
+// 把用户选择的平台移到首位并设为主平台（不改动传入数组）。
+export function prioritizePlatform(sources, name) {
+  const key = normalizePlatformName(name);
+  if (!key) return sources;
+  const index = sources.findIndex((source) => normalizePlatformName(source.name) === key);
+  if (index <= 0) return sources;
+  const target = { ...sources[index], primary: true };
+  const rest = sources.filter((_, position) => position !== index).map((source) => (source.primary ? { ...source, primary: false } : source));
+  return [target, ...rest];
+}

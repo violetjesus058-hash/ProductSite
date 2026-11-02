@@ -9,7 +9,8 @@ import { readEngagement, readFavorites, recordDwellTime, rememberVisit, saveFavo
 import SafeProductImage from "@/components/SafeProductImage";
 import { rankBehavioralRecommendations } from "@/lib/categoryRecommendations";
 import { initializeAnalytics, trackEvent } from "@/lib/analytics";
-import { platformIconFor, platformSourcesFor, primarySourceFor, type PlatformSource } from "@/lib/platformSources.mjs";
+import { platformIconFor, platformSourcesFor, prioritizePlatform, type PlatformSource } from "@/lib/platformSources.mjs";
+import { resolvePreferredPlatform } from "@/lib/platformPreference";
 import { displayStyleLabel } from "@/data/style-label-map";
 
 const englishCategoryLabels: Record<string, string> = { clothing: "CLOTHING", shoe: "SHOES", pants: "PANTS", bags: "BAGS", ACC: "ACCESSORIES", watches: "WATCHES" };
@@ -86,7 +87,8 @@ export default function ProductDetail() {
   const catalogSnapshot = useCatalogVersion();
   const catalogVersion = catalogSnapshot.loaded;
   const product = products.find((item) => item.id === id);
-  const platformSources = product ? platformSourcesFor(product) : [];
+  const preferredPlatform = typeof window !== "undefined" ? resolvePreferredPlatform(window.location.search) : "";
+  const platformSources = product ? prioritizePlatform(platformSourcesFor(product, { withInviteCodes: true }), preferredPlatform) : [];
   const hasPlatformSources = platformSources.length > 1;
   const relatedStyles = useMemo(() => {
     if (!product?.sourceProductId) return product ? [product] : [];
@@ -227,7 +229,7 @@ export default function ProductDetail() {
   }, [product]);
 
   if (!product) return <div className="not-found-page"><span>CATALOG / UNAVAILABLE</span><h1>This product is temporarily unavailable.</h1><p>Some catalog categories may be unavailable while inventory is being updated. Please explore other product categories.</p><Link href="/">Back to catalog</Link></div>;
-  const primarySource = primarySourceFor(product);
+  const primarySource = platformSources.find((source) => source.primary) || platformSources[0];
   if (!primarySource) return <div className="not-found-page"><span>CATALOG / 404</span><h1>Buying platforms unavailable.</h1><Link href="/">Back to catalog</Link></div>;
 
   return <div className="detail-shell" data-layout={useLayoutB ? "B" : undefined}>

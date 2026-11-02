@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { normalizePlatformName, platformIconFor, platformSourcesFor } from "./platformSources.mjs";
+import { normalizePlatformName, platformIconFor, platformSourcesFor, prioritizePlatform } from "./platformSources.mjs";
 
 const sampleId = "7543342819";
 const sourceUrl = `https://shop1784277725.v.weidian.com/item.html?itemID=${sampleId}`;
@@ -9,7 +9,7 @@ describe("sampled shopping platform sources", () => {
     const sources = platformSourcesFor({ sourceProductId: sampleId });
     const byName = new Map(sources.map((source) => [source.name, source.url]));
     expect(sources[0]).toMatchObject({ name: "Oopbuy", primary: true, url: `https://oopbuy.com/product/weidian/${sampleId}?inviteCode=Y5DH4UF2W` });
-    expect(sources.find((source) => source.name === "Kakobuy")).toMatchObject({ disabled: true, disabledReason: "Temporarily unavailable" });
+    expect(sources.find((source) => source.name === "Kakobuy")).toMatchObject({ url: `https://www.kakobuy.com/item/details?url=${encodeURIComponent(`https://weidian.com/item.html?itemID=${sampleId}`)}&affcode=vxxss` });
     expect(byName.get("Joyagoo")).toBe(`https://joyagoo.com/product?id=${sampleId}&platform=WEIDIAN&productUrl=&productPwd=`);
     expect(byName.get("EastMallBuy")).toContain(`url=${encodeURIComponent(sourceUrl)}`);
     expect(byName.get("EastMallBuy")).toContain("inviter=valeriyachentsov");
@@ -31,6 +31,14 @@ describe("sampled shopping platform sources", () => {
     const other = platformSourcesFor({ sourceProductId: "1234567890" });
     expect(matching.find((source) => source.name === "UUFans")?.url).toBe("https://www.uufinds.com/goodItemDetail/qc/1969745225590595586?spuNo=7543342819&channel=weidian&originPrice=27.74&originCurrencyCode=USD");
     expect(other.some((source) => source.name === "UUFans")).toBe(false);
+  });
+
+  it("moves the preferred platform to the front and makes it primary", () => {
+    const sources = platformSourcesFor({ sourceProductId: sampleId });
+    const prioritized = prioritizePlatform(sources, "didpop");
+    expect(prioritized[0]).toMatchObject({ name: "Didpop", primary: true });
+    expect(prioritized.find((source) => source.name === "Oopbuy")?.primary).toBe(false);
+    expect(sources[0]).toMatchObject({ name: "Oopbuy", primary: true });
   });
 
   it("reuses existing icons through canonical platform aliases and falls back when no verified logo exists", () => {
