@@ -124,9 +124,26 @@ function toProduct(record) {
 
 const sourceKeyOf = (row) => String(row.sourceProductId || row.id || "");
 
-// 默认排序：先按商品取最低价代表款，商品层面做价格高低锯齿（最低→最高→次低→次高…），
-// 其余 style 行之后按商品顺序轮询穿插。首页卡片与表格前几页因此完全同序，
-// 且首页每个商品只出现一次。
+// 低价配件（手机壳 / 袜子 / 耳机）不参与均价计算，但仍正常出现在低价档。
+const budgetAccessoryPattern = /phone case|phone cover|earphone|headphone|airpod|earbud|sock/i;
+
+function seededShuffle(items, seed) {
+  let state = seed;
+  const random = () => {
+    state = (Math.imul(state, 1664525) + 1013904223) >>> 0;
+    return state / 4294967296;
+  };
+  const result = [...items];
+  for (let index = result.length - 1; index > 0; index -= 1) {
+    const target = Math.floor(random() * (index + 1));
+    [result[index], result[target]] = [result[target], result[index]];
+  }
+  return result;
+}
+
+// 默认排序：按商品取最低价代表款，用“排除低价配件后的均价”动态切四档，
+// 再按 核心 → 峰值 → 高位 → 低价 的波浪循环输出，避免极端价格成对出现。
+// 其余 style 行按商品顺序轮询穿插；首页卡片与表格前几页完全同序。
 function curatedOrder(rows) {
   const groups = new Map();
   for (const row of rows) {
@@ -138,7 +155,7 @@ function curatedOrder(rows) {
     const sorted = [...group].sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0) || String(a.id).localeCompare(String(b.id)));
     return { key, representative: sorted[0], rest: sorted.slice(1) };
   });
-  // 同图不同 listing 视为同一商品：首图相同则只保留一条代表参与锯齿，其余整组挪到尾部轮询。
+  // 同图不同 listing 视为同一商品：首图相同则只保留一条代表参与排序，其余整组挪到尾部轮询。
   const canonical = new Map();
   const duplicates = [];
   for (const product of products) {
@@ -151,22 +168,56 @@ function curatedOrder(rows) {
     else duplicates.push(product);
   }
   const canonicalProducts = [...canonical.values()];
-  canonicalProducts.sort((a, b) => (Number(a.representative.price) || 0) - (Number(b.representative.price) || 0) || a.key.localeCompare(b.key));
 
-  const zigzag = [];
-  let low = 0;
-  let high = canonicalProducts.length - 1;
-  while (low <= high) {
-    zigzag.push(canonicalProducts[low]);
-    low += 1;
-    if (low <= high) {
-      zigzag.push(canonicalProducts[high]);
-      high -= 1;
+  const eligiblePrices = canonicalProducts
+    .filter((item) => !budgetAccessoryPattern.test(String(item.representative.name || "")))
+    .map((item) => Number(item.representative.price) || 0);
+  const average = eligiblePrices.length ? eligiblePrices.reduce((sum, price) => sum + price, 0) / eligiblePrices.length : 0;
+  const thresholds = average > 0 ? [average * 0.8, average, average * 1.3] : [0, 0, 0];
+  const bandFor = (product) => {
+    if (!(average > 0)) return 1;
+    const price = Number(product.representative.price) || 0;
+    if (price < thresholds[0]) return 0;
+    if (price < thresholds[1]) return 1;
+    if (price < thresholds[2]) return 2;
+    return 3;
+  };
+
+  const bandQueues = [[], [], [], []];
+  for (const product of canonicalProducts) bandQueues[bandFor(product)].push(product);
+  bandQueues.forEach((queue, index) => { bandQueues[index] = seededShuffle(queue, 101 + index); });
+
+  const wave = [1, 3, 2, 0]; // 核心 → 峰值 → 高位 → 低价
+  const waveProducts = [];
+  let cursor = 0;
+  let previousBand = -1;
+  while (waveProducts.length < canonicalProducts.length) {
+    let slot = -1;
+    for (let step = 0; step < wave.length * 2; step += 1) {
+      const candidate = (cursor + step) % wave.length;
+      const band = wave[candidate];
+      if (!bandQueues[band].length || band === previousBand) continue;
+      slot = candidate;
+      break;
     }
+    if (slot === -1) {
+      for (let step = 0; step < wave.length; step += 1) {
+        const candidate = (cursor + step) % wave.length;
+        if (bandQueues[wave[candidate]].length) {
+          slot = candidate;
+          break;
+        }
+      }
+    }
+    if (slot === -1) break;
+    const band = wave[slot];
+    waveProducts.push(bandQueues[band].shift());
+    previousBand = band;
+    cursor = (slot + 1) % wave.length;
   }
 
-  const ordered = zigzag.map((item) => item.representative);
-  const queues = zigzag.map((item) => item.rest);
+  const ordered = waveProducts.map((item) => item.representative);
+  const queues = waveProducts.map((item) => item.rest);
   for (const duplicate of duplicates) queues.push([duplicate.representative, ...duplicate.rest]);
   let pending = queues.some((queue) => queue.length > 0);
   while (pending) {
