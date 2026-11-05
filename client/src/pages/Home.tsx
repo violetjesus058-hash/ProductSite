@@ -29,6 +29,13 @@ function styleKeyOf(product: (typeof products)[number]) {
   const source = product.sizes.find((value) => /[;:|]/.test(value));
   return source?.split(/[;:|]/)[0].trim().toLowerCase() || "";
 }
+// 多款式 LEGO 每张卡对应一个 style，卡片标题优先用款式名以便区分。
+const GENERIC_STYLE_TITLES = new Set(["standard", "default", "option", "one size"]);
+function legoCardTitle(product: (typeof products)[number]) {
+  const label = displayStyleLabel(product.styleLabel || "").trim();
+  if (!label || GENERIC_STYLE_TITLES.has(label.toLowerCase())) return "";
+  return cleanTitle(label);
+}
 function styleImageFor(product: (typeof products)[number]) {
   const sourceId = product.sourceProductId || product.id;
   const key = styleKeyOf(product);
@@ -238,12 +245,17 @@ export default function Home() {
   const visible = isAiAuditView ? filteredProducts.slice(0, pageSize) : filteredProducts;
   // 同款只出一张卡：按目录锯齿顺序保留每个商品首次出现的 style 行，图/价与该行一致。
   // 同一商品在源数据里可能有多条 listing（sourceProductId 不同但首图相同），一并按首图去重。
+  // LEGO 例外：每个 style/SKU 独立成卡，点击后仍进入同一商品详情页并选中对应款式。
   const expandedCards = useMemo(() => {
     if (isAiAuditView) return visible.map((product) => ({ product, styleKey: "", image: "" }));
     const seenSources = new Set<string>();
     const seenImages = new Set<string>();
     const cards: { product: (typeof products)[number]; styleKey: string; image: string }[] = [];
     for (const product of visible) {
+      if (product.category === "lego") {
+        cards.push({ product, styleKey: styleKeyOf(product), image: product.images?.[0] || "" });
+        continue;
+      }
       const sourceId = String(product.sourceProductId || product.id);
       const imageKey = String(product.images?.[0] || "").trim().toLowerCase();
       if (seenSources.has(sourceId)) continue;
@@ -429,7 +441,8 @@ export default function Home() {
             const isFav = favorites.includes(product.id); 
             const isDisliked = dislikes.includes(product.id);
             const title = englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`); 
-            const cardTitle = isSizeOnlyCardTitle(title) ? "" : title;
+            const styleTitle = product.category === "lego" ? legoCardTitle(product) : "";
+            const cardTitle = styleTitle || (isSizeOnlyCardTitle(title) ? "" : title);
             const displayBrand = product.brand && product.brand.toLowerCase() !== "unbranded" ? englishValue(product.brand, "") : "";
             
             if (isAiAuditView) {
