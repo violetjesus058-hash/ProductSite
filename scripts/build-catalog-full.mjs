@@ -218,8 +218,14 @@ function curatedOrder(rows) {
     cursor = (slot + 1) % wave.length;
   }
 
-  const ordered = waveProducts.map((item) => item.representative);
-  const queues = waveProducts.map((item) => item.rest);
+  // LEGO 多款式：同一商品的 style 行紧随其代表款，让每个 style 的独立卡片成组出现。
+  const ordered = [];
+  const queues = [];
+  for (const item of waveProducts) {
+    ordered.push(item.representative);
+    if (normalizeCategory(item.representative.category) === "lego") ordered.push(...item.rest);
+    else queues.push(item.rest);
+  }
   for (const duplicate of duplicates) queues.push([duplicate.representative, ...duplicate.rest]);
   let pending = queues.some((queue) => queue.length > 0);
   while (pending) {
