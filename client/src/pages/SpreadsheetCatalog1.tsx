@@ -99,6 +99,7 @@ function InlinePurchaseCard({ item, group, selectedPlatform, selectedStyleId, sh
             return <button key={style.id} type="button" className={selected ? "is-selected" : ""} aria-pressed={selected} onClick={() => onStyleSelect(style.id)}>{label}</button>;
           })}
         </div>
+        <div className="spreadsheet-inline-style-price" aria-live="polite">{formatMoney(selectedStyle.price, selectedStyle.currency)}</div>
       </div>
     </div>
     <div className="spreadsheet-inline-commerce">

@@ -181,6 +181,7 @@
 .spreadsheet-inline-style-list { display: flex; flex-wrap: wrap; gap: 6px; max-height: 250px; overflow: auto; }
 .spreadsheet-inline-style-list button { padding: 6px 8px; border: 1px solid var(--sheet-line); border-radius: 5px; background: var(--sheet-paper); color: var(--sheet-ink); cursor: pointer; font-size: 10px; }
 .spreadsheet-inline-style-list button.is-selected { border-color: var(--sheet-accent); background: color-mix(in srgb, var(--sheet-accent) 10%, var(--sheet-paper)); color: var(--sheet-accent); }
+.spreadsheet-inline-style-price { margin-top: 12px; color: var(--sheet-accent); font: 600 15px "DM Mono", monospace; letter-spacing: .02em; }
 .spreadsheet-inline-product-heading { display: flex; justify-content: space-between; gap: 16px; padding-bottom: 15px; margin-bottom: 16px; border-bottom: 1px solid var(--sheet-line); }
 .spreadsheet-inline-product-heading div { display: flex; flex-direction: column; gap: 4px; }
 .spreadsheet-inline-product-heading span, .spreadsheet-inline-platform-heading span { color: var(--sheet-muted); font: 10px "DM Mono", monospace; letter-spacing: .08em; }
