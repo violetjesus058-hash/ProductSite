@@ -13,3 +13,12 @@
   Cache-Control: public, max-age=3600
   ! Cross-Origin-Resource-Policy
   Cross-Origin-Resource-Policy: cross-origin
+
+# Vite build assets are content-hashed: safe to cache for a year.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Product images keep their filename across rebuilds, so use a shorter window
+# with background revalidation instead of immutable caching.
+/product-images/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
