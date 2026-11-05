@@ -45,7 +45,7 @@ function isSizeOnlyCardTitle(value: string) {
 const CATALOG_RETURN_KEY = "catalog:return-context:v1";
 type CatalogReturnContext = { category: string; brand: string; query: string; sort: string; scrollY: number };
 function readCatalogReturnContext(): CatalogReturnContext | null { if (typeof window === "undefined") return null; try { const raw = window.sessionStorage.getItem(CATALOG_RETURN_KEY); if (!raw) return null; const parsed = JSON.parse(raw) as Partial<CatalogReturnContext>; if (!parsed || typeof parsed !== "object" || typeof parsed.category !== "string" || typeof parsed.brand !== "string" || typeof parsed.query !== "string" || typeof parsed.sort !== "string" || typeof parsed.scrollY !== "number") return null; return parsed as CatalogReturnContext; } catch { return null; } }
-const englishCategoryLabels: Record<string, string> = { all: "ALL PRODUCTS", clothing: "CLOTHING", shoe: "SHOES", pants: "PANTS", bags: "BAGS", ACC: "ACCESSORIES", watches: "WATCHES" };
+const englishCategoryLabels: Record<string, string> = { all: "ALL PRODUCTS", clothing: "CLOTHING", shoe: "SHOES", pants: "PANTS", bags: "BAGS", ACC: "ACCESSORIES", watches: "WATCHES", lego: "LEGO" };
 function money(value: number, currency = "USD") { return new Intl.NumberFormat("en-US", { style: "currency", currency, maximumFractionDigits: 2 }).format(value); }
 function demoBadge(price: number, averageCatalogPrice: number) {
   if (price <= averageCatalogPrice * 0.65 || price >= averageCatalogPrice * 1.6) return "NEW";

@@ -32,6 +32,7 @@ const CATEGORY_MAP = {
   bags: "bags", bag: "bags",
   watches: "watches", watch: "watches",
   acc: "ACC", accessories: "ACC", accessory: "ACC",
+  lego: "lego", blocks: "lego", buildingblocks: "lego", brick: "lego", bricks: "lego",
   fragrance: "fragrance",
 };
 

@@ -13,7 +13,7 @@ import { platformIconFor, platformSourcesFor, prioritizePlatform, type PlatformS
 import { resolvePreferredPlatform } from "@/lib/platformPreference";
 import { displayStyleLabel } from "@/data/style-label-map";
 
-const englishCategoryLabels: Record<string, string> = { clothing: "CLOTHING", shoe: "SHOES", pants: "PANTS", bags: "BAGS", ACC: "ACCESSORIES", watches: "WATCHES" };
+const englishCategoryLabels: Record<string, string> = { clothing: "CLOTHING", shoe: "SHOES", pants: "PANTS", bags: "BAGS", ACC: "ACCESSORIES", watches: "WATCHES", lego: "LEGO" };
 function PlatformIdentity({ source }: { source: PlatformSource }) {
   const icon = platformIconFor(source.name);
   return icon ? <img src={icon} alt="" aria-hidden="true" loading="lazy" /> : <span className="platform-source-fallback" aria-hidden="true">{source.name.charAt(0).toUpperCase()}</span>;

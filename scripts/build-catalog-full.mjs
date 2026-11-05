@@ -34,6 +34,7 @@ const categoryLabels = {
   bags: "Bags",
   watches: "Watches",
   ACC: "Accessories",
+  lego: "Lego",
   fragrance: "Fragrance",
 };
 
@@ -55,6 +56,7 @@ const CATEGORY_MAP = {
   bags: "bags", bag: "bags",
   watches: "watches", watch: "watches",
   acc: "ACC", accessories: "ACC", accessory: "ACC",
+  lego: "lego", blocks: "lego", buildingblocks: "lego", brick: "lego", bricks: "lego",
   fragrance: "fragrance",
 };
 
@@ -287,7 +289,7 @@ async function writeCatalogCsv(rows, platformSourcesFor) {
 
 async function main() {
   const csvArgs = process.argv.slice(2).filter((value) => /\.csv$/i.test(value));
-  const defaultCsvs = ["catalog-new.csv", "catalog-new-2.csv", "catalog-new-3.csv"]
+  const defaultCsvs = ["catalog-new.csv", "catalog-new-2.csv", "catalog-new-3.csv", "catalog-new-4.csv"]
     .map((name) => path.join(root, "data", name))
     .filter((file) => existsSync(file));
   const csvPaths = (csvArgs.length ? csvArgs.map((value) => path.resolve(value)) : defaultCsvs);
@@ -396,6 +398,7 @@ async function main() {
     { key: "ACC", label: "Accessories" },
     { key: "bags", label: "Bags" },
     { key: "watches", label: "Watches" },
+    { key: "lego", label: "Lego" },
     { key: "fragrance", label: "Fragrance" },
   ];
   const quickCategories = quickDefs.map((definition) => {

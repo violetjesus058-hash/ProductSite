@@ -10,8 +10,9 @@ const RELATED_CATEGORIES: Record<string, string[]> = {
   bags: ["ACC", "clothing", "shoe"],
   fragrance: ["watches", "ACC", "bags"],
   watches: ["ACC", "bags", "fragrance"],
+  lego: ["ACC", "bags", "watches"],
   ACC: ["bags", "watches", "shoe"],
-  all: ["clothing", "pants", "shoe", "bags", "fragrance", "watches", "ACC"],
+  all: ["clothing", "pants", "shoe", "bags", "fragrance", "watches", "ACC", "lego"],
 };
 
 export function rankBehavioralRecommendations(

@@ -229,5 +229,6 @@ export const categoryLabels: Record<string, string> = {
   bags: "Bags",
   ACC: "Accessories",
   watches: "Watches",
+  lego: "Lego",
 };
-export const categoryOrder = ["all", "clothing", "pants", "shoe", "bags", "watches", "ACC"];
+export const categoryOrder = ["all", "clothing", "pants", "shoe", "bags", "watches", "ACC", "lego"];

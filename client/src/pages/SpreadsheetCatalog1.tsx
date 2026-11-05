@@ -132,6 +132,7 @@ const quickCategoryOptions = [
   { key: "ACC", label: "Accessories" },
   { key: "bags", label: "Bags" },
   { key: "watches", label: "Watches" },
+  { key: "lego", label: "Lego" },
 ];
 let catalogIndexPromise: Promise<CatalogSummary[]> | null = null;
 const previewGroupPromises = new Map<string, Promise<ProductPreviewGroup>>();
@@ -358,7 +359,7 @@ export default function SpreadsheetCatalog1() {
   const catalogMeta = useMemo<CatalogMeta | null>(() => {
     if (!meta || !runtimeCatalogIndex) return meta;
     const labels = new Map(meta.categories.map((category) => [category.key, category.label]));
-    const knownLabels: Record<string, string> = { clothing: "Clothing", shoe: "Shoes", pants: "Pants", bags: "Bags", fragrance: "Fragrance", watches: "Watches", ACC: "Accessories" };
+    const knownLabels: Record<string, string> = { clothing: "Clothing", shoe: "Shoes", pants: "Pants", bags: "Bags", fragrance: "Fragrance", watches: "Watches", ACC: "Accessories", lego: "Lego" };
     const categories = [...new Set(runtimeCatalogIndex.map((item) => item.category).filter(Boolean))].map((key) => ({ key, label: labels.get(key) || knownLabels[key] || key }));
     const platformNames = [...new Set(runtimeCatalogIndex.flatMap((item) => item.platformKeys || []))].sort((a, b) => a.localeCompare(b));
     const quickCategories = quickCategoryOptions.map((definition) => {

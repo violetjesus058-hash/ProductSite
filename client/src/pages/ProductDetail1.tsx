@@ -45,7 +45,7 @@ function formatMoney(value: number, currency: string) {
 
 function categoryLabel(value: string) {
   if (!value) return "";
-  const map: Record<string, string> = { clothing: "Clothing", shoe: "Shoes", pants: "Pants", bags: "Bags", watches: "Watches", ACC: "Accessories", fragrance: "Fragrance" };
+  const map: Record<string, string> = { clothing: "Clothing", shoe: "Shoes", pants: "Pants", bags: "Bags", watches: "Watches", ACC: "Accessories", lego: "Lego", fragrance: "Fragrance" };
   return map[value] || value;
 }
 
