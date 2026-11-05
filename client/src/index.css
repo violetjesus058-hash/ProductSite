@@ -756,6 +756,10 @@ a { color:inherit; text-decoration:none; }
 .analytics-product-cell img, .analytics-product-placeholder { width: 48px; height: 48px; flex: 0 0 48px; object-fit: cover; border: 1px solid rgba(24,23,21,.1); background: #eee8dc; }
 .analytics-product-placeholder { display: block; }
 .analytics-product-cell strong, .analytics-product-cell small { display: block; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.analytics-product-link { display: inline-flex; align-items: center; gap: 4px; color: #181715; text-decoration: none; }
+.analytics-product-link:hover strong { color: #ef6356; text-decoration: underline; text-underline-offset: 2px; }
+.analytics-product-link:focus-visible { outline: 2px solid #ef6356; outline-offset: 2px; border-radius: 3px; }
+.analytics-product-link svg { flex: 0 0 auto; color: #8d857a; }
 /* Referrer section */
 .analytics-export-button { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; margin-left: 10px; border: 1px solid rgba(24,23,21,.15); border-radius: 5px; background: #fff; color: #2b2a26; font-size: 11px; cursor: pointer; transition: background .15s; }
 .analytics-export-button:hover:not(:disabled) { background: #f3efe6; }

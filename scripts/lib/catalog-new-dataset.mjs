@@ -87,10 +87,14 @@ export function prepareCatalogNewDatasets(csvTexts) {
     return current;
   };
 
+  // 关闭链尾合并：保留原始 sourceProductId，避免不同商品被归并后产生重复 style_id。
+  const MERGE_LINK_TARGETS = false;
   const targetIdByProduct = new Map();
-  for (const oldId of nextIdByProduct.keys()) {
-    const target = resolveId(oldId);
-    if (target !== oldId) targetIdByProduct.set(oldId, target);
+  if (MERGE_LINK_TARGETS) {
+    for (const oldId of nextIdByProduct.keys()) {
+      const target = resolveId(oldId);
+      if (target !== oldId) targetIdByProduct.set(oldId, target);
+    }
   }
 
   const originsByTarget = new Map();
