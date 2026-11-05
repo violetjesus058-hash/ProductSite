@@ -218,14 +218,9 @@ function curatedOrder(rows) {
     cursor = (slot + 1) % wave.length;
   }
 
-  // LEGO 多款式：同一商品的 style 行紧随其代表款，让每个 style 的独立卡片成组出现。
-  const ordered = [];
-  const queues = [];
-  for (const item of waveProducts) {
-    ordered.push(item.representative);
-    if (normalizeCategory(item.representative.category) === "lego") ordered.push(...item.rest);
-    else queues.push(item.rest);
-  }
+  // 同一商品的多个 style 交叉分配到各页（锯齿交错），避免连续出现同一商品的多个款式。
+  const ordered = waveProducts.map((item) => item.representative);
+  const queues = waveProducts.map((item) => item.rest);
   for (const duplicate of duplicates) queues.push([duplicate.representative, ...duplicate.rest]);
   let pending = queues.some((queue) => queue.length > 0);
   while (pending) {
@@ -320,6 +315,15 @@ async function main() {
 
   // 2. 首页分页（顺序与表格索引一致）
   const ordered = products;
+  const styleCountBySource = new Map();
+  for (const row of allRecords) {
+    const key = String(row.sourceProductId || row.id);
+    styleCountBySource.set(key, (styleCountBySource.get(key) || 0) + 1);
+  }
+  // LEGO 行带上套装总款式数，前端据此决定拆卡还是合并成一张卡（不受已加载页数影响）。
+  const withStyleCount = (row) => normalizeCategory(row.category) === "lego"
+    ? { ...row, styleCount: styleCountBySource.get(String(row.sourceProductId || row.id)) || 1 }
+    : row;
   const totalPages = Math.max(1, Math.ceil(ordered.length / PAGE_SIZE));
   const pagesDir = path.join(outputRoot, `pages-${PAGE_SIZE}`);
   await fs.mkdir(pagesDir, { recursive: true });
@@ -329,7 +333,7 @@ async function main() {
       pageSize: PAGE_SIZE,
       total: ordered.length,
       totalPages,
-      items: ordered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
+      items: ordered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE).map(withStyleCount),
     });
   }
 

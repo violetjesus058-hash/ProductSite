@@ -248,14 +248,19 @@ export default function Home() {
   // 同一商品在源数据里可能有多条 listing（sourceProductId 不同但首图相同），一并按首图去重。
   // LEGO：款式少的套装（不同模型）每个 style 独立成卡；款式过多的套餐/组合套装只出一张代表卡。
   const legoSplitSources = useMemo(() => {
-    const counts = new Map<string, number>();
+    const declaredCounts = new Map<string, number>();
+    const loadedCounts = new Map<string, number>();
     for (const product of products) {
       if (product.category !== "lego") continue;
       const sourceId = String(product.sourceProductId || product.id);
-      counts.set(sourceId, (counts.get(sourceId) || 0) + 1);
+      loadedCounts.set(sourceId, (loadedCounts.get(sourceId) || 0) + 1);
+      const declared = Number((product as { styleCount?: number }).styleCount) || 0;
+      if (declared > 0) declaredCounts.set(sourceId, Math.max(declaredCounts.get(sourceId) || 0, declared));
     }
     const split = new Set<string>();
-    counts.forEach((count, sourceId) => { if (count <= LEGO_SPLIT_STYLE_LIMIT) split.add(sourceId); });
+    loadedCounts.forEach((loaded, sourceId) => {
+      if ((declaredCounts.get(sourceId) || loaded) <= LEGO_SPLIT_STYLE_LIMIT) split.add(sourceId);
+    });
     return split;
   }, [catalogVersion]);
   const expandedCards = useMemo(() => {
