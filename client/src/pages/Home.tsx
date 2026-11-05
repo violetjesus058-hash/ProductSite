@@ -30,6 +30,7 @@ function styleKeyOf(product: (typeof products)[number]) {
   return source?.split(/[;:|]/)[0].trim().toLowerCase() || "";
 }
 // 多款式 LEGO 每张卡对应一个 style，卡片标题优先用款式名以便区分。
+const LEGO_SPLIT_STYLE_LIMIT = 6;
 const GENERIC_STYLE_TITLES = new Set(["standard", "default", "option", "one size"]);
 function legoCardTitle(product: (typeof products)[number]) {
   const label = displayStyleLabel(product.styleLabel || "").trim();
@@ -245,7 +246,18 @@ export default function Home() {
   const visible = isAiAuditView ? filteredProducts.slice(0, pageSize) : filteredProducts;
   // 同款只出一张卡：按目录锯齿顺序保留每个商品首次出现的 style 行，图/价与该行一致。
   // 同一商品在源数据里可能有多条 listing（sourceProductId 不同但首图相同），一并按首图去重。
-  // LEGO 例外：每个 style/SKU 独立成卡，点击后仍进入同一商品详情页并选中对应款式。
+  // LEGO：款式少的套装（不同模型）每个 style 独立成卡；款式过多的套餐/组合套装只出一张代表卡。
+  const legoSplitSources = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const product of products) {
+      if (product.category !== "lego") continue;
+      const sourceId = String(product.sourceProductId || product.id);
+      counts.set(sourceId, (counts.get(sourceId) || 0) + 1);
+    }
+    const split = new Set<string>();
+    counts.forEach((count, sourceId) => { if (count <= LEGO_SPLIT_STYLE_LIMIT) split.add(sourceId); });
+    return split;
+  }, [catalogVersion]);
   const expandedCards = useMemo(() => {
     if (isAiAuditView) return visible.map((product) => ({ product, styleKey: "", image: "" }));
     const seenSources = new Set<string>();
@@ -253,7 +265,14 @@ export default function Home() {
     const cards: { product: (typeof products)[number]; styleKey: string; image: string }[] = [];
     for (const product of visible) {
       if (product.category === "lego") {
-        cards.push({ product, styleKey: styleKeyOf(product), image: product.images?.[0] || "" });
+        const sourceId = String(product.sourceProductId || product.id);
+        if (legoSplitSources.has(sourceId)) {
+          cards.push({ product, styleKey: styleKeyOf(product), image: product.images?.[0] || "" });
+          continue;
+        }
+        if (seenSources.has(sourceId)) continue;
+        seenSources.add(sourceId);
+        cards.push({ product, styleKey: "", image: product.images?.[0] || "" });
         continue;
       }
       const sourceId = String(product.sourceProductId || product.id);
@@ -265,7 +284,7 @@ export default function Home() {
       cards.push({ product, styleKey: styleKeyOf(product), image: product.images?.[0] || "" });
     }
     return cards;
-  }, [visible, isAiAuditView]);
+  }, [visible, isAiAuditView, legoSplitSources]);
   const visibleSourceCount = new Set(visible.map(reviewKey)).size;
   useEffect(() => {
     trackOnce("product_list_view", `${category}:${brand}:${query.trim()}:${sort}`, { category, brand, query: query.trim() || null, sort, result_count: filteredProducts.length });
@@ -441,7 +460,7 @@ export default function Home() {
             const isFav = favorites.includes(product.id); 
             const isDisliked = dislikes.includes(product.id);
             const title = englishValue(cleanTitle(product.catalogName || product.name), `Catalog Item ${product.id}`); 
-            const styleTitle = product.category === "lego" ? legoCardTitle(product) : "";
+            const styleTitle = product.category === "lego" && cardStyleKey ? legoCardTitle(product) : "";
             const cardTitle = styleTitle || (isSizeOnlyCardTitle(title) ? "" : title);
             const displayBrand = product.brand && product.brand.toLowerCase() !== "unbranded" ? englishValue(product.brand, "") : "";
             
