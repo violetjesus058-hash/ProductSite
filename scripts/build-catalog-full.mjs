@@ -405,7 +405,7 @@ async function main() {
       sourceProductId: sid,
       name: first.name,
       catalogName: first.catalogName,
-      brand: first.brand,
+      brand: brandOverrides.get(sid) || first.brand,
       category: first.category,
       subCategory: first.subCategory,
       shopUrl: first.shopUrl,
