@@ -57,9 +57,13 @@ export default function SafeProductImage({ sources = [], alt, className, loading
   const [failedAll, setFailedAll] = useState(false);
   const [thumbnailFailed, setThumbnailFailed] = useState(false);
   const source = failedAll ? FALLBACK_IMAGE : normalizedSources[sourceIndex] || FALLBACK_IMAGE;
-  const thumbnailSource = (value: string, size: 320 | 640) => value.startsWith("/product-images/") && !value.includes("/thumb-")
-    ? value.replace("/product-images/", `/product-images/thumb-${size}/`)
-    : value;
+  const thumbnailSource = (value: string, size: 320 | 640) => {
+    const marker = "/product-images/";
+    if (value.includes("/thumb-")) return value;
+    const index = value.indexOf(marker);
+    if (index === -1) return value;
+    return `${value.slice(0, index)}${marker}thumb-${size}/${value.slice(index + marker.length)}`;
+  };
   const useThumbnail = responsive && !thumbnailFailed && source !== FALLBACK_IMAGE;
   const desiredThumbnailSize = fixedThumbnailSize || 320;
   const desiredSource = useThumbnail ? thumbnailSource(source, desiredThumbnailSize) : source;
