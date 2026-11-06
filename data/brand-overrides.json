@@ -1,0 +1,17 @@
+{
+  "_note": "人工核验的品牌覆盖，按 sourceProductId 生效，优先级高于 CSV 的 brand 列。粗加工版本，后续可继续精修。",
+  "7543309413": "Nike",
+  "7543311383": "Apple",
+  "7543327115": "AMIRI",
+  "7543327119": "Burberry",
+  "7543336857": "Gucci",
+  "7543338873": "Louis Vuitton",
+  "7543346841": "Diesel",
+  "7543348805": "Stone Island",
+  "7543352781": "Apple",
+  "7543366669": "Moncler",
+  "7543371979": "Louis Vuitton",
+  "7543382897": "Vivienne Westwood",
+  "7543398543": "Nike",
+  "7543404477": "Canada Goose"
+}

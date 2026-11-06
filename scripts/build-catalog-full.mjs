@@ -14,7 +14,7 @@
  * 默认读取仓库内 data/catalog-new.csv、-2、-3。
  */
 import fs from "node:fs/promises";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { readCatalogNewDatasets } from "./lib/catalog-new-dataset.mjs";
@@ -26,6 +26,26 @@ const siteUrl = "https://productsite-8wf.pages.dev";
 const placeholder = "/catalog-detail-stilllife.webp";
 const unavailableCategories = new Set(["fragrance"]);
 const PAGE_SIZE = 60;
+
+// 人工核验的品牌覆盖：{ "sourceProductId": "Brand" }，优先级高于 CSV 里的 brand 列。
+function loadBrandOverrides() {
+  const file = path.join(root, "data/brand-overrides.json");
+  if (!existsSync(file)) return new Map();
+  try {
+    const raw = JSON.parse(readFileSync(file, "utf8"));
+    const map = new Map();
+    for (const [sid, brand] of Object.entries(raw || {})) {
+      const key = String(sid).trim();
+      const value = String(brand || "").trim();
+      if (key && value && !key.startsWith("_")) map.set(key, value);
+    }
+    return map;
+  } catch (error) {
+    throw new Error(`data/brand-overrides.json 解析失败：${error.message}`);
+  }
+}
+
+const brandOverrides = loadBrandOverrides();
 
 const categoryLabels = {
   clothing: "Clothing",
@@ -105,7 +125,7 @@ function toProduct(record) {
     styleLabel: String(record.styleLabel || "").trim(),
     reviewStatus: String(record.reviewStatus || "unreviewed").trim() || "unreviewed",
     reviewNote: String(record.reviewNote || "").trim(),
-    brand: String(record.brand || "Unbranded").trim() || "Unbranded",
+    brand: brandOverrides.get(String(record.sourceProductId || record.id).trim()) || String(record.brand || "Unbranded").trim() || "Unbranded",
     price: Number(record.price) || 0,
     referencePrice: Number(record.referencePrice) || null,
     currency: String(record.currency || "USD").trim() || "USD",
