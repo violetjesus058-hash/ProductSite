@@ -165,6 +165,54 @@ function main() {
     fs.writeFileSync(metaFile, JSON.stringify(meta), "utf8");
     console.log(`已更新 ${metaFile}：total=${meta.total}`);
   }
+
+  // 商品详情聚合（/product1/:id 直接读取），与主站 catalog-data/products 结构保持一致，
+  // 保证隔离路径的详情页只使用 catalog-data-1，不依赖主站数据集。
+  const detailGroups = new Map();
+  for (const row of records) {
+    const sid = String(row.sourceProductId || row.id || "").trim();
+    if (!sid) continue;
+    if (!detailGroups.has(sid)) detailGroups.set(sid, []);
+    detailGroups.get(sid).push(row);
+  }
+  const productsDir = path.join(outDir, "products");
+  fs.mkdirSync(productsDir, { recursive: true });
+  let detailCount = 0;
+  for (const [sid, groupRows] of detailGroups) {
+    const first = groupRows[0];
+    const gallery = [];
+    const styles = groupRows.map((row) => {
+      const images = splitList(row.images);
+      for (const image of images) if (!gallery.includes(image)) gallery.push(image);
+      return {
+        id: row.id,
+        styleKey: row.styleKey,
+        styleLabel: row.styleLabel,
+        price: Number(row.price) || 0,
+        currency: row.currency || "USD",
+        sizes: splitList(row.sizes),
+        colors: splitList(row.colors),
+        stock: row.stock,
+        images,
+        description: row.description,
+      };
+    });
+    fs.writeFileSync(path.join(productsDir, `${sid}.json`), JSON.stringify({
+      sourceProductId: sid,
+      name: first.name,
+      catalogName: first.catalogName,
+      brand: first.brand,
+      category: first.category,
+      subCategory: first.subCategory,
+      shopUrl: first.shopUrl,
+      productUrl: first.url,
+      refreshed: String(first.priceCheckedAt || "").slice(0, 10),
+      gallery,
+      styles,
+    }), "utf8");
+    detailCount += 1;
+  }
+  console.log(`详情文件      : ${detailCount} 个 products/*.json`);
 }
 
 main();

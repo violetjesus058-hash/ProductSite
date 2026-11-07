@@ -89,6 +89,8 @@ function InlinePurchaseCard({ item, group, selectedPlatform, agentKey, selectedS
       ? "🔥 OPTIMIZED FOR OOPBUY"
       : "";
   const agentMissing = !!agentKey && group.platforms.length > 0 && !group.platforms.some((platform) => platform.name.toLowerCase().includes(agentKey.toLowerCase()));
+  // 隔离路径的商品详情走 /product1（catalog-data-1），避免跳到主站数据集。
+  const detailHref = catalogBasePath().endsWith("/catalog-data-1") ? `/product1/${encodeURIComponent(group.sourceProductId)}` : "";
 
   return <section className="spreadsheet-inline-purchase" aria-label={`Quick purchase options for ${group.name}`}>
     <div className="spreadsheet-inline-visual">
@@ -110,7 +112,7 @@ function InlinePurchaseCard({ item, group, selectedPlatform, agentKey, selectedS
       </div>
     </div>
     <div className="spreadsheet-inline-commerce">
-      <div className="spreadsheet-inline-product-heading"><div><span>SELECTED STYLE</span><strong>{group.name}</strong><small>{displayStyleLabel(selectedStyle.styleLabel) ? `Style ${displayStyleLabel(selectedStyle.styleLabel)}` : "Style not specified"}</small></div><b>{formatMoney(selectedStyle.price, selectedStyle.currency)}</b></div>
+      <div className="spreadsheet-inline-product-heading"><div><span>SELECTED STYLE</span>{detailHref ? <Link className="spreadsheet-inline-detail-link" href={detailHref} title="View full product details"><strong>{group.name}</strong></Link> : <strong>{group.name}</strong>}<small>{displayStyleLabel(selectedStyle.styleLabel) ? `Style ${displayStyleLabel(selectedStyle.styleLabel)}` : "Style not specified"}</small></div><b>{formatMoney(selectedStyle.price, selectedStyle.currency)}</b></div>
       {primary && (primary.disabled
         ? <span className="spreadsheet-inline-cta is-disabled" aria-disabled="true" title={`${primary.name}: ${primary.disabledReason || "Temporarily unavailable"}`}>{primary.name} paused · {primary.disabledReason || "Temporarily unavailable"}</span>
         : <a className="spreadsheet-inline-cta" href={primary.url} target="_blank" rel="noopener noreferrer" onClick={() => onPlatformClick(primary, group, selectedStyle)}>Order via Agent →</a>)}
