@@ -17,7 +17,7 @@ export type CatalogSummary = {
   platformKeys: string[];
   hasStyleImage: boolean;
   priceCheckedAt: string;
-  // 主站首页：批量替换后的商品 id，用于所有平台的购买链接（/spreadsheet 不读取该字段）。
+  // 批量替换后的商品 id，用于所有平台的购买链接（未替换的数据集不含该字段）。
   linkTargetId?: string;
 };
 export type CatalogSort = "curated" | "random" | "price-low" | "price-high" | "name" | "recent";

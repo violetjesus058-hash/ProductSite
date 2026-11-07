@@ -109,6 +109,9 @@ function toSummary(record) {
     platformKeys: PLATFORM_NAMES,
     hasStyleImage: images.length > 1,
     priceCheckedAt: String(record.priceCheckedAt || record.collectedAt || "").trim(),
+    linkTargetId: record.linkTargetId && String(record.linkTargetId).trim() !== String(record.sourceProductId || record.id || "").trim()
+      ? String(record.linkTargetId).trim()
+      : undefined,
   };
 }
 
@@ -336,23 +339,12 @@ async function main() {
   // 1. 表格索引
   await jsonWrite(path.join(outputRoot, "catalog-index.json"), summaries);
 
-  // 1b. 主站首页索引：所有平台统一使用批量替换后的商品 id；
-  // /spreadsheet 继续读取 catalog-index.json，保持原数据不动。
+  // 1b. /spreadsheet 与主站共用同一份已替换链接的索引数据；/spreadsheet1 继续读取 catalog-data-1。
   const homeRoot = path.join(root, "client/public/catalog-data-home");
-  const linkTargetBySource = new Map();
-  for (const record of allRecords) {
-    const sid = String(record.sourceProductId || "").trim();
-    const target = String(record.linkTargetId || "").trim();
-    if (sid && target && target !== sid) linkTargetBySource.set(sid, target);
-  }
-  const homeSummaries = summaries.map((row) => {
-    const target = linkTargetBySource.get(row.sourceProductId);
-    return target ? { ...row, linkTargetId: target } : row;
-  });
   await fs.rm(homeRoot, { recursive: true, force: true });
   await fs.mkdir(homeRoot, { recursive: true });
-  await jsonWrite(path.join(homeRoot, "catalog-index.json"), homeSummaries);
-  console.log(`主站全平台替换: ${linkTargetBySource.size} 个商品`);
+  await jsonWrite(path.join(homeRoot, "catalog-index.json"), summaries);
+  console.log(`主站全平台替换: ${new Set(summaries.filter((row) => row.linkTargetId).map((row) => row.sourceProductId)).size} 个商品`);
 
   // 2. 首页分页（顺序与表格索引一致）
   const ordered = products;

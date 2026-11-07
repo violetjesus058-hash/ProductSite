@@ -138,7 +138,7 @@ function InlinePurchaseCard({ item, group, selectedPlatform, agentKey, selectedS
 const assetRoot = import.meta.env.BASE_URL.replace(/\/$/, "");
 const placeholder = `${assetRoot}/catalog-detail-stilllife.webp`;
 const entryPreviewBase = `${assetRoot}/entry-previews`;
-// 数据集隔离：/ 主站首页（全平台替换），/spreadsheet 原始数据，/spreadsheet1 全量替换对比。
+// 数据集隔离：/ 与 /spreadsheet 使用已替换链接的数据，/spreadsheet1 全量替换对比。
 function catalogBasePath() {
   if (typeof window === "undefined") return `${assetRoot}/catalog-data`;
   const path = window.location.pathname.replace(import.meta.env.BASE_URL, "/");
