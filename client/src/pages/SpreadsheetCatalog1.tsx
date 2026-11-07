@@ -29,6 +29,7 @@ type InlinePurchaseCardProps = {
   item: CatalogPageRow;
   group?: ProductPreviewGroup;
   selectedPlatform: string;
+  agentKey: string;
   selectedStyleId: string | null;
   showAllPlatforms: boolean;
   loading: boolean;
@@ -65,7 +66,7 @@ function PlatformPicker({ platforms, value, onChange }: { platforms: Array<{ key
   </div>;
 }
 
-function InlinePurchaseCard({ item, group, selectedPlatform, selectedStyleId, showAllPlatforms, loading, error, onStyleSelect, onTogglePlatforms, onImageOpen, onPlatformClick, onRetry }: InlinePurchaseCardProps) {
+function InlinePurchaseCard({ item, group, selectedPlatform, agentKey, selectedStyleId, showAllPlatforms, loading, error, onStyleSelect, onTogglePlatforms, onImageOpen, onPlatformClick, onRetry }: InlinePurchaseCardProps) {
   if (!group) return <div className="spreadsheet-inline-state" role={error ? "alert" : "status"}>
     {loading ? <><span className="spreadsheet-loader" /> Loading purchase options…</> : <><span>{error || "Purchase options are unavailable."}</span><button type="button" onClick={onRetry}>Retry</button></>}
   </div>;
@@ -81,6 +82,12 @@ function InlinePurchaseCard({ item, group, selectedPlatform, selectedStyleId, sh
   const visiblePlatforms = showAllPlatforms ? orderedPlatforms : orderedPlatforms.slice(0, 5);
   const styleImageUrl = selectedStyle.image || item.thumbnail || placeholder;
   const refreshedStyleImageUrl = `${styleImageUrl}${styleImageUrl.includes("?") ? "&" : "?"}style=${encodeURIComponent(selectedStyle.id)}`;
+  const premiumBadge = primary && /kakobuy/i.test(primary.name)
+    ? "🔥 BEST FOR KAKOBUY AGENT"
+    : primary && /oopbuy/i.test(primary.name)
+      ? "🔥 OPTIMIZED FOR OOPBUY"
+      : "";
+  const agentMissing = !!agentKey && group.platforms.length > 0 && !group.platforms.some((platform) => platform.name.toLowerCase().includes(agentKey.toLowerCase()));
 
   return <section className="spreadsheet-inline-purchase" aria-label={`Quick purchase options for ${group.name}`}>
     <div className="spreadsheet-inline-visual">
@@ -103,7 +110,10 @@ function InlinePurchaseCard({ item, group, selectedPlatform, selectedStyleId, sh
     </div>
     <div className="spreadsheet-inline-commerce">
       <div className="spreadsheet-inline-product-heading"><div><span>SELECTED STYLE</span><strong>{group.name}</strong><small>{displayStyleLabel(selectedStyle.styleLabel) ? `Style ${displayStyleLabel(selectedStyle.styleLabel)}` : "Style not specified"}</small></div><b>{formatMoney(selectedStyle.price, selectedStyle.currency)}</b></div>
+      {primary && <a className="spreadsheet-inline-cta" href={primary.url} target="_blank" rel="noopener noreferrer" onClick={() => onPlatformClick(primary, group, selectedStyle)}>Order via Agent →</a>}
       <div className="spreadsheet-inline-platform-heading"><span>BUYING PLATFORMS</span><small>{group.platforms.length} sources</small></div>
+      {agentMissing && <div className="spreadsheet-inline-fallback" role="status">⚠️ {agentKey} link checking... standard agent route displayed below.</div>}
+      {premiumBadge && <div className="spreadsheet-inline-premium-badge">{premiumBadge}</div>}
       <div className="spreadsheet-inline-platform-list">
         {visiblePlatforms.map((platform) => {
           const icon = platformIconFor(platform.name);
@@ -149,6 +159,19 @@ function saveLocalPreference(key: string, value: string) {
 
 function menuPermissionCopy(menuName: string) {
   return { title: "No permission", message: `You don't have permission to use the “${menuName}” menu in this catalog.`, dismissLabel: "Dismiss permission notice" };
+}
+
+const DEFAULT_ENTRY_AGENT = "Kakobuy";
+
+function detectEntryAgent() {
+  if (typeof window === "undefined") return DEFAULT_ENTRY_AGENT;
+  const params = new URLSearchParams(window.location.search);
+  const marker = [params.get("agent"), params.get("utm_source"), params.get("source"), document.referrer || ""].filter(Boolean).join(" ").toLowerCase();
+  if (marker.includes("oopbuy")) return "Oopbuy";
+  if (marker.includes("kakobuy")) return "Kakobuy";
+  if (marker.includes("pandabuy")) return "Pandabuy";
+  if (marker.includes("superbuy")) return "Superbuy";
+  return DEFAULT_ENTRY_AGENT;
 }
 
 function readViewState(): ViewState {
@@ -232,6 +255,7 @@ function ImageThumb({ item }: { item: CatalogPageRow }) {
 export default function SpreadsheetCatalog1() {
   useEffect(() => { document.documentElement.lang = "en"; }, []);
   const [view, setView] = useState<ViewState>(readViewState);
+  const [entryAgent] = useState(detectEntryAgent);
   const [shuffleSeed] = useState(() => {
     const seed = new Uint32Array(1);
     if (typeof window !== "undefined" && window.crypto?.getRandomValues) {
@@ -452,7 +476,7 @@ export default function SpreadsheetCatalog1() {
   const platforms = catalogMeta?.platforms || [];
   const selectedPlatformLabel = platforms.find((item) => item.key === view.platform)?.label;
   // 带 platform 参数进入或在下拉框切换平台时，标题跟随切换成对应的 Spreadsheet 名称
-  const catalogHeading = selectedPlatformLabel ? `RIVORA Style Catalog - ${selectedPlatformLabel} Spreadsheet` : "RIVORA Style Catalog";
+  const catalogHeading = selectedPlatformLabel ? `RIVORA Style Catalog - ${selectedPlatformLabel} Spreadsheet` : `THE ULTIMATE ${entryAgent.toUpperCase()} SPREADSHEET (2026)`;
   const rows = payload?.items || [];
   function primaryPlatformLabelFor(item: CatalogPageRow) {
     const selectedPlatformKey = normalizePlatformName(view.platform);
@@ -600,6 +624,7 @@ export default function SpreadsheetCatalog1() {
       item={item}
       group={previewGroups[item.sourceProductId]}
       selectedPlatform={view.platform}
+      agentKey={entryAgent}
       selectedStyleId={selectedStyleId}
       showAllPlatforms={showAllPlatforms}
       loading={previewLoadingSourceId === item.sourceProductId}
@@ -697,7 +722,9 @@ export default function SpreadsheetCatalog1() {
           <ChevronDown className="spreadsheet-select-chevron" size={16} aria-hidden="true" />
         </label>
       </div>
-      <div className="spreadsheet-platform-callout" role="note"><Store size={16} aria-hidden="true" /><span><strong>Choose a platform</strong><small>Filter the table by buying source to compare available sellers and prices.</small><strong className="spreadsheet-platform-outage-label">PLATFORM SERVICE ALERT</strong><small className="spreadsheet-platform-maintenance">AcBuy and Multbuy are currently unavailable while under maintenance.</small><small className="spreadsheet-platform-alternative">Recommended alternatives: Oopbuy, Sugargoo, Superbuy, or another available platform below.</small></span><b>{view.platform ? "FILTER ACTIVE" : "RECOMMENDED"}</b></div>
+      <p className="spreadsheet-platform-hint">Select your Agent to see specific items 👇</p>
+      <div className="spreadsheet-platform-callout" role="note"><Store size={16} aria-hidden="true" /><span><strong>Choose a platform</strong><small>Filter the table by buying source to compare available sellers and prices.</small><strong className="spreadsheet-platform-outage-label">PLATFORM SERVICE ALERT</strong><small className="spreadsheet-platform-maintenance">AcBuy and Multbuy are currently unavailable while under maintenance.</small><small className="spreadsheet-platform-alternative">Recommended alternatives: Oopbuy, Sugargoo, Superbuy, or another available platform below.</small></span><b>{view.platform ? "FILTER ACTIVE" : "CHOOSE / RECOMMENDED"}</b></div>
+      <div className="spreadsheet-trust-line" role="note"><Check size={15} aria-hidden="true" /><span><strong>100% Compatible with Kakobuy, Oopbuy, Pandabuy &amp; All Major Agents.</strong> One-Click Automatic Parsing Supported.</span></div>
       <div className="spreadsheet-availability-notice" role="status"><strong>Fragrance is temporarily unavailable.</strong><span>Please explore Accessories, Watches, Bags, or Clothing instead.</span><div><Link href="/spreadsheet?view=styles&category=ACC">Accessories</Link><Link href="/spreadsheet?view=styles&category=watches">Watches</Link><Link href="/spreadsheet?view=styles&category=bags">Bags</Link><Link href="/spreadsheet?view=styles&category=clothing">Clothing</Link></div></div>
 
       <div className="spreadsheet-column-labels" aria-hidden="true">{["A", "B", "C", "D", "E", "F", "G", "H"].map((column) => <span key={column}>{column}</span>)}</div>
@@ -718,6 +745,7 @@ export default function SpreadsheetCatalog1() {
             : <>
               <div className="spreadsheet-directory-layout" ref={directoryLayoutRef}>
               <div className="spreadsheet-directory-main">
+              <div className="spreadsheet-action-hint-bar">👉 Click <b>View</b> for Agent links</div>
               <div className="spreadsheet-table-wrap">
                 <table className="spreadsheet-table">
                   <thead><tr><th scope="col">Image</th><th scope="col">Product</th><th scope="col">Style</th><th scope="col">Sizes</th><th scope="col">Price</th><th scope="col">Category</th><th scope="col">Platform</th><th scope="col"><span className="sr-only">Action</span></th></tr></thead>
