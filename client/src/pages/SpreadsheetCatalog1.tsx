@@ -133,9 +133,15 @@ function InlinePurchaseCard({ item, group, selectedPlatform, agentKey, selectedS
   </section>;
 }
 
-const basePath = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/catalog-data`;
-const placeholder = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/catalog-detail-stilllife.webp`;
-const entryPreviewBase = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/entry-previews`;
+const assetRoot = import.meta.env.BASE_URL.replace(/\/$/, "");
+const placeholder = `${assetRoot}/catalog-detail-stilllife.webp`;
+const entryPreviewBase = `${assetRoot}/entry-previews`;
+// /spreadsheet1 读取隔离数据集 catalog-data-1（含 new link 批量替换），其余路径沿用主站 catalog-data。
+function catalogBasePath() {
+  if (typeof window === "undefined") return `${assetRoot}/catalog-data`;
+  const path = window.location.pathname.replace(import.meta.env.BASE_URL, "/");
+  return `${assetRoot}/${/^\/spreadsheet1\/?$/.test(path) ? "catalog-data-1" : "catalog-data"}`;
+}
 const THEME_STORAGE_KEY = "rivora-spreadsheet-theme-v1";
 const QUICK_CATEGORY_COOLDOWN_MS = 450;
 const QUICK_CATEGORY_SETTLE_MS = 450;
@@ -149,7 +155,7 @@ const quickCategoryOptions = [
   { key: "watches", label: "Watches" },
   { key: "lego", label: "Lego" },
 ];
-let catalogIndexPromise: Promise<CatalogSummary[]> | null = null;
+let catalogIndexPromise: { base: string; promise: Promise<CatalogSummary[]> } | null = null;
 const previewGroupPromises = new Map<string, Promise<ProductPreviewGroup>>();
 
 function readLocalPreference(key: string) {
@@ -199,21 +205,23 @@ async function fetchJson<T>(url: string, signal?: AbortSignal): Promise<T> {
   return response.json() as Promise<T>;
 }
 
-function loadCatalogIndex(): Promise<CatalogSummary[]> {
-  if (!catalogIndexPromise) {
-    catalogIndexPromise = fetchJson<CatalogSummary[]>(`${basePath}/catalog-index.json`).catch((error) => {
-      catalogIndexPromise = null;
-      throw error;
-    });
-  }
-  return catalogIndexPromise;
+function loadCatalogIndex(base = catalogBasePath()): Promise<CatalogSummary[]> {
+  if (catalogIndexPromise?.base === base) return catalogIndexPromise.promise;
+  const promise = fetchJson<CatalogSummary[]>(`${base}/catalog-index.json`).catch((error) => {
+    catalogIndexPromise = null;
+    throw error;
+  });
+  catalogIndexPromise = { base, promise };
+  return promise;
 }
 
 function loadPreviewGroup(sourceProductId: string): Promise<ProductPreviewGroup> {
-  const cached = previewGroupPromises.get(sourceProductId);
+  const base = catalogBasePath();
+  const cacheKey = `${base}|${sourceProductId}`;
+  const cached = previewGroupPromises.get(cacheKey);
   if (cached) return cached;
   // 该数据集由 CSV 索引直接构造，不再读取旧的 previews/*.json 文件
-  const request = loadCatalogIndex().then((items) => {
+  const request = loadCatalogIndex(base).then((items) => {
     const rows = items.filter((item) => item.sourceProductId === sourceProductId);
     if (!rows.length) throw new Error("Product not found in catalog.");
     const first = rows[0];
@@ -233,10 +241,10 @@ function loadPreviewGroup(sourceProductId: string): Promise<ProductPreviewGroup>
       })),
     };
   }).catch((error) => {
-    previewGroupPromises.delete(sourceProductId);
+    previewGroupPromises.delete(cacheKey);
     throw error;
   });
-  previewGroupPromises.set(sourceProductId, request);
+  previewGroupPromises.set(cacheKey, request);
   return request;
 }
 
@@ -351,7 +359,7 @@ export default function SpreadsheetCatalog1() {
 
   useEffect(() => {
     const controller = new AbortController();
-    void fetchJson<CatalogMeta>(`${basePath}/meta.json`, controller.signal)
+    void fetchJson<CatalogMeta>(`${catalogBasePath()}/meta.json`, controller.signal)
       .then((value) => setMeta(value))
       .catch((reason: unknown) => {
         if (controller.signal.aborted) return;

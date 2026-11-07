@@ -116,7 +116,7 @@ function main() {
     }
   }
 
-  const { rows: records, stats } = readCatalogNewDatasets(csvPaths);
+  const { rows: records, stats } = readCatalogNewDatasets(csvPaths, { mergeLinkTargets: true });
   const overlay = applyStyleImages(records);
   const summaries = records.map(toSummary).filter((item) => item.id && item.name);
   const dropped = records.length - summaries.length;
@@ -156,8 +156,10 @@ function main() {
   console.log(`\n已写入 ${outFile}（${sizeMb} MB）`);
 
   const metaFile = path.join(outDir, "meta.json");
-  if (fs.existsSync(metaFile)) {
-    const meta = JSON.parse(fs.readFileSync(metaFile, "utf8"));
+  const mainMetaFile = path.resolve("client/public/catalog-data/meta.json");
+  const metaSource = fs.existsSync(metaFile) ? metaFile : fs.existsSync(mainMetaFile) ? mainMetaFile : "";
+  if (metaSource) {
+    const meta = JSON.parse(fs.readFileSync(metaSource, "utf8"));
     meta.total = clean.length;
     meta.generatedAt = new Date().toISOString();
     fs.writeFileSync(metaFile, JSON.stringify(meta), "utf8");

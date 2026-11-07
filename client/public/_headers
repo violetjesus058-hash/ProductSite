@@ -22,3 +22,9 @@
 # with background revalidation instead of immutable caching.
 /product-images/*
   Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+# Catalog JSON is rebuilt on every deploy; always revalidate so new link data lands immediately.
+/catalog-data/*
+  Cache-Control: public, max-age=0, must-revalidate
+/catalog-data-1/*
+  Cache-Control: public, max-age=0, must-revalidate

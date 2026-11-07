@@ -59,7 +59,7 @@ function parseRecords(csvText) {
 // 图片列表也可能多一张/少一张，都不能当成不同款式
 const styleKeyOf = (record) => [record.sourceProductId, record.styleLabel, record.sizes].join("\u0001");
 
-export function prepareCatalogNewDatasets(csvTexts) {
+export function prepareCatalogNewDatasets(csvTexts, options = {}) {
   const groups = csvTexts.map(parseRecords);
   const allRecords = groups.flat();
 
@@ -88,7 +88,8 @@ export function prepareCatalogNewDatasets(csvTexts) {
   };
 
   // 关闭链尾合并：保留原始 sourceProductId，避免不同商品被归并后产生重复 style_id。
-  const MERGE_LINK_TARGETS = false;
+  // 隔离数据集（/spreadsheet1）需要验证 new link 批量替换，可显式传 mergeLinkTargets: true 开启。
+  const MERGE_LINK_TARGETS = options.mergeLinkTargets === true;
   const targetIdByProduct = new Map();
   if (MERGE_LINK_TARGETS) {
     for (const oldId of nextIdByProduct.keys()) {
@@ -194,6 +195,6 @@ function decodeCsv(buffer) {
   }
 }
 
-export function readCatalogNewDatasets(csvPaths) {
-  return prepareCatalogNewDatasets(csvPaths.map((csvPath) => decodeCsv(fs.readFileSync(csvPath))));
+export function readCatalogNewDatasets(csvPaths, options = {}) {
+  return prepareCatalogNewDatasets(csvPaths.map((csvPath) => decodeCsv(fs.readFileSync(csvPath))), options);
 }
