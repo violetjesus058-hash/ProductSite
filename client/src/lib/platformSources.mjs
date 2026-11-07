@@ -75,7 +75,10 @@ export function platformIconFor(name) {
 
 export function platformSourcesFor(product, options = {}) {
   const sourceId = String(product.sourceProductId || product.id || "");
+  // 主站首页只替换 Oopbuy：批量替换目标 id 优先用于 Oopbuy 链接，其他平台保持原商品 id。
+  const oopbuyId = String(product.oopbuyProductId || sourceId);
   const encodedId = encodeURIComponent(sourceId);
+  const encodedOopbuyId = encodeURIComponent(oopbuyId);
   const isKakobuy = /kakobuy\.com/i.test(product.url || "");
   const encodedWeidianUrl = encodeURIComponent(`https://weidian.com/item.html?itemID=${sourceId}`);
   const sourceUrl = `https://shop1784277725.v.weidian.com/item.html?itemID=${sourceId}`;
@@ -83,7 +86,7 @@ export function platformSourcesFor(product, options = {}) {
   // Kakobuy 链接统一按当前最新的商品 id 生成，不使用 CSV 中可能已过期的 url
   const kakobuyUrl = `https://www.kakobuy.com/item/details?url=${encodedWeidianUrl}&affcode=vxxss`;
   const sources = [
-    { name: "Oopbuy", url: `https://oopbuy.com/product/weidian/${encodedId}?inviteCode=Y5DH4UF2W`, primary: true },
+    { name: "Oopbuy", url: `https://oopbuy.com/product/weidian/${encodedOopbuyId}?inviteCode=Y5DH4UF2W`, primary: true },
     { name: "Kakobuy", url: kakobuyUrl, disabled: true, disabledReason: "Batch replacement in progress" },
     { name: "Superbuy", url: `https://www.superbuy.com/en/page/buy/?nTag=Home-search&from=search-input&url=${encodedWeidianUrl}&partnercode=E6miyW` },
     { name: "RizzitGO", url: `https://rizzitgo.com/detail-page/?goodsId=${encodedId}&source=3` },

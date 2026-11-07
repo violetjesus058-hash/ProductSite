@@ -90,12 +90,11 @@ export function prepareCatalogNewDatasets(csvTexts, options = {}) {
   // 关闭链尾合并：保留原始 sourceProductId，避免不同商品被归并后产生重复 style_id。
   // 隔离数据集（/spreadsheet1）需要验证 new link 批量替换，可显式传 mergeLinkTargets: true 开启。
   const MERGE_LINK_TARGETS = options.mergeLinkTargets === true;
+  // 始终解析 new link 目标：主站只替换 Oopbuy 链接时也要用；只有 mergeLinkTargets 才真正改写商品 id。
   const targetIdByProduct = new Map();
-  if (MERGE_LINK_TARGETS) {
-    for (const oldId of nextIdByProduct.keys()) {
-      const target = resolveId(oldId);
-      if (target !== oldId) targetIdByProduct.set(oldId, target);
-    }
+  for (const oldId of nextIdByProduct.keys()) {
+    const target = resolveId(oldId);
+    if (target !== oldId) targetIdByProduct.set(oldId, target);
   }
 
   const originsByTarget = new Map();
@@ -111,6 +110,8 @@ export function prepareCatalogNewDatasets(csvTexts, options = {}) {
     record.__oldId = record.sourceProductId;
     const target = targetIdByProduct.get(record.sourceProductId);
     if (!target) continue;
+    record.linkTargetId = target;
+    if (!MERGE_LINK_TARGETS) continue;
     record.sourceProductId = target;
     if (/^kb-\d+/.test(record.id)) record.id = record.id.replace(/^kb-\d+/, `kb-${target}`);
     record.shopUrl = weidianLink(target);
@@ -127,7 +128,7 @@ export function prepareCatalogNewDatasets(csvTexts, options = {}) {
     const fileKeys = new Set();
     for (const record of group) {
       const key = styleKeyOf(record);
-      const isMerged = mergedTargets.has(record.sourceProductId);
+      const isMerged = MERGE_LINK_TARGETS && mergedTargets.has(record.sourceProductId);
       if (isMerged && seenInMerged.has(key)) { dedupedRows += 1; continue; }
       if (!fileKeys.has(key) && seenInEarlierFiles.has(key)) { crossFileDuplicates += 1; continue; }
       rows.push(record);
@@ -139,25 +140,29 @@ export function prepareCatalogNewDatasets(csvTexts, options = {}) {
 
   // 链式指向有时会把两件不同商品串到同一个 id 上（分类不同、款式完全不重叠）。
   // 这类合并只保留行数最多的分类，其余分类回退到各自旧 id，避免详情页混进别的商品。
-  const categoriesByProduct = new Map();
-  for (const record of rows) {
-    if (!categoriesByProduct.has(record.sourceProductId)) categoriesByProduct.set(record.sourceProductId, new Map());
-    const byCategory = categoriesByProduct.get(record.sourceProductId);
-    byCategory.set(record.category, (byCategory.get(record.category) || 0) + 1);
-  }
+  // 仅在真正合并商品 id 时处理；主站只替换 Oopbuy 链接时保持原分组不动。
   const splitOff = [];
-  for (const [productId, byCategory] of categoriesByProduct) {
-    if (byCategory.size < 2) continue;
-    const keepCategory = [...byCategory.entries()].sort((a, b) => b[1] - a[1])[0][0];
+  if (MERGE_LINK_TARGETS) {
+    const categoriesByProduct = new Map();
     for (const record of rows) {
-      if (record.sourceProductId !== productId || record.category === keepCategory) continue;
-      const oldId = record.__oldId || productId;
-      record.sourceProductId = oldId;
-      if (/^kb-\d+/.test(record.id)) record.id = record.id.replace(/^kb-\d+/, `kb-${oldId}`);
-      record.shopUrl = weidianLink(oldId);
-      record.url = kakobuyLink(oldId);
-      if (record["new link"]) record["new link"] = record.url;
-      splitOff.push({ target: productId, keptCategory: keepCategory, oldId, category: record.category });
+      if (!categoriesByProduct.has(record.sourceProductId)) categoriesByProduct.set(record.sourceProductId, new Map());
+      const byCategory = categoriesByProduct.get(record.sourceProductId);
+      byCategory.set(record.category, (byCategory.get(record.category) || 0) + 1);
+    }
+    for (const [productId, byCategory] of categoriesByProduct) {
+      if (byCategory.size < 2) continue;
+      const keepCategory = [...byCategory.entries()].sort((a, b) => b[1] - a[1])[0][0];
+      for (const record of rows) {
+        if (record.sourceProductId !== productId || record.category === keepCategory) continue;
+        const oldId = record.__oldId || productId;
+        record.sourceProductId = oldId;
+        if (/^kb-\d+/.test(record.id)) record.id = record.id.replace(/^kb-\d+/, `kb-${oldId}`);
+        record.shopUrl = weidianLink(oldId);
+        record.url = kakobuyLink(oldId);
+        if (record["new link"]) record["new link"] = record.url;
+        record.linkTargetId = oldId;
+        splitOff.push({ target: productId, keptCategory: keepCategory, oldId, category: record.category });
+      }
     }
   }
 
@@ -172,7 +177,7 @@ export function prepareCatalogNewDatasets(csvTexts, options = {}) {
     rowsOut: rows.length,
     productsIn: nextIdByProduct.size,
     productsOut: new Set(rows.map((record) => record.sourceProductId)).size,
-    rekeyedProducts: targetIdByProduct.size,
+    rekeyedProducts: MERGE_LINK_TARGETS ? targetIdByProduct.size : 0,
     mergedTargets: [...mergedTargets],
     dedupedRows,
     crossFileDuplicates,

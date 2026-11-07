@@ -138,11 +138,13 @@ function InlinePurchaseCard({ item, group, selectedPlatform, agentKey, selectedS
 const assetRoot = import.meta.env.BASE_URL.replace(/\/$/, "");
 const placeholder = `${assetRoot}/catalog-detail-stilllife.webp`;
 const entryPreviewBase = `${assetRoot}/entry-previews`;
-// /spreadsheet1 读取隔离数据集 catalog-data-1（含 new link 批量替换），其余路径沿用主站 catalog-data。
+// 数据集隔离：/ 主站首页（仅替换 Oopbuy），/spreadsheet 原始数据，/spreadsheet1 全量替换对比。
 function catalogBasePath() {
   if (typeof window === "undefined") return `${assetRoot}/catalog-data`;
   const path = window.location.pathname.replace(import.meta.env.BASE_URL, "/");
-  return `${assetRoot}/${/^\/spreadsheet1\/?$/.test(path) ? "catalog-data-1" : "catalog-data"}`;
+  if (/^\/spreadsheet1\/?$/.test(path)) return `${assetRoot}/catalog-data-1`;
+  if (/^\/spreadsheet\/?$/.test(path)) return `${assetRoot}/catalog-data`;
+  return `${assetRoot}/catalog-data-home`;
 }
 const THEME_STORAGE_KEY = "rivora-spreadsheet-theme-v1";
 const QUICK_CATEGORY_COOLDOWN_MS = 450;
@@ -227,7 +229,7 @@ function loadPreviewGroup(sourceProductId: string): Promise<ProductPreviewGroup>
     const rows = items.filter((item) => item.sourceProductId === sourceProductId);
     if (!rows.length) throw new Error("Product not found in catalog.");
     const first = rows[0];
-    const platforms = platformSourcesFor({ id: first.id, sourceProductId }, { withInviteCodes: true })
+    const platforms = platformSourcesFor({ id: first.id, sourceProductId, oopbuyProductId: first.oopbuyProductId }, { withInviteCodes: true })
       .map((source: PlatformSource) => ({ name: source.name, url: source.url, primary: !!source.primary, disabled: !!source.disabled, disabledReason: source.disabledReason }));
     return {
       sourceProductId,

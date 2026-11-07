@@ -116,4 +116,5 @@ client/public/__manus__/version.json
 # Generated static catalog JSON (rebuilt by scripts/generate-catalog-data.mjs)
 /client/public/catalog-data/
 /client/public/catalog-data-1/
+/client/public/catalog-data-home/
 /client/public/kakobuy-catalog.csv

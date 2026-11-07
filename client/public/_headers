@@ -28,3 +28,5 @@
   Cache-Control: public, max-age=0, must-revalidate
 /catalog-data-1/*
   Cache-Control: public, max-age=0, must-revalidate
+/catalog-data-home/*
+  Cache-Control: public, max-age=0, must-revalidate

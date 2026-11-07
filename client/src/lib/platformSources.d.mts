@@ -2,6 +2,7 @@ export type PlatformSource = { name: string; url: string; primary?: boolean; dis
 export type PlatformProduct = {
   id?: string;
   sourceProductId?: string;
+  oopbuyProductId?: string;
   url?: string;
   platformLinks?: Record<string, string>;
 };
