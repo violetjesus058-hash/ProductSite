@@ -76,9 +76,9 @@ function InlinePurchaseCard({ item, group, selectedPlatform, agentKey, selectedS
   const selectedPlatformSource = selectedPlatform
     ? group.platforms.find((platform) => normalizePlatformName(platform.name) === normalizePlatformName(selectedPlatform))
     : undefined;
-  // 动态置顶：优先跟随进入渠道的代理，其次是数据里的 primary 标记，最后退到第一个平台。
+  // 动态置顶：先跟随用户筛选的平台，其次用数据里的 primary（与表格 Platform 列一致），再接进入渠道，最后退到第一个平台。
   const agentSource = agentKey ? group.platforms.find((platform) => platform.name.toLowerCase().includes(agentKey.toLowerCase())) : undefined;
-  const primary = selectedPlatformSource || agentSource || group.platforms.find((platform) => platform.primary) || group.platforms[0];
+  const primary = selectedPlatformSource || group.platforms.find((platform) => platform.primary) || agentSource || group.platforms[0];
   const orderedPlatforms = primary ? [primary, ...group.platforms.filter((platform) => platform !== primary)] : group.platforms;
   const visiblePlatforms = showAllPlatforms ? orderedPlatforms : orderedPlatforms.slice(0, 5);
   const styleImageUrl = selectedStyle.image || item.thumbnail || placeholder;
