@@ -24,8 +24,8 @@ export default function App() {
   useEffect(() => { document.documentElement.lang = location.startsWith("/admin") ? "zh-CN" : getSiteLanguage(); }, [location]);
   useEffect(() => { capturePreferredPlatform(window.location.search); }, [location]);
   useEffect(() => {
-    if (location === "/spreadsheet") return;
-    if (!(location === "/" || location.startsWith("/product/") || location.startsWith("/admin/products/import"))) return;
+    if (location === "/spreadsheet" || location === "/") return;
+    if (!(location.startsWith("/product/") || location.startsWith("/admin/products/import"))) return;
     const workerUrl = String(import.meta.env.VITE_CLOUDFLARE_WORKER_URL || "").replace(/\/$/, "");
     if (!workerUrl) return;
     fetch(`${workerUrl}/api/products/overrides`).then((response) => response.ok ? response.json() : null).then(async (payload) => {
@@ -63,7 +63,8 @@ export default function App() {
           <Toaster />
           <Suspense fallback={<div className="route-loading" role="status">Loading…</div>}>
             <Switch>
-              <Route path="/" component={Home} />
+              <Route path="/" component={SpreadsheetCatalog1} />
+              <Route path="/gallery" component={Home} />
               <Route path="/spreadsheet" component={SpreadsheetCatalog1} />
               <Route path="/spreadsheet1" component={SpreadsheetCatalog1} />
               <Route path="/product1/:id" component={ProductDetail1} />

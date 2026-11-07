@@ -7,7 +7,6 @@ import { styleImages } from "@/data/style-images";
 import { formatVisitTime, readDislikes, readEngagement, readFavorites, readHistory, saveFavorites, toggleDislike, type HistoryEntry, type EngagementEntry } from "@/lib/catalogMemory";
 import { shouldAllowAction } from "@/lib/mobileActionGuard";
 import RequestProductDialog from "@/components/RequestProductDialog";
-import CatalogEntryChooser from "@/components/CatalogEntryChooser";
 import SafeProductImage from "@/components/SafeProductImage";
 import { buildCategoryRecommendationPool, rankBehavioralRecommendations } from "@/lib/categoryRecommendations";
 import { initializeAnalytics, trackEvent, trackOnce } from "@/lib/analytics";
@@ -413,7 +412,6 @@ export default function Home() {
   const resetFilters = () => { setCategory("all"); setBrand("all"); };
 
   return <>
-    <CatalogEntryChooser sourcePath="/" onChoose={(choice) => { if (choice === "spreadsheet") navigate("/spreadsheet"); }} />
     <div className={`catalog-shell catalog-style-${pageStyle} type-size-${fontSizeLevel} tracking-level-${letterSpacingLevel}`}>
     <nav className="mobile-icon-rail" aria-label="Mobile categories"><button className={!openPanel && category === "all" ? "is-active" : ""} onClick={() => { if (!openPanel) changeAuditCategory("all"); }} aria-label="All products" aria-disabled={Boolean(openPanel)}><HomeIcon size={17} /><span>ALL</span></button>{navItems.slice(1).map((item) => <button key={item.id} className={!openPanel && category === item.id ? "is-active" : ""} onClick={() => { if (!openPanel) changeAuditCategory(item.id); }} aria-label={item.label} aria-disabled={Boolean(openPanel)}><span>{item.id === "ACC" ? "ACC" : item.label.slice(0, 5)}</span></button>)}<button className={openPanel === "favorites" ? "is-active" : ""} aria-label="Saved items" aria-pressed={openPanel === "favorites"} onClick={() => setOpenPanel((current) => current === "favorites" ? null : "favorites")}><Heart size={17} fill={favoriteProducts.length ? "currentColor" : "none"} /></button><span className="mobile-rail-divider" /><a className="mobile-rail-catalog-link" href="/spreadsheet" aria-label="Catalog Table" title="Catalog Table"><Table2 size={17} /></a><button className="mobile-rail-request-link" onClick={() => setRequestProductOpen(true)} aria-label="Request a product" title="Request a product">{tx("REQUEST", "申请商品")}</button><a className="mobile-rail-discord-link" href="https://discord.gg/jtc399kUQV" target="_blank" rel="noreferrer" aria-label="Discord feedback" title="Discord feedback">{tx("DISCORD", "Discord")}</a></nav>
     <aside className="catalog-rail">

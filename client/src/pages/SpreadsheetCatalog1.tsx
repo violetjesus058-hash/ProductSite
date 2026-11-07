@@ -1,8 +1,7 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
-import { Link, useLocation } from "wouter";
+import { Link } from "wouter";
 import { ArrowDownWideNarrow, ArrowLeft, ArrowRight, Check, ChevronDown, Copy, ExternalLink, LayoutGrid, Moon, Share2, Store, Sun, Table2, X } from "lucide-react";
 import "./spreadsheet.css";
-import CatalogEntryChooser from "@/components/CatalogEntryChooser";
 import { initializeAnalytics, trackEvent, trackOnce } from "@/lib/analytics";
 import { filterCatalogItems, paginateCatalogItems, type CatalogSummary, type CatalogSort } from "@/lib/catalogSummary";
 import { isLongSleeve, LONG_SLEEVE_CATEGORY } from "@/lib/catalogOrdering.mjs";
@@ -231,7 +230,6 @@ function ImageThumb({ item }: { item: CatalogPageRow }) {
 }
 
 export default function SpreadsheetCatalog1() {
-  const [, setLocation] = useLocation();
   useEffect(() => { document.documentElement.lang = "en"; }, []);
   const [view, setView] = useState<ViewState>(readViewState);
   const [shuffleSeed] = useState(() => {
@@ -657,9 +655,9 @@ export default function SpreadsheetCatalog1() {
     <header className="spreadsheet-header">
       <Link href="/" className="spreadsheet-brand" aria-label="RIVORA product catalog"><img src="/branding/rivora-icon.png" alt="" /><span>RIVORA</span></Link>
       <div className="spreadsheet-document-name"><strong>RIVORA Product Catalog</strong><small>Interactive catalog</small></div>
-      <div className="browse-mode-switch spreadsheet-browse-mode-switch" aria-label="Switch browsing mode"><a href="/" onClick={() => trackEvent("browse_mode_switch", { from_mode: "spreadsheet", to_mode: "product-site", source: "header" })}>Gallery</a><span className="is-active">Spreadsheet</span></div>
-      <nav aria-label="Main navigation"><a href="https://productsite-8wf.pages.dev/">Product Catalog</a><a href="https://productsite-8wf.pages.dev/spreadsheet" aria-current="page">Catalog Table</a></nav>
-      <a href="https://productsite-8wf.pages.dev/" className="spreadsheet-back"><ArrowLeft size={15} /> Product Catalog</a>
+      <div className="browse-mode-switch spreadsheet-browse-mode-switch" aria-label="Switch browsing mode"><a href="/gallery" onClick={() => trackEvent("browse_mode_switch", { from_mode: "spreadsheet", to_mode: "product-site", source: "header" })}>Gallery</a><span className="is-active">Spreadsheet</span></div>
+      <nav aria-label="Main navigation"><a href="/gallery">Product Catalog</a><a href="/spreadsheet" aria-current="page">Catalog Table</a></nav>
+      <a href="/gallery" className="spreadsheet-back"><ArrowLeft size={15} /> Product Catalog</a>
       <div className="spreadsheet-share-control share-control">
         <button className="spreadsheet-share-button detail-share-button" type="button" onClick={() => setShareOpen((open) => !open)} aria-label="Share this catalog" aria-haspopup="menu" aria-expanded={shareOpen} aria-controls="spreadsheet-share-menu" title="Share this catalog"><Share2 size={16} aria-hidden="true" /><span>Share</span></button>
         {shareOpen && <div className="spreadsheet-share-menu share-menu" id="spreadsheet-share-menu" role="menu" aria-label="Share this catalog"><div className="share-menu-title">SHARE THIS CATALOG</div><button className="share-copy" type="button" role="menuitem" onClick={() => { void copyCatalogLink(); }}><span>{linkCopied ? "Link copied" : "Copy catalog link"}</span>{linkCopied ? <Check size={14} /> : <Copy size={14} />}</button>{shareLinks.map((item) => <a key={item.name} href={item.href} target={item.name === "Email" ? undefined : "_blank"} rel={item.name === "Email" ? undefined : "noopener noreferrer"} role="menuitem" onClick={() => setShareOpen(false)}>{item.name}<ExternalLink size={13} aria-hidden="true" /></a>)}{typeof navigator !== "undefined" && "share" in navigator && <button className="share-native" type="button" role="menuitem" onClick={() => { void shareCatalog(); }}>More sharing options<Share2 size={13} aria-hidden="true" /></button>}</div>}
@@ -769,7 +767,5 @@ export default function SpreadsheetCatalog1() {
         <div className="spreadsheet-lightbox-caption"><span>{previewAlt}</span><a href={previewUrl} target="_blank" rel="noreferrer">Open original <ExternalLink size={15} /></a></div>
       </section>
     </div>}
-
-    <CatalogEntryChooser sourcePath="/spreadsheet" onChoose={(choice) => { if (choice === "product-site") setLocation("/"); }} />
   </main>;
 }
