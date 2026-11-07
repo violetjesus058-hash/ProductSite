@@ -31,7 +31,7 @@ export type CatalogPreviewStyle = {
 export type CatalogPreviewGroup = {
   sourceProductId: string;
   name: string;
-  platforms: Array<{ name: string; url: string; primary?: boolean }>;
+  platforms: Array<{ name: string; url: string; primary?: boolean; disabled?: boolean; disabledReason?: string }>;
   styles: CatalogPreviewStyle[];
 };
 

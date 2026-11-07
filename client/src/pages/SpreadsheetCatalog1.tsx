@@ -77,15 +77,15 @@ function InlinePurchaseCard({ item, group, selectedPlatform, agentKey, selectedS
     ? group.platforms.find((platform) => normalizePlatformName(platform.name) === normalizePlatformName(selectedPlatform))
     : undefined;
   // 动态置顶：先跟随用户筛选的平台，其次用数据里的 primary（与表格 Platform 列一致），再接进入渠道，最后退到第一个平台。
-  const agentSource = agentKey ? group.platforms.find((platform) => platform.name.toLowerCase().includes(agentKey.toLowerCase())) : undefined;
-  const primary = selectedPlatformSource || group.platforms.find((platform) => platform.primary) || agentSource || group.platforms[0];
+  const agentSource = agentKey ? group.platforms.find((platform) => !platform.disabled && platform.name.toLowerCase().includes(agentKey.toLowerCase())) : undefined;
+  const primary = selectedPlatformSource || group.platforms.find((platform) => platform.primary && !platform.disabled) || agentSource || group.platforms[0];
   const orderedPlatforms = primary ? [primary, ...group.platforms.filter((platform) => platform !== primary)] : group.platforms;
   const visiblePlatforms = showAllPlatforms ? orderedPlatforms : orderedPlatforms.slice(0, 5);
   const styleImageUrl = selectedStyle.image || item.thumbnail || placeholder;
   const refreshedStyleImageUrl = `${styleImageUrl}${styleImageUrl.includes("?") ? "&" : "?"}style=${encodeURIComponent(selectedStyle.id)}`;
-  const premiumBadge = primary && /kakobuy/i.test(primary.name)
+  const premiumBadge = primary && !primary.disabled && /kakobuy/i.test(primary.name)
     ? "🔥 BEST FOR KAKOBUY AGENT"
-    : primary && /oopbuy/i.test(primary.name)
+    : primary && !primary.disabled && /oopbuy/i.test(primary.name)
       ? "🔥 OPTIMIZED FOR OOPBUY"
       : "";
   const agentMissing = !!agentKey && group.platforms.length > 0 && !group.platforms.some((platform) => platform.name.toLowerCase().includes(agentKey.toLowerCase()));
@@ -111,15 +111,19 @@ function InlinePurchaseCard({ item, group, selectedPlatform, agentKey, selectedS
     </div>
     <div className="spreadsheet-inline-commerce">
       <div className="spreadsheet-inline-product-heading"><div><span>SELECTED STYLE</span><strong>{group.name}</strong><small>{displayStyleLabel(selectedStyle.styleLabel) ? `Style ${displayStyleLabel(selectedStyle.styleLabel)}` : "Style not specified"}</small></div><b>{formatMoney(selectedStyle.price, selectedStyle.currency)}</b></div>
-      {primary && <a className="spreadsheet-inline-cta" href={primary.url} target="_blank" rel="noopener noreferrer" onClick={() => onPlatformClick(primary, group, selectedStyle)}>Order via Agent →</a>}
+      {primary && (primary.disabled
+        ? <span className="spreadsheet-inline-cta is-disabled" aria-disabled="true" title={`${primary.name}: ${primary.disabledReason || "Temporarily unavailable"}`}>{primary.name} paused · {primary.disabledReason || "Temporarily unavailable"}</span>
+        : <a className="spreadsheet-inline-cta" href={primary.url} target="_blank" rel="noopener noreferrer" onClick={() => onPlatformClick(primary, group, selectedStyle)}>Order via Agent →</a>)}
       <div className="spreadsheet-inline-platform-heading"><span>BUYING PLATFORMS</span><small>{group.platforms.length} sources</small></div>
       {agentMissing && <div className="spreadsheet-inline-fallback" role="status">⚠️ {agentKey} link checking... standard agent route displayed below.</div>}
       {premiumBadge && <div className="spreadsheet-inline-premium-badge">{premiumBadge}</div>}
       <div className="spreadsheet-inline-platform-list">
         {visiblePlatforms.map((platform) => {
           const icon = platformIconFor(platform.name);
+          const identity = <span className="spreadsheet-inline-platform-identity">{icon ? <img src={icon} alt="" aria-hidden="true" loading="lazy" /> : <i aria-hidden="true">{platform.name.charAt(0).toUpperCase()}</i>}<strong>{platform.name}</strong></span>;
+          if (platform.disabled) return <div key={platform.name} className={`spreadsheet-inline-platform is-disabled ${platform === primary ? "is-primary" : ""}`} aria-disabled="true" title={`${platform.name}: ${platform.disabledReason || "Temporarily unavailable"}`}>{identity}<small>{platform.disabledReason || "Temporarily unavailable"}</small></div>;
           return <a key={platform.name} href={platform.url} target="_blank" rel="noopener noreferrer" className={`spreadsheet-inline-platform ${platform === primary ? "is-primary" : ""}`} onClick={() => onPlatformClick(platform, group, selectedStyle)}>
-            <span className="spreadsheet-inline-platform-identity">{icon ? <img src={icon} alt="" aria-hidden="true" loading="lazy" /> : <i aria-hidden="true">{platform.name.charAt(0).toUpperCase()}</i>}<strong>{platform.name}</strong></span>
+            {identity}
             <ExternalLink size={14} aria-hidden="true" />
           </a>;
         })}

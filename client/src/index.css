@@ -466,6 +466,8 @@ a { color:inherit; text-decoration:none; }
 .module-option-group button:hover, .module-option-group button.is-selected { border-color:var(--coral); background:#fff7f4; color:var(--coral); }
 .module-buy-button { display:flex; align-items:center; justify-content:center; gap:8px; min-height:45px; margin-top:25px; background:var(--coral); color:#fffdf8; font-size:11px; font-weight:800; }
 .module-buy-button:hover { transform:translateY(-2px); }
+.primary-action.is-disabled, .module-buy-button.is-disabled { background:#d9d4cc; color:#7a746b; cursor:not-allowed; }
+.primary-action.is-disabled:hover, .module-buy-button.is-disabled:hover { transform:none; background:#d9d4cc; }
 @media (max-width:760px) {
   .detail-purchase-modules { gap:18px; padding:24px 16px; }
   .detail-purchase-module { grid-template-columns:1fr; height:auto; max-width:none; }
