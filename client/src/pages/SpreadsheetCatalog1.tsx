@@ -76,8 +76,9 @@ function InlinePurchaseCard({ item, group, selectedPlatform, agentKey, selectedS
   const selectedPlatformSource = selectedPlatform
     ? group.platforms.find((platform) => normalizePlatformName(platform.name) === normalizePlatformName(selectedPlatform))
     : undefined;
-  // /spreadsheet1 放开 Kakobuy，主平台仍按数据里的 primary 取（Kakobuy 不带 primary 标记）
-  const primary = selectedPlatformSource || group.platforms.find((platform) => platform.primary) || group.platforms[0];
+  // 动态置顶：优先跟随进入渠道的代理，其次是数据里的 primary 标记，最后退到第一个平台。
+  const agentSource = agentKey ? group.platforms.find((platform) => platform.name.toLowerCase().includes(agentKey.toLowerCase())) : undefined;
+  const primary = selectedPlatformSource || agentSource || group.platforms.find((platform) => platform.primary) || group.platforms[0];
   const orderedPlatforms = primary ? [primary, ...group.platforms.filter((platform) => platform !== primary)] : group.platforms;
   const visiblePlatforms = showAllPlatforms ? orderedPlatforms : orderedPlatforms.slice(0, 5);
   const styleImageUrl = selectedStyle.image || item.thumbnail || placeholder;
