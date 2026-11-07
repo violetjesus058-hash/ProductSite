@@ -17,8 +17,8 @@ export type CatalogSummary = {
   platformKeys: string[];
   hasStyleImage: boolean;
   priceCheckedAt: string;
-  // 主站首页：只用于 Oopbuy 下单链接的批量替换目标 id（/spreadsheet 不读取该字段）。
-  oopbuyProductId?: string;
+  // 主站首页：批量替换后的商品 id，用于所有平台的购买链接（/spreadsheet 不读取该字段）。
+  linkTargetId?: string;
 };
 export type CatalogSort = "curated" | "random" | "price-low" | "price-high" | "name" | "recent";
 export type CatalogQuery = { category?: string; platform?: string; sort?: CatalogSort; seed?: number | string };

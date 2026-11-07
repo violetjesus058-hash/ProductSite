@@ -138,7 +138,7 @@ function InlinePurchaseCard({ item, group, selectedPlatform, agentKey, selectedS
 const assetRoot = import.meta.env.BASE_URL.replace(/\/$/, "");
 const placeholder = `${assetRoot}/catalog-detail-stilllife.webp`;
 const entryPreviewBase = `${assetRoot}/entry-previews`;
-// 数据集隔离：/ 主站首页（仅替换 Oopbuy），/spreadsheet 原始数据，/spreadsheet1 全量替换对比。
+// 数据集隔离：/ 主站首页（全平台替换），/spreadsheet 原始数据，/spreadsheet1 全量替换对比。
 function catalogBasePath() {
   if (typeof window === "undefined") return `${assetRoot}/catalog-data`;
   const path = window.location.pathname.replace(import.meta.env.BASE_URL, "/");
@@ -229,10 +229,11 @@ function loadPreviewGroup(sourceProductId: string): Promise<ProductPreviewGroup>
     const rows = items.filter((item) => item.sourceProductId === sourceProductId);
     if (!rows.length) throw new Error("Product not found in catalog.");
     const first = rows[0];
-    const platforms = platformSourcesFor({ id: first.id, sourceProductId, oopbuyProductId: first.oopbuyProductId }, { withInviteCodes: true })
+    const platforms = platformSourcesFor({ id: first.id, sourceProductId, linkTargetId: first.linkTargetId }, { withInviteCodes: true })
       .map((source: PlatformSource) => ({ name: source.name, url: source.url, primary: !!source.primary, disabled: !!source.disabled, disabledReason: source.disabledReason }));
     return {
       sourceProductId,
+      linkTargetId: first.linkTargetId,
       name: first.name,
       platforms,
       styles: rows.map((row) => ({

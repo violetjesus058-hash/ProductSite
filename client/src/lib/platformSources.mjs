@@ -50,7 +50,7 @@ const platformIconFiles = {
   zentbuy: "ZentBuy.png",
 };
 
-// 邀请码清单（来源：邀请码机制规则文件），只在 spreadsheet1 路径注入
+// 补充邀请码（平台链接规则本身未内嵌推广参数的平台）
 const spreadsheetInviteCodes = {
   joyagoo: { param: "ref", code: "300950678" },
   cssbuy: { param: "promotionCode", code: "141b285ac4016ebb" },
@@ -75,19 +75,19 @@ export function platformIconFor(name) {
 
 export function platformSourcesFor(product, options = {}) {
   const sourceId = String(product.sourceProductId || product.id || "");
-  // 主站首页只替换 Oopbuy：批量替换目标 id 优先用于 Oopbuy 链接，其他平台保持原商品 id。
-  const oopbuyId = String(product.oopbuyProductId || sourceId);
-  const encodedId = encodeURIComponent(sourceId);
-  const encodedOopbuyId = encodeURIComponent(oopbuyId);
+  // 主站商品统一使用批量替换后的商品 id（linkTargetId），所有平台按各自规则拼接并带上邀请码；
+  // /spreadsheet 数据集没有该字段，自动回退原始商品 id，数据保持不动。
+  const targetId = String(product.linkTargetId || sourceId);
+  const encodedId = encodeURIComponent(targetId);
   const isKakobuy = /kakobuy\.com/i.test(product.url || "");
-  const encodedWeidianUrl = encodeURIComponent(`https://weidian.com/item.html?itemID=${sourceId}`);
-  const sourceUrl = `https://shop1784277725.v.weidian.com/item.html?itemID=${sourceId}`;
+  const encodedWeidianUrl = encodeURIComponent(`https://weidian.com/item.html?itemID=${targetId}`);
+  const sourceUrl = `https://shop1784277725.v.weidian.com/item.html?itemID=${targetId}`;
   const encodedSourceUrl = encodeURIComponent(sourceUrl);
   // Kakobuy 链接统一按当前最新的商品 id 生成，不使用 CSV 中可能已过期的 url
   const kakobuyUrl = `https://www.kakobuy.com/item/details?url=${encodedWeidianUrl}&affcode=vxxss`;
   const sources = [
-    { name: "Oopbuy", url: `https://oopbuy.com/product/weidian/${encodedOopbuyId}?inviteCode=Y5DH4UF2W`, primary: true },
-    { name: "Kakobuy", url: kakobuyUrl, disabled: true, disabledReason: "Batch replacement in progress" },
+    { name: "Oopbuy", url: `https://oopbuy.com/product/weidian/${encodedId}?inviteCode=Y5DH4UF2W`, primary: true },
+    { name: "Kakobuy", url: kakobuyUrl },
     { name: "Superbuy", url: `https://www.superbuy.com/en/page/buy/?nTag=Home-search&from=search-input&url=${encodedWeidianUrl}&partnercode=E6miyW` },
     { name: "RizzitGO", url: `https://rizzitgo.com/detail-page/?goodsId=${encodedId}&source=3` },
     { name: "ZentBuy", url: `https://zentbuy.com/product/weidian/${encodedId}?linkSearch=true` },
@@ -108,6 +108,19 @@ export function platformSourcesFor(product, options = {}) {
     { name: "BBDBuy", url: `https://www.bbdbuy.com/goods/WEIDIAN/${encodedId}?from=search` },
     { name: "CnShopper", url: `https://cnshopper.com/product/weidian/${encodedId}` },
     { name: "ESGOBuy", url: `https://www.esgobuy.com/productDetail?url=${encodedSourceUrl}` },
+    // 其余平台的链接规则与邀请码（与 Worker 的 affiliateTemplates 保持一致）
+    { name: "Litbuy", url: `https://litbuy.com/product/weidian/${encodedId}?inviteCode=XXGYH4Z80` },
+    { name: "GTbuy", url: `https://gtbuy.com/product/weidian/${encodedId}?inviteCode=XO78PVRZW` },
+    { name: "Hipobuy", url: `https://hipobuy.com/product/weidian/${encodedId}?inviteCode=P6PP29VX7` },
+    { name: "Fansbuy", url: `https://fansbuy.com/item-micro-${encodedId}.html?promotionCode=R0dfTU9DRzA2VTk` },
+    { name: "LoveGoBuy", url: `https://www.lovegobuy.com/product?shop_type=weidian&id=${encodedId}&invite_code=U577HX` },
+    { name: "Hoobuy", url: `https://hoobuy.com/product/2/${encodedId}?inviteCode=K8l2grxX` },
+    { name: "UsFans", url: `https://www.usfans.com/product/3/${encodedId}?ref=BCSLQC` },
+    { name: "OrientDig", url: `https://orientdig.com/product/?shop_type=weidian&id=${encodedId}&ref=100245718` },
+    { name: "Sugargoo", url: `https://www.sugargoo.com/products?productLink=${encodedWeidianUrl}&memberId=3229305473717352480` },
+    { name: "BBDBuyEU", url: `https://www.bbdbuyeu.com/goods/WEIDIAN/${encodedId}?inviteCode=j4zwj7` },
+    { name: "VigorBuy", url: `https://vigorbuy.com/product/2/${encodedId}?inviteCode=jkNlpqAP` },
+    { name: "Fishgoo", url: `https://www.fishgoo.com/#/product?productLink=${encodedWeidianUrl}&memberId=TG2665ux5KieI` },
   ];
 
   // The supplied UUFans deep link includes a separate QC item id and price that cannot be

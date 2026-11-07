@@ -17,6 +17,7 @@ export type CatalogProductOverride = UnknownRecord & {
   images?: unknown;
   platformLinks?: unknown;
   url?: unknown;
+  linkTargetId?: unknown;
   collectedAt?: unknown;
   priceCheckedAt?: unknown;
 };
@@ -30,6 +31,7 @@ export type CatalogPreviewStyle = {
 };
 export type CatalogPreviewGroup = {
   sourceProductId: string;
+  linkTargetId?: string;
   name: string;
   platforms: Array<{ name: string; url: string; primary?: boolean; disabled?: boolean; disabledReason?: string }>;
   styles: CatalogPreviewStyle[];
@@ -86,6 +88,7 @@ function summaryFromOverride(item: CatalogProductOverride, previous?: CatalogSum
     platformKeys,
     hasStyleImage: previous?.hasStyleImage || false,
     priceCheckedAt: asText(item.priceCheckedAt, asText(item.collectedAt, previous?.priceCheckedAt || "")),
+    linkTargetId: asText(item.linkTargetId, previous?.linkTargetId || "") || undefined,
   };
 }
 
@@ -130,10 +133,11 @@ export function mergePreviewOverrides(
   const first = matching[0];
   const hasPlatformData = Object.prototype.hasOwnProperty.call(first, "platformLinks") || Object.prototype.hasOwnProperty.call(first, "url");
   const platforms = hasPlatformData
-    ? platformSourcesFor({ ...first, sourceProductId } as Parameters<typeof platformSourcesFor>[0])
+    ? platformSourcesFor({ ...first, sourceProductId, linkTargetId: baseGroup?.linkTargetId } as Parameters<typeof platformSourcesFor>[0])
     : baseGroup?.platforms || [];
   return {
     sourceProductId,
+    linkTargetId: baseGroup?.linkTargetId,
     name: asText(first.catalogName, asText(first.name, baseGroup?.name || "Catalog item")),
     platforms,
     styles: [...styles.values()],

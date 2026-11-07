@@ -141,7 +141,7 @@ function toProduct(record) {
     collectedAt: String(record.collectedAt || "").trim(),
     priceCheckedAt: String(record.priceCheckedAt || record.collectedAt || "").trim(),
     sourceSkuIds: splitList(record.sourceSkuIds),
-    oopbuyProductId: record.linkTargetId && String(record.linkTargetId).trim() !== String(record.sourceProductId || record.id || "").trim()
+    linkTargetId: record.linkTargetId && String(record.linkTargetId).trim() !== String(record.sourceProductId || record.id || "").trim()
       ? String(record.linkTargetId).trim()
       : undefined,
   };
@@ -336,23 +336,23 @@ async function main() {
   // 1. 表格索引
   await jsonWrite(path.join(outputRoot, "catalog-index.json"), summaries);
 
-  // 1b. 主站首页索引：只把 Oopbuy 链接替换为 new link 目标 id，其余平台仍用原始商品 id；
+  // 1b. 主站首页索引：所有平台统一使用批量替换后的商品 id；
   // /spreadsheet 继续读取 catalog-index.json，保持原数据不动。
   const homeRoot = path.join(root, "client/public/catalog-data-home");
-  const oopbuyTargetBySource = new Map();
+  const linkTargetBySource = new Map();
   for (const record of allRecords) {
     const sid = String(record.sourceProductId || "").trim();
     const target = String(record.linkTargetId || "").trim();
-    if (sid && target && target !== sid) oopbuyTargetBySource.set(sid, target);
+    if (sid && target && target !== sid) linkTargetBySource.set(sid, target);
   }
   const homeSummaries = summaries.map((row) => {
-    const target = oopbuyTargetBySource.get(row.sourceProductId);
-    return target ? { ...row, oopbuyProductId: target } : row;
+    const target = linkTargetBySource.get(row.sourceProductId);
+    return target ? { ...row, linkTargetId: target } : row;
   });
   await fs.rm(homeRoot, { recursive: true, force: true });
   await fs.mkdir(homeRoot, { recursive: true });
   await jsonWrite(path.join(homeRoot, "catalog-index.json"), homeSummaries);
-  console.log(`主站 Oopbuy 替换: ${oopbuyTargetBySource.size} 个商品`);
+  console.log(`主站全平台替换: ${linkTargetBySource.size} 个商品`);
 
   // 2. 首页分页（顺序与表格索引一致）
   const ordered = products;
@@ -432,7 +432,7 @@ async function main() {
       shopUrl: first.shopUrl,
       productUrl: first.url,
       refreshed: String(first.priceCheckedAt || "").slice(0, 10),
-      oopbuyProductId: first.linkTargetId && String(first.linkTargetId).trim() !== String(sid).trim()
+      linkTargetId: first.linkTargetId && String(first.linkTargetId).trim() !== String(sid).trim()
         ? String(first.linkTargetId).trim()
         : undefined,
       gallery,
