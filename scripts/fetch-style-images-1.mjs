@@ -43,8 +43,12 @@ const jitter = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 let globalPauseUntil = 0;
 
 const csvPaths = args.filter((value) => /\.csv$/i.test(value));
+const defaultCsvPaths = ["catalog-new.csv", "catalog-new-2.csv", "catalog-new-3.csv", "catalog-new-4.csv"]
+  .map((name) => path.join(ROOT, "data", name));
+// 映射表以批量替换后的 target id 为键，主站通过 linkTargetId 回退读取。
 const { rows } = readCatalogNewDatasets(
-  csvPaths.length ? csvPaths : ["d:/ps/catalog-new.csv", "d:/ps/catalog-new-2.csv", "d:/ps/catalog-new-3.csv"],
+  csvPaths.length ? csvPaths : defaultCsvPaths,
+  { mergeLinkTargets: true },
 );
 
 // sourceProductId → { styleKey → { label, skuIds } }
@@ -167,7 +171,12 @@ function save() {
 }
 
 const queue = [...targets.entries()]
-  .filter(([productId]) => !map[productId])
+  .map(([productId, styles]) => {
+    const existing = map[productId] || {};
+    const missing = new Map([...styles].filter(([styleKey]) => !existing[styleKey]));
+    return [productId, missing];
+  })
+  .filter(([, missing]) => missing.size > 0)
   .slice(OFFSET, LIMIT ? OFFSET + LIMIT : undefined)
   .sort((a, b) => a[0].localeCompare(b[0]));
 
@@ -191,7 +200,7 @@ async function lane() {
     try {
       const skuInfos = await fetchSkuInfos(productId);
       const images = styleImagesFrom(skuInfos, styles);
-      map[productId] = images;
+      map[productId] = { ...(map[productId] || {}), ...images };
       stylesAdded += Object.keys(images).length;
     } catch (err) {
       failed += 1;

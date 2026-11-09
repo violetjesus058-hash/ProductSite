@@ -32,8 +32,12 @@ export function applyStyleImages(rows) {
   let applied = 0;
   for (const row of rows) {
     const productId = String(row.sourceProductId || row.id || "").trim();
+    const linkTargetId = String(row.linkTargetId || "").trim();
     const styleKey = String(row.styleKey || "").trim();
-    const image = (map[productId] || {})[styleKey];
+    // 映射表按批量替换后的 id 建立；主站保留旧 id 时用 linkTargetId 回退查找。
+    const image =
+      (map[productId] || {})[styleKey] ||
+      (linkTargetId && linkTargetId !== productId ? (map[linkTargetId] || {})[styleKey] : "");
     if (!image) continue;
     const images = splitImages(row.images);
     if (images[0] === image) continue;
