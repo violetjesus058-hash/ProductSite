@@ -133,6 +133,14 @@ async function fetchSkuInfos(productId) {
   throw lastErr;
 }
 
+function normalizeStyleKey(value) {
+  return String(value || "")
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[\u200b-\u200d\ufeff]/g, "")
+    .replace(/[\s\p{P}\p{S}]+/gu, "");
+}
+
 function styleImagesFrom(skuInfos, styleTargets) {
   // CSV 里的 sourceSkuIds 是旧商品的 SKU，链式收敛到新 id 后已经对不上；
   // 可靠的做法是用款式标题匹配：thor 的 skuInfo.title 形如「01;S」「黑色;M」。
@@ -148,15 +156,24 @@ function styleImagesFrom(skuInfos, styleTargets) {
     const stylePart = title.split(/[;:|]/)[0];
     const k1 = stylePart.trim().toLowerCase();
     const k2 = k1.replace(/\s+/g, "");
+    const k3 = normalizeStyleKey(stylePart);
     if (k1 && !byTitle.has(k1)) byTitle.set(k1, img);
     if (k2 && k2 !== k1 && !byTitle.has(k2)) byTitle.set(k2, img);
+    if (k3 && !byTitle.has(k3)) byTitle.set(k3, img);
   }
   const out = {};
   for (const [styleKey, target] of styleTargets) {
     const label = String(target.label || "").trim();
     const k1 = label.toLowerCase();
     const k2 = k1.replace(/\s+/g, "");
-    const byLabel = (k1 && byTitle.get(k1)) || (k2 && byTitle.get(k2));
+    const k3 = normalizeStyleKey(label);
+    let byLabel = (k1 && byTitle.get(k1)) || (k2 && byTitle.get(k2)) || (k3 && byTitle.get(k3));
+    // 微店标题常带不可见字符 / 全半角标点差异；唯一包含匹配可兜底。
+    if (!byLabel && k3.length >= 6) {
+      const candidates = [...byTitle.entries()].filter(([key]) => key.includes(k3) || k3.includes(key));
+      const images = new Set(candidates.map(([, image]) => image));
+      if (images.size === 1) byLabel = [...images][0];
+    }
     if (byLabel) { out[styleKey] = byLabel; continue; }
     for (const skuId of target.skuIds) {
       const img = bySkuId.get(skuId);
