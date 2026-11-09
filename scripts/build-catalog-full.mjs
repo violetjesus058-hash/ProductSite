@@ -339,6 +339,13 @@ async function main() {
   // 1. 表格索引
   await jsonWrite(path.join(outputRoot, "catalog-index.json"), summaries);
 
+  // 1a. 轻量替换映射：管理后台等页面据此把旧商品 id 换成最新链接 id。
+  const linkTargets = {};
+  for (const row of summaries) {
+    if (row.linkTargetId) linkTargets[row.sourceProductId] = row.linkTargetId;
+  }
+  await jsonWrite(path.join(outputRoot, "link-targets.json"), linkTargets);
+
   // 1b. /spreadsheet 与主站共用同一份已替换链接的索引数据；/spreadsheet1 继续读取 catalog-data-1。
   const homeRoot = path.join(root, "client/public/catalog-data-home");
   await fs.rm(homeRoot, { recursive: true, force: true });
