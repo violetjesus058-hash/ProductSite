@@ -133,6 +133,11 @@ async function fetchSkuInfos(productId) {
   throw lastErr;
 }
 
+// CSV 款式名与微店 SKU 标题语言/写法不一致时的显式映射（只影响指定商品）。
+const STYLE_TITLE_ALIASES = {
+  "7879447716": { "银绿色": "silver Green", "银蓝色": "silver-blue" },
+};
+
 function normalizeStyleKey(value) {
   return String(value || "")
     .normalize("NFKC")
@@ -141,7 +146,7 @@ function normalizeStyleKey(value) {
     .replace(/[\s\p{P}\p{S}]+/gu, "");
 }
 
-function styleImagesFrom(skuInfos, styleTargets) {
+function styleImagesFrom(skuInfos, styleTargets, productId) {
   // CSV 里的 sourceSkuIds 是旧商品的 SKU，链式收敛到新 id 后已经对不上；
   // 可靠的做法是用款式标题匹配：thor 的 skuInfo.title 形如「01;S」「黑色;M」。
   const bySkuId = new Map();
@@ -163,7 +168,8 @@ function styleImagesFrom(skuInfos, styleTargets) {
   }
   const out = {};
   for (const [styleKey, target] of styleTargets) {
-    const label = String(target.label || "").trim();
+    const rawLabel = String(target.label || "").trim();
+    const label = STYLE_TITLE_ALIASES[productId]?.[rawLabel] || rawLabel;
     const k1 = label.toLowerCase();
     const k2 = k1.replace(/\s+/g, "");
     const k3 = normalizeStyleKey(label);
@@ -216,7 +222,7 @@ async function lane() {
     const [productId, styles] = queue[index];
     try {
       const skuInfos = await fetchSkuInfos(productId);
-      const images = styleImagesFrom(skuInfos, styles);
+      const images = styleImagesFrom(skuInfos, styles, productId);
       map[productId] = { ...(map[productId] || {}), ...images };
       stylesAdded += Object.keys(images).length;
     } catch (err) {
