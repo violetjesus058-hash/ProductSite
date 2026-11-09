@@ -432,6 +432,18 @@ export default function SpreadsheetCatalog1() {
   }, [catalogMeta, view.platform]);
 
   useEffect(() => {
+    if (!catalogMeta || view.platform) return;
+    const source = new URLSearchParams(window.location.search).get("utm_source") || "";
+    if (!source) return;
+    const matchedPlatform = catalogMeta.platforms.find(
+      (platform) => normalizePlatformName(platform.key) === normalizePlatformName(source),
+    );
+    if (matchedPlatform) {
+      setView((current) => current.platform ? current : { ...current, platform: matchedPlatform.key });
+    }
+  }, [catalogMeta, view.platform]);
+
+  useEffect(() => {
     if (!catalogMeta || !overridesReady || !runtimeCatalogReady) return;
     const controller = new AbortController();
     const currentRequest = ++requestNumber.current;
