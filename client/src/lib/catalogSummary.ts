@@ -28,6 +28,13 @@ export type CatalogQuery = { category?: string; platform?: string; brand?: strin
 
 function normalized(value: string | undefined) { return (value || "").normalize("NFKC").trim().toLocaleLowerCase(); }
 
+function productKey(item: CatalogSummary) { return item.sourceProductId || item.id; }
+
+// 价格波动带：以当前结果均价为基准，按百分比划分高/中/低三段，
+// 不使用固定金额，均价变化时阈值同步变化。
+const PRICE_WAVE_HIGH = 1.5; // 均价 +50%
+const PRICE_WAVE_LOW = 0.6; // 均价 -40%
+
 function seededRandom(seed: number | string) {
   let state = 2166136261;
   for (const character of String(seed)) state = Math.imul(state ^ character.charCodeAt(0), 16777619);
@@ -101,6 +108,57 @@ export function randomizeCatalogItems(items: CatalogSummary[], seed: number | st
   return result;
 }
 
+/** Keep a sorted list roughly intact while preventing two styles of one product from sitting together. */
+function interleaveAdjacentGroups(items: CatalogSummary[]): CatalogSummary[] {
+  const result = [...items];
+  for (let index = 1; index < result.length; index += 1) {
+    if (productKey(result[index]) !== productKey(result[index - 1])) continue;
+    let swapIndex = index + 1;
+    while (swapIndex < result.length && productKey(result[swapIndex]) === productKey(result[index - 1])) swapIndex += 1;
+    if (swapIndex < result.length) [result[index], result[swapIndex]] = [result[swapIndex], result[index]];
+  }
+  return result;
+}
+
+/**
+ * Price wave: split the result set into three bands by percentage distance from its average
+ * price, then emit one row from each band in a repeating cycle so prices move up and down.
+ * Same-product styles are interleaved inside every band and across band boundaries.
+ */
+export function waveCatalogItems(items: CatalogSummary[], seed: number | string, start: "random" | "high" | "low" = "random"): CatalogSummary[] {
+  if (!items.length) return [];
+  const random = seededRandom(seed);
+  const average = items.reduce((sum, item) => sum + item.price, 0) / items.length;
+  const high: CatalogSummary[] = [];
+  const middle: CatalogSummary[] = [];
+  const low: CatalogSummary[] = [];
+  for (const item of items) {
+    if (average > 0 && item.price > average * PRICE_WAVE_HIGH) high.push(item);
+    else if (average > 0 && item.price <= average * PRICE_WAVE_LOW) low.push(item);
+    else middle.push(item);
+  }
+  const queues = {
+    high: interleaveWithinGroups(high, random),
+    middle: interleaveWithinGroups(middle, random),
+    low: interleaveWithinGroups(low, random),
+  };
+  const offsets = { high: 0, middle: 0, low: 0 };
+  const baseOrder: Array<keyof typeof queues> = start === "high" ? ["high", "middle", "low"] : start === "low" ? ["low", "middle", "high"] : ["high", "middle", "low"];
+  const result: CatalogSummary[] = [];
+  while (result.length < items.length) {
+    const order = start === "random" ? shuffle(baseOrder, random) : baseOrder;
+    let emitted = false;
+    for (const key of order) {
+      if (offsets[key] >= queues[key].length) continue;
+      result.push(queues[key][offsets[key]]);
+      offsets[key] += 1;
+      emitted = true;
+    }
+    if (!emitted) break;
+  }
+  return interleaveAdjacentGroups(result);
+}
+
 export function filterCatalogItems(items: CatalogSummary[], query: CatalogQuery): CatalogSummary[] {
   const category = normalized(query.category);
   const platform = normalized(query.platform);
@@ -116,12 +174,13 @@ export function filterCatalogItems(items: CatalogSummary[], query: CatalogQuery)
     return true;
   });
   switch (query.sort || "curated") {
-    case "curated": return filtered;
-    case "price-low": return filtered.sort((a, b) => a.price - b.price || a.id.localeCompare(b.id));
-    case "price-high": return filtered.sort((a, b) => b.price - a.price || a.id.localeCompare(b.id));
-    case "name": return filtered.sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
-    case "recent": return filtered.sort((a, b) => (b.priceCheckedAt || "").localeCompare(a.priceCheckedAt || "") || a.id.localeCompare(b.id));
-    default: return randomizeCatalogItems(filtered, query.seed ?? 0);
+    case "curated": return waveCatalogItems(filtered, query.seed ?? 0, "random");
+    case "random": return randomizeCatalogItems(filtered, query.seed ?? 0);
+    case "price-low": return waveCatalogItems(filtered, query.seed ?? 0, "low");
+    case "price-high": return waveCatalogItems(filtered, query.seed ?? 0, "high");
+    case "name": return interleaveAdjacentGroups(filtered.sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id)));
+    case "recent": return interleaveAdjacentGroups(filtered.sort((a, b) => (b.priceCheckedAt || "").localeCompare(a.priceCheckedAt || "") || a.id.localeCompare(b.id)));
+    default: return waveCatalogItems(filtered, query.seed ?? 0, "random");
   }
 }
 

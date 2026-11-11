@@ -32,11 +32,15 @@ const catalog = [
 ];
 
 describe("spreadsheet catalog ordering", () => {
-  it("uses random order by default and keeps the same visit order stable", () => {
+  it("uses a stable curated wave by default", () => {
     const implicit = filterCatalogItems(catalog, {});
+    const explicit = filterCatalogItems(catalog, { sort: "curated", seed: 0 });
+    expect(implicit.map((entry) => entry.id)).toEqual(explicit.map((entry) => entry.id));
+  });
+
+  it("keeps random order stable for the same seed", () => {
     const explicit = filterCatalogItems(catalog, { sort: "random", seed: 12345 });
     const repeated = filterCatalogItems(catalog, { sort: "random", seed: 12345 });
-    expect(implicit.map((entry) => entry.id)).toEqual(filterCatalogItems(catalog, { sort: "random", seed: 0 }).map((entry) => entry.id));
     expect(explicit.map((entry) => entry.id)).toEqual(repeated.map((entry) => entry.id));
     expect(explicit.map((entry) => entry.id)).not.toEqual(filterCatalogItems(catalog, { sort: "random", seed: 54321 }).map((entry) => entry.id));
   });
@@ -64,8 +68,21 @@ describe("spreadsheet catalog ordering", () => {
     expect([...firstPage.items, ...secondPage.items, ...finalPage.items]).toEqual(ordered);
   });
 
-  it("retains explicit price sorting", () => {
-    const lowToHigh = filterCatalogItems(catalog, { sort: "price-low", seed: 12345 });
-    expect(lowToHigh.map((entry) => entry.price)).toEqual([...lowToHigh.map((entry) => entry.price)].sort((a, b) => a - b));
+  it("orders price sorts as an average-based wave and keeps products apart", () => {
+    const prices = catalog.map((entry) => entry.price);
+    const average = prices.reduce((sum, price) => sum + price, 0) / prices.length;
+    const lowFirst = filterCatalogItems(catalog, { sort: "price-low", seed: 12345 });
+    const highFirst = filterCatalogItems(catalog, { sort: "price-high", seed: 12345 });
+    expect(lowFirst).toHaveLength(catalog.length);
+    expect(highFirst).toHaveLength(catalog.length);
+    expect(lowFirst[0].price).toBeLessThanOrEqual(average * 0.6);
+    expect(highFirst[0].price).toBeGreaterThan(average * 1.5);
+    for (const ordered of [lowFirst, highFirst]) {
+      for (let index = 1; index < ordered.length; index += 1) {
+        expect(ordered[index].sourceProductId).not.toBe(ordered[index - 1].sourceProductId);
+      }
+    }
+    const wavePrices = lowFirst.map((entry) => entry.price);
+    expect(wavePrices).not.toEqual([...wavePrices].sort((a, b) => a - b));
   });
 });
