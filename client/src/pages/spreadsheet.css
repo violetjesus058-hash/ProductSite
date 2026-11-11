@@ -82,6 +82,7 @@
 .spreadsheet-title-row h1 { margin: 0; font: 700 clamp(30px, 4vw, 46px)/1.08 "Playfair Display", Georgia, serif; letter-spacing: -.025em; }
 .spreadsheet-subtitle { margin: 10px 0 0; color: var(--sheet-muted); font-size: 14px; }
 .spreadsheet-toolbar { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 15px; }
+.spreadsheet-toolbar.has-brand { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
 .spreadsheet-select { position: relative; min-height: 72px; display: grid; grid-template-columns: 28px 1fr 18px; grid-template-rows: 1fr 1fr; align-items: center; column-gap: 10px; padding: 11px 14px; border: 1px solid var(--sheet-line); border-radius: 8px; background: var(--sheet-paper); cursor: pointer; }
 .spreadsheet-select:hover { border-color: #c8c6bb; }
 .spreadsheet-control-platform.is-priority { border: 2px solid var(--sheet-accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--sheet-accent) 14%, transparent), 0 8px 22px color-mix(in srgb, var(--sheet-accent) 16%, transparent); }
@@ -268,6 +269,7 @@
   .spreadsheet-title-row h1 { font-size: 31px; }
   .spreadsheet-subtitle { font-size: 12px; }
   .spreadsheet-toolbar { grid-template-columns: 1fr; gap: 8px; }
+  .spreadsheet-toolbar.has-brand { grid-template-columns: 1fr; }
   .spreadsheet-select { min-height: 58px; grid-template-columns: 25px 1fr 16px; }
   .spreadsheet-column-labels { display: none; }
   .spreadsheet-quick-categories { padding: 13px 11px; }

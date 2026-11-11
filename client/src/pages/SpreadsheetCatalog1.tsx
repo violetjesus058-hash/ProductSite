@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "wouter";
-import { ArrowDownWideNarrow, ArrowLeft, ArrowRight, Check, ChevronDown, Copy, ExternalLink, LayoutGrid, Moon, Share2, Store, Sun, Table2, X } from "lucide-react";
+import { ArrowDownWideNarrow, ArrowLeft, ArrowRight, Check, ChevronDown, Copy, ExternalLink, LayoutGrid, Moon, Share2, Store, Sun, Tag, Table2, X } from "lucide-react";
 import "./spreadsheet.css";
 import { initializeAnalytics, trackEvent, trackOnce } from "@/lib/analytics";
 import { filterCatalogItems, paginateCatalogItems, type CatalogSummary, type CatalogSort } from "@/lib/catalogSummary";
@@ -16,10 +16,11 @@ type CatalogMeta = {
   categories: Array<{ key: string; label: string }>;
   quickCategories?: Array<{ key: string; label: string; thumbnail: string }>;
   platforms: Array<{ key: string; label: string }>;
+  brands?: Array<{ key: string; label: string; count: number }>;
 };
 type CatalogPageRow = Omit<CatalogSummary, "platformKeys"> & { platformKeys?: string[] };
 type PagePayload = { page: number; pageSize: number; total: number; totalPages: number; items: CatalogPageRow[] };
-type ViewState = { category: string; platform: string; sort: CatalogSort; page: number };
+type ViewState = { category: string; platform: string; brand: string; sort: CatalogSort; page: number };
 type QuickCategoryIntent = { category: string; token: number };
 type MenuPermissionNotice = { title: string; message: string; dismissLabel: string; left: number; top: number; width: number };
 type PreviewStyle = { id: string; styleKey: string; styleLabel: string; image: string; price: number; currency: string };
@@ -198,6 +199,7 @@ function readViewState(): ViewState {
   return {
     category: params.get("category") || "",
     platform: requestedPlatform === "all" || requestedPlatform === "allplatforms" ? "" : requestedPlatform,
+    brand: params.get("brand") || "",
     sort: allowedSorts.includes(sortValue as CatalogSort) ? sortValue as CatalogSort : "curated",
     page: Number.isFinite(parsedPage) ? Math.max(1, Math.floor(parsedPage)) : 1,
   };
@@ -354,13 +356,14 @@ export default function SpreadsheetCatalog1() {
     const url = new URL(window.location.href);
     const params = url.searchParams;
     params.set("view", "styles");
-    for (const key of ["q", "category", "platform", "sort", "page"]) params.delete(key);
+    for (const key of ["q", "category", "platform", "brand", "sort", "page"]) params.delete(key);
     if (view.category) params.set("category", view.category);
     if (view.platform) params.set("platform", view.platform);
+    if (view.brand && (meta?.brands?.length || 0) > 0) params.set("brand", view.brand);
     if (view.sort !== "curated") params.set("sort", view.sort);
     if (view.page > 1) params.set("page", String(view.page));
     window.history.replaceState(window.history.state, "", `${url.pathname}?${params.toString()}`);
-  }, [view]);
+  }, [view, meta]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -455,7 +458,7 @@ export default function SpreadsheetCatalog1() {
       try {
         const index = runtimeCatalogIndex || await loadCatalogIndex();
         if (controller.signal.aborted || requestNumber.current !== currentRequest) return;
-        const filtered = filterCatalogItems(index, { category: view.category, platform: view.platform, sort: view.sort, seed: shuffleSeed });
+        const filtered = filterCatalogItems(index, { category: view.category, platform: view.platform, brand: (catalogMeta?.brands?.length || 0) > 0 ? view.brand : "", sort: view.sort, seed: shuffleSeed });
         const result = paginateCatalogItems(filtered, view.page, pageSize);
         if (result.page !== view.page) setView((old) => ({ ...old, page: result.page }));
         if (requestNumber.current === currentRequest) setPayload({ ...result, totalPages: result.totalPages });
@@ -480,7 +483,7 @@ export default function SpreadsheetCatalog1() {
     };
     void load();
     return () => controller.abort();
-  }, [catalogMeta, overridesReady, runtimeCatalogReady, runtimeCatalogIndex, pageSize, view.page, view.category, view.platform, view.sort, shuffleSeed]);
+  }, [catalogMeta, overridesReady, runtimeCatalogReady, runtimeCatalogIndex, pageSize, view.page, view.category, view.platform, view.brand, view.sort, shuffleSeed]);
 
   useEffect(() => {
     if (!imagePreviewItem) return;
@@ -505,6 +508,8 @@ export default function SpreadsheetCatalog1() {
   const selectedCategoryLabel = view.category === LONG_SLEEVE_CATEGORY ? "Long sleeve" : categories.find((item) => item.key === view.category)?.label || "All categories";
   const platforms = catalogMeta?.platforms || [];
   const selectedPlatformLabel = platforms.find((item) => item.key === view.platform)?.label;
+  const brandOptions = catalogMeta?.brands || [];
+  const selectedBrandLabel = brandOptions.find((item) => item.key === view.brand)?.label || "All brands";
   // 带 platform 参数进入或在下拉框切换平台时，标题跟随切换成对应的 Spreadsheet 名称
   const catalogHeading = selectedPlatformLabel ? `RIVORA Style Catalog - ${selectedPlatformLabel} Spreadsheet` : `THE ULTIMATE ${entryAgent.toUpperCase()} SPREADSHEET (2026)`;
   const rows = payload?.items || [];
@@ -536,7 +541,7 @@ export default function SpreadsheetCatalog1() {
 
   function clearFilters() {
     cancelQuickCategoryIntent();
-    setView((old) => ({ ...old, category: "", platform: "", sort: "curated", page: 1 }));
+    setView((old) => ({ ...old, category: "", platform: "", brand: "", sort: "curated", page: 1 }));
   }
 
   function setCategory(category: string) {
@@ -565,6 +570,12 @@ export default function SpreadsheetCatalog1() {
       trackEvent("table_filter_use", { platform, page_type: "table_catalog", filter_type: "platform", previous_platform: view.platform || "all", page_number: view.page, sort: view.sort });
       trackEvent("spreadsheet_platform_select", { page_type: "spreadsheet", platform, previous_platform: view.platform || "all", page_number: view.page, category: view.category || "all", sort: view.sort, selection_mode: "explicit_filter" });
     }
+  }
+
+  function setBrand(brand: string) {
+    cancelQuickCategoryIntent();
+    updateView({ brand, page: 1 });
+    if (brand) trackEvent("table_filter_use", { brand, page_type: "table_catalog", filter_type: "brand", previous_brand: view.brand || "all", page_number: view.page, sort: view.sort });
   }
 
   function setSort(sort: CatalogSort) {
@@ -733,7 +744,7 @@ export default function SpreadsheetCatalog1() {
         <div><p className="spreadsheet-eyebrow"><Table2 size={16} /> PRODUCT CATALOG</p><h1>{catalogHeading}</h1><p className="spreadsheet-subtitle">Browse product styles, compare prices and find buying platforms.</p></div>
       </div>
 
-      <div className="spreadsheet-toolbar" aria-label="Catalog filters">
+      <div className={`spreadsheet-toolbar ${brandOptions.length > 0 ? "has-brand" : ""}`} aria-label="Catalog filters">
         <label className="spreadsheet-select spreadsheet-control-category">
           <LayoutGrid className="spreadsheet-control-icon" size={21} strokeWidth={1.9} aria-hidden="true" />
           <span className="spreadsheet-select-label">Category</span>
@@ -741,6 +752,16 @@ export default function SpreadsheetCatalog1() {
           <select aria-label="Category" value={view.category} onChange={(event) => setCategory(event.target.value)}><option value="">All categories</option>{categoryOptions.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}</select>
           <ChevronDown className="spreadsheet-select-chevron" size={16} aria-hidden="true" />
         </label>
+        {brandOptions.length > 0 && <label className="spreadsheet-select spreadsheet-control-brand">
+          <Tag className="spreadsheet-control-icon" size={21} strokeWidth={1.9} aria-hidden="true" />
+          <span className="spreadsheet-select-label">Brand</span>
+          <span className="spreadsheet-select-value">{selectedBrandLabel}</span>
+          <select aria-label="Brand" value={view.brand} onChange={(event) => setBrand(event.target.value)}>
+            <option value="">All brands</option>
+            {brandOptions.map((item) => <option key={item.key} value={item.key}>{item.label} ({item.count})</option>)}
+          </select>
+          <ChevronDown className="spreadsheet-select-chevron" size={16} aria-hidden="true" />
+        </label>}
         <div className={`spreadsheet-select spreadsheet-control-platform ${view.platform ? "has-selection" : "is-priority"}`}>
           <PlatformPicker platforms={platforms} value={view.platform} onChange={setPlatform} />
         </div>
@@ -767,7 +788,7 @@ export default function SpreadsheetCatalog1() {
         })}</div>
       </div>
 
-      <div className="spreadsheet-results" aria-live="polite" aria-busy={loading}><span className="spreadsheet-results-status">{loading && <span className="spreadsheet-loader spreadsheet-results-loader" aria-hidden="true" />}{loading ? quickCategoryBusy && pendingQuickCategory && view.category === pendingQuickCategory ? `Loading ${quickCategoryOptions.find((item) => item.key === pendingQuickCategory)?.label}…` : "Loading catalog…" : countLabel}</span>{(view.category || view.platform || view.sort !== "random") && <button type="button" onClick={clearFilters}>Clear filters</button>}</div>
+      <div className="spreadsheet-results" aria-live="polite" aria-busy={loading}><span className="spreadsheet-results-status">{loading && <span className="spreadsheet-loader spreadsheet-results-loader" aria-hidden="true" />}{loading ? quickCategoryBusy && pendingQuickCategory && view.category === pendingQuickCategory ? `Loading ${quickCategoryOptions.find((item) => item.key === pendingQuickCategory)?.label}…` : "Loading catalog…" : countLabel}</span>{(view.category || view.platform || view.brand || view.sort !== "random") && <button type="button" onClick={clearFilters}>Clear filters</button>}</div>
 
       {error ? <section className="spreadsheet-state" role="alert"><h2>Catalog data is temporarily unavailable.</h2><p>{error}</p><button type="button" onClick={() => { catalogIndexPromise = null; setError(""); setPayload(null); setMeta(null); window.location.reload(); }}>Retry</button></section>
         : loading && rows.length === 0 ? <div className="spreadsheet-state" role="status"><span className="spreadsheet-loader" /> Loading catalog…</div>

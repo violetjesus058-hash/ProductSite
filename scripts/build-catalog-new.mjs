@@ -11,7 +11,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
-import { readCatalogNewDatasets } from "./lib/catalog-new-dataset.mjs";
+import { parseCsvRows, readCatalogNewDatasets } from "./lib/catalog-new-dataset.mjs";
 import { applyStyleImages } from "./lib/style-image-overlay.mjs";
 
 // 与主站 catalog-data 的平台清单保持一致（35 个），否则 /spreadsheet1 的 platform 参数会因
@@ -70,6 +70,53 @@ function toSummary(record) {
   };
 }
 
+const UNBRANDED = "Unbranded";
+
+function normalizeBrandToken(value) {
+  const text = String(value || "").trim();
+  if (!text) return "";
+  if (/^(无|无品牌|none|unknown|n\/a)$/i.test(text)) return UNBRANDED;
+  return text;
+}
+
+// 品牌 CSV 是人工核验导出，商品 id 仍是批量替换前的旧 id；用构建时已有的
+// oldId → targetId 映射对齐到 /spreadsheet1 的 sourceProductId。
+function loadBrandMap(file, idMap, targetIds) {
+  if (!fs.existsSync(file)) {
+    console.warn(`品牌数据    : 未找到 ${file}，跳过品牌字段`);
+    return null;
+  }
+  const table = parseCsvRows(fs.readFileSync(file, "utf8").replace(/^\ufeff/, ""));
+  if (!table.length) return null;
+  const header = table.shift().map((value) => value.trim());
+  const map = new Map();
+  let matchedRows = 0;
+  for (const values of table) {
+    const row = {};
+    header.forEach((key, index) => { row[key] = String(values[index] ?? "").trim(); });
+    const ids = [row["商品ID"], ...String(row["关联商品ID"] || "").split(/[;|]/).map((value) => value.trim())].filter(Boolean);
+    const targets = new Set();
+    for (const id of ids) {
+      const target = idMap.get(id) || id;
+      if (targetIds.has(target)) targets.add(target);
+    }
+    if (!targets.size) continue;
+    matchedRows += 1;
+    const tokens = [];
+    for (const value of String(row["品牌"] || "").split(/[;/]/)) {
+      const token = normalizeBrandToken(value);
+      if (token && !tokens.includes(token)) tokens.push(token);
+    }
+    for (const target of targets) {
+      if (!map.has(target)) map.set(target, []);
+      const brands = map.get(target);
+      for (const token of tokens) if (!brands.includes(token)) brands.push(token);
+    }
+  }
+  console.log(`品牌数据    : ${matchedRows}/${table.length} 行匹配，覆盖 ${map.size} 个商品`);
+  return map;
+}
+
 // 平台清单一旦和主站漂移，前端会把 URL 里的 platform 静默重置成「All platforms」，
 // 表现为同一平台在主站能筛、在 /spreadsheet1 筛不动，所以构建前先做对齐校验。
 function assertPlatformsAligned() {
@@ -121,6 +168,17 @@ function main() {
   const summaries = records.map(toSummary).filter((item) => item.id && item.name);
   const dropped = records.length - summaries.length;
 
+  // /spreadsheet1 专属品牌字段：品牌 CSV 的旧 id 先对齐到当前 sourceProductId。
+  const targetIds = new Set(summaries.map((item) => item.sourceProductId));
+  const brandMap = loadBrandMap(path.resolve("data/brand-audit.csv"), stats.idMap || new Map(), targetIds);
+  if (brandMap) {
+    for (const item of summaries) {
+      const brands = brandMap.get(item.sourceProductId) || [];
+      item.brand = brands[0] || UNBRANDED;
+      item.brands = brands.length ? brands : [UNBRANDED];
+    }
+  }
+
   const categoryCount = {};
   const platformSet = new Set();
   for (const item of summaries) {
@@ -162,6 +220,21 @@ function main() {
     const meta = JSON.parse(fs.readFileSync(metaSource, "utf8"));
     meta.total = clean.length;
     meta.generatedAt = new Date().toISOString();
+    if (brandMap) {
+      const brandCounts = new Map();
+      const seenProducts = new Set();
+      for (const item of summaries) {
+        if (seenProducts.has(item.sourceProductId)) continue;
+        seenProducts.add(item.sourceProductId);
+        for (const brand of item.brands) brandCounts.set(brand, (brandCounts.get(brand) || 0) + 1);
+      }
+      meta.brands = [...brandCounts.entries()]
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+        .map(([key, count]) => ({ key, label: key, count }));
+      console.log(`品牌清单    : ${meta.brands.length} 个（${meta.brands.slice(0, 5).map((item) => `${item.label} ${item.count}`).join(", ")}…）`);
+    } else {
+      delete meta.brands;
+    }
     fs.writeFileSync(metaFile, JSON.stringify(meta), "utf8");
     console.log(`已更新 ${metaFile}：total=${meta.total}`);
   }

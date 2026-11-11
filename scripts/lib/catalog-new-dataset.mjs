@@ -181,6 +181,7 @@ export function prepareCatalogNewDatasets(csvTexts, options = {}) {
     mergedTargets: [...mergedTargets],
     dedupedRows,
     crossFileDuplicates,
+    idMap: targetIdByProduct,
     splitOff,
     emptyNewLinkProducts: [...nextIdByProduct.entries()].filter(([, nextId]) => !nextId).map(([oldId]) => oldId),
   };

@@ -17,11 +17,14 @@ export type CatalogSummary = {
   platformKeys: string[];
   hasStyleImage: boolean;
   priceCheckedAt: string;
+  // /spreadsheet1 品牌筛选：brand 为主品牌，brands 支持一商品多品牌。
+  brand?: string;
+  brands?: string[];
   // 批量替换后的商品 id，用于所有平台的购买链接（未替换的数据集不含该字段）。
   linkTargetId?: string;
 };
 export type CatalogSort = "curated" | "random" | "price-low" | "price-high" | "name" | "recent";
-export type CatalogQuery = { category?: string; platform?: string; sort?: CatalogSort; seed?: number | string };
+export type CatalogQuery = { category?: string; platform?: string; brand?: string; sort?: CatalogSort; seed?: number | string };
 
 function normalized(value: string | undefined) { return (value || "").normalize("NFKC").trim().toLocaleLowerCase(); }
 
@@ -101,10 +104,15 @@ export function randomizeCatalogItems(items: CatalogSummary[], seed: number | st
 export function filterCatalogItems(items: CatalogSummary[], query: CatalogQuery): CatalogSummary[] {
   const category = normalized(query.category);
   const platform = normalized(query.platform);
+  const brand = normalized(query.brand);
   const filtered = items.filter((item) => {
     if (isUnavailableCategory(item.category)) return false;
     if (category === LONG_SLEEVE_CATEGORY ? !isLongSleeve(item) : category && normalized(item.category) !== category) return false;
     if (platform && !item.platformKeys.some((key) => normalized(key) === platform)) return false;
+    if (brand) {
+      const brands = item.brands?.length ? item.brands : item.brand ? [item.brand] : [];
+      if (!brands.some((value) => normalized(value) === brand)) return false;
+    }
     return true;
   });
   switch (query.sort || "curated") {
