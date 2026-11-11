@@ -75,7 +75,8 @@ const UNBRANDED = "Unbranded";
 function normalizeBrandToken(value) {
   const text = String(value || "").trim();
   if (!text) return "";
-  if (/^(无|无品牌|none|unknown|n\/a)$/i.test(text)) return UNBRANDED;
+  // 「子路潮品」是货源/店铺词，按需求统一归入无品牌。
+  if (text === "子路潮品" || /^(无|无品牌|none|unknown|n\/a)$/i.test(text)) return UNBRANDED;
   return text;
 }
 

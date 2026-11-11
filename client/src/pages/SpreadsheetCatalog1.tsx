@@ -510,6 +510,8 @@ export default function SpreadsheetCatalog1() {
   const selectedPlatformLabel = platforms.find((item) => item.key === view.platform)?.label;
   const brandOptions = catalogMeta?.brands || [];
   const selectedBrandLabel = brandOptions.find((item) => item.key === view.brand)?.label || "All brands";
+  // 品牌菜单卡片只展示商品数前六的品牌，点击即筛选，再点一次取消。
+  const brandCards = [...brandOptions].sort((a, b) => b.count - a.count).slice(0, 6);
   // 带 platform 参数进入或在下拉框切换平台时，标题跟随切换成对应的 Spreadsheet 名称
   const catalogHeading = selectedPlatformLabel ? `RIVORA Style Catalog - ${selectedPlatformLabel} Spreadsheet` : `THE ULTIMATE ${entryAgent.toUpperCase()} SPREADSHEET (2026)`;
   const rows = payload?.items || [];
@@ -787,6 +789,14 @@ export default function SpreadsheetCatalog1() {
           return <button key={item.key} type="button" className={[active ? "is-active" : "", pending ? "is-loading" : ""].filter(Boolean).join(" ")} aria-pressed={active} aria-busy={pending} disabled={loading || quickCategoryBusy} onClick={() => setQuickCategory(active ? "" : item.key, item.key)}><img className="spreadsheet-quick-category-image" src={item.thumbnail} alt="" aria-hidden="true" loading="lazy" decoding="async" /><span className="spreadsheet-quick-category-button-label"><strong>{item.label}</strong>{pending ? <span className="spreadsheet-quick-category-spinner" aria-hidden="true" /> : <ArrowRight size={15} aria-hidden="true" />}</span></button>;
         })}</div>
       </div>
+
+      {brandCards.length > 0 && <div className="spreadsheet-brand-cards" role="group" aria-label="Brand filters">
+        <span className="spreadsheet-brand-cards-label"><strong>Brands</strong><small>Top 6 by product count</small></span>
+        <div className="spreadsheet-brand-card-list">{brandCards.map((item) => {
+          const active = view.brand === item.key;
+          return <button key={item.key} type="button" className={active ? "is-active" : ""} aria-pressed={active} onClick={() => setBrand(active ? "" : item.key)}><strong>{item.label}</strong><small>{item.count} products</small></button>;
+        })}</div>
+      </div>}
 
       <div className="spreadsheet-results" aria-live="polite" aria-busy={loading}><span className="spreadsheet-results-status">{loading && <span className="spreadsheet-loader spreadsheet-results-loader" aria-hidden="true" />}{loading ? quickCategoryBusy && pendingQuickCategory && view.category === pendingQuickCategory ? `Loading ${quickCategoryOptions.find((item) => item.key === pendingQuickCategory)?.label}…` : "Loading catalog…" : countLabel}</span>{(view.category || view.platform || view.brand || view.sort !== "random") && <button type="button" onClick={clearFilters}>Clear filters</button>}</div>
 

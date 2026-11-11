@@ -138,6 +138,16 @@
 .spreadsheet-quick-category-button-label svg { flex: 0 0 auto; }
 .spreadsheet-quick-category-spinner { width: 13px; height: 13px; border: 2px solid #ffffff70; border-top-color: white; border-radius: 50%; animation: spreadsheet-spin .7s linear infinite; }
 @keyframes spreadsheet-spin { to { transform: rotate(360deg); } }
+.spreadsheet-brand-cards { margin-top: 13px; padding: 15px 17px; border: 1px solid var(--sheet-line); background: var(--sheet-paper); }
+.spreadsheet-brand-cards-label { display: flex; align-items: baseline; gap: 10px; margin-bottom: 11px; }
+.spreadsheet-brand-cards-label strong { font-size: 12px; }
+.spreadsheet-brand-cards-label small { color: var(--sheet-muted); font-size: 10px; }
+.spreadsheet-brand-card-list { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+.spreadsheet-brand-card-list button { min-width: 0; min-height: 62px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 5px; padding: 10px 13px; border: 1px solid var(--sheet-line); border-radius: 7px; background: var(--sheet-soft); color: var(--sheet-ink); cursor: pointer; text-align: left; }
+.spreadsheet-brand-card-list button:hover, .spreadsheet-brand-card-list button.is-active { border-color: var(--sheet-accent); box-shadow: 0 0 0 1px var(--sheet-accent); }
+.spreadsheet-brand-card-list button.is-active strong { color: var(--sheet-accent); }
+.spreadsheet-brand-card-list strong { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
+.spreadsheet-brand-card-list small { color: var(--sheet-muted); font: 9px "DM Mono", monospace; letter-spacing: .04em; text-transform: uppercase; }
 .spreadsheet-results { min-height: 51px; display: flex; justify-content: space-between; align-items: center; color: var(--sheet-muted); font: 11px "DM Mono", monospace; }
 .spreadsheet-results button { border: 0; background: transparent; color: var(--sheet-accent); cursor: pointer; font-size: 11px; }
 .spreadsheet-loader { display: inline-block; width: 17px; height: 17px; border: 2px solid var(--sheet-line); border-top-color: var(--sheet-accent); border-radius: 50%; animation: spreadsheet-spin .7s linear infinite; vertical-align: middle; }
@@ -248,6 +258,7 @@
   .spreadsheet-content { width: min(100% - 32px, 760px); padding-top: 32px; }
   .spreadsheet-quick-category-buttons { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .spreadsheet-quick-category-buttons button { min-height: 132px; }
+  .spreadsheet-brand-card-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .spreadsheet-table { min-width: 1100px; }
 }
 @media (max-width: 640px) {
@@ -276,6 +287,10 @@
   .spreadsheet-quick-category-label { flex-direction: column; gap: 2px; }
   .spreadsheet-quick-category-buttons { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   .spreadsheet-quick-category-buttons button { min-height: 112px; }
+  .spreadsheet-brand-cards { padding: 13px 11px; }
+  .spreadsheet-brand-cards-label { flex-direction: column; gap: 2px; }
+  .spreadsheet-brand-card-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .spreadsheet-brand-card-list button { min-height: 56px; }
   .spreadsheet-results { min-height: 43px; }
   .spreadsheet-table-wrap { display: none; }
   .spreadsheet-mobile-list { display: flex; flex-direction: column; gap: 8px; }
