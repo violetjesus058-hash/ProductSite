@@ -108,14 +108,39 @@ export function randomizeCatalogItems(items: CatalogSummary[], seed: number | st
   return result;
 }
 
-/** Keep a sorted list roughly intact while preventing two styles of one product from sitting together. */
+/** Spread adjacent same-product runs while preserving the original order as much as possible. */
 function interleaveAdjacentGroups(items: CatalogSummary[]): CatalogSummary[] {
-  const result = [...items];
-  for (let index = 1; index < result.length; index += 1) {
-    if (productKey(result[index]) !== productKey(result[index - 1])) continue;
-    let swapIndex = index + 1;
-    while (swapIndex < result.length && productKey(result[swapIndex]) === productKey(result[index - 1])) swapIndex += 1;
-    if (swapIndex < result.length) [result[index], result[swapIndex]] = [result[swapIndex], result[index]];
+  if (!items.length) return [];
+  const groups: CatalogSummary[][] = [];
+  for (const item of items) {
+    const last = groups[groups.length - 1];
+    if (last && productKey(last[0]) === productKey(item)) last.push(item);
+    else groups.push([item]);
+  }
+  const offsets = new Array(groups.length).fill(0);
+  const result: CatalogSummary[] = [];
+  let previous = "";
+  while (result.length < items.length) {
+    let picked = -1;
+    let bestRemaining = 0;
+    for (let index = 0; index < groups.length; index += 1) {
+      const remaining = groups[index].length - offsets[index];
+      if (remaining <= 0 || remaining <= bestRemaining) continue;
+      if (productKey(groups[index][offsets[index]]) === previous) continue;
+      bestRemaining = remaining;
+      picked = index;
+    }
+    if (picked === -1) {
+      for (let index = 0; index < groups.length; index += 1) {
+        const remaining = groups[index].length - offsets[index];
+        if (remaining > bestRemaining) { bestRemaining = remaining; picked = index; }
+      }
+    }
+    if (picked === -1) break;
+    const item = groups[picked][offsets[picked]];
+    offsets[picked] += 1;
+    result.push(item);
+    previous = productKey(item);
   }
   return result;
 }
@@ -145,18 +170,52 @@ export function waveCatalogItems(items: CatalogSummary[], seed: number | string,
   const offsets = { high: 0, middle: 0, low: 0 };
   const baseOrder: Array<keyof typeof queues> = start === "high" ? ["high", "middle", "low"] : start === "low" ? ["low", "middle", "high"] : ["high", "middle", "low"];
   const result: CatalogSummary[] = [];
+  let previous = "";
   while (result.length < items.length) {
     const order = start === "random" ? shuffle(baseOrder, random) : baseOrder;
     let emitted = false;
     for (const key of order) {
+      const queue = queues[key];
+      let index = offsets[key];
+      if (index >= queue.length) continue;
+      // 同一商品的款式可能同时落在两个价格带，跨带衔接时把冲突项与带内下一条不同商品互换。
+      if (productKey(queue[index]) === previous) {
+        let swapIndex = index + 1;
+        while (swapIndex < queue.length && productKey(queue[swapIndex]) === previous) swapIndex += 1;
+        if (swapIndex >= queue.length) continue;
+        [queue[index], queue[swapIndex]] = [queue[swapIndex], queue[index]];
+      }
+      result.push(queue[index]);
+      offsets[key] = index + 1;
+      previous = productKey(queue[index]);
+      emitted = true;
+    }
+    if (emitted) continue;
+    // 三个价格带的队首都属于上一行商品时，在带内找一条不同商品的款式插进来。
+    let forced = false;
+    for (const key of order) {
+      const queue = queues[key];
+      for (let index = offsets[key]; index < queue.length; index += 1) {
+        if (productKey(queue[index]) === previous) continue;
+        const [item] = queue.splice(index, 1);
+        result.push(item);
+        previous = productKey(item);
+        forced = true;
+        break;
+      }
+      if (forced) break;
+    }
+    if (forced) continue;
+    // 剩余行全部属于同一商品时无法再拆分，按原顺序输出。
+    for (const key of order) {
       if (offsets[key] >= queues[key].length) continue;
       result.push(queues[key][offsets[key]]);
       offsets[key] += 1;
-      emitted = true;
+      previous = productKey(result[result.length - 1]);
+      break;
     }
-    if (!emitted) break;
   }
-  return interleaveAdjacentGroups(result);
+  return result;
 }
 
 export function filterCatalogItems(items: CatalogSummary[], query: CatalogQuery): CatalogSummary[] {
