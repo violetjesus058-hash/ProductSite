@@ -17,7 +17,7 @@ import fs from "node:fs/promises";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { readCatalogNewDatasets } from "./lib/catalog-new-dataset.mjs";
+import { parseCsvRows, readCatalogNewDatasets } from "./lib/catalog-new-dataset.mjs";
 import { applyStyleImages } from "./lib/style-image-overlay.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -46,6 +46,49 @@ function loadBrandOverrides() {
 }
 
 const brandOverrides = loadBrandOverrides();
+
+const UNBRANDED = "Unbranded";
+
+function normalizeBrandToken(value) {
+  const text = String(value || "").trim();
+  if (!text) return "";
+  // 「子路潮品」是货源/店铺词，按需求统一归入无品牌。
+  if (text === "子路潮品" || /^(无|无品牌|none|unknown|n\/a)$/i.test(text)) return UNBRANDED;
+  return text;
+}
+
+// 品牌 CSV 使用当前 catalog-data 的商品 id，可直接匹配；多品牌按 / 或 ; 拆分。
+function loadBrandMap(file, targetIds) {
+  if (!existsSync(file)) {
+    console.warn(`品牌数据      : 未找到 ${file}，跳过品牌字段`);
+    return null;
+  }
+  const table = parseCsvRows(readFileSync(file, "utf8").replace(/^\ufeff/, ""));
+  if (!table.length) return null;
+  const header = table.shift().map((value) => value.trim());
+  const map = new Map();
+  let matchedRows = 0;
+  for (const values of table) {
+    const row = {};
+    header.forEach((key, index) => { row[key] = String(values[index] ?? "").trim(); });
+    const ids = [row["商品ID"], ...String(row["关联商品ID"] || "").split(/[;|]/).map((value) => value.trim())].filter(Boolean);
+    const targets = new Set(ids.filter((id) => targetIds.has(id)));
+    if (!targets.size) continue;
+    matchedRows += 1;
+    const tokens = [];
+    for (const value of String(row["品牌"] || "").split(/[;/]/)) {
+      const token = normalizeBrandToken(value);
+      if (token && !tokens.includes(token)) tokens.push(token);
+    }
+    for (const target of targets) {
+      if (!map.has(target)) map.set(target, []);
+      const brands = map.get(target);
+      for (const token of tokens) if (!brands.includes(token)) brands.push(token);
+    }
+  }
+  console.log(`品牌数据      : ${matchedRows}/${table.length} 行匹配，覆盖 ${map.size} 个商品`);
+  return map;
+}
 
 const categoryLabels = {
   clothing: "Clothing",
@@ -331,6 +374,28 @@ async function main() {
   const hiddenRows = allRecords.filter((row) => unavailableCategories.has(normalizeCategory(row.category)));
   // 表格索引与首页分页使用同一份锯齿顺序；fragrance 行追加在末尾，前端过滤后仍与首页同序。
   const summaries = [...orderedPageRows, ...hiddenRows].map(toSummary).filter((item) => item.id && item.name);
+  // /spreadsheet 品牌筛选：与 /spreadsheet1 共用同一份人工核验品牌数据。
+  const brandMap = loadBrandMap(path.join(root, "data/brand-audit.csv"), new Set(summaries.map((item) => item.sourceProductId)));
+  let brandList;
+  if (brandMap) {
+    for (const item of summaries) {
+      const override = brandOverrides.get(item.sourceProductId);
+      const brands = override ? [override] : brandMap.get(item.sourceProductId) || [];
+      item.brand = brands[0] || UNBRANDED;
+      item.brands = brands.length ? brands : [UNBRANDED];
+    }
+    const brandCounts = new Map();
+    const seenProducts = new Set();
+    for (const item of summaries) {
+      if (seenProducts.has(item.sourceProductId)) continue;
+      seenProducts.add(item.sourceProductId);
+      for (const brand of item.brands) brandCounts.set(brand, (brandCounts.get(brand) || 0) + 1);
+    }
+    brandList = [...brandCounts.entries()]
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .map(([key, count]) => ({ key, label: key, count }));
+    console.log(`品牌清单      : ${brandList.length} 个（${brandList.slice(0, 5).map((item) => `${item.label} ${item.count}`).join(", ")}…）`);
+  }
   const products = orderedPageRows.map(toProduct);
 
   await fs.rm(outputRoot, { recursive: true, force: true });
@@ -467,6 +532,7 @@ async function main() {
     categories: categoryKeys.filter((key) => !unavailableCategories.has(key)).map((key) => ({ key, label: categoryLabels[key] })),
     quickCategories,
     platforms: [...platformMap.values()].sort((a, b) => a.label.localeCompare(b.label)),
+    ...(brandList ? { brands: brandList } : {}),
   });
   // 主站首页索引复用同一份 meta
   await jsonWrite(path.join(homeRoot, "meta.json"), {
