@@ -795,7 +795,7 @@ export default function SpreadsheetCatalog1() {
       {brandCards.length > 0 && <div className="spreadsheet-brand-cards" role="group" aria-label="Brand filters">
         <span className="spreadsheet-brand-cards-label"><strong>Brands</strong><small>All Brands + top 5</small></span>
         <div className="spreadsheet-brand-card-list">
-          <button type="button" className={allBrandsActive ? "is-active" : ""} aria-pressed={allBrandsActive} onClick={() => setBrand(allBrandsActive ? "" : ALL_BRANDS)}><strong>All Brands</strong></button>
+          <button type="button" className={`is-all-brands${allBrandsActive ? " is-active" : ""}`} aria-pressed={allBrandsActive} onClick={() => setBrand(allBrandsActive ? "" : ALL_BRANDS)}><strong>All Brands</strong></button>
           {brandCards.map((item) => {
             const active = view.brand === item.key;
             return <button key={item.key} type="button" className={active ? "is-active" : ""} aria-pressed={active} onClick={() => setBrand(active ? "" : item.key)}><strong>{item.label}</strong></button>;
