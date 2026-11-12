@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { filterCatalogItems, paginateCatalogItems, type CatalogSummary } from "./catalogSummary";
+import { ALL_BRANDS, filterCatalogItems, paginateCatalogItems, type CatalogSummary } from "./catalogSummary";
 
 function item(id: string, sourceProductId: string, category: string, price: number): CatalogSummary {
   return {
@@ -84,5 +84,16 @@ describe("spreadsheet catalog ordering", () => {
     }
     const wavePrices = lowFirst.map((entry) => entry.price);
     expect(wavePrices).not.toEqual([...wavePrices].sort((a, b) => a - b));
+  });
+
+  it("filters All Brands to products with a real brand tag", () => {
+    const branded = [
+      { ...item("g-1", "product-g", "shoe", 10), brand: "Nike", brands: ["Nike"] },
+      { ...item("h-1", "product-h", "shoe", 20), brand: "Unbranded", brands: ["Unbranded"] },
+      { ...item("i-1", "product-i", "shoe", 30), brand: "Unbranded", brands: ["Unbranded", "adidas"] },
+      { ...item("j-1", "product-j", "shoe", 40), brand: "Unbranded" },
+    ];
+    const result = filterCatalogItems(branded, { brand: ALL_BRANDS, sort: "random", seed: 1 });
+    expect(result.map((entry) => entry.id).sort()).toEqual(["g-1", "i-1"]);
   });
 });

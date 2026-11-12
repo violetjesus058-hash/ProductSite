@@ -24,6 +24,8 @@ export type CatalogSummary = {
   linkTargetId?: string;
 };
 export type CatalogSort = "curated" | "random" | "price-low" | "price-high" | "name" | "recent";
+// 品牌卡片「All Brands」的筛选值：只保留有品牌标记的商品，无品牌不参与。
+export const ALL_BRANDS = "all";
 export type CatalogQuery = { category?: string; platform?: string; brand?: string; sort?: CatalogSort; seed?: number | string };
 
 function normalized(value: string | undefined) { return (value || "").normalize("NFKC").trim().toLocaleLowerCase(); }
@@ -222,11 +224,15 @@ export function filterCatalogItems(items: CatalogSummary[], query: CatalogQuery)
   const category = normalized(query.category);
   const platform = normalized(query.platform);
   const brand = normalized(query.brand);
+  const brandedOnly = brand === ALL_BRANDS;
   const filtered = items.filter((item) => {
     if (isUnavailableCategory(item.category)) return false;
     if (category === LONG_SLEEVE_CATEGORY ? !isLongSleeve(item) : category && normalized(item.category) !== category) return false;
     if (platform && !item.platformKeys.some((key) => normalized(key) === platform)) return false;
-    if (brand) {
+    if (brandedOnly) {
+      const brands = item.brands?.length ? item.brands : item.brand ? [item.brand] : [];
+      if (!brands.some((value) => normalized(value) !== "unbranded")) return false;
+    } else if (brand) {
       const brands = item.brands?.length ? item.brands : item.brand ? [item.brand] : [];
       if (!brands.some((value) => normalized(value) === brand)) return false;
     }

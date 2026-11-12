@@ -3,7 +3,7 @@ import { Link } from "wouter";
 import { ArrowDownWideNarrow, ArrowLeft, ArrowRight, Check, ChevronDown, Copy, ExternalLink, LayoutGrid, Moon, Share2, Store, Sun, Tag, Table2, X } from "lucide-react";
 import "./spreadsheet.css";
 import { initializeAnalytics, trackEvent, trackOnce } from "@/lib/analytics";
-import { filterCatalogItems, paginateCatalogItems, type CatalogSummary, type CatalogSort } from "@/lib/catalogSummary";
+import { ALL_BRANDS, filterCatalogItems, paginateCatalogItems, type CatalogSummary, type CatalogSort } from "@/lib/catalogSummary";
 import { isLongSleeve, LONG_SLEEVE_CATEGORY } from "@/lib/catalogOrdering.mjs";
 import { normalizePlatformName, platformIconFor, platformSourcesFor, type PlatformSource } from "@/lib/platformSources.mjs";
 import { mergeCatalogOverrides, mergePreviewOverrides, type CatalogPreviewGroup, type CatalogProductOverride } from "@/lib/catalogOverrides";
@@ -509,9 +509,10 @@ export default function SpreadsheetCatalog1() {
   const platforms = catalogMeta?.platforms || [];
   const selectedPlatformLabel = platforms.find((item) => item.key === view.platform)?.label;
   const brandOptions = catalogMeta?.brands || [];
-  const selectedBrandLabel = brandOptions.find((item) => item.key === view.brand)?.label || "All brands";
-  // 品牌菜单卡片只展示商品数前六的品牌，点击即筛选，再点一次取消。
-  const brandCards = [...brandOptions].sort((a, b) => b.count - a.count).slice(0, 6);
+  const selectedBrandLabel = view.brand === ALL_BRANDS ? "All Brands" : brandOptions.find((item) => item.key === view.brand)?.label || "All brands";
+  // 第一张卡固定为 All Brands（只含有品牌标记的商品），后面跟有品牌商品数前五的品牌；卡片不显示数量。
+  const brandCards = brandOptions.filter((item) => item.key !== "Unbranded").sort((a, b) => b.count - a.count).slice(0, 5);
+  const allBrandsActive = view.brand === ALL_BRANDS;
   // 带 platform 参数进入或在下拉框切换平台时，标题跟随切换成对应的 Spreadsheet 名称
   const catalogHeading = selectedPlatformLabel ? `RIVORA Style Catalog - ${selectedPlatformLabel} Spreadsheet` : `THE ULTIMATE ${entryAgent.toUpperCase()} SPREADSHEET (2026)`;
   const rows = payload?.items || [];
@@ -760,6 +761,7 @@ export default function SpreadsheetCatalog1() {
           <span className="spreadsheet-select-value">{selectedBrandLabel}</span>
           <select aria-label="Brand" value={view.brand} onChange={(event) => setBrand(event.target.value)}>
             <option value="">All brands</option>
+            {view.brand === ALL_BRANDS && <option value={ALL_BRANDS}>All Brands</option>}
             {brandOptions.map((item) => <option key={item.key} value={item.key}>{item.label} ({item.count})</option>)}
           </select>
           <ChevronDown className="spreadsheet-select-chevron" size={16} aria-hidden="true" />
@@ -791,11 +793,14 @@ export default function SpreadsheetCatalog1() {
       </div>
 
       {brandCards.length > 0 && <div className="spreadsheet-brand-cards" role="group" aria-label="Brand filters">
-        <span className="spreadsheet-brand-cards-label"><strong>Brands</strong><small>Top 6 by product count</small></span>
-        <div className="spreadsheet-brand-card-list">{brandCards.map((item) => {
-          const active = view.brand === item.key;
-          return <button key={item.key} type="button" className={active ? "is-active" : ""} aria-pressed={active} onClick={() => setBrand(active ? "" : item.key)}><strong>{item.label}</strong><small>{item.count} products</small></button>;
-        })}</div>
+        <span className="spreadsheet-brand-cards-label"><strong>Brands</strong><small>All Brands + top 5</small></span>
+        <div className="spreadsheet-brand-card-list">
+          <button type="button" className={allBrandsActive ? "is-active" : ""} aria-pressed={allBrandsActive} onClick={() => setBrand(allBrandsActive ? "" : ALL_BRANDS)}><strong>All Brands</strong></button>
+          {brandCards.map((item) => {
+            const active = view.brand === item.key;
+            return <button key={item.key} type="button" className={active ? "is-active" : ""} aria-pressed={active} onClick={() => setBrand(active ? "" : item.key)}><strong>{item.label}</strong></button>;
+          })}
+        </div>
       </div>}
 
       <div className="spreadsheet-results" aria-live="polite" aria-busy={loading}><span className="spreadsheet-results-status">{loading && <span className="spreadsheet-loader spreadsheet-results-loader" aria-hidden="true" />}{loading ? quickCategoryBusy && pendingQuickCategory && view.category === pendingQuickCategory ? `Loading ${quickCategoryOptions.find((item) => item.key === pendingQuickCategory)?.label}…` : "Loading catalog…" : countLabel}</span>{(view.category || view.platform || view.brand || view.sort !== "random") && <button type="button" onClick={clearFilters}>Clear filters</button>}</div>
