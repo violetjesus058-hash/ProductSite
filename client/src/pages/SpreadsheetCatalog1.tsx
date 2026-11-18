@@ -762,7 +762,7 @@ export default function SpreadsheetCatalog1() {
           <select aria-label="Brand" value={view.brand} onChange={(event) => setBrand(event.target.value)}>
             <option value="">All brands</option>
             {view.brand === ALL_BRANDS && <option value={ALL_BRANDS}>All Brands</option>}
-            {brandOptions.map((item) => <option key={item.key} value={item.key}>{item.label} ({item.count})</option>)}
+            {brandOptions.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}
           </select>
           <ChevronDown className="spreadsheet-select-chevron" size={16} aria-hidden="true" />
         </label>}
