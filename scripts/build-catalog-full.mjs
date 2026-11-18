@@ -534,7 +534,7 @@ async function main() {
     platforms: [...platformMap.values()].sort((a, b) => a.label.localeCompare(b.label)),
     ...(brandList ? { brands: brandList } : {}),
   });
-  // 主站首页索引复用同一份 meta
+  // 主站首页索引复用同一份 meta（品牌清单与 /spreadsheet 保持一致，否则首页不渲染 Brands 卡片）
   await jsonWrite(path.join(homeRoot, "meta.json"), {
     total: products.length,
     generatedAt: new Date().toISOString(),
@@ -542,6 +542,7 @@ async function main() {
     categories: categoryKeys.filter((key) => !unavailableCategories.has(key)).map((key) => ({ key, label: categoryLabels[key] })),
     quickCategories,
     platforms: [...platformMap.values()].sort((a, b) => a.label.localeCompare(b.label)),
+    ...(brandList ? { brands: brandList } : {}),
   });
 
   // 6. 对外 CSV
