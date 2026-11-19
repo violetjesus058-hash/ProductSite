@@ -96,4 +96,14 @@ describe("spreadsheet catalog ordering", () => {
     const result = filterCatalogItems(branded, { brand: ALL_BRANDS, sort: "random", seed: 1 });
     expect(result.map((entry) => entry.id).sort()).toEqual(["g-1", "i-1"]);
   });
+
+  it("accepts hyphen and underscore variants in the brand parameter", () => {
+    const branded = [
+      { ...item("k-1", "product-k", "shoe", 10), brand: "Ralph Lauren", brands: ["Ralph Lauren"] },
+      { ...item("l-1", "product-l", "shoe", 20), brand: "Unbranded", brands: ["Unbranded"] },
+    ];
+    expect(filterCatalogItems(branded, { brand: "ralph-lauren" }).map((entry) => entry.id)).toEqual(["k-1"]);
+    expect(filterCatalogItems(branded, { brand: "Ralph_Lauren" }).map((entry) => entry.id)).toEqual(["k-1"]);
+    expect(filterCatalogItems(branded, { brand: "  Ralph   Lauren  " }).map((entry) => entry.id)).toEqual(["k-1"]);
+  });
 });

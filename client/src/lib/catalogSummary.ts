@@ -29,6 +29,8 @@ export const ALL_BRANDS = "all";
 export type CatalogQuery = { category?: string; platform?: string; brand?: string; sort?: CatalogSort; seed?: number | string };
 
 function normalized(value: string | undefined) { return (value || "").normalize("NFKC").trim().toLocaleLowerCase(); }
+// 品牌参数容错：把连字符/下划线当空格，合并多余空格，方便手写或分享出去的链接。
+function normalizedBrand(value: string | undefined) { return normalized(value).replace(/[-_]+/g, " ").replace(/\s+/g, " ").trim(); }
 
 function productKey(item: CatalogSummary) { return item.sourceProductId || item.id; }
 
@@ -223,7 +225,7 @@ export function waveCatalogItems(items: CatalogSummary[], seed: number | string,
 export function filterCatalogItems(items: CatalogSummary[], query: CatalogQuery): CatalogSummary[] {
   const category = normalized(query.category);
   const platform = normalized(query.platform);
-  const brand = normalized(query.brand);
+  const brand = normalizedBrand(query.brand);
   const brandedOnly = brand === ALL_BRANDS;
   const filtered = items.filter((item) => {
     if (isUnavailableCategory(item.category)) return false;
@@ -231,10 +233,10 @@ export function filterCatalogItems(items: CatalogSummary[], query: CatalogQuery)
     if (platform && !item.platformKeys.some((key) => normalized(key) === platform)) return false;
     if (brandedOnly) {
       const brands = item.brands?.length ? item.brands : item.brand ? [item.brand] : [];
-      if (!brands.some((value) => normalized(value) !== "unbranded")) return false;
+      if (!brands.some((value) => normalizedBrand(value) !== "unbranded")) return false;
     } else if (brand) {
       const brands = item.brands?.length ? item.brands : item.brand ? [item.brand] : [];
-      if (!brands.some((value) => normalized(value) === brand)) return false;
+      if (!brands.some((value) => normalizedBrand(value) === brand)) return false;
     }
     return true;
   });
