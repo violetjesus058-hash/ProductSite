@@ -288,6 +288,7 @@ export default function SpreadsheetCatalog1() {
   const [shareOpen, setShareOpen] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
   const [menuNotice, setMenuNotice] = useState<MenuPermissionNotice | null>(null);
+  const [noticeOpen, setNoticeOpen] = useState(false);
   const [meta, setMeta] = useState<CatalogMeta | null>(null);
   const [productOverrides, setProductOverrides] = useState<CatalogProductOverride[]>([]);
   const [overridesReady, setOverridesReady] = useState(false);
@@ -739,13 +740,22 @@ export default function SpreadsheetCatalog1() {
 
     <div className="spreadsheet-sheet-menu" role="toolbar" aria-label="Spreadsheet menu bar">{["File", "Edit", "View", "Insert", "Format", "Data", "Tools", "Extensions", "Help"].map((menu) => { const copy = menuPermissionCopy(menu); return <button key={menu} type="button" aria-disabled="true" title={`${copy.title}: ${copy.message}`} onClick={(event) => showMenuPermissionNotice(menu, event.currentTarget)}>{menu}</button>; })}</div>
     {menuNotice && <div className="spreadsheet-permission-popover" role="status" aria-live="polite" style={{ left: menuNotice.left, top: menuNotice.top, width: menuNotice.width }}><strong>{menuNotice.title}</strong><span>{menuNotice.message}</span><button type="button" aria-label={menuNotice.dismissLabel} onClick={() => setMenuNotice(null)}><X size={14} aria-hidden="true" /></button></div>}
-    <div className="spreadsheet-sheet-tools" aria-label="Spreadsheet view toolbar"><span className="spreadsheet-sheet-tool-pill"><Table2 size={14} aria-hidden="true" /> Catalog</span><span className="spreadsheet-sheet-tool-divider" aria-hidden="true" /><span>100%</span><span className="spreadsheet-sheet-tool-pill is-view-only">Structured catalog</span><span className="spreadsheet-sheet-tools-spacer" /><span className="spreadsheet-sheet-tool-note">Product styles · Prices · Platforms</span></div>
-    <div className="spreadsheet-formula-bar" aria-hidden="true"><span className="spreadsheet-cell-reference">A1</span><span className="spreadsheet-formula-fx">fx</span><span className="spreadsheet-formula-value">RIVORA STYLE CATALOG</span></div>
 
     <section className="spreadsheet-content">
       <div className="spreadsheet-title-row">
         <div><p className="spreadsheet-eyebrow"><Table2 size={16} /> PRODUCT CATALOG</p><h1>{catalogHeading}</h1><p className="spreadsheet-subtitle">Browse product styles, compare prices and find buying platforms.</p></div>
       </div>
+
+      {brandCards.length > 0 && <div className="spreadsheet-brand-cards" role="group" aria-label="Brand filters">
+        <span className="spreadsheet-brand-cards-label"><strong>Brands</strong><small>All Brands + top 5</small></span>
+        <div className="spreadsheet-brand-card-list">
+          <button type="button" className={`is-all-brands${allBrandsActive ? " is-active" : ""}`} aria-pressed={allBrandsActive} onClick={() => setBrand(allBrandsActive ? "" : ALL_BRANDS)}><strong>All Brands</strong></button>
+          {brandCards.map((item) => {
+            const active = view.brand === item.key;
+            return <button key={item.key} type="button" className={active ? "is-active" : ""} aria-pressed={active} onClick={() => setBrand(active ? "" : item.key)}><strong>{item.label}</strong></button>;
+          })}
+        </div>
+      </div>}
 
       <div className={`spreadsheet-toolbar ${brandOptions.length > 0 ? "has-brand" : ""}`} aria-label="Catalog filters">
         <label className="spreadsheet-select spreadsheet-control-category">
@@ -777,12 +787,20 @@ export default function SpreadsheetCatalog1() {
           <ChevronDown className="spreadsheet-select-chevron" size={16} aria-hidden="true" />
         </label>
       </div>
-      <p className="spreadsheet-platform-hint">Select your Agent to see specific items 👇</p>
-      <div className="spreadsheet-platform-callout" role="note"><Store size={16} aria-hidden="true" /><span><strong>Choose a platform</strong><small>Filter the table by buying source to compare available sellers and prices.</small><strong className="spreadsheet-platform-outage-label">PLATFORM SERVICE ALERT</strong><small className="spreadsheet-platform-maintenance">AcBuy and Multbuy are currently unavailable while under maintenance.</small><small className="spreadsheet-platform-alternative">Recommended alternatives: Oopbuy, Sugargoo, Superbuy, or another available platform below.</small></span><b>{view.platform ? "FILTER ACTIVE" : "CHOOSE / RECOMMENDED"}</b></div>
-      <div className="spreadsheet-trust-line" role="note"><Check size={15} aria-hidden="true" /><span><strong>100% Compatible with Kakobuy, Oopbuy, Pandabuy &amp; All Major Agents.</strong> One-Click Automatic Parsing Supported.</span></div>
-      <div className="spreadsheet-availability-notice" role="status"><strong>Fragrance is temporarily unavailable.</strong><span>Please explore Accessories, Watches, Bags, or Clothing instead.</span><div><Link href="/spreadsheet?view=styles&category=ACC">Accessories</Link><Link href="/spreadsheet?view=styles&category=watches">Watches</Link><Link href="/spreadsheet?view=styles&category=bags">Bags</Link><Link href="/spreadsheet?view=styles&category=clothing">Clothing</Link></div></div>
+      <div className={`spreadsheet-notice-bar${noticeOpen ? " is-open" : ""}`}>
+        <button type="button" className="spreadsheet-notice-summary" onClick={() => setNoticeOpen((open) => !open)} aria-expanded={noticeOpen}>
+          <Store size={14} aria-hidden="true" />
+          <strong>{view.platform ? `${view.platform} filter active` : "Choose a platform"}</strong>
+          <span>100% compatible with Kakobuy, Oopbuy, Pandabuy &amp; all major agents</span>
+          <span className="spreadsheet-notice-warn">Fragrance temporarily unavailable</span>
+          <ChevronDown size={14} aria-hidden="true" />
+        </button>
+        {noticeOpen && <div className="spreadsheet-notice-details">
+          <p><strong>PLATFORM SERVICE ALERT</strong> AcBuy and Multbuy are currently unavailable while under maintenance. Recommended alternatives: Oopbuy, Sugargoo, Superbuy, or another available platform in the Platform menu.</p>
+          <p><strong>Fragrance is temporarily unavailable.</strong> Please explore <Link href="/spreadsheet?view=styles&category=ACC">Accessories</Link>, <Link href="/spreadsheet?view=styles&category=watches">Watches</Link>, <Link href="/spreadsheet?view=styles&category=bags">Bags</Link>, or <Link href="/spreadsheet?view=styles&category=clothing">Clothing</Link> instead.</p>
+        </div>}
+      </div>
 
-      <div className="spreadsheet-column-labels" aria-hidden="true">{["A", "B", "C", "D", "E", "F", "G", "H"].map((column) => <span key={column}>{column}</span>)}</div>
       <div className="spreadsheet-quick-categories" role="group" aria-label="Quick category filters" aria-busy={quickCategoryBusy}>
         <span className="spreadsheet-quick-category-label"><strong>Product Categories</strong><small>Click a tile to filter the catalog</small></span>
         <div className="spreadsheet-quick-category-buttons">{quickCategories.map((item) => {
@@ -791,17 +809,6 @@ export default function SpreadsheetCatalog1() {
           return <button key={item.key} type="button" className={[active ? "is-active" : "", pending ? "is-loading" : ""].filter(Boolean).join(" ")} aria-pressed={active} aria-busy={pending} disabled={loading || quickCategoryBusy} onClick={() => setQuickCategory(active ? "" : item.key, item.key)}><img className="spreadsheet-quick-category-image" src={item.thumbnail} alt="" aria-hidden="true" loading="lazy" decoding="async" /><span className="spreadsheet-quick-category-button-label"><strong>{item.label}</strong>{pending ? <span className="spreadsheet-quick-category-spinner" aria-hidden="true" /> : <ArrowRight size={15} aria-hidden="true" />}</span></button>;
         })}</div>
       </div>
-
-      {brandCards.length > 0 && <div className="spreadsheet-brand-cards" role="group" aria-label="Brand filters">
-        <span className="spreadsheet-brand-cards-label"><strong>Brands</strong><small>All Brands + top 5</small></span>
-        <div className="spreadsheet-brand-card-list">
-          <button type="button" className={`is-all-brands${allBrandsActive ? " is-active" : ""}`} aria-pressed={allBrandsActive} onClick={() => setBrand(allBrandsActive ? "" : ALL_BRANDS)}><strong>All Brands</strong></button>
-          {brandCards.map((item) => {
-            const active = view.brand === item.key;
-            return <button key={item.key} type="button" className={active ? "is-active" : ""} aria-pressed={active} onClick={() => setBrand(active ? "" : item.key)}><strong>{item.label}</strong></button>;
-          })}
-        </div>
-      </div>}
 
       <div className="spreadsheet-results" aria-live="polite" aria-busy={loading}><span className="spreadsheet-results-status">{loading && <span className="spreadsheet-loader spreadsheet-results-loader" aria-hidden="true" />}{loading ? quickCategoryBusy && pendingQuickCategory && view.category === pendingQuickCategory ? `Loading ${quickCategoryOptions.find((item) => item.key === pendingQuickCategory)?.label}…` : "Loading catalog…" : countLabel}</span>{(view.category || view.platform || view.brand || view.sort !== "random") && <button type="button" onClick={clearFilters}>Clear filters</button>}</div>
 
