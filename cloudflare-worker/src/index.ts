@@ -9,7 +9,7 @@ export interface Env {
 const OVERRIDES_CACHE_KEY = "product_overrides";
 const OVERRIDES_CACHE_TTL = 600;       // 10 minutes
 const ANALYTICS_CACHE_TTL = 900;        // 15 minutes
-const ANALYTICS_CACHE_PAGE = 1;          // only cache the default page=1 result
+const ANALYTICS_CACHE_BUCKET_MS = 10 * 60 * 1000; // 缓存键按 10 分钟时间桶归一化，数据最多延迟 10 分钟
 
 type RequestRow = {
   id: number;
@@ -356,48 +356,96 @@ async function getAnalyticsSummary(request: Request, env: Env) {
   const since = range === "today" ? beijingDayStartUtc(0) : range === "yesterday" ? beijingDayStartUtc(1) : range === "week" ? beijingWeekStartUtc() : range === "month" ? (() => { const now = new Date(Date.now() + 8 * 60 * 60 * 1000); return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, -8)).toISOString(); })() : range === "all" ? "1970-01-01T00:00:00.000Z" : range === "custom" && customStart ? customStart : beijingDayStartUtc(days - 1);
   const until = range === "yesterday" ? beijingDayStartUtc(0) : range === "custom" && customEnd ? new Date(new Date(customEnd).getTime() + 24 * 60 * 60 * 1000).toISOString() : new Date().toISOString();
   const periodLabel = range === "today" ? "今天" : range === "yesterday" ? "昨天" : range === "week" ? "本周（周一至今）" : range === "14" ? "过去 14 天" : range === "month" ? "本月" : range === "all" ? "所有时间" : range === "custom" ? `${url.searchParams.get("startDate") || ""} 至 ${url.searchParams.get("endDate") || ""}` : `过去 ${days} 天`;
-  const isDefaultPageView = page === ANALYTICS_CACHE_PAGE && pageSize === 50 && searchPage === 1 && searchPageSize === 25 && platformClickPage === 1 && platformClickPageSize === 25;
-  const analyticsCacheKey = env.ANALYTICS_CACHE && isDefaultPageView ? `analytics:summary:${range}:${since}:${until}` : null;
+  // 数据最多延迟 10 分钟：缓存键按 10 分钟时间桶归一化。之前 key 里带毫秒级 until，导致缓存永不命中。
+  const cacheBucket = Math.floor(Date.now() / ANALYTICS_CACHE_BUCKET_MS);
+  const analyticsCacheKey = env.ANALYTICS_CACHE ? `analytics:summary:${range}:${since}:${cacheBucket}` : null;
+  const isDefaultDetails = page === 1 && pageSize === 50 && searchPage === 1 && searchPageSize === 25 && platformClickPage === 1 && platformClickPageSize === 25;
+  let payload: Record<string, unknown> | null = null;
   if (analyticsCacheKey) {
     try {
       const cached = await env.ANALYTICS_CACHE!.get(analyticsCacheKey);
-      if (cached) return response(request, env, JSON.parse(cached));
+      if (cached) payload = JSON.parse(cached) as Record<string, unknown>;
     } catch { /* KV read error → fall through to D1 */ }
   }
-  const [totals, events, products, platforms, spreadsheetPlatforms, platformClicks, platformClickTotal, categories, daily, sources, sourceUsers, media, campaigns, devices, languages, paths, searches, searchTotal, conversions, recentTotal, recent] = await Promise.all([
-    env.DB.prepare("SELECT COUNT(*) AS total_events, COUNT(DISTINCT anonymous_id) AS unique_visitors, COUNT(DISTINCT session_id) AS unique_sessions, COUNT(DISTINCT CASE WHEN event_name = 'product_detail_view' THEN anonymous_id END) AS detail_visitors, COUNT(DISTINCT CASE WHEN event_name IN ('affiliate_click','outbound_click') THEN anonymous_id END) AS click_visitors FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ?").bind(since, until).first(),
-    env.DB.prepare("SELECT event_name AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? GROUP BY event_name ORDER BY count DESC LIMIT 30").bind(since, until).all(),
-    env.DB.prepare("SELECT product_id AS id, MAX(source_product_id) AS source_product_id, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND product_id IS NOT NULL GROUP BY product_id ORDER BY count DESC LIMIT 30").bind(since, until).all(),
-    // 平台入口排行只统计真实外链点击；筛选平台、默认选平台、空结果等事件虽然也带 platform 字段，但不是点击。
-    env.DB.prepare("SELECT platform AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND event_name IN ('affiliate_click','outbound_click') AND product_id IS NOT NULL AND platform IS NOT NULL GROUP BY platform ORDER BY count DESC LIMIT 30").bind(since, until).all(),
-    env.DB.prepare("SELECT platform AS name, COUNT(*) AS count, COUNT(DISTINCT anonymous_id) AS user_count, SUM(CASE WHEN event_name = 'spreadsheet_platform_select' THEN 1 ELSE 0 END) AS selection_count, SUM(CASE WHEN event_name = 'spreadsheet_platform_auto_select' THEN 1 ELSE 0 END) AS auto_select_count, SUM(CASE WHEN event_name = 'affiliate_click' THEN 1 ELSE 0 END) AS click_count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND path = '/spreadsheet' AND platform IS NOT NULL AND event_name IN ('spreadsheet_platform_select','spreadsheet_platform_auto_select','affiliate_click') GROUP BY platform ORDER BY click_count DESC, selection_count DESC, count DESC LIMIT 30").bind(since, until).all(),
-    env.DB.prepare("SELECT product_id, MAX(COALESCE(NULLIF(json_extract(properties_json, '$.product_name'), ''), product_id)) AS product_name, MAX(COALESCE(NULLIF(json_extract(properties_json, '$.style_label'), ''), '')) AS style_label, MAX(CAST(json_extract(properties_json, '$.price') AS REAL)) AS price, MAX(COALESCE(NULLIF(json_extract(properties_json, '$.currency'), ''), 'USD')) AS currency, platform, MAX(COALESCE(NULLIF(json_extract(properties_json, '$.product_image'), ''), '')) AS image, COUNT(*) AS click_count, MAX(occurred_at) AS last_clicked_at FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND event_name IN ('affiliate_click','outbound_click') AND product_id IS NOT NULL AND platform IS NOT NULL GROUP BY product_id, platform ORDER BY click_count DESC, last_clicked_at DESC LIMIT ? OFFSET ?").bind(since, until, platformClickPageSize, platformClickOffset).all(),
-    env.DB.prepare("SELECT COUNT(*) AS count FROM (SELECT product_id, platform FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND event_name IN ('affiliate_click','outbound_click') AND product_id IS NOT NULL AND platform IS NOT NULL GROUP BY product_id, platform)").bind(since, until).first(),
-    env.DB.prepare("SELECT category AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND category IS NOT NULL GROUP BY category ORDER BY count DESC LIMIT 30").bind(since, until).all(),
-    env.DB.prepare("SELECT date(occurred_at, '+8 hours') AS date, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? GROUP BY date ORDER BY date ASC").bind(since, until).all(),
-    env.DB.prepare("SELECT COALESCE(NULLIF(utm_source, ''), 'direct') AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? GROUP BY name ORDER BY count DESC LIMIT 30").bind(since, until).all(),
-    env.DB.prepare("SELECT COALESCE(NULLIF(utm_source, ''), 'direct') AS name, COUNT(DISTINCT COALESCE(NULLIF(anonymous_id, ''), NULLIF(session_id, ''))) AS user_count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? GROUP BY name ORDER BY user_count DESC LIMIT 30").bind(since, until).all(),
-    env.DB.prepare("SELECT COALESCE(NULLIF(utm_medium, ''), 'none') AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? GROUP BY name ORDER BY count DESC LIMIT 30").bind(since, until).all(),
-    env.DB.prepare("SELECT COALESCE(NULLIF(utm_campaign, ''), 'none') AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? GROUP BY name ORDER BY count DESC LIMIT 30").bind(since, until).all(),
-    env.DB.prepare("SELECT COALESCE(NULLIF(device, ''), 'unknown') AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? GROUP BY name ORDER BY count DESC LIMIT 20").bind(since, until).all(),
-    env.DB.prepare("SELECT COALESCE(NULLIF(language, ''), 'unknown') AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? GROUP BY name ORDER BY count DESC LIMIT 20").bind(since, until).all(),
-    env.DB.prepare("SELECT COALESCE(NULLIF(path, ''), '/') AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? GROUP BY name ORDER BY count DESC LIMIT 30").bind(since, until).all(),
-    env.DB.prepare(`SELECT query AS name, COUNT(*) AS count, SUM(CASE WHEN event_name = 'search_no_result' THEN 1 ELSE 0 END) AS no_result_count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND event_name IN ('search', 'search_no_result') AND query IS NOT NULL AND query != '' GROUP BY query ORDER BY count DESC, query ASC LIMIT ${searchPageSize} OFFSET ${searchOffset}`).bind(since, until).all(),
-    env.DB.prepare("SELECT COUNT(DISTINCT query) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND event_name IN ('search', 'search_no_result') AND query IS NOT NULL AND query != ''").bind(since, until).first(),
-    env.DB.prepare("SELECT event_name AS name, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND event_name IN ('product_detail_view','favorite_add','dislike','affiliate_click','outbound_click','request_product_submit','discord_feedback_click') GROUP BY event_name ORDER BY count DESC").bind(since, until).all(),
-    env.DB.prepare("SELECT COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ?").bind(since, until).first(),
-    env.DB.prepare("SELECT id, event_name, occurred_at, path, product_id, category, platform, device, language, utm_source, utm_campaign, query, list_type, position FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? ORDER BY id DESC LIMIT ? OFFSET ?").bind(since, until, pageSize, offset).all<AnalyticsRow>(),
-  ]);
-  const payload = {
-    days, range, periodLabel, page, pageSize, searchPage, searchPageSize, searchTotal: Number((searchTotal as { count?: number } | null)?.count || 0), platformClickPage, platformClickPageSize, platformClickTotal: Number((platformClickTotal as { count?: number } | null)?.count || 0), recentTotal: Number((recentTotal as { count?: number } | null)?.count || 0),
-    totals: totals || { total_events: 0, unique_visitors: 0, unique_sessions: 0, detail_visitors: 0, click_visitors: 0 },
-    events: events.results || [], products: products.results || [], platforms: platforms.results || [], spreadsheetPlatforms: spreadsheetPlatforms.results || [], platformClicks: platformClicks.results || [], categories: categories.results || [], daily: daily.results || [],
-    sources: sources.results || [], sourceUsers: sourceUsers.results || [], media: media.results || [], campaigns: campaigns.results || [], devices: devices.results || [], languages: languages.results || [], paths: paths.results || [], searches: searches.results || [], conversions: conversions.results || [], recent: recent.results || [],
-  };
-  if (analyticsCacheKey) {
-    try { await env.ANALYTICS_CACHE!.put(analyticsCacheKey, JSON.stringify(payload), { expirationTtl: ANALYTICS_CACHE_TTL }); } catch { /* KV write error → ignore */ }
+  if (payload && isDefaultDetails) return response(request, env, payload);
+  if (!payload) {
+    const [totals, composite, products, sourceUsers, searches, searchTotal, platformClicks, platformClickTotal, recent] = await Promise.all([
+      env.DB.prepare("SELECT COUNT(*) AS total_events, COUNT(DISTINCT anonymous_id) AS unique_visitors, COUNT(DISTINCT session_id) AS unique_sessions, COUNT(DISTINCT CASE WHEN event_name = 'product_detail_view' THEN anonymous_id END) AS detail_visitors, COUNT(DISTINCT CASE WHEN event_name IN ('affiliate_click','outbound_click') THEN anonymous_id END) AS click_visitors FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ?").bind(since, until).first(),
+      // 一次聚合扫描覆盖事件、每日、平台、品类、来源、媒介、设备、语言、页面、表格平台等 12 个维度，替代原来 12 条独立查询。
+      env.DB.prepare("SELECT date(occurred_at, '+8 hours') AS day, event_name, platform, category, device, language, path, utm_source, utm_medium, utm_campaign, COUNT(*) AS count, SUM(CASE WHEN event_name IN ('affiliate_click','outbound_click') AND product_id IS NOT NULL THEN 1 ELSE 0 END) AS platform_click_count, SUM(CASE WHEN path = '/spreadsheet' AND event_name = 'spreadsheet_platform_select' THEN 1 ELSE 0 END) AS spreadsheet_select_count, SUM(CASE WHEN path = '/spreadsheet' AND event_name = 'spreadsheet_platform_auto_select' THEN 1 ELSE 0 END) AS spreadsheet_auto_count, SUM(CASE WHEN path = '/spreadsheet' AND event_name = 'affiliate_click' THEN 1 ELSE 0 END) AS spreadsheet_click_count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? GROUP BY day, event_name, platform, category, device, language, path, utm_source, utm_medium, utm_campaign").bind(since, until).all(),
+      env.DB.prepare("SELECT product_id AS id, MAX(source_product_id) AS source_product_id, COUNT(*) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND product_id IS NOT NULL GROUP BY product_id ORDER BY count DESC LIMIT 30").bind(since, until).all(),
+      env.DB.prepare("SELECT COALESCE(NULLIF(utm_source, ''), 'direct') AS name, COUNT(DISTINCT COALESCE(NULLIF(anonymous_id, ''), NULLIF(session_id, ''))) AS user_count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? GROUP BY name ORDER BY user_count DESC LIMIT 30").bind(since, until).all(),
+      env.DB.prepare("SELECT query AS name, COUNT(*) AS count, SUM(CASE WHEN event_name = 'search_no_result' THEN 1 ELSE 0 END) AS no_result_count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND event_name IN ('search', 'search_no_result') AND query IS NOT NULL AND query != '' GROUP BY query ORDER BY count DESC, query ASC LIMIT 25 OFFSET 0").bind(since, until).all(),
+      env.DB.prepare("SELECT COUNT(DISTINCT query) AS count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND event_name IN ('search', 'search_no_result') AND query IS NOT NULL AND query != ''").bind(since, until).first(),
+      env.DB.prepare("SELECT product_id, MAX(COALESCE(NULLIF(json_extract(properties_json, '$.product_name'), ''), product_id)) AS product_name, MAX(COALESCE(NULLIF(json_extract(properties_json, '$.style_label'), ''), '')) AS style_label, MAX(CAST(json_extract(properties_json, '$.price') AS REAL)) AS price, MAX(COALESCE(NULLIF(json_extract(properties_json, '$.currency'), ''), 'USD')) AS currency, platform, MAX(COALESCE(NULLIF(json_extract(properties_json, '$.product_image'), ''), '')) AS image, COUNT(*) AS click_count, MAX(occurred_at) AS last_clicked_at FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND event_name IN ('affiliate_click','outbound_click') AND product_id IS NOT NULL AND platform IS NOT NULL GROUP BY product_id, platform ORDER BY click_count DESC, last_clicked_at DESC LIMIT 25 OFFSET 0").bind(since, until).all(),
+      env.DB.prepare("SELECT COUNT(*) AS count FROM (SELECT product_id, platform FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND event_name IN ('affiliate_click','outbound_click') AND product_id IS NOT NULL AND platform IS NOT NULL GROUP BY product_id, platform)").bind(since, until).first(),
+      env.DB.prepare("SELECT id, event_name, occurred_at, path, product_id, category, platform, device, language, utm_source, utm_campaign, query, list_type, position FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? ORDER BY id DESC LIMIT 50 OFFSET 0").bind(since, until).all<AnalyticsRow>(),
+    ]);
+    const aggregateRows = (composite.results || []) as Array<{ day: string; event_name: string | null; platform: string | null; category: string | null; device: string | null; language: string | null; path: string | null; utm_source: string | null; utm_medium: string | null; utm_campaign: string | null; count: number; platform_click_count: number; spreadsheet_select_count: number; spreadsheet_auto_count: number; spreadsheet_click_count: number }>;
+    const sumMap = (map: Map<string, number>, key: string, value: number) => { if (value) map.set(key, (map.get(key) || 0) + Number(value)); };
+    const ranking = (map: Map<string, number>, limit: number) => [...map.entries()].map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count).slice(0, limit);
+    const eventsMap = new Map<string, number>();
+    const dailyMap = new Map<string, number>();
+    const platformMap = new Map<string, number>();
+    const categoryMap = new Map<string, number>();
+    const sourceMap = new Map<string, number>();
+    const mediaMap = new Map<string, number>();
+    const campaignMap = new Map<string, number>();
+    const deviceMap = new Map<string, number>();
+    const languageMap = new Map<string, number>();
+    const pathMap = new Map<string, number>();
+    const spreadsheetMap = new Map<string, { count: number; selection_count: number; auto_select_count: number; click_count: number }>();
+    for (const row of aggregateRows) {
+      const count = Number(row.count || 0);
+      sumMap(eventsMap, row.event_name || "", count);
+      sumMap(dailyMap, row.day || "", count);
+      if (row.platform) sumMap(platformMap, row.platform, Number(row.platform_click_count || 0));
+      if (row.category) sumMap(categoryMap, row.category, count);
+      sumMap(sourceMap, row.utm_source || "direct", count);
+      sumMap(mediaMap, row.utm_medium || "none", count);
+      sumMap(campaignMap, row.utm_campaign || "none", count);
+      sumMap(deviceMap, row.device || "unknown", count);
+      sumMap(languageMap, row.language || "unknown", count);
+      sumMap(pathMap, row.path || "/", count);
+      if (row.path === "/spreadsheet" && row.platform) {
+        const selection = Number(row.spreadsheet_select_count || 0);
+        const autoSelect = Number(row.spreadsheet_auto_count || 0);
+        const click = Number(row.spreadsheet_click_count || 0);
+        if (selection + autoSelect + click > 0) {
+          const entry = spreadsheetMap.get(row.platform) || { count: 0, selection_count: 0, auto_select_count: 0, click_count: 0 };
+          entry.selection_count += selection;
+          entry.auto_select_count += autoSelect;
+          entry.click_count += click;
+          entry.count = entry.selection_count + entry.auto_select_count + entry.click_count;
+          spreadsheetMap.set(row.platform, entry);
+        }
+      }
+    }
+    const conversionNames = ["product_detail_view", "favorite_add", "dislike", "affiliate_click", "outbound_click", "request_product_submit", "discord_feedback_click"];
+    payload = {
+      days, range, periodLabel, page: 1, pageSize: 50, searchPage: 1, searchPageSize: 25, searchTotal: Number((searchTotal as { count?: number } | null)?.count || 0), platformClickPage: 1, platformClickPageSize: 25, platformClickTotal: Number((platformClickTotal as { count?: number } | null)?.count || 0), recentTotal: Number((totals as { total_events?: number } | null)?.total_events || 0),
+      totals: totals || { total_events: 0, unique_visitors: 0, unique_sessions: 0, detail_visitors: 0, click_visitors: 0 },
+      events: ranking(eventsMap, 30), products: products.results || [], platforms: ranking(platformMap, 30),
+      spreadsheetPlatforms: [...spreadsheetMap.entries()].map(([name, entry]) => ({ name, count: entry.count, user_count: 0, selection_count: entry.selection_count, auto_select_count: entry.auto_select_count, click_count: entry.click_count })).sort((a, b) => b.click_count - a.click_count || b.selection_count - a.selection_count || b.count - a.count).slice(0, 30),
+      platformClicks: platformClicks.results || [], categories: ranking(categoryMap, 30),
+      daily: [...dailyMap.entries()].map(([date, count]) => ({ date, count })).sort((a, b) => a.date.localeCompare(b.date)),
+      sources: ranking(sourceMap, 30), sourceUsers: sourceUsers.results || [], media: ranking(mediaMap, 30), campaigns: ranking(campaignMap, 30), devices: ranking(deviceMap, 20), languages: ranking(languageMap, 20), paths: ranking(pathMap, 30),
+      searches: searches.results || [], conversions: conversionNames.map((name) => ({ name, count: eventsMap.get(name) || 0 })).filter((entry) => entry.count > 0).sort((a, b) => b.count - a.count), recent: recent.results || [],
+    };
+    if (analyticsCacheKey) {
+      try { await env.ANALYTICS_CACHE!.put(analyticsCacheKey, JSON.stringify(payload), { expirationTtl: ANALYTICS_CACHE_TTL }); } catch { /* KV write error → ignore */ }
+    }
   }
-  return response(request, env, payload);
+  if (isDefaultDetails) return response(request, env, payload);
+  // 翻页时只补查当前分页，复用缓存的汇总主体，避免每翻一页重跑整套聚合。
+  const override: Record<string, unknown> = { page, pageSize, searchPage, searchPageSize, platformClickPage, platformClickPageSize };
+  const detailJobs: Array<Promise<{ key: string; rows: unknown }>> = [];
+  if (page !== 1 || pageSize !== 50) detailJobs.push(env.DB.prepare("SELECT id, event_name, occurred_at, path, product_id, category, platform, device, language, utm_source, utm_campaign, query, list_type, position FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? ORDER BY id DESC LIMIT ? OFFSET ?").bind(since, until, pageSize, offset).all<AnalyticsRow>().then((result) => ({ key: "recent", rows: result.results || [] })));
+  if (searchPage !== 1 || searchPageSize !== 25) detailJobs.push(env.DB.prepare(`SELECT query AS name, COUNT(*) AS count, SUM(CASE WHEN event_name = 'search_no_result' THEN 1 ELSE 0 END) AS no_result_count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND event_name IN ('search', 'search_no_result') AND query IS NOT NULL AND query != '' GROUP BY query ORDER BY count DESC, query ASC LIMIT ${searchPageSize} OFFSET ${searchOffset}`).bind(since, until).all().then((result) => ({ key: "searches", rows: result.results || [] })));
+  if (platformClickPage !== 1 || platformClickPageSize !== 25) detailJobs.push(env.DB.prepare("SELECT product_id, MAX(COALESCE(NULLIF(json_extract(properties_json, '$.product_name'), ''), product_id)) AS product_name, MAX(COALESCE(NULLIF(json_extract(properties_json, '$.style_label'), ''), '')) AS style_label, MAX(CAST(json_extract(properties_json, '$.price') AS REAL)) AS price, MAX(COALESCE(NULLIF(json_extract(properties_json, '$.currency'), ''), 'USD')) AS currency, platform, MAX(COALESCE(NULLIF(json_extract(properties_json, '$.product_image'), ''), '')) AS image, COUNT(*) AS click_count, MAX(occurred_at) AS last_clicked_at FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND event_name IN ('affiliate_click','outbound_click') AND product_id IS NOT NULL AND platform IS NOT NULL GROUP BY product_id, platform ORDER BY click_count DESC, last_clicked_at DESC LIMIT ? OFFSET ?").bind(since, until, platformClickPageSize, platformClickOffset).all().then((result) => ({ key: "platformClicks", rows: result.results || [] })));
+  const details = await Promise.all(detailJobs);
+  for (const item of details) override[item.key] = item.rows;
+  return response(request, env, { ...payload, ...override });
 }
 
 async function getAnalyticsReferrers(request: Request, env: Env, asCsv = false) {
@@ -412,6 +460,14 @@ async function getAnalyticsReferrers(request: Request, env: Env, asCsv = false) 
   const since = range === "today" ? beijingDayStartUtc(0) : range === "yesterday" ? beijingDayStartUtc(1) : range === "week" ? beijingWeekStartUtc() : range === "month" ? (() => { const now = new Date(Date.now() + 8 * 60 * 60 * 1000); return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, -8)).toISOString(); })() : range === "all" ? "1970-01-01T00:00:00.000Z" : range === "custom" && customStart ? customStart : beijingDayStartUtc(days - 1);
   const until = range === "yesterday" ? beijingDayStartUtc(0) : range === "custom" && customEnd ? new Date(new Date(customEnd).getTime() + 24 * 60 * 60 * 1000).toISOString() : new Date().toISOString();
   const periodLabel = range === "today" ? "今天" : range === "yesterday" ? "昨天" : range === "week" ? "本周（周一至今）" : range === "14" ? "过去 14 天" : range === "month" ? "本月" : range === "all" ? "所有时间" : range === "custom" ? `${url.searchParams.get("startDate") || ""} 至 ${url.searchParams.get("endDate") || ""}` : `过去 ${days} 天`;
+  // 来源域名同样按 10 分钟时间桶缓存，翻页时不再重复扫描。
+  const referrerCacheKey = !asCsv && env.ANALYTICS_CACHE ? `analytics:referrers:${range}:${since}:${Math.floor(Date.now() / ANALYTICS_CACHE_BUCKET_MS)}` : null;
+  if (referrerCacheKey) {
+    try {
+      const cached = await env.ANALYTICS_CACHE!.get(referrerCacheKey);
+      if (cached) return response(request, env, JSON.parse(cached));
+    } catch { /* KV read error → fall through to D1 */ }
+  }
   const LIMIT_HOST = 100;
   const LIMIT_FULL = 200;
   const LIMIT_MATRIX = 200;
@@ -527,11 +583,15 @@ async function getAnalyticsReferrers(request: Request, env: Env, asCsv = false) 
       headers: { ...Object.fromEntries(corsHeaders(request, env)), "content-type": "text/csv; charset=UTF-8", "content-disposition": `attachment; filename="${filename}"` },
     });
   }
-  return response(request, env, {
+  const payload = {
     period,
     totals: { external: externalTotal, internal: internalTotal, direct: directTotal, summary: summaryTotal },
     hosts, full, matrix,
-  });
+  };
+  if (referrerCacheKey) {
+    try { await env.ANALYTICS_CACHE!.put(referrerCacheKey, JSON.stringify(payload), { expirationTtl: ANALYTICS_CACHE_TTL }); } catch { /* KV write error → ignore */ }
+  }
+  return response(request, env, payload);
 }
 function csvEscape(value: unknown) { const text = typeof value === "string" ? value : value == null ? "" : String(value); return /[",\n\r]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text; }
 function productTemplateResponse(request: Request, env: Env) { return new Response(`${productTemplateHeaders.join(",")}\n`, { status: 200, headers: { ...Object.fromEntries(corsHeaders(request, env)), "content-type": "text/csv; charset=UTF-8", "content-disposition": 'attachment; filename="productsite-product-template.csv"' } }); }
