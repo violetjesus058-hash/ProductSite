@@ -907,13 +907,39 @@ export default function SpreadsheetCatalog1() {
               </div>
               {showMoreProducts && moreProducts.length > 0 && <section className="spreadsheet-more" aria-labelledby="spreadsheet-more-title">
                 <div className="spreadsheet-more-heading"><div><p className="spreadsheet-eyebrow">MORE PRODUCTS</p><h2 id="spreadsheet-more-title">More from other brands</h2><p>This brand has a small selection, so here are styles from multiple brands across the catalog.</p></div><span className="spreadsheet-more-count">{moreProducts.length} picks</span></div>
-                <div className="spreadsheet-more-grid">{moreProducts.map((item, index) => {
-                  const brands = brandNamesOf(item).slice(0, 2);
-                  const href = catalogBasePath().endsWith("/catalog-data-1") ? `/product1/${encodeURIComponent(item.sourceProductId)}` : `/product/${encodeURIComponent(item.id)}`;
-                  return <Link key={item.id} href={href} className="spreadsheet-more-card" aria-label={`${item.name} by ${brands.join(" / ")}`} onClick={() => trackEvent("more_products_click", { source: "brand_more", product_id: item.id, brand: view.brand, position: index + 1 })}>
-                    <span className="spreadsheet-more-image"><img src={item.thumbnail || placeholder} alt={item.name} loading="lazy" decoding="async" onError={(event) => { event.currentTarget.src = placeholder; }} /></span>
-                    <span className="spreadsheet-more-body"><strong>{item.name}</strong><span className="spreadsheet-more-brands">{brands.map((brand) => <span key={brand}>{brand}</span>)}</span><span className="spreadsheet-more-price">{formatMoney(item.price, item.currency)}</span></span>
-                  </Link>;
+                <div className="spreadsheet-table-wrap">
+                  <table className="spreadsheet-table">
+                    <thead><tr><th scope="col">Image</th><th scope="col">Product</th><th scope="col">Style</th><th scope="col">Sizes</th><th scope="col">Price</th><th scope="col">Category</th><th scope="col">Platform</th><th scope="col"><span className="sr-only">Action</span></th></tr></thead>
+                    <tbody>{moreProducts.map((item) => {
+                      const expanded = expandedItemId === item.id;
+                      const displayItem = rowDisplayItem(item, expanded);
+                      const badgeBrand = brandNamesOf(item)[0];
+                      return <Fragment key={item.id}>
+                        <tr>
+                          <td className="spreadsheet-image-cell"><button className="spreadsheet-thumb-button" type="button" onClick={() => setImagePreviewItem(displayItem)} aria-label={`View original image: ${displayItem.name}${displayItem.styleLabel ? `, Style ${displayStyleLabel(displayItem.styleLabel)}` : ""}`}><ImageThumb item={displayItem} /></button></td>
+                          <td className="spreadsheet-product-cell"><button type="button" className="spreadsheet-product-trigger" onClick={() => toggleInlinePreview(item)} aria-label={`${expanded ? "Hide" : "View"} purchase options for ${item.name}`} aria-expanded={expanded} aria-controls={`more-desktop-inline-preview-${item.id}`}><strong title={item.name}>{item.name}</strong><small>{item.sourceProductId}</small>{badgeBrand && <span className="spreadsheet-brand-tag" title={item.brands?.join(" / ") || badgeBrand}>{badgeBrand}</span>}</button></td>
+                          <td>{displayItem.styleLabel && displayStyleLabel(displayItem.styleLabel) ? <span className="spreadsheet-style-tag">Style {displayStyleLabel(displayItem.styleLabel)}</span> : <span className="spreadsheet-muted">—</span>}</td>
+                          <td>{item.sizeCount ? `${item.sizeCount} sizes` : <span className="spreadsheet-muted">Options not listed</span>}</td>
+                          <td className="spreadsheet-price">{formatMoney(displayItem.price, displayItem.currency)}</td>
+                          <td><span className="spreadsheet-category">{categories.find((entry) => entry.key === item.category)?.label || item.category}</span></td>
+                          <td><span className="spreadsheet-platform">{primaryPlatformLabelFor(item)}</span><small className="spreadsheet-platform-count">{item.platformCount} platforms</small></td>
+                          <td><button className="spreadsheet-view" type="button" onClick={() => toggleInlinePreview(item)} aria-label={`${expanded ? "Hide" : "Preview purchase options for"} ${item.name}`} aria-expanded={expanded} aria-controls={`more-desktop-inline-preview-${item.id}`} aria-pressed={expanded}>{expanded ? "Hide" : "View"} {expanded ? <ChevronDown size={14} className="is-expanded" /> : <ArrowRight size={14} />}</button></td>
+                        </tr>
+                        {expanded && <tr className="spreadsheet-expanded-row"><td className="spreadsheet-expanded-cell" colSpan={8}><div id={`more-desktop-inline-preview-${item.id}`}>{renderInlinePurchaseCard(item)}</div></td></tr>}
+                      </Fragment>;
+                    })}</tbody>
+                  </table>
+                </div>
+                <div className="spreadsheet-mobile-list">{moreProducts.map((item) => {
+                  const expanded = expandedItemId === item.id;
+                  const displayItem = rowDisplayItem(item, expanded);
+                  const badgeBrand = brandNamesOf(item)[0];
+                  return <article className="spreadsheet-mobile-row" key={item.id}>
+                    <button className="spreadsheet-mobile-image spreadsheet-thumb-button" type="button" onClick={() => setImagePreviewItem(displayItem)} aria-label={`View original image: ${displayItem.name}${displayItem.styleLabel ? `, Style ${displayStyleLabel(displayItem.styleLabel)}` : ""}`}><ImageThumb item={displayItem} /></button>
+                    <div className="spreadsheet-mobile-info"><button type="button" className="spreadsheet-product-trigger" onClick={() => toggleInlinePreview(item)} aria-label={`${expanded ? "Hide" : "View"} purchase options for ${item.name}`} aria-expanded={expanded} aria-controls={`more-mobile-inline-preview-${item.id}`}><strong>{item.name}</strong></button><span>{displayItem.styleLabel ? `Style ${displayItem.styleLabel}` : "Style not specified"} · {categories.find((entry) => entry.key === item.category)?.label || item.category}</span>{badgeBrand && <span className="spreadsheet-brand-tag" title={item.brands?.join(" / ") || badgeBrand}>{badgeBrand}</span>}<span>{item.sizeCount ? `${item.sizeCount} sizes` : "Options not listed"} · {view.platform ? `${primaryPlatformLabelFor(item)} · ` : ""}{item.platformCount} platforms</span><strong className="spreadsheet-mobile-price">{formatMoney(displayItem.price, displayItem.currency)}</strong></div>
+                    <button className="spreadsheet-mobile-view" type="button" onClick={() => toggleInlinePreview(item)} aria-label={`${expanded ? "Hide" : "Preview purchase options for"} ${item.name}`} aria-expanded={expanded} aria-controls={`more-mobile-inline-preview-${item.id}`} aria-pressed={expanded}>{expanded ? "Hide" : "View"} {expanded ? <ChevronDown size={14} className="is-expanded" /> : <ArrowRight size={14} />}</button>
+                    {expanded && <div className="spreadsheet-mobile-expanded" id={`more-mobile-inline-preview-${item.id}`}>{renderInlinePurchaseCard(item)}</div>}
+                  </article>;
                 })}</div>
               </section>}
             </>}
