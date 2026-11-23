@@ -342,3 +342,31 @@
   .spreadsheet-pagination button { min-height: 32px; padding-inline: 8px; }
   .spreadsheet-footer { font-size: 8px; }
 }
+
+/* 小品牌页尾的跨品牌「更多商品」模块 */
+.spreadsheet-more { margin-top: 34px; padding-top: 26px; border-top: 1px solid var(--sheet-line); }
+.spreadsheet-more-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; margin-bottom: 14px; }
+.spreadsheet-more-heading p { margin: 0; }
+.spreadsheet-more-heading h2 { margin: 4px 0 0; font: 700 24px/1.2 "Playfair Display", Georgia, serif; letter-spacing: -.015em; }
+.spreadsheet-more-heading > div > p:last-child { margin-top: 6px; color: var(--sheet-muted); font-size: 12px; }
+.spreadsheet-more-count { flex: 0 0 auto; color: var(--sheet-muted); font: 10px "DM Mono", monospace; letter-spacing: .08em; text-transform: uppercase; }
+.spreadsheet-more-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+.spreadsheet-more-card { display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--sheet-line); border-radius: 10px; background: var(--sheet-paper); color: inherit; text-decoration: none; transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease; }
+.spreadsheet-more-card:hover { border-color: var(--sheet-accent); transform: translateY(-2px); box-shadow: 0 8px 20px color-mix(in srgb, var(--sheet-accent) 14%, transparent); }
+.spreadsheet-more-image { display: block; aspect-ratio: 1 / 1; background: var(--sheet-soft); }
+.spreadsheet-more-image img { width: 100%; height: 100%; object-fit: cover; }
+.spreadsheet-more-body { display: flex; flex-direction: column; gap: 6px; padding: 9px 10px 11px; }
+.spreadsheet-more-body strong { display: -webkit-box; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-size: 11px; line-height: 1.35; }
+.spreadsheet-more-brands { display: flex; flex-wrap: wrap; gap: 4px; }
+.spreadsheet-more-brands > span { padding: 2px 6px; border-radius: 999px; background: var(--sheet-soft); color: var(--sheet-muted); font-size: 9px; }
+.spreadsheet-more-price { margin-top: auto; color: var(--sheet-accent); font-size: 12px; font-weight: 700; }
+@media (max-width: 900px) {
+  .spreadsheet-more-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .spreadsheet-more { margin-top: 24px; padding-top: 20px; }
+  .spreadsheet-more-heading { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .spreadsheet-more-heading h2 { font-size: 20px; }
+  .spreadsheet-more-grid { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scroll-snap-type: x mandatory; }
+  .spreadsheet-more-card { flex: 0 0 132px; scroll-snap-align: start; }
+}

@@ -30,7 +30,8 @@ export type CatalogQuery = { category?: string; platform?: string; brand?: strin
 
 function normalized(value: string | undefined) { return (value || "").normalize("NFKC").trim().toLocaleLowerCase(); }
 // 品牌参数容错：把连字符/下划线当空格，合并多余空格，方便手写或分享出去的链接。
-function normalizedBrand(value: string | undefined) { return normalized(value).replace(/[-_]+/g, " ").replace(/\s+/g, " ").trim(); }
+export function normalizeBrandValue(value: string | undefined) { return normalized(value).replace(/[-_]+/g, " ").replace(/\s+/g, " ").trim(); }
+const normalizedBrand = normalizeBrandValue;
 
 function productKey(item: CatalogSummary) { return item.sourceProductId || item.id; }
 

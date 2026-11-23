@@ -3,7 +3,7 @@ import { Link } from "wouter";
 import { ArrowDownWideNarrow, ArrowLeft, ArrowRight, Check, ChevronDown, Copy, ExternalLink, LayoutGrid, Moon, Share2, Store, Sun, Tag, Table2, X } from "lucide-react";
 import "./spreadsheet.css";
 import { initializeAnalytics, trackEvent, trackOnce } from "@/lib/analytics";
-import { ALL_BRANDS, filterCatalogItems, paginateCatalogItems, type CatalogSummary, type CatalogSort } from "@/lib/catalogSummary";
+import { ALL_BRANDS, filterCatalogItems, normalizeBrandValue, paginateCatalogItems, type CatalogSummary, type CatalogSort } from "@/lib/catalogSummary";
 import { isLongSleeve, LONG_SLEEVE_CATEGORY } from "@/lib/catalogOrdering.mjs";
 import { normalizePlatformName, platformIconFor, platformSourcesFor, type PlatformSource } from "@/lib/platformSources.mjs";
 import { mergeCatalogOverrides, mergePreviewOverrides, type CatalogPreviewGroup, type CatalogProductOverride } from "@/lib/catalogOverrides";
@@ -26,6 +26,41 @@ type MenuPermissionNotice = { title: string; message: string; dismissLabel: stri
 type PreviewStyle = { id: string; styleKey: string; styleLabel: string; image: string; price: number; currency: string };
 type ProductPreviewGroup = CatalogPreviewGroup;
 type ImagePreviewItem = Pick<CatalogPageRow, "name" | "styleLabel" | "thumbnail">;
+
+function brandNamesOf(item: CatalogSummary): string[] {
+  const brands = item.brands?.length ? item.brands : item.brand ? [item.brand] : [];
+  return brands.filter((brand) => brand && normalizeBrandValue(brand) !== "unbranded");
+}
+
+// 小品牌页尾的「更多商品」：从其他品牌轮转取商品，保证一次出现多个品牌，且不重复同一商品。
+function buildMoreProducts(items: CatalogSummary[], currentBrand: string, limit = 12): CatalogSummary[] {
+  const current = normalizeBrandValue(currentBrand);
+  const groups = new Map<string, CatalogSummary[]>();
+  const seenProducts = new Set<string>();
+  for (const item of items) {
+    const productId = item.sourceProductId || item.id;
+    if (seenProducts.has(productId)) continue;
+    const brands = brandNamesOf(item);
+    if (!brands.length) continue;
+    if (brands.some((brand) => normalizeBrandValue(brand) === current)) continue;
+    seenProducts.add(productId);
+    const group = groups.get(brands[0]) || [];
+    group.push(item);
+    groups.set(brands[0], group);
+  }
+  const queues = [...groups.values()]
+    .sort((a, b) => b.length - a.length || a[0].name.localeCompare(b[0].name))
+    .map((group) => group.slice(0, 2));
+  const result: CatalogSummary[] = [];
+  while (result.length < limit && queues.some((queue) => queue.length)) {
+    for (const queue of queues) {
+      const next = queue.shift();
+      if (next) result.push(next);
+      if (result.length >= limit) break;
+    }
+  }
+  return result;
+}
 type InlinePurchaseCardProps = {
   item: CatalogPageRow;
   group?: ProductPreviewGroup;
@@ -294,6 +329,7 @@ export default function SpreadsheetCatalog1() {
   const [overridesReady, setOverridesReady] = useState(false);
   const [runtimeCatalogIndex, setRuntimeCatalogIndex] = useState<CatalogSummary[] | null>(null);
   const [runtimeCatalogReady, setRuntimeCatalogReady] = useState(false);
+  const [moreSource, setMoreSource] = useState<CatalogSummary[] | null>(null);
   const [pageSize, setPageSize] = useState(50);
   const [payload, setPayload] = useState<PagePayload | null>(null);
   const [loading, setLoading] = useState(true);
@@ -694,6 +730,18 @@ export default function SpreadsheetCatalog1() {
   }, [loading, payload?.total, view.category, view.platform]);
 
   const pageCount = payload?.totalPages || (catalogMeta ? Math.max(1, Math.ceil(catalogMeta.total / pageSize)) : 1);
+  // 品牌结果不超过 5 页时，在列表末尾补一个跨品牌「更多商品」模块。
+  const showMoreProducts = !!view.brand && view.brand !== ALL_BRANDS && pageCount <= 5 && (payload?.total || 0) > 0;
+  useEffect(() => {
+    if (!showMoreProducts || moreSource) return;
+    let active = true;
+    void loadCatalogIndex().then((items) => { if (active) setMoreSource(items); }).catch(() => { /* 模块是增强内容，加载失败不阻断列表 */ });
+    return () => { active = false; };
+  }, [showMoreProducts, moreSource]);
+  const moreProducts = useMemo(
+    () => showMoreProducts && moreSource ? buildMoreProducts(moreSource, view.brand, 12) : [],
+    [showMoreProducts, moreSource, view.brand],
+  );
   const shareUrl = window.location.href;
   const shareTitle = "RIVORA Style Directory";
   const shareText = "Browse styles, prices, and buying platforms in the RIVORA catalog.";
@@ -857,6 +905,17 @@ export default function SpreadsheetCatalog1() {
 
               <div className="spreadsheet-pagination"><span>Page {payload?.page || view.page} of {pageCount}</span><div><button type="button" onClick={() => setPage(Math.max(1, (payload?.page || view.page) - 1))} disabled={(payload?.page || view.page) <= 1}><ArrowLeft size={14} /> Previous</button><button type="button" onClick={() => setPage(Math.min(pageCount, (payload?.page || view.page) + 1))} disabled={(payload?.page || view.page) >= pageCount}>Next <ArrowRight size={14} /></button></div></div>
               </div>
+              {showMoreProducts && moreProducts.length > 0 && <section className="spreadsheet-more" aria-labelledby="spreadsheet-more-title">
+                <div className="spreadsheet-more-heading"><div><p className="spreadsheet-eyebrow">MORE PRODUCTS</p><h2 id="spreadsheet-more-title">More from other brands</h2><p>This brand has a small selection, so here are styles from multiple brands across the catalog.</p></div><span className="spreadsheet-more-count">{moreProducts.length} picks</span></div>
+                <div className="spreadsheet-more-grid">{moreProducts.map((item, index) => {
+                  const brands = brandNamesOf(item).slice(0, 2);
+                  const href = catalogBasePath().endsWith("/catalog-data-1") ? `/product1/${encodeURIComponent(item.sourceProductId)}` : `/product/${encodeURIComponent(item.id)}`;
+                  return <Link key={item.id} href={href} className="spreadsheet-more-card" aria-label={`${item.name} by ${brands.join(" / ")}`} onClick={() => trackEvent("more_products_click", { source: "brand_more", product_id: item.id, brand: view.brand, position: index + 1 })}>
+                    <span className="spreadsheet-more-image"><img src={item.thumbnail || placeholder} alt={item.name} loading="lazy" decoding="async" onError={(event) => { event.currentTarget.src = placeholder; }} /></span>
+                    <span className="spreadsheet-more-body"><strong>{item.name}</strong><span className="spreadsheet-more-brands">{brands.map((brand) => <span key={brand}>{brand}</span>)}</span><span className="spreadsheet-more-price">{formatMoney(item.price, item.currency)}</span></span>
+                  </Link>;
+                })}</div>
+              </section>}
             </>}
       <footer className="spreadsheet-footer"><span>RIVORA · STYLE CATALOG</span><span>{countLabel || "Browse the catalog"}</span></footer>
     </section>
