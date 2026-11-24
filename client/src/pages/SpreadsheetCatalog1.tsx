@@ -110,21 +110,21 @@ function PlatformChoiceModal({ platform, onClose, onBrowseCatalog }: {
       </header>
       <div className="spreadsheet-choice-options">
         <button className="spreadsheet-choice-card is-primary" type="button" onClick={() => { trackEvent("platform_choice_select", { platform: platform.label, choice: "catalog", source: "side_marquee" }); onBrowseCatalog(); }}>
-          <span className="spreadsheet-choice-badge is-primary"><Check size={12} aria-hidden="true" /> MOST CHOSEN · 多数人的选择</span>
+          <span className="spreadsheet-choice-badge is-primary"><Check size={12} aria-hidden="true" /> MOST POPULAR</span>
           <span className="spreadsheet-choice-icon"><Table2 size={22} aria-hidden="true" /></span>
           <strong>Browse in our catalog</strong>
-          <span className="spreadsheet-choice-copy">Keep your current filters and view the same styles with {platform.label} links applied.</span>
+          <span className="spreadsheet-choice-copy">See the same styles with {platform.label} buying links. Your filters stay the same.</span>
           <span className="spreadsheet-choice-cta">View {platform.label} styles <ArrowRight size={15} aria-hidden="true" /></span>
         </button>
         <a className="spreadsheet-choice-card" href={platform.url} target="_blank" rel="noopener noreferrer" onClick={() => { trackEvent("platform_choice_select", { platform: platform.label, choice: "sheet", source: "side_marquee" }); window.setTimeout(onClose, 0); }}>
-          <span className="spreadsheet-choice-badge">CLASSIC CHOICE · 经典选择</span>
+          <span className="spreadsheet-choice-badge">CLASSIC CHOICE</span>
           <span className="spreadsheet-choice-icon"><ExternalLink size={22} aria-hidden="true" /></span>
           <strong>Open {platform.label} spreadsheet</strong>
-          <span className="spreadsheet-choice-copy">Go straight to the original Google Sheet for this platform.</span>
+          <span className="spreadsheet-choice-copy">Open the {platform.label} Google Sheet in a new tab.</span>
           <span className="spreadsheet-choice-cta is-secondary">Open Google Sheet <ExternalLink size={14} aria-hidden="true" /></span>
         </a>
       </div>
-      <p className="spreadsheet-choice-note" id="spreadsheet-choice-note">The catalog keeps your current brand and category filters. The spreadsheet opens on Google Sheets in a new tab.</p>
+      <p className="spreadsheet-choice-note" id="spreadsheet-choice-note">Your brand and category filters stay the same. The spreadsheet opens in a new tab.</p>
     </div>
   </div>;
 }
