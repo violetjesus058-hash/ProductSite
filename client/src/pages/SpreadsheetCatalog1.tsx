@@ -872,8 +872,9 @@ export default function SpreadsheetCatalog1() {
   const previewUrl = imagePreviewItem?.thumbnail || placeholder;
   const previewAlt = imagePreviewItem ? `${imagePreviewItem.name}${imagePreviewItem.styleLabel ? `, Style ${displayStyleLabel(imagePreviewItem.styleLabel)}` : ""}` : "";
 
-  // 先只在 /spreadsheet1 的 VLONE 品牌页预览两侧平台跑马灯，确认效果后再决定是否放开。
-  const showSideMarquees = catalogBasePath().endsWith("/catalog-data-1") && normalizeBrandValue(view.brand) === "vlone";
+  // /spreadsheet 全量显示两侧平台跑马灯；/spreadsheet1 仍只在 VLONE 页预览，两套数据集互不影响。
+  const sideMarqueeBase = catalogBasePath();
+  const showSideMarquees = sideMarqueeBase.endsWith("/catalog-data") || (sideMarqueeBase.endsWith("/catalog-data-1") && normalizeBrandValue(view.brand) === "vlone");
   const openPlatformChoice = (platform: { label: string; url: string }) => {
     setPlatformChoice(platform);
     trackEvent("platform_choice_open", { platform: platform.label, source: "side_marquee" });
