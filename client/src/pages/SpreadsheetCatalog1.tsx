@@ -36,7 +36,7 @@ function SidePlatformMarquee() {
     {([["left", "up"], ["right", "down"]] as const).map(([side, direction]) => <div className={`spreadsheet-marquee-rail is-${side}`} key={side}>
       <div className={`spreadsheet-marquee-track is-${direction}`}>
         {[0, 1].map((copy) => <div className="spreadsheet-marquee-group" key={copy}>
-          {items.map((item) => <span className="spreadsheet-marquee-item" key={`${copy}-${item.label}`} title={item.label}><img src={item.icon} alt="" loading="lazy" decoding="async" /></span>)}
+          {items.map((item) => <span className="spreadsheet-marquee-item" key={`${copy}-${item.label}`} title={item.label}><img src={item.icon} alt="" decoding="async" /></span>)}
         </div>)}
       </div>
     </div>)}
