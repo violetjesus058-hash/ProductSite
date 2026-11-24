@@ -356,3 +356,25 @@
   .spreadsheet-more-heading { flex-direction: column; align-items: flex-start; gap: 6px; }
   .spreadsheet-more-heading h2 { font-size: 26px; }
 }
+
+/* 左右两侧平台 logo 跑马灯（预览：/spreadsheet1 + VLONE） */
+.spreadsheet-marquee-layer { display: none; }
+.spreadsheet-marquee-rail { position: fixed; top: 86px; bottom: 18px; z-index: 2; width: 68px; overflow: hidden; -webkit-mask-image: linear-gradient(transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(transparent, #000 8%, #000 92%, transparent); }
+.spreadsheet-marquee-rail.is-left { left: max(12px, calc((100vw - 1240px) / 2 - 80px)); }
+.spreadsheet-marquee-rail.is-right { right: max(12px, calc((100vw - 1240px) / 2 - 80px)); }
+.spreadsheet-marquee-track { display: flex; flex-direction: column; width: 68px; will-change: transform; }
+.spreadsheet-marquee-track.is-up { animation: spreadsheet-side-marquee-up 40s linear infinite; }
+.spreadsheet-marquee-track.is-down { animation: spreadsheet-side-marquee-down 40s linear infinite; }
+.spreadsheet-marquee-rail:hover .spreadsheet-marquee-track { animation-play-state: paused; }
+.spreadsheet-marquee-group { display: flex; flex-direction: column; gap: 12px; padding-bottom: 12px; }
+.spreadsheet-marquee-item { display: flex; align-items: center; justify-content: center; width: 68px; height: 68px; border: 1px solid var(--sheet-line); border-radius: 14px; background: var(--sheet-paper); box-shadow: 0 6px 16px rgba(34, 40, 36, .08); }
+.spreadsheet-marquee-item img { width: 48px; height: 40px; object-fit: contain; }
+@keyframes spreadsheet-side-marquee-up { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+@keyframes spreadsheet-side-marquee-down { from { transform: translateY(-50%); } to { transform: translateY(0); } }
+@media (min-width: 1280px) {
+  .spreadsheet-shell.has-side-marquees .spreadsheet-marquee-layer { display: block; }
+  .spreadsheet-shell.has-side-marquees .spreadsheet-content { width: min(1240px, calc(100% - 184px)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spreadsheet-marquee-track { animation: none !important; }
+}

@@ -27,6 +27,22 @@ type PreviewStyle = { id: string; styleKey: string; styleLabel: string; image: s
 type ProductPreviewGroup = CatalogPreviewGroup;
 type ImagePreviewItem = Pick<CatalogPageRow, "name" | "styleLabel" | "thumbnail">;
 
+// 两侧平台跑马灯使用的平台，顺序即展示顺序；logo 统一取自 platform-icons。
+const SIDE_MARQUEE_PLATFORMS = ["Kakobuy", "Hipobuy", "Oopbuy", "Litbuy", "GTbuy", "USFans", "Fansbuy", "Hoobuy", "Weidian", "OrientDig", "Sugargoo", "BBDBuy", "VigorBuy", "Fishgoo"];
+
+function SidePlatformMarquee() {
+  const items = SIDE_MARQUEE_PLATFORMS.map((label) => ({ label, icon: platformIconFor(label) })).filter((item) => item.icon);
+  return <div className="spreadsheet-marquee-layer" aria-hidden="true">
+    {([["left", "up"], ["right", "down"]] as const).map(([side, direction]) => <div className={`spreadsheet-marquee-rail is-${side}`} key={side}>
+      <div className={`spreadsheet-marquee-track is-${direction}`}>
+        {[0, 1].map((copy) => <div className="spreadsheet-marquee-group" key={copy}>
+          {items.map((item) => <span className="spreadsheet-marquee-item" key={`${copy}-${item.label}`} title={item.label}><img src={item.icon} alt="" loading="lazy" decoding="async" /></span>)}
+        </div>)}
+      </div>
+    </div>)}
+  </div>;
+}
+
 function brandNamesOf(item: CatalogSummary): string[] {
   const brands = item.brands?.length ? item.brands : item.brand ? [item.brand] : [];
   return brands.filter((brand) => brand && normalizeBrandValue(brand) !== "unbranded");
@@ -769,7 +785,10 @@ export default function SpreadsheetCatalog1() {
   const previewUrl = imagePreviewItem?.thumbnail || placeholder;
   const previewAlt = imagePreviewItem ? `${imagePreviewItem.name}${imagePreviewItem.styleLabel ? `, Style ${displayStyleLabel(imagePreviewItem.styleLabel)}` : ""}` : "";
 
-  return <main className="spreadsheet-shell" data-theme={catalogTheme}>
+  // 先只在 /spreadsheet1 的 VLONE 品牌页预览两侧平台跑马灯，确认效果后再决定是否放开。
+  const showSideMarquees = catalogBasePath().endsWith("/catalog-data-1") && normalizeBrandValue(view.brand) === "vlone";
+  return <main className={`spreadsheet-shell${showSideMarquees ? " has-side-marquees" : ""}`} data-theme={catalogTheme}>
+    {showSideMarquees && <SidePlatformMarquee />}
     <header className="spreadsheet-header">
       <Link href="/" className="spreadsheet-brand" aria-label="RIVORA product catalog"><img src="/branding/rivora-icon.png" alt="" /><span>RIVORA</span></Link>
       <div className="spreadsheet-document-name"><strong>RIVORA Product Catalog</strong><small>Interactive catalog</small></div>
