@@ -46,19 +46,18 @@ const SIDE_MARQUEE_PLATFORMS = [
   { label: "Fishgoo", url: "https://docs.google.com/spreadsheets/d/1Vs190yOAkrQ04LQb6l_Lnr_oTA0ny4CI3PJ_0B4_6zs/edit?gid=573316454#gid=573316454" },
 ];
 
-function SidePlatformMarquee() {
+function SidePlatformMarquee({ onChoose }: { onChoose: (platform: { label: string; url: string }) => void }) {
   const items = SIDE_MARQUEE_PLATFORMS.map((platform) => ({ ...platform, icon: platformIconFor(platform.label) })).filter((item) => item.icon);
   const groups = (rail: string, decorative: boolean) => [0, 1].map((copy) => <div className="spreadsheet-marquee-group" key={`${rail}-${copy}`} aria-hidden={decorative || copy === 1 ? true : undefined}>
-    {items.map((item) => <a
+    {items.map((item) => <button
       className="spreadsheet-marquee-item"
       key={`${rail}-${copy}-${item.label}`}
-      href={item.url}
-      target="_blank"
-      rel="noopener noreferrer"
+      type="button"
       tabIndex={decorative || copy === 1 ? -1 : 0}
-      aria-label={`Open ${item.label} spreadsheet in a new tab`}
-      title={`${item.label} spreadsheet`}
-    ><img src={item.icon} alt="" decoding="async" /></a>)}
+      aria-label={`Open ${item.label} options`}
+      title={`${item.label} options`}
+      onClick={() => onChoose({ label: item.label, url: item.url })}
+    ><img src={item.icon} alt="" decoding="async" /></button>)}
   </div>);
   return <div className="spreadsheet-marquee-layer">
     <div className="spreadsheet-marquee-rail is-left">
@@ -66,6 +65,66 @@ function SidePlatformMarquee() {
     </div>
     <div className="spreadsheet-marquee-rail is-right" aria-hidden="true">
       <div className="spreadsheet-marquee-track is-down">{groups("right", true)}</div>
+    </div>
+  </div>;
+}
+
+function PlatformChoiceModal({ platform, onClose, onBrowseCatalog }: {
+  platform: { label: string; url: string };
+  onClose: () => void;
+  onBrowseCatalog: () => void;
+}) {
+  const modalRef = useRef<HTMLDivElement | null>(null);
+  const closeRef = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    const previous = document.activeElement as HTMLElement | null;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    closeRef.current?.focus();
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") { onClose(); return; }
+      if (event.key !== "Tab") return;
+      const focusable = Array.from(modalRef.current?.querySelectorAll<HTMLElement>("a[href], button:not([disabled])") || []);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = previousOverflow;
+      previous?.focus();
+    };
+  }, []);
+
+  const icon = platformIconFor(platform.label);
+  return <div className="spreadsheet-choice-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
+    <div className="spreadsheet-choice-modal" ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="spreadsheet-choice-title" aria-describedby="spreadsheet-choice-note">
+      <header className="spreadsheet-choice-header">
+        <span className="spreadsheet-choice-logo">{icon ? <img src={icon} alt="" /> : <Store size={22} aria-hidden="true" />}</span>
+        <div><p className="spreadsheet-eyebrow">CHOOSE HOW TO OPEN</p><h2 id="spreadsheet-choice-title">{platform.label}</h2></div>
+        <button className="spreadsheet-choice-close" type="button" onClick={onClose} ref={closeRef} aria-label="Close dialog"><X size={18} aria-hidden="true" /></button>
+      </header>
+      <div className="spreadsheet-choice-options">
+        <button className="spreadsheet-choice-card is-primary" type="button" onClick={() => { trackEvent("platform_choice_select", { platform: platform.label, choice: "catalog", source: "side_marquee" }); onBrowseCatalog(); }}>
+          <span className="spreadsheet-choice-badge is-primary"><Check size={12} aria-hidden="true" /> MOST CHOSEN · 多数人的选择</span>
+          <span className="spreadsheet-choice-icon"><Table2 size={22} aria-hidden="true" /></span>
+          <strong>Browse in our catalog</strong>
+          <span className="spreadsheet-choice-copy">Keep your current filters and view the same styles with {platform.label} links applied.</span>
+          <span className="spreadsheet-choice-cta">View {platform.label} styles <ArrowRight size={15} aria-hidden="true" /></span>
+        </button>
+        <a className="spreadsheet-choice-card" href={platform.url} target="_blank" rel="noopener noreferrer" onClick={() => { trackEvent("platform_choice_select", { platform: platform.label, choice: "sheet", source: "side_marquee" }); window.setTimeout(onClose, 0); }}>
+          <span className="spreadsheet-choice-badge">CLASSIC CHOICE · 经典选择</span>
+          <span className="spreadsheet-choice-icon"><ExternalLink size={22} aria-hidden="true" /></span>
+          <strong>Open {platform.label} spreadsheet</strong>
+          <span className="spreadsheet-choice-copy">Go straight to the original Google Sheet for this platform.</span>
+          <span className="spreadsheet-choice-cta is-secondary">Open Google Sheet <ExternalLink size={14} aria-hidden="true" /></span>
+        </a>
+      </div>
+      <p className="spreadsheet-choice-note" id="spreadsheet-choice-note">The catalog keeps your current brand and category filters. The spreadsheet opens on Google Sheets in a new tab.</p>
     </div>
   </div>;
 }
@@ -378,6 +437,7 @@ export default function SpreadsheetCatalog1() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [imagePreviewItem, setImagePreviewItem] = useState<ImagePreviewItem | null>(null);
+  const [platformChoice, setPlatformChoice] = useState<{ label: string; url: string } | null>(null);
   const [expandedItemId, setExpandedItemId] = useState<string | null>(null);
   const [selectedStyleId, setSelectedStyleId] = useState<string | null>(null);
   const [showAllPlatforms, setShowAllPlatforms] = useState(false);
@@ -814,8 +874,18 @@ export default function SpreadsheetCatalog1() {
 
   // 先只在 /spreadsheet1 的 VLONE 品牌页预览两侧平台跑马灯，确认效果后再决定是否放开。
   const showSideMarquees = catalogBasePath().endsWith("/catalog-data-1") && normalizeBrandValue(view.brand) === "vlone";
+  const openPlatformChoice = (platform: { label: string; url: string }) => {
+    setPlatformChoice(platform);
+    trackEvent("platform_choice_open", { platform: platform.label, source: "side_marquee" });
+  };
+  const browseWithPlatform = () => {
+    if (!platformChoice) return;
+    setView((current) => ({ ...current, platform: platformChoice.label, page: 1 }));
+    setPlatformChoice(null);
+  };
   return <main className={`spreadsheet-shell${showSideMarquees ? " has-side-marquees" : ""}`} data-theme={catalogTheme}>
-    {showSideMarquees && <SidePlatformMarquee />}
+    {showSideMarquees && <SidePlatformMarquee onChoose={openPlatformChoice} />}
+    {showSideMarquees && platformChoice && <PlatformChoiceModal platform={platformChoice} onClose={() => setPlatformChoice(null)} onBrowseCatalog={browseWithPlatform} />}
     <header className="spreadsheet-header">
       <Link href="/" className="spreadsheet-brand" aria-label="RIVORA product catalog"><img src="/branding/rivora-icon.png" alt="" /><span>RIVORA</span></Link>
       <div className="spreadsheet-document-name"><strong>RIVORA Product Catalog</strong><small>Interactive catalog</small></div>
