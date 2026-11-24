@@ -27,19 +27,46 @@ type PreviewStyle = { id: string; styleKey: string; styleLabel: string; image: s
 type ProductPreviewGroup = CatalogPreviewGroup;
 type ImagePreviewItem = Pick<CatalogPageRow, "name" | "styleLabel" | "thumbnail">;
 
-// 两侧平台跑马灯使用的平台，顺序即展示顺序；logo 统一取自 platform-icons。
-const SIDE_MARQUEE_PLATFORMS = ["Kakobuy", "Hipobuy", "Oopbuy", "Litbuy", "GTbuy", "USFans", "Fansbuy", "Hoobuy", "Weidian", "OrientDig", "Sugargoo", "BBDBuy", "VigorBuy", "Fishgoo"];
+// 两侧平台跑马灯使用的平台与对应表格；顺序即展示顺序，logo 统一取自 platform-icons。
+const SIDE_MARQUEE_PLATFORMS = [
+  { label: "Kakobuy", url: "https://docs.google.com/spreadsheets/d/1Vs190yOAkrQ04LQb6l_Lnr_oTA0ny4CI3PJ_0B4_6zs/edit?gid=1903531254#gid=1903531254" },
+  { label: "Hipobuy", url: "https://docs.google.com/spreadsheets/d/1Vs190yOAkrQ04LQb6l_Lnr_oTA0ny4CI3PJ_0B4_6zs/edit?gid=1848478451#gid=1848478451" },
+  { label: "Joyagoo", url: "https://docs.google.com/spreadsheets/d/1Vs190yOAkrQ04LQb6l_Lnr_oTA0ny4CI3PJ_0B4_6zs/edit?gid=892375262#gid=892375262" },
+  { label: "Oopbuy", url: "https://docs.google.com/spreadsheets/d/1Vs190yOAkrQ04LQb6l_Lnr_oTA0ny4CI3PJ_0B4_6zs/edit?gid=284704653#gid=284704653" },
+  { label: "Litbuy", url: "https://docs.google.com/spreadsheets/d/1Vs190yOAkrQ04LQb6l_Lnr_oTA0ny4CI3PJ_0B4_6zs/edit?gid=1631059896#gid=1631059896" },
+  { label: "GTbuy", url: "https://docs.google.com/spreadsheets/d/1Vs190yOAkrQ04LQb6l_Lnr_oTA0ny4CI3PJ_0B4_6zs/edit?gid=1729953760#gid=1729953760" },
+  { label: "USFans", url: "https://docs.google.com/spreadsheets/d/1Vs190yOAkrQ04LQb6l_Lnr_oTA0ny4CI3PJ_0B4_6zs/edit?gid=2086211270#gid=2086211270" },
+  { label: "Fansbuy", url: "https://docs.google.com/spreadsheets/d/1Vs190yOAkrQ04LQb6l_Lnr_oTA0ny4CI3PJ_0B4_6zs/edit?gid=766708488#gid=766708488" },
+  { label: "Hoobuy", url: "https://docs.google.com/spreadsheets/d/1Vs190yOAkrQ04LQb6l_Lnr_oTA0ny4CI3PJ_0B4_6zs/edit?gid=317779445#gid=317779445" },
+  { label: "Weidian", url: "https://docs.google.com/spreadsheets/d/1Vs190yOAkrQ04LQb6l_Lnr_oTA0ny4CI3PJ_0B4_6zs/edit?gid=352110059#gid=352110059" },
+  { label: "OrientDig", url: "https://docs.google.com/spreadsheets/d/1Vs190yOAkrQ04LQb6l_Lnr_oTA0ny4CI3PJ_0B4_6zs/edit?gid=1338059330#gid=1338059330" },
+  { label: "Sugargoo", url: "https://docs.google.com/spreadsheets/d/1Vs190yOAkrQ04LQb6l_Lnr_oTA0ny4CI3PJ_0B4_6zs/edit?gid=781505349#gid=781505349" },
+  { label: "BBDBuy", url: "https://docs.google.com/spreadsheets/d/1Vs190yOAkrQ04LQb6l_Lnr_oTA0ny4CI3PJ_0B4_6zs/edit?gid=522764744#gid=522764744" },
+  { label: "VigorBuy", url: "https://docs.google.com/spreadsheets/d/1Vs190yOAkrQ04LQb6l_Lnr_oTA0ny4CI3PJ_0B4_6zs/edit?gid=1941853618#gid=1941853618" },
+  { label: "Fishgoo", url: "https://docs.google.com/spreadsheets/d/1Vs190yOAkrQ04LQb6l_Lnr_oTA0ny4CI3PJ_0B4_6zs/edit?gid=573316454#gid=573316454" },
+];
 
 function SidePlatformMarquee() {
-  const items = SIDE_MARQUEE_PLATFORMS.map((label) => ({ label, icon: platformIconFor(label) })).filter((item) => item.icon);
-  return <div className="spreadsheet-marquee-layer" aria-hidden="true">
-    {([["left", "up"], ["right", "down"]] as const).map(([side, direction]) => <div className={`spreadsheet-marquee-rail is-${side}`} key={side}>
-      <div className={`spreadsheet-marquee-track is-${direction}`}>
-        {[0, 1].map((copy) => <div className="spreadsheet-marquee-group" key={copy}>
-          {items.map((item) => <span className="spreadsheet-marquee-item" key={`${copy}-${item.label}`} title={item.label}><img src={item.icon} alt="" decoding="async" /></span>)}
-        </div>)}
-      </div>
-    </div>)}
+  const items = SIDE_MARQUEE_PLATFORMS.map((platform) => ({ ...platform, icon: platformIconFor(platform.label) })).filter((item) => item.icon);
+  const groups = (rail: string, decorative: boolean) => [0, 1].map((copy) => <div className="spreadsheet-marquee-group" key={`${rail}-${copy}`} aria-hidden={decorative || copy === 1 ? true : undefined}>
+    {items.map((item) => <a
+      className="spreadsheet-marquee-item"
+      key={`${rail}-${copy}-${item.label}`}
+      href={item.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      tabIndex={decorative || copy === 1 ? -1 : 0}
+      aria-label={`Open ${item.label} spreadsheet in a new tab`}
+      title={`${item.label} spreadsheet`}
+    ><img src={item.icon} alt="" decoding="async" /></a>)}
+  </div>);
+  return <div className="spreadsheet-marquee-layer">
+    <div className="spreadsheet-marquee-rail is-left">
+      <div className="spreadsheet-marquee-track is-up">{groups("left", false)}</div>
+    </div>
+    <div className="spreadsheet-marquee-rail is-right" aria-hidden="true">
+      <div className="spreadsheet-marquee-track is-down">{groups("right", true)}</div>
+    </div>
   </div>;
 }
 
