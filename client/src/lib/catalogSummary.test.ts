@@ -150,6 +150,7 @@ describe("spreadsheet catalog URL facets", () => {
     expect(ids(filterCatalogItems(styles, { category: "accessories" }))).toEqual(["cap"]);
     expect(ids(filterCatalogItems(styles, { category: "clothing" }))).toEqual(["hoodie", "shirt"]);
     expect(ids(filterCatalogItems(styles, { category: "hoodies,tees" }))).toEqual(["hoodie"]);
+    expect(ids(filterCatalogItems([...styles, item("acc-tee", "pa2", "ACC", 12, { subCategory: "Selection", name: "Tee Keychain" })], { category: "tees" }))).toEqual([]);
   });
 
   const seasonal = [

@@ -72,6 +72,8 @@
 .spreadsheet-eyebrow { display: flex; align-items: center; gap: 8px; margin: 0; color: var(--sheet-accent); font: 10px "DM Mono", monospace; letter-spacing: .14em; }
 .spreadsheet-title-row h1 { margin: 0; font: 700 clamp(24px, 2.6vw, 32px)/1.1 "Playfair Display", Georgia, serif; letter-spacing: -.02em; }
 .spreadsheet-subtitle { margin: 0; color: var(--sheet-muted); font-size: 12px; }
+.spreadsheet-filters-toggle { display: none; }
+.spreadsheet-filters { display: block; }
 .spreadsheet-toolbar { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 10px; }
 .spreadsheet-toolbar.has-brand { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
 .spreadsheet-select { position: relative; min-height: 56px; display: grid; grid-template-columns: 26px 1fr 18px; grid-template-rows: 1fr 1fr; align-items: center; column-gap: 9px; padding: 7px 12px; border: 1px solid var(--sheet-line); border-radius: 8px; background: var(--sheet-paper); cursor: pointer; }
@@ -316,6 +318,12 @@
   .spreadsheet-title-row { margin-bottom: 10px; }
   .spreadsheet-title-row h1 { font-size: 24px; }
   .spreadsheet-subtitle { font-size: 11px; }
+  .spreadsheet-filters-toggle { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; margin: 0 0 8px; padding: 0 11px; border: 1px solid var(--sheet-line); border-radius: 7px; background: var(--sheet-paper); color: var(--sheet-ink); font: 700 10px "DM Mono", monospace; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+  .spreadsheet-filters-toggle b { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 4px; border-radius: 9px; background: var(--sheet-accent); color: white; font-size: 10px; }
+  .spreadsheet-filters-toggle svg:last-child { transition: transform .18s ease; }
+  .spreadsheet-filters-toggle svg.is-open { transform: rotate(180deg); }
+  .spreadsheet-filters { display: none; }
+  .spreadsheet-filters.is-open { display: block; }
   .spreadsheet-toolbar { grid-template-columns: 1fr; gap: 8px; }
   .spreadsheet-toolbar.has-brand { grid-template-columns: 1fr; }
   .spreadsheet-select { min-height: 52px; grid-template-columns: 25px 1fr 16px; }

@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "wouter";
-import { ArrowDownWideNarrow, ArrowLeft, ArrowRight, Check, ChevronDown, Copy, ExternalLink, LayoutGrid, Moon, Share2, Store, Sun, Tag, Table2, X } from "lucide-react";
+import { ArrowDownWideNarrow, ArrowLeft, ArrowRight, Check, ChevronDown, Copy, ExternalLink, LayoutGrid, Moon, Share2, SlidersHorizontal, Store, Sun, Tag, Table2, X } from "lucide-react";
 import "./spreadsheet.css";
 import { initializeAnalytics, trackEvent, trackOnce } from "@/lib/analytics";
 import { ALL_BRANDS, filterCatalogItems, normalizeBrandValue, paginateCatalogItems, type CatalogSummary, type CatalogSort } from "@/lib/catalogSummary";
@@ -458,6 +458,7 @@ export default function SpreadsheetCatalog1() {
   const [previewLoadingSourceId, setPreviewLoadingSourceId] = useState<string | null>(null);
   const [previewErrorSourceId, setPreviewErrorSourceId] = useState<string | null>(null);
   const [quickCategoryBusy, setQuickCategoryBusy] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(true);
   const [pendingQuickCategory, setPendingQuickCategory] = useState<string | null>(null);
   const previewRequestRef = useRef(0);
   const requestNumber = useRef(0);
@@ -469,6 +470,10 @@ export default function SpreadsheetCatalog1() {
   const menuNoticeTimerRef = useRef<number | null>(null);
   const directoryLayoutRef = useRef<HTMLDivElement | null>(null);
   const pendingPaginationScrollRef = useRef(false);
+  // 用户改筛选时写入一条历史记录，返回键可回到上一个筛选；首次进入与 popstate 只替换当前记录。
+  const lastSyncedViewRef = useRef<ViewState | null>(null);
+  const urlSyncedRef = useRef(false);
+  const popNavigationRef = useRef(false);
 
   useEffect(() => { saveLocalPreference(THEME_STORAGE_KEY, catalogTheme); }, [catalogTheme]);
   useEffect(() => () => { if (menuNoticeTimerRef.current !== null) window.clearTimeout(menuNoticeTimerRef.current); }, []);
@@ -500,7 +505,10 @@ export default function SpreadsheetCatalog1() {
   }, []);
 
   useEffect(() => {
-    const onPopState = () => setView(readViewState());
+    const onPopState = () => {
+      popNavigationRef.current = true;
+      setView(readViewState());
+    };
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
   }, []);
@@ -511,7 +519,7 @@ export default function SpreadsheetCatalog1() {
     const extras = [...url.searchParams.entries()].filter(([key]) => !managed.includes(key));
     const params = new URLSearchParams();
     params.set("view", "styles");
-    if (view.platform) params.set("platform", view.platform);
+    if (view.platform) params.set("platform", normalizePlatformName(view.platform));
     if (view.category) params.set("category", view.category);
     if (view.price) params.set("price", view.price);
     if (view.season) params.set("season", view.season);
@@ -522,7 +530,14 @@ export default function SpreadsheetCatalog1() {
     if (view.page > 1) params.set("page", String(view.page));
     if (view.limit) params.set("limit", String(view.limit));
     for (const [key, value] of extras) params.append(key, value);
-    window.history.replaceState(window.history.state, "", `${url.pathname}?${params.toString()}`);
+    const nextUrl = `${url.pathname}?${params.toString()}`;
+    const viewChanged = lastSyncedViewRef.current !== view;
+    lastSyncedViewRef.current = view;
+    const pushed = viewChanged && urlSyncedRef.current && !popNavigationRef.current;
+    popNavigationRef.current = false;
+    urlSyncedRef.current = true;
+    if (nextUrl === `${url.pathname}${url.search}`) return;
+    window.history[pushed ? "pushState" : "replaceState"](window.history.state, "", nextUrl);
   }, [view, meta]);
 
   // 组合参数会生成大量近似页面，带筛选时使用 noindex,follow；离开该视图后恢复站点默认值。
@@ -1004,6 +1019,13 @@ export default function SpreadsheetCatalog1() {
         </div>
       </div>}
 
+      <button className="spreadsheet-filters-toggle" type="button" aria-expanded={filtersOpen} aria-controls="spreadsheet-filters" onClick={() => setFiltersOpen((open) => !open)}>
+        <SlidersHorizontal size={15} aria-hidden="true" />
+        <span>Filters</span>
+        {activeFilterChips.length > 0 && <b>{activeFilterChips.length}</b>}
+        <ChevronDown className={filtersOpen ? "is-open" : ""} size={15} aria-hidden="true" />
+      </button>
+      <div className={`spreadsheet-filters${filtersOpen ? " is-open" : ""}`} id="spreadsheet-filters">
       <div className={`spreadsheet-toolbar ${brandOptions.length > 0 ? "has-brand" : ""}`} aria-label="Catalog filters">
         <label className="spreadsheet-select spreadsheet-control-category">
           <LayoutGrid className="spreadsheet-control-icon" size={21} strokeWidth={1.9} aria-hidden="true" />
@@ -1068,6 +1090,7 @@ export default function SpreadsheetCatalog1() {
           </select>
           <ChevronDown className="spreadsheet-select-chevron" size={16} aria-hidden="true" />
         </label>
+      </div>
       </div>
       {activeFilterChips.length > 0 && <div className="spreadsheet-active-filters" aria-label="Active filters">
         <span className="spreadsheet-active-filters-label">Active filters</span>
