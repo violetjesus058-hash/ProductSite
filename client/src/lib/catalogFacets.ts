@@ -116,15 +116,16 @@ export function subcategorySlug(item: CatalogFacetItem) {
 const CATEGORY_MATCHERS: Record<string, (item: CatalogFacetItem) => boolean> = {
   clothing: (item) => normalizeFacetToken(item.category) === "clothing",
   shoe: (item) => normalizeFacetToken(item.category) === "shoe",
-  sneakers: (item) => subcategorySlug(item) === "sneakers",
-  pants: (item) => normalizeFacetToken(item.category) === "pants" || ["trousers", "jeans", "sweatpants"].includes(subcategorySlug(item)),
-  hoodies: (item) => subcategorySlug(item) === "hoodies",
-  tees: (item) => subcategorySlug(item) === "tees",
-  shirts: (item) => subcategorySlug(item) === "shirts",
-  jackets: (item) => subcategorySlug(item) === "jackets",
-  shorts: (item) => subcategorySlug(item) === "shorts",
-  sweaters: (item) => subcategorySlug(item) === "sweaters",
-  bags: (item) => normalizeFacetToken(item.category) === "bags" || subcategorySlug(item) === "bags",
+  sneakers: (item) => normalizeFacetToken(item.category) === "shoe" && subcategorySlug(item) === "sneakers",
+  pants: (item) => normalizeFacetToken(item.category) === "pants"
+    || (normalizeFacetToken(item.category) === "clothing" && ["trousers", "jeans", "sweatpants"].includes(subcategorySlug(item))),
+  hoodies: (item) => normalizeFacetToken(item.category) === "clothing" && subcategorySlug(item) === "hoodies",
+  tees: (item) => normalizeFacetToken(item.category) === "clothing" && subcategorySlug(item) === "tees",
+  shirts: (item) => normalizeFacetToken(item.category) === "clothing" && subcategorySlug(item) === "shirts",
+  jackets: (item) => normalizeFacetToken(item.category) === "clothing" && subcategorySlug(item) === "jackets",
+  shorts: (item) => normalizeFacetToken(item.category) === "clothing" && subcategorySlug(item) === "shorts",
+  sweaters: (item) => normalizeFacetToken(item.category) === "clothing" && subcategorySlug(item) === "sweaters",
+  bags: (item) => normalizeFacetToken(item.category) === "bags",
   watches: (item) => normalizeFacetToken(item.category) === "watches",
   accessories: (item) => normalizeFacetToken(item.category) === "acc",
   acc: (item) => normalizeFacetToken(item.category) === "acc",
@@ -161,6 +162,11 @@ function parsePriceToken(token: string): PriceRange | null {
     return min < max ? { min, max } : null;
   }
   return null;
+}
+
+/** 过滤 URL 中无法识别的价格词，避免页面显示无效筛选条件。 */
+export function validPriceTokens(value: string | undefined) {
+  return splitFacetTokens(value).filter((token) => token === "all" || !!parsePriceToken(token));
 }
 
 /** price 使用款式当前 USD 价格做数值比较，多个价格段为 OR。 */

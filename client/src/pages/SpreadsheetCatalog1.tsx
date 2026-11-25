@@ -4,7 +4,7 @@ import { ArrowDownWideNarrow, ArrowLeft, ArrowRight, Check, ChevronDown, Copy, E
 import "./spreadsheet.css";
 import { initializeAnalytics, trackEvent, trackOnce } from "@/lib/analytics";
 import { ALL_BRANDS, filterCatalogItems, normalizeBrandValue, paginateCatalogItems, type CatalogSummary, type CatalogSort } from "@/lib/catalogSummary";
-import { CATEGORY_OPTIONS, PRICE_OPTIONS, SEASON_OPTIONS, USE_OPTIONS, normalizeFacetToken, splitFacetTokens } from "@/lib/catalogFacets";
+import { CATEGORY_OPTIONS, PRICE_OPTIONS, SEASON_OPTIONS, USE_OPTIONS, normalizeFacetToken, splitFacetTokens, validPriceTokens } from "@/lib/catalogFacets";
 import { isLongSleeve, LONG_SLEEVE_CATEGORY } from "@/lib/catalogOrdering.mjs";
 import { normalizePlatformName, platformIconFor, platformSourcesFor, type PlatformSource } from "@/lib/platformSources.mjs";
 import { mergeCatalogOverrides, mergePreviewOverrides, type CatalogPreviewGroup, type CatalogProductOverride } from "@/lib/catalogOverrides";
@@ -344,10 +344,10 @@ function readViewState(): ViewState {
     category: (params.get("category") || "").trim(),
     platform: requestedPlatform === "all" || requestedPlatform === "allplatforms" ? "" : requestedPlatform,
     brand: (params.get("brand") || "").trim(),
-    price: splitFacetTokens(params.get("price") || "").join(","),
-    season: splitFacetTokens(params.get("season") || "").join(","),
-    use: splitFacetTokens(params.get("use") || "").join(","),
-    qc: normalizeFacetToken(params.get("qc") || ""),
+    price: validPriceTokens(params.get("price") || "").join(","),
+    season: splitFacetTokens(params.get("season") || "").filter((token) => token === "all" || SEASON_OPTIONS.some((option) => option.value === token)).join(","),
+    use: splitFacetTokens(params.get("use") || "").filter((token) => token === "all" || USE_OPTIONS.some((option) => option.value === token)).join(","),
+    qc: normalizeFacetToken(params.get("qc") || "") === "available" ? "available" : "",
     sort: allowedSorts.includes(requestedSort) ? requestedSort : "curated",
     page: Number.isFinite(parsedPage) ? Math.max(1, Math.floor(parsedPage)) : 1,
     limit: PAGE_LIMITS.includes(parsedLimit) ? parsedLimit : 0,
