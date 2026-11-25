@@ -969,9 +969,11 @@ export default function SpreadsheetCatalog1() {
   const previewUrl = imagePreviewItem?.thumbnail || placeholder;
   const previewAlt = imagePreviewItem ? `${imagePreviewItem.name}${imagePreviewItem.styleLabel ? `, Style ${displayStyleLabel(imagePreviewItem.styleLabel)}` : ""}` : "";
 
-  // /spreadsheet 全量显示两侧平台跑马灯；/spreadsheet1 仍只在 VLONE 页预览，两套数据集互不影响。
+  // /spreadsheet 与首页 / 全量显示两侧平台跑马灯；/spreadsheet1 仍只在 VLONE 页预览，两套数据集互不影响。
   const sideMarqueeBase = catalogBasePath();
-  const showSideMarquees = sideMarqueeBase.endsWith("/catalog-data") || (sideMarqueeBase.endsWith("/catalog-data-1") && normalizeBrandValue(view.brand) === "vlone");
+  const showSideMarquees = sideMarqueeBase.endsWith("/catalog-data")
+    || sideMarqueeBase.endsWith("/catalog-data-home")
+    || (sideMarqueeBase.endsWith("/catalog-data-1") && normalizeBrandValue(view.brand) === "vlone");
   const openPlatformChoice = (platform: { label: string; url: string }) => {
     setPlatformChoice(platform);
     trackEvent("platform_choice_open", { platform: platform.label, source: "side_marquee" });
