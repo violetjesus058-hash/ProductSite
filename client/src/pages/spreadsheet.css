@@ -97,6 +97,14 @@
 .spreadsheet-platform-picker-menu img, .spreadsheet-platform-picker-fallback { flex: 0 0 24px; width: 24px; height: 24px; object-fit: contain; }
 .spreadsheet-platform-picker-fallback { display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--sheet-accent); color: white; font-size: 12px; font-weight: 700; }
 @keyframes spreadsheet-platform-pulse { 0%, 100% { opacity: .35; transform: scale(1); } 50% { opacity: .9; transform: scale(1.012); } }
+.spreadsheet-facet-toolbar { margin-bottom: 8px; }
+.spreadsheet-active-filters { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; }
+.spreadsheet-active-filters-label { color: var(--sheet-muted); font: 700 9px "DM Mono", monospace; letter-spacing: .1em; text-transform: uppercase; }
+.spreadsheet-active-filters-list { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.spreadsheet-filter-chip { display: inline-flex; align-items: center; gap: 5px; min-height: 26px; padding: 4px 9px; border: 1px solid var(--sheet-line); border-radius: 999px; background: var(--sheet-paper); color: var(--sheet-ink); font-size: 11px; cursor: pointer; }
+.spreadsheet-filter-chip:hover, .spreadsheet-filter-chip:focus-visible { border-color: var(--sheet-accent); color: var(--sheet-accent); }
+.spreadsheet-filter-clear { border: 0; background: transparent; color: var(--sheet-accent); font-size: 10px; text-decoration: underline; cursor: pointer; }
+.spreadsheet-price-note { margin: -2px 0 8px; color: var(--sheet-muted); font-size: 10px; }
 .spreadsheet-notice-bar { margin: 0 0 10px; border: 1px solid var(--sheet-line); border-radius: 7px; background: var(--sheet-paper); }
 .spreadsheet-notice-summary { width: 100%; display: flex; align-items: center; gap: 10px; min-height: 32px; padding: 5px 12px; border: 0; background: transparent; color: var(--sheet-ink); cursor: pointer; text-align: left; font-size: 11px; }
 .spreadsheet-notice-summary > svg:first-child { flex: 0 0 auto; color: var(--sheet-accent); }

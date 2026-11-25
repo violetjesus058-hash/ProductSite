@@ -4,6 +4,7 @@ import { ArrowDownWideNarrow, ArrowLeft, ArrowRight, Check, ChevronDown, Copy, E
 import "./spreadsheet.css";
 import { initializeAnalytics, trackEvent, trackOnce } from "@/lib/analytics";
 import { ALL_BRANDS, filterCatalogItems, normalizeBrandValue, paginateCatalogItems, type CatalogSummary, type CatalogSort } from "@/lib/catalogSummary";
+import { CATEGORY_OPTIONS, PRICE_OPTIONS, SEASON_OPTIONS, USE_OPTIONS, normalizeFacetToken, splitFacetTokens } from "@/lib/catalogFacets";
 import { isLongSleeve, LONG_SLEEVE_CATEGORY } from "@/lib/catalogOrdering.mjs";
 import { normalizePlatformName, platformIconFor, platformSourcesFor, type PlatformSource } from "@/lib/platformSources.mjs";
 import { mergeCatalogOverrides, mergePreviewOverrides, type CatalogPreviewGroup, type CatalogProductOverride } from "@/lib/catalogOverrides";
@@ -20,7 +21,11 @@ type CatalogMeta = {
 };
 type CatalogPageRow = Omit<CatalogSummary, "platformKeys"> & { platformKeys?: string[] };
 type PagePayload = { page: number; pageSize: number; total: number; totalPages: number; items: CatalogPageRow[] };
-type ViewState = { category: string; platform: string; brand: string; sort: CatalogSort; page: number };
+type ViewState = { category: string; platform: string; brand: string; price: string; season: string; use: string; qc: string; sort: CatalogSort; page: number; limit: number };
+type FacetFilterKey = "category" | "platform" | "brand" | "price" | "season" | "use" | "qc";
+const SORT_ALIASES: Record<string, CatalogSort> = { popular: "curated", newest: "recent", "recently-checked": "recent", "qc-available": "curated" };
+const SORT_LABELS: Record<CatalogSort, string> = { curated: "Curated", random: "Random", "price-low": "Price: Low to High", "price-high": "Price: High to Low", name: "Name", recent: "Recently checked" };
+const PAGE_LIMITS = [20, 24, 50];
 type QuickCategoryIntent = { category: string; token: number };
 type MenuPermissionNotice = { title: string; message: string; dismissLabel: string; left: number; top: number; width: number };
 type PreviewStyle = { id: string; styleKey: string; styleLabel: string; image: string; price: number; currency: string };
@@ -329,16 +334,23 @@ function detectEntryAgent() {
 
 function readViewState(): ViewState {
   const params = new URLSearchParams(window.location.search);
-  const sortValue = params.get("sort");
+  const sortValue = params.get("sort") || "";
   const allowedSorts: CatalogSort[] = ["curated", "random", "price-low", "price-high", "name", "recent"];
+  const requestedSort = (SORT_ALIASES[sortValue] || sortValue) as CatalogSort;
   const parsedPage = Number(params.get("page") || "1");
+  const parsedLimit = Number(params.get("limit") || "0");
   const requestedPlatform = normalizePlatformName(params.get("platform") || "");
   return {
-    category: params.get("category") || "",
+    category: (params.get("category") || "").trim(),
     platform: requestedPlatform === "all" || requestedPlatform === "allplatforms" ? "" : requestedPlatform,
-    brand: params.get("brand") || "",
-    sort: allowedSorts.includes(sortValue as CatalogSort) ? sortValue as CatalogSort : "curated",
+    brand: (params.get("brand") || "").trim(),
+    price: splitFacetTokens(params.get("price") || "").join(","),
+    season: splitFacetTokens(params.get("season") || "").join(","),
+    use: splitFacetTokens(params.get("use") || "").join(","),
+    qc: normalizeFacetToken(params.get("qc") || ""),
+    sort: allowedSorts.includes(requestedSort) ? requestedSort : "curated",
     page: Number.isFinite(parsedPage) ? Math.max(1, Math.floor(parsedPage)) : 1,
+    limit: PAGE_LIMITS.includes(parsedLimit) ? parsedLimit : 0,
   };
 }
 
@@ -433,6 +445,7 @@ export default function SpreadsheetCatalog1() {
   const [runtimeCatalogReady, setRuntimeCatalogReady] = useState(false);
   const [moreSource, setMoreSource] = useState<CatalogSummary[] | null>(null);
   const [pageSize, setPageSize] = useState(50);
+  const effectivePageSize = view.limit || pageSize;
   const [payload, setPayload] = useState<PagePayload | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -494,16 +507,33 @@ export default function SpreadsheetCatalog1() {
 
   useEffect(() => {
     const url = new URL(window.location.href);
-    const params = url.searchParams;
+    const managed = ["q", "view", "platform", "category", "price", "season", "use", "qc", "brand", "sort", "page", "limit"];
+    const extras = [...url.searchParams.entries()].filter(([key]) => !managed.includes(key));
+    const params = new URLSearchParams();
     params.set("view", "styles");
-    for (const key of ["q", "category", "platform", "brand", "sort", "page"]) params.delete(key);
-    if (view.category) params.set("category", view.category);
     if (view.platform) params.set("platform", view.platform);
+    if (view.category) params.set("category", view.category);
+    if (view.price) params.set("price", view.price);
+    if (view.season) params.set("season", view.season);
+    if (view.use) params.set("use", view.use);
+    if (view.qc) params.set("qc", view.qc);
     if (view.brand && (meta?.brands?.length || 0) > 0) params.set("brand", view.brand);
     if (view.sort !== "curated") params.set("sort", view.sort);
     if (view.page > 1) params.set("page", String(view.page));
+    if (view.limit) params.set("limit", String(view.limit));
+    for (const [key, value] of extras) params.append(key, value);
     window.history.replaceState(window.history.state, "", `${url.pathname}?${params.toString()}`);
   }, [view, meta]);
+
+  // 组合参数会生成大量近似页面，带筛选时使用 noindex,follow；离开该视图后恢复站点默认值。
+  useEffect(() => {
+    const tag = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
+    if (!tag) return;
+    const original = tag.getAttribute("content") || "index,follow,max-image-preview:large";
+    const hasFilters = !!(view.category || view.platform || view.brand || view.price || view.season || view.use || view.qc) || view.sort !== "curated";
+    tag.setAttribute("content", hasFilters ? "noindex,follow" : original);
+    return () => tag.setAttribute("content", original);
+  }, [view]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -598,8 +628,8 @@ export default function SpreadsheetCatalog1() {
       try {
         const index = runtimeCatalogIndex || await loadCatalogIndex();
         if (controller.signal.aborted || requestNumber.current !== currentRequest) return;
-        const filtered = filterCatalogItems(index, { category: view.category, platform: view.platform, brand: (catalogMeta?.brands?.length || 0) > 0 ? view.brand : "", sort: view.sort, seed: shuffleSeed });
-        const result = paginateCatalogItems(filtered, view.page, pageSize);
+        const filtered = filterCatalogItems(index, { category: view.category, platform: view.platform, brand: (catalogMeta?.brands?.length || 0) > 0 ? view.brand : "", price: view.price, season: view.season, use: view.use, qc: view.qc, sort: view.sort, seed: shuffleSeed });
+        const result = paginateCatalogItems(filtered, view.page, effectivePageSize);
         if (result.page !== view.page) setView((old) => ({ ...old, page: result.page }));
         if (requestNumber.current === currentRequest) setPayload({ ...result, totalPages: result.totalPages });
       } catch (reason) {
@@ -623,7 +653,7 @@ export default function SpreadsheetCatalog1() {
     };
     void load();
     return () => controller.abort();
-  }, [catalogMeta, overridesReady, runtimeCatalogReady, runtimeCatalogIndex, pageSize, view.page, view.category, view.platform, view.brand, view.sort, shuffleSeed]);
+  }, [catalogMeta, overridesReady, runtimeCatalogReady, runtimeCatalogIndex, effectivePageSize, view.page, view.category, view.platform, view.brand, view.price, view.season, view.use, view.qc, view.sort, shuffleSeed]);
 
   useEffect(() => {
     if (!imagePreviewItem) return;
@@ -644,12 +674,41 @@ export default function SpreadsheetCatalog1() {
     ...item,
     thumbnail: catalogMeta?.quickCategories?.find((category) => category.key === item.key)?.thumbnail || placeholder,
   }));
-  const categoryOptions = [...categories, { key: LONG_SLEEVE_CATEGORY, label: "Long sleeve" }];
-  const selectedCategoryLabel = view.category === LONG_SLEEVE_CATEGORY ? "Long sleeve" : categories.find((item) => item.key === view.category)?.label || "All categories";
+  const categoryOptions = [
+    ...categories,
+    ...CATEGORY_OPTIONS
+      .filter((option) => !categories.some((item) => normalizeFacetToken(item.key) === option.value))
+      .filter((option) => !(option.value === "accessories" && categories.some((item) => normalizeFacetToken(item.key) === "acc")))
+      .filter((option) => option.value !== LONG_SLEEVE_CATEGORY)
+      .map((option) => ({ key: option.value, label: option.label })),
+    { key: LONG_SLEEVE_CATEGORY, label: "Long sleeve" },
+  ];
+  const categoryTokens = splitFacetTokens(view.category);
+  const categoryTokenLabel = (token: string) => token === LONG_SLEEVE_CATEGORY
+    ? "Long sleeve"
+    : categories.find((item) => normalizeFacetToken(item.key) === token)?.label
+      || CATEGORY_OPTIONS.find((option) => option.value === token)?.label
+      || token;
+  const selectedCategoryLabel = categoryTokens.length ? categoryTokens.map(categoryTokenLabel).join(", ") : "All categories";
+  const selectedCategoryValue = categoryOptions.some((item) => item.key === view.category) ? view.category : "";
+  const facetLabel = (value: string, options: Array<{ value: string; label: string }>) =>
+    splitFacetTokens(value).map((token) => options.find((option) => option.value === token)?.label || token).join(", ");
+  const selectedPriceLabel = view.price ? facetLabel(view.price, PRICE_OPTIONS) : "Any price";
+  const selectedSeasonLabel = view.season ? facetLabel(view.season, SEASON_OPTIONS) : "Any season";
+  const selectedUseLabel = view.use ? facetLabel(view.use, USE_OPTIONS) : "Any use";
   const platforms = catalogMeta?.platforms || [];
   const selectedPlatformLabel = platforms.find((item) => item.key === view.platform)?.label;
   const brandOptions = catalogMeta?.brands || [];
   const selectedBrandLabel = view.brand === ALL_BRANDS ? "All Brands" : brandOptions.find((item) => item.key === view.brand)?.label || "All brands";
+  const activeFilterChips: Array<{ key: FacetFilterKey; label: string }> = [];
+  if (view.platform) activeFilterChips.push({ key: "platform", label: `Platform: ${selectedPlatformLabel || view.platform}` });
+  if (view.category) activeFilterChips.push({ key: "category", label: `Category: ${selectedCategoryLabel}` });
+  if (view.price) activeFilterChips.push({ key: "price", label: `Price: ${selectedPriceLabel}` });
+  if (view.season) activeFilterChips.push({ key: "season", label: `Season: ${selectedSeasonLabel}` });
+  if (view.use) activeFilterChips.push({ key: "use", label: `Use: ${selectedUseLabel}` });
+  if (view.qc) activeFilterChips.push({ key: "qc", label: "QC: Available" });
+  if (view.brand) activeFilterChips.push({ key: "brand", label: `Brand: ${selectedBrandLabel}` });
+  const hasActiveFilters = activeFilterChips.length > 0 || view.sort !== "curated";
   // 第一张卡固定为 All Brands（只含有品牌标记的商品），后面跟有品牌商品数前五的品牌；卡片不显示数量。
   const brandCards = brandOptions.filter((item) => item.key !== "Unbranded").sort((a, b) => b.count - a.count).slice(0, 5);
   const allBrandsActive = view.brand === ALL_BRANDS;
@@ -663,10 +722,10 @@ export default function SpreadsheetCatalog1() {
   }
   const countLabel = useMemo(() => {
     if (!payload) return "";
-    const start = payload.total === 0 ? 0 : (payload.page - 1) * pageSize + 1;
-    const end = Math.min(payload.page * pageSize, payload.total);
+    const start = payload.total === 0 ? 0 : (payload.page - 1) * effectivePageSize + 1;
+    const end = Math.min(payload.page * effectivePageSize, payload.total);
     return `${start.toLocaleString()}–${end.toLocaleString()} of ${payload.total.toLocaleString()}`;
-  }, [payload, pageSize]);
+  }, [payload, effectivePageSize]);
 
   function updateView(patch: Partial<ViewState>) {
     setView((old) => ({ ...old, ...patch }));
@@ -684,7 +743,30 @@ export default function SpreadsheetCatalog1() {
 
   function clearFilters() {
     cancelQuickCategoryIntent();
-    setView((old) => ({ ...old, category: "", platform: "", brand: "", sort: "curated", page: 1 }));
+    setView((old) => ({ ...old, category: "", platform: "", brand: "", price: "", season: "", use: "", qc: "", sort: "curated", page: 1 }));
+  }
+
+  function removeFilter(key: FacetFilterKey) {
+    cancelQuickCategoryIntent();
+    updateView({ [key]: "", page: 1 } as Partial<ViewState>);
+  }
+
+  function setPrice(price: string) {
+    cancelQuickCategoryIntent();
+    updateView({ price, page: 1 });
+    if (price) trackEvent("table_filter_use", { price, page_type: "table_catalog", filter_type: "price", page_number: view.page, sort: view.sort });
+  }
+
+  function setSeason(season: string) {
+    cancelQuickCategoryIntent();
+    updateView({ season, page: 1 });
+    if (season) trackEvent("table_filter_use", { season, page_type: "table_catalog", filter_type: "season", page_number: view.page, sort: view.sort });
+  }
+
+  function setUse(use: string) {
+    cancelQuickCategoryIntent();
+    updateView({ use, page: 1 });
+    if (use) trackEvent("table_filter_use", { use, page_type: "table_catalog", filter_type: "use", page_number: view.page, sort: view.sort });
   }
 
   function setCategory(category: string) {
@@ -832,7 +914,7 @@ export default function SpreadsheetCatalog1() {
     if (!loading && payload?.total === 0) trackEvent("table_empty_result", { category: view.category, platform: view.platform, page_type: "table_catalog" });
   }, [loading, payload?.total, view.category, view.platform]);
 
-  const pageCount = payload?.totalPages || (catalogMeta ? Math.max(1, Math.ceil(catalogMeta.total / pageSize)) : 1);
+  const pageCount = payload?.totalPages || (catalogMeta ? Math.max(1, Math.ceil(catalogMeta.total / effectivePageSize)) : 1);
   // 品牌结果不超过 5 页时，在列表末尾补一个跨品牌「更多商品」模块。
   const showMoreProducts = !!view.brand && view.brand !== ALL_BRANDS && pageCount <= 5 && (payload?.total || 0) > 0;
   useEffect(() => {
@@ -927,7 +1009,7 @@ export default function SpreadsheetCatalog1() {
           <LayoutGrid className="spreadsheet-control-icon" size={21} strokeWidth={1.9} aria-hidden="true" />
           <span className="spreadsheet-select-label">Category</span>
           <span className="spreadsheet-select-value">{selectedCategoryLabel}</span>
-          <select aria-label="Category" value={view.category} onChange={(event) => setCategory(event.target.value)}><option value="">All categories</option>{categoryOptions.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}</select>
+          <select aria-label="Category" value={selectedCategoryValue} onChange={(event) => setCategory(event.target.value)}><option value="">All categories</option>{categoryOptions.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}{view.category && !selectedCategoryValue && <option value={view.category}>{selectedCategoryLabel}</option>}</select>
           <ChevronDown className="spreadsheet-select-chevron" size={16} aria-hidden="true" />
         </label>
         {brandOptions.length > 0 && <label className="spreadsheet-select spreadsheet-control-brand">
@@ -947,11 +1029,54 @@ export default function SpreadsheetCatalog1() {
         <label className="spreadsheet-select spreadsheet-sort">
           <ArrowDownWideNarrow className="spreadsheet-control-icon" size={21} strokeWidth={1.9} aria-hidden="true" />
           <span className="spreadsheet-select-label">Sort</span>
-          <span className="spreadsheet-select-value">{{ curated: "Curated", random: "Random", "price-low": "Price: Low to High", "price-high": "Price: High to Low", name: "Name", recent: "Recently checked" }[view.sort]}</span>
+          <span className="spreadsheet-select-value">{SORT_LABELS[view.sort]}</span>
           <select aria-label="Sort" value={view.sort} onChange={(event) => setSort(event.target.value as CatalogSort)}><option value="curated">Curated</option><option value="random">Random</option><option value="price-low">Price: Low to High</option><option value="price-high">Price: High to Low</option><option value="name">Name</option><option value="recent">Recently checked</option></select>
           <ChevronDown className="spreadsheet-select-chevron" size={16} aria-hidden="true" />
         </label>
       </div>
+      <div className="spreadsheet-toolbar spreadsheet-facet-toolbar" aria-label="Price, season and use filters">
+        <label className="spreadsheet-select spreadsheet-control-price">
+          <Tag className="spreadsheet-control-icon" size={21} strokeWidth={1.9} aria-hidden="true" />
+          <span className="spreadsheet-select-label">Price <b>USD</b></span>
+          <span className="spreadsheet-select-value">{selectedPriceLabel}</span>
+          <select aria-label="Price" value={view.price} onChange={(event) => setPrice(event.target.value)}>
+            <option value="">Any price</option>
+            {PRICE_OPTIONS.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}
+            {view.price && !PRICE_OPTIONS.some((item) => item.value === view.price) && <option value={view.price}>{selectedPriceLabel}</option>}
+          </select>
+          <ChevronDown className="spreadsheet-select-chevron" size={16} aria-hidden="true" />
+        </label>
+        <label className="spreadsheet-select spreadsheet-control-season">
+          <Sun className="spreadsheet-control-icon" size={21} strokeWidth={1.9} aria-hidden="true" />
+          <span className="spreadsheet-select-label">Season</span>
+          <span className="spreadsheet-select-value">{selectedSeasonLabel}</span>
+          <select aria-label="Season" value={view.season} onChange={(event) => setSeason(event.target.value)}>
+            <option value="">Any season</option>
+            {SEASON_OPTIONS.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}
+            {view.season && !SEASON_OPTIONS.some((item) => item.value === view.season) && <option value={view.season}>{selectedSeasonLabel}</option>}
+          </select>
+          <ChevronDown className="spreadsheet-select-chevron" size={16} aria-hidden="true" />
+        </label>
+        <label className="spreadsheet-select spreadsheet-control-use">
+          <Store className="spreadsheet-control-icon" size={21} strokeWidth={1.9} aria-hidden="true" />
+          <span className="spreadsheet-select-label">Use</span>
+          <span className="spreadsheet-select-value">{selectedUseLabel}</span>
+          <select aria-label="Use" value={view.use} onChange={(event) => setUse(event.target.value)}>
+            <option value="">Any use</option>
+            {USE_OPTIONS.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}
+            {view.use && !USE_OPTIONS.some((item) => item.value === view.use) && <option value={view.use}>{selectedUseLabel}</option>}
+          </select>
+          <ChevronDown className="spreadsheet-select-chevron" size={16} aria-hidden="true" />
+        </label>
+      </div>
+      {activeFilterChips.length > 0 && <div className="spreadsheet-active-filters" aria-label="Active filters">
+        <span className="spreadsheet-active-filters-label">Active filters</span>
+        <div className="spreadsheet-active-filters-list">
+          {activeFilterChips.map((chip) => <button key={chip.key} type="button" className="spreadsheet-filter-chip" onClick={() => removeFilter(chip.key)} aria-label={`Remove filter: ${chip.label}`}>{chip.label}<X size={12} aria-hidden="true" /></button>)}
+          {activeFilterChips.length > 1 && <button type="button" className="spreadsheet-filter-clear" onClick={clearFilters}>Clear all</button>}
+        </div>
+      </div>}
+      {view.price && <p className="spreadsheet-price-note">Prices are product prices in USD and may change. Shipping, tax and service fees are not included.</p>}
       <div className={`spreadsheet-notice-bar${noticeOpen ? " is-open" : ""}`}>
         <button type="button" className="spreadsheet-notice-summary" onClick={() => setNoticeOpen((open) => !open)} aria-expanded={noticeOpen}>
           <Store size={14} aria-hidden="true" />
@@ -963,6 +1088,7 @@ export default function SpreadsheetCatalog1() {
         {noticeOpen && <div className="spreadsheet-notice-details">
           <p><strong>PLATFORM SERVICE ALERT</strong> AcBuy and Multbuy are currently unavailable while under maintenance. Recommended alternatives: Oopbuy, Sugargoo, Superbuy, or another available platform in the Platform menu.</p>
           <p><strong>Fragrance is temporarily unavailable.</strong> Please explore <Link href="/spreadsheet?view=styles&category=ACC">Accessories</Link>, <Link href="/spreadsheet?view=styles&category=watches">Watches</Link>, <Link href="/spreadsheet?view=styles&category=bags">Bags</Link>, or <Link href="/spreadsheet?view=styles&category=clothing">Clothing</Link> instead.</p>
+          <p><strong>Prices and availability can change.</strong> Product prices are shown in USD; shipping, tax and service fees are not included. Stock, QC photos and external link status may change after the last check.</p>
         </div>}
       </div>
 
@@ -975,7 +1101,7 @@ export default function SpreadsheetCatalog1() {
         })}</div>
       </div>
 
-      <div className="spreadsheet-results" aria-live="polite" aria-busy={loading}><span className="spreadsheet-results-status">{loading && <span className="spreadsheet-loader spreadsheet-results-loader" aria-hidden="true" />}{loading ? quickCategoryBusy && pendingQuickCategory && view.category === pendingQuickCategory ? `Loading ${quickCategoryOptions.find((item) => item.key === pendingQuickCategory)?.label}…` : "Loading catalog…" : countLabel}</span>{(view.category || view.platform || view.brand || view.sort !== "random") && <button type="button" onClick={clearFilters}>Clear filters</button>}</div>
+      <div className="spreadsheet-results" aria-live="polite" aria-busy={loading}><span className="spreadsheet-results-status">{loading && <span className="spreadsheet-loader spreadsheet-results-loader" aria-hidden="true" />}{loading ? quickCategoryBusy && pendingQuickCategory && view.category === pendingQuickCategory ? `Loading ${quickCategoryOptions.find((item) => item.key === pendingQuickCategory)?.label}…` : "Loading catalog…" : `${countLabel} · ${SORT_LABELS[view.sort]}`}</span>{hasActiveFilters && <button type="button" onClick={clearFilters}>Clear filters</button>}</div>
 
       {error ? <section className="spreadsheet-state" role="alert"><h2>Catalog data is temporarily unavailable.</h2><p>{error}</p><button type="button" onClick={() => { catalogIndexPromise = null; setError(""); setPayload(null); setMeta(null); window.location.reload(); }}>Retry</button></section>
         : loading && rows.length === 0 ? <div className="spreadsheet-state" role="status"><span className="spreadsheet-loader" /> Loading catalog…</div>

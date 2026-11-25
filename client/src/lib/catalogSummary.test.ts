@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { ALL_BRANDS, filterCatalogItems, paginateCatalogItems, type CatalogSummary } from "./catalogSummary";
 
-function item(id: string, sourceProductId: string, category: string, price: number): CatalogSummary {
+function item(id: string, sourceProductId: string, category: string, price: number, overrides: Partial<CatalogSummary> = {}): CatalogSummary {
   return {
     id,
     sourceProductId,
@@ -19,6 +19,7 @@ function item(id: string, sourceProductId: string, category: string, price: numb
     platformKeys: ["Shop"],
     hasStyleImage: false,
     priceCheckedAt: "2026-01-01T00:00:00.000Z",
+    ...overrides,
   };
 }
 
@@ -105,5 +106,87 @@ describe("spreadsheet catalog ordering", () => {
     expect(filterCatalogItems(branded, { brand: "ralph-lauren" }).map((entry) => entry.id)).toEqual(["k-1"]);
     expect(filterCatalogItems(branded, { brand: "Ralph_Lauren" }).map((entry) => entry.id)).toEqual(["k-1"]);
     expect(filterCatalogItems(branded, { brand: "  Ralph   Lauren  " }).map((entry) => entry.id)).toEqual(["k-1"]);
+  });
+});
+
+describe("spreadsheet catalog URL facets", () => {
+  const ids = (items: CatalogSummary[]) => items.map((entry) => entry.id).sort();
+  const priced = [
+    item("p1", "p1", "clothing", 9.99),
+    item("p2", "p2", "clothing", 10),
+    item("p3", "p3", "clothing", 19.99),
+    item("p4", "p4", "clothing", 20),
+    item("p5", "p5", "clothing", 25),
+    item("p6", "p6", "clothing", 50),
+    item("p7", "p7", "clothing", 75),
+  ];
+
+  it("compares prices numerically with exclusive upper bounds", () => {
+    expect(ids(filterCatalogItems(priced, { price: "under-10" }))).toEqual(["p1"]);
+    expect(ids(filterCatalogItems(priced, { price: "under-20" }))).toEqual(["p1", "p2", "p3"]);
+    expect(ids(filterCatalogItems(priced, { price: "under-25" }))).toEqual(["p1", "p2", "p3", "p4"]);
+    expect(ids(filterCatalogItems(priced, { price: "20-30" }))).toEqual(["p4", "p5"]);
+    expect(ids(filterCatalogItems(priced, { price: "50-plus" }))).toEqual(["p6", "p7"]);
+  });
+
+  it("treats comma-separated prices as OR and ignores unknown price tokens", () => {
+    expect(ids(filterCatalogItems(priced, { price: "10-20,50-plus" }))).toEqual(["p2", "p3", "p6", "p7"]);
+    expect(ids(filterCatalogItems(priced, { price: "all" }))).toEqual(["p1", "p2", "p3", "p4", "p5", "p6", "p7"]);
+    expect(ids(filterCatalogItems(priced, { price: "cheap" }))).toEqual(["p1", "p2", "p3", "p4", "p5", "p6", "p7"]);
+  });
+
+  const styles = [
+    item("sandal", "ps2", "shoe", 20, { subCategory: "Sandals" }),
+    item("sneaker", "ps1", "shoe", 30, { subCategory: "Sneakers" }),
+    item("cap", "pa1", "ACC", 15, { subCategory: "Caps" }),
+    item("hoodie", "ph1", "clothing", 25, { subCategory: "Hoodies" }),
+    item("shirt", "pt1", "clothing", 18, { subCategory: "Shirts" }),
+  ];
+
+  it("maps category aliases and subcategory slugs", () => {
+    expect(ids(filterCatalogItems(styles, { category: "shoe" }))).toEqual(["sandal", "sneaker"]);
+    expect(ids(filterCatalogItems(styles, { category: "sneakers" }))).toEqual(["sneaker"]);
+    expect(ids(filterCatalogItems(styles, { category: "ACC" }))).toEqual(["cap"]);
+    expect(ids(filterCatalogItems(styles, { category: "accessories" }))).toEqual(["cap"]);
+    expect(ids(filterCatalogItems(styles, { category: "clothing" }))).toEqual(["hoodie", "shirt"]);
+    expect(ids(filterCatalogItems(styles, { category: "hoodies,tees" }))).toEqual(["hoodie"]);
+  });
+
+  const seasonal = [
+    item("hoodie", "pw1", "clothing", 25, { subCategory: "Hoodies" }),
+    item("tee", "pt1", "clothing", 15, { subCategory: "Tees" }),
+    item("bag", "pb1", "bags", 30, { subCategory: "Backpacks" }),
+  ];
+
+  it("filters seasons from subcategory rules and combines different parameters with AND", () => {
+    expect(ids(filterCatalogItems(seasonal, { season: "winter" }))).toEqual(["hoodie"]);
+    expect(ids(filterCatalogItems(seasonal, { season: "summer" }))).toEqual(["tee"]);
+    expect(ids(filterCatalogItems(seasonal, { season: "all-season" }))).toEqual(["bag"]);
+    expect(ids(filterCatalogItems(seasonal, { category: "clothing", season: "winter" }))).toEqual(["hoodie"]);
+    expect(ids(filterCatalogItems(seasonal, { season: "winter,summer" }))).toEqual(["hoodie", "tee"]);
+    expect(ids(filterCatalogItems(seasonal, { season: "monsoon" }))).toEqual(["bag", "hoodie", "tee"]);
+  });
+
+  const usage = [
+    item("run", "pr1", "shoe", 40, { subCategory: "Sneakers", name: "Running Sneakers" }),
+    item("walk", "pr2", "shoe", 35, { subCategory: "Sneakers", name: "Casual Sneakers" }),
+    item("pack", "pb1", "bags", 30, { subCategory: "Backpacks" }),
+    item("hoodie", "ph1", "clothing", 25, { subCategory: "Hoodies" }),
+  ];
+
+  it("filters use tags and supports comma-separated values", () => {
+    expect(ids(filterCatalogItems(usage, { use: "running" }))).toEqual(["run"]);
+    expect(ids(filterCatalogItems(usage, { use: "school" }))).toEqual(["pack"]);
+    expect(ids(filterCatalogItems(usage, { use: "travel" }))).toEqual(["pack"]);
+    expect(ids(filterCatalogItems(usage, { use: "streetwear" }))).toEqual(["hoodie", "run", "walk"]);
+    expect(ids(filterCatalogItems(usage, { use: "gym,travel" }))).toEqual(["pack"]);
+    expect(ids(filterCatalogItems(usage, { use: "brunch" }))).toEqual(["hoodie", "pack", "run", "walk"]);
+  });
+
+  it("only filters QC when the data flag exists", () => {
+    const withQc = [...usage, item("qc", "pq1", "shoe", 45, { subCategory: "Sneakers", qcAvailable: true })];
+    expect(ids(filterCatalogItems(withQc, { qc: "available" }))).toEqual(["qc"]);
+    expect(ids(filterCatalogItems(usage, { qc: "available" }))).toEqual([]);
+    expect(ids(filterCatalogItems(usage, { qc: "unknown" }))).toEqual(["hoodie", "pack", "run", "walk"]);
   });
 });

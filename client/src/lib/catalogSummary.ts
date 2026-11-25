@@ -1,4 +1,4 @@
-import { isLongSleeve, LONG_SLEEVE_CATEGORY } from "./catalogOrdering.mjs";
+import { matchesCategories, matchesPrice, matchesQc, matchesSeason, matchesUse } from "./catalogFacets";
 import { isUnavailableCategory } from "./catalogAvailability.mjs";
 export type CatalogSummary = {
   id: string;
@@ -22,11 +22,28 @@ export type CatalogSummary = {
   brands?: string[];
   // 批量替换后的商品 id，用于所有平台的购买链接（未替换的数据集不含该字段）。
   linkTargetId?: string;
+  // 可选筛选字段：数据补齐后优先使用，缺失时由 catalogFacets 按品类推导。
+  seasons?: string[];
+  uses?: string[];
+  qcAvailable?: boolean;
+  linkStatus?: string;
+  lastCheckedAt?: string;
+  createdAt?: string;
 };
 export type CatalogSort = "curated" | "random" | "price-low" | "price-high" | "name" | "recent";
 // 品牌卡片「All Brands」的筛选值：只保留有品牌标记的商品，无品牌不参与。
 export const ALL_BRANDS = "all";
-export type CatalogQuery = { category?: string; platform?: string; brand?: string; sort?: CatalogSort; seed?: number | string };
+export type CatalogQuery = {
+  category?: string;
+  platform?: string;
+  brand?: string;
+  sort?: CatalogSort;
+  seed?: number | string;
+  price?: string;
+  season?: string;
+  use?: string;
+  qc?: string;
+};
 
 function normalized(value: string | undefined) { return (value || "").normalize("NFKC").trim().toLocaleLowerCase(); }
 // 品牌参数容错：把连字符/下划线当空格，合并多余空格，方便手写或分享出去的链接。
@@ -230,8 +247,12 @@ export function filterCatalogItems(items: CatalogSummary[], query: CatalogQuery)
   const brandedOnly = brand === ALL_BRANDS;
   const filtered = items.filter((item) => {
     if (isUnavailableCategory(item.category)) return false;
-    if (category === LONG_SLEEVE_CATEGORY ? !isLongSleeve(item) : category && normalized(item.category) !== category) return false;
+    if (!matchesCategories(item, category)) return false;
     if (platform && !item.platformKeys.some((key) => normalized(key) === platform)) return false;
+    if (!matchesPrice(item, query.price)) return false;
+    if (!matchesSeason(item, query.season)) return false;
+    if (!matchesUse(item, query.use)) return false;
+    if (!matchesQc(item, query.qc)) return false;
     if (brandedOnly) {
       const brands = item.brands?.length ? item.brands : item.brand ? [item.brand] : [];
       if (!brands.some((value) => normalizedBrand(value) !== "unbranded")) return false;
