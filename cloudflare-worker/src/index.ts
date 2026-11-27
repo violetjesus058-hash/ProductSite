@@ -358,7 +358,7 @@ async function getAnalyticsSummary(request: Request, env: Env) {
   const periodLabel = range === "today" ? "今天" : range === "yesterday" ? "昨天" : range === "week" ? "本周（周一至今）" : range === "14" ? "过去 14 天" : range === "month" ? "本月" : range === "all" ? "所有时间" : range === "custom" ? `${url.searchParams.get("startDate") || ""} 至 ${url.searchParams.get("endDate") || ""}` : `过去 ${days} 天`;
   // 数据最多延迟 10 分钟：缓存键按 10 分钟时间桶归一化。之前 key 里带毫秒级 until，导致缓存永不命中。
   const cacheBucket = Math.floor(Date.now() / ANALYTICS_CACHE_BUCKET_MS);
-  const analyticsCacheKey = env.ANALYTICS_CACHE ? `analytics:summary:${range}:${since}:${cacheBucket}` : null;
+  const analyticsCacheKey = env.ANALYTICS_CACHE ? `analytics:summary:v2:${range}:${since}:${cacheBucket}` : null;
   const isDefaultDetails = page === 1 && pageSize === 50 && searchPage === 1 && searchPageSize === 25 && platformClickPage === 1 && platformClickPageSize === 25;
   let payload: Record<string, unknown> | null = null;
   if (analyticsCacheKey) {
@@ -369,7 +369,7 @@ async function getAnalyticsSummary(request: Request, env: Env) {
   }
   if (payload && isDefaultDetails) return response(request, env, payload);
   if (!payload) {
-    const [totals, composite, products, sourceUsers, searches, searchTotal, platformClicks, platformClickTotal, recent] = await Promise.all([
+    const [totals, composite, products, sourceUsers, searches, searchTotal, platformClicks, platformClickTotal, recent, marqueePlatforms] = await Promise.all([
       env.DB.prepare("SELECT COUNT(*) AS total_events, COUNT(DISTINCT anonymous_id) AS unique_visitors, COUNT(DISTINCT session_id) AS unique_sessions, COUNT(DISTINCT CASE WHEN event_name = 'product_detail_view' THEN anonymous_id END) AS detail_visitors, COUNT(DISTINCT CASE WHEN event_name IN ('affiliate_click','outbound_click') THEN anonymous_id END) AS click_visitors FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ?").bind(since, until).first(),
       // 一次聚合扫描覆盖事件、每日、平台、品类、来源、媒介、设备、语言、页面、表格平台等 12 个维度，替代原来 12 条独立查询。
       env.DB.prepare("SELECT date(occurred_at, '+8 hours') AS day, event_name, platform, category, device, language, path, utm_source, utm_medium, utm_campaign, COUNT(*) AS count, SUM(CASE WHEN event_name IN ('affiliate_click','outbound_click') AND product_id IS NOT NULL THEN 1 ELSE 0 END) AS platform_click_count, SUM(CASE WHEN path = '/spreadsheet' AND event_name = 'spreadsheet_platform_select' THEN 1 ELSE 0 END) AS spreadsheet_select_count, SUM(CASE WHEN path = '/spreadsheet' AND event_name = 'spreadsheet_platform_auto_select' THEN 1 ELSE 0 END) AS spreadsheet_auto_count, SUM(CASE WHEN path = '/spreadsheet' AND event_name = 'affiliate_click' THEN 1 ELSE 0 END) AS spreadsheet_click_count FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? GROUP BY day, event_name, platform, category, device, language, path, utm_source, utm_medium, utm_campaign").bind(since, until).all(),
@@ -380,6 +380,8 @@ async function getAnalyticsSummary(request: Request, env: Env) {
       env.DB.prepare("SELECT product_id, MAX(COALESCE(NULLIF(json_extract(properties_json, '$.product_name'), ''), product_id)) AS product_name, MAX(COALESCE(NULLIF(json_extract(properties_json, '$.style_label'), ''), '')) AS style_label, MAX(CAST(json_extract(properties_json, '$.price') AS REAL)) AS price, MAX(COALESCE(NULLIF(json_extract(properties_json, '$.currency'), ''), 'USD')) AS currency, platform, MAX(COALESCE(NULLIF(json_extract(properties_json, '$.product_image'), ''), '')) AS image, COUNT(*) AS click_count, MAX(occurred_at) AS last_clicked_at FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND event_name IN ('affiliate_click','outbound_click') AND product_id IS NOT NULL AND platform IS NOT NULL GROUP BY product_id, platform ORDER BY click_count DESC, last_clicked_at DESC LIMIT 25 OFFSET 0").bind(since, until).all(),
       env.DB.prepare("SELECT COUNT(*) AS count FROM (SELECT product_id, platform FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND event_name IN ('affiliate_click','outbound_click') AND product_id IS NOT NULL AND platform IS NOT NULL GROUP BY product_id, platform)").bind(since, until).first(),
       env.DB.prepare("SELECT id, event_name, occurred_at, path, product_id, category, platform, device, language, utm_source, utm_campaign, query, list_type, position FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? ORDER BY id DESC LIMIT 50 OFFSET 0").bind(since, until).all<AnalyticsRow>(),
+      // 两侧跑马灯：打开平台弹窗的次数与打开后选择「本网站 / 谷歌表格」的去向。
+      env.DB.prepare("SELECT platform, SUM(CASE WHEN event_name = 'platform_choice_open' THEN 1 ELSE 0 END) AS open_count, COUNT(DISTINCT CASE WHEN event_name = 'platform_choice_open' AND anonymous_id IS NOT NULL THEN anonymous_id END) AS open_users, SUM(CASE WHEN event_name = 'platform_choice_select' AND json_extract(properties_json, '$.choice') = 'catalog' THEN 1 ELSE 0 END) AS site_count, SUM(CASE WHEN event_name = 'platform_choice_select' AND json_extract(properties_json, '$.choice') = 'sheet' THEN 1 ELSE 0 END) AS sheet_count, MAX(occurred_at) AS last_seen FROM analytics_events WHERE occurred_at >= ? AND occurred_at < ? AND event_name IN ('platform_choice_open','platform_choice_select') AND platform IS NOT NULL AND platform != '' AND COALESCE(json_extract(properties_json, '$.source'), '') = 'side_marquee' GROUP BY platform ORDER BY open_count DESC, site_count DESC LIMIT 50").bind(since, until).all(),
     ]);
     const aggregateRows = (composite.results || []) as Array<{ day: string; event_name: string | null; platform: string | null; category: string | null; device: string | null; language: string | null; path: string | null; utm_source: string | null; utm_medium: string | null; utm_campaign: string | null; count: number; platform_click_count: number; spreadsheet_select_count: number; spreadsheet_auto_count: number; spreadsheet_click_count: number }>;
     const sumMap = (map: Map<string, number>, key: string, value: number) => { if (value) map.set(key, (map.get(key) || 0) + Number(value)); };
@@ -427,6 +429,12 @@ async function getAnalyticsSummary(request: Request, env: Env) {
       totals: totals || { total_events: 0, unique_visitors: 0, unique_sessions: 0, detail_visitors: 0, click_visitors: 0 },
       events: ranking(eventsMap, 30), products: products.results || [], platforms: ranking(platformMap, 30),
       spreadsheetPlatforms: [...spreadsheetMap.entries()].map(([name, entry]) => ({ name, count: entry.count, user_count: 0, selection_count: entry.selection_count, auto_select_count: entry.auto_select_count, click_count: entry.click_count })).sort((a, b) => b.click_count - a.click_count || b.selection_count - a.selection_count || b.count - a.count).slice(0, 30),
+      marqueePlatforms: ((marqueePlatforms.results || []) as Array<{ platform: string; open_count: number; open_users: number; site_count: number; sheet_count: number; last_seen: string }>).map((row) => {
+        const site = Number(row.site_count || 0);
+        const sheet = Number(row.sheet_count || 0);
+        const choices = site + sheet;
+        return { name: row.platform, open_count: Number(row.open_count || 0), open_users: Number(row.open_users || 0), site_count: site, sheet_count: sheet, choice_count: choices, site_share: choices ? site / choices : 0, last_seen: row.last_seen || "" };
+      }),
       platformClicks: platformClicks.results || [], categories: ranking(categoryMap, 30),
       daily: [...dailyMap.entries()].map(([date, count]) => ({ date, count })).sort((a, b) => a.date.localeCompare(b.date)),
       sources: ranking(sourceMap, 30), sourceUsers: sourceUsers.results || [], media: ranking(mediaMap, 30), campaigns: ranking(campaignMap, 30), devices: ranking(deviceMap, 20), languages: ranking(languageMap, 20), paths: ranking(pathMap, 30),

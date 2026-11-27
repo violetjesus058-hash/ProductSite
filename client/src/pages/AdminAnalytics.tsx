@@ -5,12 +5,13 @@ import { normalizePlatformName, platformSourcesFor } from "@/lib/platformSources
 
 type Row = { name?: string | null; id?: string | null; count: number; user_count?: number; no_result_count?: number; selection_count?: number; auto_select_count?: number; click_count?: number };
 type PlatformClickRow = { product_id: string; product_name?: string | null; style_label?: string | null; price?: number | null; currency?: string | null; platform?: string | null; image?: string | null; click_count: number; last_clicked_at: string };
+type MarqueePlatformRow = { name: string; open_count: number; open_users: number; site_count: number; sheet_count: number; choice_count: number; site_share: number; last_seen: string };
 type Summary = {
   days: number;
   range: string;
   periodLabel: string;
   totals: { total_events: number; unique_visitors: number; unique_sessions: number; detail_visitors?: number; click_visitors?: number };
-  events: Row[]; products: Row[]; platforms: Row[]; spreadsheetPlatforms: Row[]; platformClicks: PlatformClickRow[]; platformClickTotal: number; platformClickPage: number; platformClickPageSize: number; categories: Row[]; daily: Array<{ date?: string; name?: string; count: number }>;
+  events: Row[]; products: Row[]; platforms: Row[]; spreadsheetPlatforms: Row[]; marqueePlatforms?: MarqueePlatformRow[]; platformClicks: PlatformClickRow[]; platformClickTotal: number; platformClickPage: number; platformClickPageSize: number; categories: Row[]; daily: Array<{ date?: string; name?: string; count: number }>;
   sources: Row[]; sourceUsers: Row[]; media: Row[]; campaigns: Row[]; devices: Row[]; languages: Row[]; paths: Row[]; searches: Row[]; conversions: Row[];
   recentTotal: number;
   page: number;
@@ -35,7 +36,7 @@ const KIND_BADGE: Record<ReferrerHostRow["kind"], string> = { direct: "analytics
 
 const workerUrl = String(import.meta.env.VITE_CLOUDFLARE_WORKER_URL || "").replace(/\/$/, "");
 const KEY_NAME = "productsite-admin-key";
-const eventNames: Record<string, string> = { session_start: "会话开始", category_view: "查看分类", product_list_view: "查看商品列表", product_impression: "商品曝光", product_click: "点击商品", product_preview: "商品预览", product_detail_view: "商品详情", search: "搜索", search_no_result: "无结果搜索", sort_use: "使用排序", affiliate_click: "平台入口点击", outbound_click: "外部链接点击", favorite_add: "加入收藏", favorite_remove: "取消收藏", dislike: "不喜欢", request_product_open: "打开申请表单", request_product_submit: "提交申请", discord_feedback_click: "Discord 反馈", spreadsheet_platform_select: "Spreadsheet 主动选平台", spreadsheet_platform_auto_select: "Spreadsheet 默认选平台", catalog_entry_chooser_view: "入口弹窗曝光", catalog_entry_choice: "入口弹窗选择" };
+const eventNames: Record<string, string> = { session_start: "会话开始", category_view: "查看分类", product_list_view: "查看商品列表", product_impression: "商品曝光", product_click: "点击商品", product_preview: "商品预览", product_detail_view: "商品详情", search: "搜索", search_no_result: "无结果搜索", sort_use: "使用排序", affiliate_click: "平台入口点击", outbound_click: "外部链接点击", favorite_add: "加入收藏", favorite_remove: "取消收藏", dislike: "不喜欢", request_product_open: "打开申请表单", request_product_submit: "提交申请", discord_feedback_click: "Discord 反馈", spreadsheet_platform_select: "Spreadsheet 主动选平台", spreadsheet_platform_auto_select: "Spreadsheet 默认选平台", catalog_entry_chooser_view: "入口弹窗曝光", catalog_entry_choice: "入口弹窗选择", platform_choice_open: "侧栏平台弹窗打开", platform_choice_select: "侧栏平台弹窗选择" };
 const label = (value?: string | null) => value ? (eventNames[value] || value) : "未标注";
 const periodOptions: Array<[string, string]> = [["today", "今天"], ["yesterday", "昨天"], ["week", "本周"], ["7", "过去 7 天"], ["14", "过去 14 天"], ["month", "本月"], ["30", "过去 30 天"], ["all", "所有时间"], ["custom", "自定义日期"]];
 const number = (value: unknown) => Number(value || 0).toLocaleString();
@@ -69,6 +70,41 @@ function PlatformClickList({ rows, total, page, pageSize, periodLabel, loading, 
 function SpreadsheetPlatformRanking({ rows, periodLabel }: { rows: Row[]; periodLabel: string }) {
   const max = Math.max(1, ...rows.map((row) => Number(row.click_count || row.selection_count || row.count || 0)));
   return <section className="analytics-section"><div className="analytics-section-title"><div><h2>Spreadsheet 平台选择</h2><p className="analytics-section-description">区分用户主动筛选、系统默认优先平台和最终外链点击；点击只代表站内行为，不代表第三方平台下单。</p></div><span>{periodLabel} · 前 10 名</span></div>{rows.length ? <div className="analytics-ranking">{rows.slice(0, 10).map((row, index) => <div className="analytics-rank" key={`${row.name || "unknown"}-${index}`}><div className="analytics-rank-label"><strong>{index + 1}. {row.name || "未标注"}</strong><span>筛选 {number(row.selection_count)} · 默认 {number(row.auto_select_count)} · 点击 {number(row.click_count)}</span></div><div className="analytics-bar"><i style={{ width: `${Math.max(4, (Number(row.click_count || row.selection_count || row.count || 0) / max) * 100)}%` }} /></div></div>)}</div> : <p className="analytics-muted">当前周期暂无 Spreadsheet 平台行为。</p>}</section>;
+}
+
+function MarqueePlatformTracking({ rows, periodLabel }: { rows: MarqueePlatformRow[]; periodLabel: string }) {
+  const totalOpens = rows.reduce((sum, row) => sum + Number(row.open_count || 0), 0);
+  const totalSite = rows.reduce((sum, row) => sum + Number(row.site_count || 0), 0);
+  const totalSheet = rows.reduce((sum, row) => sum + Number(row.sheet_count || 0), 0);
+  const totalChoices = totalSite + totalSheet;
+  const siteShare = totalChoices ? (totalSite / totalChoices) * 100 : 0;
+  const choiceRate = totalOpens ? (totalChoices / totalOpens) * 100 : 0;
+  const maxOpen = Math.max(1, ...rows.map((row) => Number(row.open_count || 0)));
+  return <>
+    <section className="analytics-section analytics-marquee-clicks">
+      <div className="analytics-section-title"><div><h2>两侧平台跑马灯点击</h2><p className="analytics-section-description">统计用户点击首页与 Spreadsheet 两侧平台图标的次数，按平台排序；点击后才会打开平台弹窗，不代表已进入平台或下单。</p></div><span>{periodLabel} · 前 10 名</span></div>
+      <div className="analytics-marquee-kpis">
+        <div><span>弹窗打开</span><strong>{number(totalOpens)}</strong><small>两侧跑马灯点击</small></div>
+        <div><span>涉及平台</span><strong>{number(rows.filter((row) => Number(row.open_count || 0) > 0).length)}</strong><small>当前周期有打开记录</small></div>
+        <div><span>打开后选择</span><strong>{number(totalChoices)}</strong><small>选择率 {choiceRate.toFixed(1)}%</small></div>
+      </div>
+      {rows.length ? <div className="analytics-ranking">{rows.slice(0, 10).map((row, index) => <div className="analytics-rank" key={`${row.name}-${index}`}><div className="analytics-rank-label"><strong>{index + 1}. {row.name || "未标注"}</strong><span>{number(row.open_count)} 次 · {number(row.open_users)} 位访客</span></div><div className="analytics-bar"><i style={{ width: `${Math.max(4, (Number(row.open_count || 0) / maxOpen) * 100)}%` }} /></div></div>)}</div> : <p className="analytics-muted">当前周期暂无两侧平台点击。用户点击两侧平台图标后开始统计。</p>}
+    </section>
+    <section className="analytics-section analytics-marquee-choices">
+      <div className="analytics-section-title"><div><h2>平台弹窗去向</h2><p className="analytics-section-description">点击平台后，用户选择浏览本站商品目录（Browse in our catalog）还是打开谷歌表格（Open Google Sheet）；只统计弹窗内的选择，不代表平台内下单。</p></div><span>{periodLabel} · 本网站 {totalChoices ? siteShare.toFixed(1) : "0.0"}%</span></div>
+      <div className="analytics-marquee-kpis">
+        <div><span>本网站</span><strong>{number(totalSite)}</strong><small>进入本站商品目录</small></div>
+        <div><span>谷歌表格</span><strong>{number(totalSheet)}</strong><small>新标签打开 Google Sheet</small></div>
+        <div><span>本网站占比</span><strong>{siteShare.toFixed(1)}%</strong><small>按有效选择计算</small></div>
+      </div>
+      <div className="analytics-table-wrap"><table className="analytics-table analytics-marquee-table"><thead><tr><th>平台</th><th>打开弹窗</th><th>本网站</th><th>谷歌表格</th><th>本网站占比</th><th>最近点击</th></tr></thead><tbody>
+        {rows.length ? rows.map((row) => {
+          const share = row.choice_count ? Number(row.site_share || 0) * 100 : 0;
+          return <tr key={row.name}><td><strong>{row.name || "未标注"}</strong><small>{number(row.open_users)} 位访客打开</small></td><td>{number(row.open_count)}</td><td>{number(row.site_count)}</td><td>{number(row.sheet_count)}</td><td><div className="analytics-choice-cell"><div className="analytics-choice-bar" title={`本网站 ${share.toFixed(1)}% · 谷歌表格 ${(100 - share).toFixed(1)}%`}><i className="is-site" style={{ width: `${share}%` }} /><i className="is-sheet" style={{ width: `${100 - share}%` }} /></div><span>{row.choice_count ? `${share.toFixed(1)}%` : "—"}</span></div></td><td>{row.last_seen ? formatDate(row.last_seen) : "—"}</td></tr>;
+        }) : <tr><td colSpan={6}>当前周期暂无平台弹窗数据。</td></tr>}
+      </tbody></table></div>
+    </section>
+  </>;
 }
 
 export default function AdminAnalytics() {
@@ -152,6 +188,7 @@ export default function AdminAnalytics() {
     {summary && <><section className="analytics-guide" aria-labelledby="analytics-guide-title"><div className="analytics-guide-heading"><span className="analytics-guide-kicker">HOW TO READ</span><h2 id="analytics-guide-title">先看懂这条用户链路</h2><p>推广链接带用户进站，用户在站内浏览商品，最后点击某个平台的购买链接。这里统计的是站内行为，<strong>不代表用户已经在第三方平台下单</strong>。</p></div><div className="analytics-guide-steps"><div><strong>1. 从哪里来</strong><span>链接里的 <code>utm_source</code> 标记来源渠道。</span></div><div><strong>2. 来了多少人</strong><span>按匿名访客去重；同一浏览器未清除站点数据时，在当前周期通常算 1 人。</span></div><div><strong>3. 看了什么</strong><span>记录商品、分类、搜索和详情页等站内行为。</span></div><div><strong>4. 点了哪里</strong><span>记录用户点击的购买平台入口，不统计平台内订单。</span></div></div></section><section className="analytics-kpis"><div><span>事件总量</span><strong>{number(summary.totals.total_events)}</strong><small>{summary.periodLabel || periodLabels[summary.range] || `最近 ${summary.days} 天`}</small></div><div><span>匿名访客</span><strong>{number(summary.totals.unique_visitors)}</strong><small>去重 anonymous ID</small></div><div><span>访问会话</span><strong>{number(summary.totals.unique_sessions)}</strong><small>去重 session ID</small></div><div><span>详情到外链点击率</span><strong>{clickRate}%</strong><small>{number(summary.totals.click_visitors)} 位点击访客 / {number(summary.totals.detail_visitors)} 位详情访客</small></div></section>
       <section className="analytics-section analytics-daily"><div className="analytics-section-title"><h2>每日事件趋势</h2><span><BarChart3 size={14} /> 按天统计</span></div><div className="analytics-daily-chart">{summary.daily.length ? summary.daily.map((row) => <div className="analytics-day" key={String(row.date || row.name)}><div className="analytics-day-bar" style={{ height: `${Math.max(4, (Number(row.count || 0) / peak) * 100)}%` }} title={`${row.date || row.name}: ${number(row.count)}`} /><small>{String(row.date || row.name || "").slice(5)}</small></div>) : <p className="analytics-muted">当前周期暂无趋势数据。</p>}</div></section>
       <div className="analytics-grid"><Ranking periodValue={days} onPeriodChange={changePeriod} periodLabel={currentPeriodLabel} title="行为事件" rows={summary.events} /><Ranking periodValue={days} onPeriodChange={changePeriod} periodLabel={currentPeriodLabel} title="热门商品" description="商品被浏览、点击、收藏等事件提到的次数；不是下单人数，也不是购买金额。" rows={summary.products} labelKey="id" rowAction={(row) => row.id ? <Link href={`/product/${encodeURIComponent(row.id)}`} className="analytics-rank-link" aria-label={`查看商品 ${row.id}`} title="查看商品详情">查看商品 <ArrowUpRight size={12} /></Link> : null} /><Ranking periodValue={days} onPeriodChange={changePeriod} periodLabel={currentPeriodLabel} title="平台入口（点击次数）" description="用户在商品详情页点了哪个平台的购买链接；只算点击，不代表已经下单。" rows={summary.platforms} /><PlatformClickList rows={summary.platformClicks} total={platformClickTotal} page={summary.platformClickPage || platformClickPage} pageSize={summary.platformClickPageSize || platformClickPageSize} periodLabel={currentPeriodLabel} loading={loading} linkTargets={linkTargets} onPageChange={(pageNumber) => reloadPlatformClicks(pageNumber)} onPageSizeChange={(size) => { setPlatformClickPageSize(size); reloadPlatformClicks(1, size); }} /><SpreadsheetPlatformRanking rows={summary.spreadsheetPlatforms} periodLabel={currentPeriodLabel} /><Ranking periodValue={days} onPeriodChange={changePeriod} periodLabel={currentPeriodLabel} title="商品分类" rows={summary.categories} /><Ranking periodValue={days} onPeriodChange={changePeriod} periodLabel={currentPeriodLabel} title="来源渠道（行为次数）" description="带着某个 utm_source 链接进站后产生的行为记录数；同一人多次操作会重复计算，不是人数。" rows={summary.sources} /><section className="analytics-section"><div className="analytics-section-title"><div><h2>渠道用户数（去重访客）</h2><p className="analytics-section-description">从某个渠道进来的匿名访客数；同一浏览器在当前周期内通常只算 1 人，无法识别真实姓名。</p></div><span>{currentPeriodLabel} · 匿名访客去重</span></div>{summary.sourceUsers.length ? <div className="analytics-ranking">{summary.sourceUsers.slice(0, 10).map((row, index) => <div className="analytics-rank" key={`${row.name || "direct"}-${index}`}><div className="analytics-rank-label"><strong>{index + 1}. {row.name === "direct" ? "直接访问" : row.name || "未标注"}</strong><span>{number(row.user_count)} 人</span></div><div className="analytics-bar"><i style={{ width: `${Math.max(4, (Number(row.user_count || 0) / Math.max(1, ...summary.sourceUsers.map((item) => Number(item.user_count || 0)))) * 100)}%` }} /></div></div>)}</div> : <p className="analytics-muted">当前周期暂无渠道用户数据。</p>}</section><Ranking periodValue={days} onPeriodChange={changePeriod} periodLabel={currentPeriodLabel} title="推广媒介" rows={summary.media} /><Ranking periodValue={days} onPeriodChange={changePeriod} periodLabel={currentPeriodLabel} title="推广活动" rows={summary.campaigns} /><Ranking periodValue={days} onPeriodChange={changePeriod} periodLabel={currentPeriodLabel} title="访问设备" rows={summary.devices} /><Ranking periodValue={days} onPeriodChange={changePeriod} periodLabel={currentPeriodLabel} title="语言环境" rows={summary.languages} /><Ranking periodValue={days} onPeriodChange={changePeriod} periodLabel={currentPeriodLabel} title="访问页面" rows={summary.paths} /></div>
+      <MarqueePlatformTracking rows={summary.marqueePlatforms || []} periodLabel={currentPeriodLabel} />
       <section className="analytics-section analytics-referrers">
         <div className="analytics-section-title">
           <div>
